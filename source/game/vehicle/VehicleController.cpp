@@ -55,17 +55,17 @@ bool rvVehicleController::Drive ( rvVehicle* vehicle, idActor* driver ) {
 		vehicle->AutoRight ( vehicle );
 		return false;
 	}
-		
+
 	// Add the driver to the vehicle and cache the position it was added.
 	if ( -1 == (mPosition = vehicle->AddDriver ( 0, driver ) ) ) {
 		return false;
 	}
-	
-	mVehicle = vehicle;	
+
+	mVehicle = vehicle;
 
 	//twhitaker: for scripted callback events
 	vehicle->OnEnter();
-	
+
 	if ( driver->IsType( idPlayer::GetClassType() ) ) {
 		idPlayer * player = static_cast< idPlayer *>( driver );
 
@@ -87,7 +87,7 @@ bool rvVehicleController::Eject ( bool force ) {
 	if ( !GetVehicle() ) {
 		return true;
 	}
-	
+
 	if ( GetDriver()->IsType( idPlayer::GetClassType() ) ) {
 		idPlayer * player = static_cast< idPlayer *>( GetDriver() );
 
@@ -102,7 +102,7 @@ bool rvVehicleController::Eject ( bool force ) {
 
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -137,7 +137,7 @@ void rvVehicleController::DrawHUD ( void ) {
 		rvVehicleWeapon * weapon = mVehicle->GetPosition( mPosition )->GetActiveWeapon();
 		if ( weapon ) {
 			if ( weapon->CanZoom() && player->IsZoomed() && player == gameLocal.GetLocalPlayer() ) {
-				weapon->GetZoomGui()->Redraw( gameLocal.time );			
+				weapon->GetZoomGui()->Redraw( gameLocal.time );
 			}
 //            if ( mVehicle->GetHud() ) {
 //				mVehicle->GetHud()->SetStateFloat( "tram_heatpct", weapon->GetOverheatPercent());

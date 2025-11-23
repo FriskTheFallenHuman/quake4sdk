@@ -26,7 +26,7 @@ protected:
 	stateResult_t		State_Killed			( const stateParms_t& parms );
 
 	int					shieldHealth;
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 
@@ -129,7 +129,7 @@ bool rvMonsterTurret::Pain ( idEntity *inflictor, idEntity *attacker, int damage
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -153,10 +153,10 @@ stateResult_t rvMonsterTurret::State_Combat ( const stateParms_t& parms ) {
 	}
 
 	FaceEnemy ( );
-			
+
 	// try moving, if there was no movement run then just try and action instead
 	UpdateAction ( );
-	
+
 	return SRESULT_WAIT;
 }
 
@@ -169,14 +169,14 @@ stateResult_t rvMonsterTurret::State_Killed ( const stateParms_t& parms ) {
 	gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_death" ), GetPhysics()->GetOrigin(), (-GetPhysics()->GetGravityNormal()).ToMat3() );
 	return idAI::State_Killed ( parms );
 }
-	
+
 /*
 ================
 rvMonsterTurret::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterTurret::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_FIRE,
 		STAGE_WAIT,
@@ -186,7 +186,7 @@ stateResult_t rvMonsterTurret::State_Torso_BlasterAttack ( const stateParms_t& p
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_FIRE );
-			
+
 		case STAGE_FIRE:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack", 2 );
 			return SRESULT_STAGE ( STAGE_WAIT );
@@ -200,5 +200,5 @@ stateResult_t rvMonsterTurret::State_Torso_BlasterAttack ( const stateParms_t& p
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

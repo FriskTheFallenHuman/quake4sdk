@@ -10,12 +10,12 @@ public:
 	CLASS_PROTOTYPE( rvMonsterSentry );
 
 	rvMonsterSentry ( void );
-	
+
 	void				InitSpawnArgsVariables( void );
 	void				Spawn				( void );
 	void				Save							( idSaveGame *savefile ) const;
 	void				Restore							( idRestoreGame *savefile );
-	
+
 	virtual void		Think				( void );
 
 	virtual bool		Pain				( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
@@ -85,15 +85,15 @@ rvMonsterSentry::Spawn
 */
 void rvMonsterSentry::Spawn ( void ) {
 	// Custom actions
-	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack", "Torso_BlasterAttack", AIACTIONF_ATTACK );		
+	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack", "Torso_BlasterAttack", AIACTIONF_ATTACK );
 	actionKamakaziAttack.Init ( spawnArgs, "action_kamakaziAttack", "Torso_KamakaziAttack", AIACTIONF_ATTACK );
 	actionCircleStrafe.Init ( spawnArgs, "action_circleStrafe", "State_Action_CircleStrafe", AIACTIONF_ATTACK );
-	
+
 	InitSpawnArgsVariables();
 
 	kamakaziHealth = spawnArgs.GetInt ( "kamakazi_Health", va("%d", health / 2) );
 	nextChatterTime = 0;
-} 
+}
 
 /*
 ================
@@ -138,13 +138,13 @@ rvMonsterSentry::Pain
 */
 bool rvMonsterSentry::Pain ( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
 	if ( kamakaziHealth > 0 && health < kamakaziHealth ) {
-		kamakaziHealth = 0;		
+		kamakaziHealth = 0;
 		move.speed = move.fly_speed = spawnArgs.GetFloat ( "kamakazi_fly_speed", va("%g", move.fly_speed ) );
 		move.turnRate = spawnArgs.GetFloat ( "kamakazi_turn_rate", va("%g", move.turnRate ) );
 		move.fly_pitch_max = spawnArgs.GetFloat ( "kamakazi_fly_pitch_max" );
 		move.fly_pitch_scale = spawnArgs.GetFloat ( "kamakazi_fly_pitch_scale" );
 	}
-		
+
 	return idAI::Pain ( inflictor, attacker, damage, dir, location );
 }
 
@@ -154,7 +154,7 @@ rvMonsterSentry::Think
 ================
 */
 void rvMonsterSentry::Think ( void ) {
-	// Explode whenever we hit something 
+	// Explode whenever we hit something
 	if ( kamakaziHealth == 0 && physicsObj.GetSlideMoveEntity () ) {
 		Explode ( );
 	} else {
@@ -213,7 +213,7 @@ bool rvMonsterSentry::CheckActions ( void ) {
 			return true;
 		}
 	}
-	
+
 	if ( idAI::CheckActions ( ) ) {
 		return true;
 	}
@@ -234,7 +234,7 @@ int rvMonsterSentry::FilterTactical ( int availableTactical ) {
 	} else {
 		availableTactical &= ~(AITACTICAL_MELEE_BIT);
 	}
-		
+
 	return idAI::FilterTactical ( availableTactical );
 }
 
@@ -245,7 +245,7 @@ rvMonsterSentry::OnDeath
 */
 void rvMonsterSentry::OnDeath ( void ) {
 	idAI::OnDeath ( );
-	
+
 	Explode ( true );
 }
 
@@ -257,7 +257,7 @@ rvMonsterSentry::Explode
 void rvMonsterSentry::Explode ( bool force ) {
 	if ( health > 0 || force ) {
 		gameLocal.RadiusDamage ( GetPhysics()->GetOrigin(), this, this, this, this, spawnArgs.GetString ( "def_kamakazi_damage" ), 1.0f );
-		
+
 		// Kill ourselves
 		Damage ( this, this, viewAxis[0], "damage_gib", 1.0f, 0 );
 	}
@@ -271,10 +271,10 @@ rvMonsterSentry::GetDebugInfo
 void rvMonsterSentry::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "action_blasterAttack",	aiActionStatusString[actionBlasterAttack.status], userData );
-	proc ( "idAI", "action_kamakaziAttack",	aiActionStatusString[actionKamakaziAttack.status], userData );	
-	proc ( "idAI", "action_circleStrafe",	aiActionStatusString[actionCircleStrafe.status], userData );	
+	proc ( "idAI", "action_kamakaziAttack",	aiActionStatusString[actionKamakaziAttack.status], userData );
+	proc ( "idAI", "action_circleStrafe",	aiActionStatusString[actionCircleStrafe.status], userData );
 	proc ( "rvMonsterSentry", "strafeRight",strafeRight?"true":"false", userData );
 	proc ( "rvMonsterSentry", "strafeTime",	va("%d",strafeTime), userData );
 	proc ( "rvMonsterSentry", "nextChatterTime",	va("%d",nextChatterTime), userData );
@@ -283,7 +283,7 @@ void rvMonsterSentry::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -313,11 +313,11 @@ stateResult_t rvMonsterSentry::State_Torso_BlasterAttack ( const stateParms_t& p
 			shots = (gameLocal.random.RandomInt ( maxShots - minShots ) + minShots) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_ATTACK );
 
-		case STAGE_ATTACK:			
+		case STAGE_ATTACK:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack", parms.blendFrames );
 			shots--;
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (IsEnemyVisible() && !enemy.fl.inFov)  ) {

@@ -34,7 +34,7 @@ idVec4	g_color_table[16] =
 // RAVEN BEGIN
 // bdube: console color
 	idVec4(0.94f, 0.62f, 0.05f, 1.0f),	// S_COLOR_CONSOLE
-// RAVEN END	
+// RAVEN END
 	idVec4(0.0f, 0.0f, 0.0f, 1.0f),
 	idVec4(0.0f, 0.0f, 0.0f, 1.0f),
 	idVec4(0.0f, 0.0f, 0.0f, 1.0f),
@@ -574,7 +574,7 @@ returns -1 if not found otherwise the index of the char
 */
 int idStr::Last( const char c ) const {
 	int i;
-	
+
 	for( i = Length(); i > 0; i-- ) {
 		if ( data[ i - 1 ] == c ) {
 			return i - 1;
@@ -637,7 +637,7 @@ idStr::StripTrailing
 */
 void idStr::StripTrailing( const char c ) {
 	int i;
-	
+
 	for( i = Length(); i > 0 && data[ i - 1 ] == c; i-- ) {
 		data[ i - 1 ] = '\0';
 		len--;
@@ -783,7 +783,7 @@ idStr::StripTrailingWhitespace
 */
 void idStr::StripTrailingWhitespace( void ) {
 	int i;
-	
+
 	// cast to unsigned char to prevent stripping off high-ASCII characters
 	for( i = Length(); i > 0 && (unsigned char)(data[ i - 1 ]) <= ' '; i-- ) {
 		data[ i - 1 ] = '\0';
@@ -827,7 +827,7 @@ idStr& idStr::StripQuotes ( void )
 	{
 		return *this;
 	}
-	
+
 	// Remove the trailing quote first
 	if ( data[len-1] == '\"' )
 	{
@@ -836,10 +836,10 @@ idStr& idStr::StripQuotes ( void )
 	}
 
 	// Strip the leading quote now
-	len--;	
+	len--;
 	memmove( &data[ 0 ], &data[ 1 ], len );
 	data[len] = '\0';
-	
+
 	return *this;
 }
 
@@ -1326,21 +1326,21 @@ bool idStr::HasLower( const char *s ) {
 	if ( !s ) {
 		return false;
 	}
-	
+
 	while ( *s ) {
 		if ( CharIsLower( *s ) ) {
 			return true;
 		}
 		s++;
 	}
-	
+
 	return false;
 }
 
 /*
 ============
 idStr::HasUpper
-	
+
 Checks if a string has any uppercase chars
 ============
 */
@@ -1348,14 +1348,14 @@ bool idStr::HasUpper( const char *s ) {
 	if ( !s ) {
 		return false;
 	}
-	
+
 	while ( *s ) {
 		if ( CharIsUpper( *s ) ) {
 			return true;
 		}
 		s++;
 	}
-	
+
 	return false;
 }
 
@@ -1668,7 +1668,7 @@ int idStr::IcmpnPath( const char *s1, const char *s2, int n ) {
 /*
 =============
 idStr::Copynz
- 
+
 Safe strncpy that ensures a trailing zero
 =============
 */
@@ -1678,7 +1678,7 @@ void idStr::Copynz( char *dest, const char *src, int destsize ) {
 		return;
 	}
 	if ( destsize < 1 ) {
-		idLib::common->Warning( "idStr::Copynz: destsize < 1" ); 
+		idLib::common->Warning( "idStr::Copynz: destsize < 1" );
 		return;
 	}
 
@@ -1752,7 +1752,7 @@ char *idStr::RemoveEscapes( char *string, int escapes ) {
 		if ( esc && (type & escapes) ) {
 			s += esc;
 			continue;
-		}		
+		}
 		else {
 			*d++ = c;
 			if ( c == C_COLOR_ESCAPE && *(s+1) ) {
@@ -1792,13 +1792,13 @@ int idStr::IsEscape( const char *s, int* type )  {
 				*type = S_ESCAPE_COLOR;
 			}
 			return 2;
-			
-		case 'r': case 'R': 
-			if ( type ) {			
+
+		case 'r': case 'R':
+			if ( type ) {
 				*type = S_ESCAPE_COMMAND;
 			}
 			return 2;
-			
+
 		case 'c': case 'C':
 			if ( *(s+2) ) {
 				if ( *(s+3) ) {
@@ -1811,7 +1811,7 @@ int idStr::IsEscape( const char *s, int* type )  {
 				}
 			}
 			return 0;
-			
+
 		case 'n': case 'N':
 			if ( type ) {
 				*type = S_ESCAPE_COMMAND;
@@ -1820,7 +1820,7 @@ int idStr::IsEscape( const char *s, int* type )  {
 				return 3;
 			}
 			return 0;
-			
+
 		case 'i': case 'I':
 			if ( *(s+2) && *(s+3) && *(s+4) ) {
 				if ( type ) {
@@ -1828,8 +1828,8 @@ int idStr::IsEscape( const char *s, int* type )  {
 				}
 				return 5;
 			}
-			return 0;		
-	}			
+			return 0;
+	}
 	return 0;
 }
 
@@ -1870,7 +1870,7 @@ C99 standard: vsnprintf returns the number of characters (excluding the trailing
 snprintf and vsnprintf do not write more than size bytes (including the trailing '\0')
 
 win32: _vsnprintf returns the number of characters written, not including the terminating null character,
-or a negative value if an output error occurs. If the number of characters to write exceeds count, then count 
+or a negative value if an output error occurs. If the number of characters to write exceeds count, then count
 characters are written and -1 is returned and no trailing '\0' is added.
 
 idStr::vsnPrintf: always appends a trailing '\0', returns number of characters written (not including terminal \0)
@@ -1907,7 +1907,7 @@ int sprintf( idStr &string, const char *fmt, ... ) {
 	int l;
 	va_list argptr;
 	char buffer[32000];
-	
+
 	va_start( argptr, fmt );
 	l = idStr::vsnPrintf( buffer, sizeof(buffer)-1, fmt, argptr );
 	va_end( argptr );
@@ -1927,10 +1927,10 @@ Sets the value of the string using a vprintf interface.
 int vsprintf( idStr &string, const char *fmt, va_list argptr ) {
 	int l;
 	char buffer[32000];
-	
+
 	l = idStr::vsnPrintf( buffer, sizeof(buffer)-1, fmt, argptr );
 	buffer[sizeof(buffer)-1] = '\0';
-	
+
 	string = buffer;
 	return l;
 }
@@ -1981,15 +1981,15 @@ char *fe( int errorId ) {
 	buf = string[index];
 	index = (index + 1) & 3;
 #ifndef _XBOX
-	FormatMessage( 
-		FORMAT_MESSAGE_FROM_SYSTEM | 
+	FormatMessage(
+		FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		errorId,
 		0, // Default language
 		(LPTSTR) buf,
 		256,
-		NULL 
+		NULL
 	);
 #endif
 	return buf;
@@ -2024,7 +2024,7 @@ void idStr::SetUnit( const char *format, float value, int unit, Measure_t measur
 	value /= 1 << ( unit * 10 );
 	sprintf( *this, format, value );
 	*this += " ";
-	*this += units[ measure ][ unit ];	
+	*this += units[ measure ][ unit ];
 }
 
 /*
@@ -2229,4 +2229,4 @@ idStr idStr::GetLastColorCode( void ) const {
 	}
 
 	return "";
-} 
+}

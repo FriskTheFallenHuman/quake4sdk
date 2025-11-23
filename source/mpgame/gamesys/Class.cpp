@@ -38,12 +38,12 @@ initialized in any order, the constructor must handle the case that subclasses
 are initialized before superclasses.
 ================
 */
-idTypeInfo::idTypeInfo( const char *classname, const char *superclass, idEventFunc<idClass> *eventCallbacks, idClass *( *CreateInstance )( void ), 
+idTypeInfo::idTypeInfo( const char *classname, const char *superclass, idEventFunc<idClass> *eventCallbacks, idClass *( *CreateInstance )( void ),
 // RAVEN BEGIN
 // bdube: added states
-	void ( idClass::*Spawn )( void ), 
+	void ( idClass::*Spawn )( void ),
 	rvStateFunc<idClass>* stateCallbacks,
-	void ( idClass::*Save )( idSaveGame *savefile ) const, void ( idClass::*Restore )( idRestoreGame *savefile ) ) {									
+	void ( idClass::*Save )( idSaveGame *savefile ) const, void ( idClass::*Restore )( idRestoreGame *savefile ) ) {
 // RAVEN END
 
 	idTypeInfo *type;
@@ -69,7 +69,7 @@ idTypeInfo::idTypeInfo( const char *classname, const char *superclass, idEventFu
 
 	// Check if any subclasses were initialized before their superclass
 	for( type = typelist; type != NULL; type = type->next ) {
-		if ( ( type->super == NULL ) && !idStr::Cmp( type->superclass, this->classname ) && 
+		if ( ( type->super == NULL ) && !idStr::Cmp( type->superclass, this->classname ) &&
 			idStr::Cmp( type->classname, "idClass" ) ) {
 			type->super	= this;
 		}
@@ -103,7 +103,7 @@ idTypeInfo::~idTypeInfo() {
 ================
 idTypeInfo::Init
 
-Initializes the event callback table for the class.  Creates a 
+Initializes the event callback table for the class.  Creates a
 table for fast lookups of event functions.  Should only be called once.
 ================
 */
@@ -189,7 +189,7 @@ void idTypeInfo::Init( void ) {
 idTypeInfo::Shutdown
 
 Should only be called when DLL or EXE is being shutdown.
-Although it cleans up any allocated memory, it doesn't bother to remove itself 
+Although it cleans up any allocated memory, it doesn't bother to remove itself
 from the class list since the program is shutting down.
 ================
 */
@@ -394,7 +394,7 @@ void idClass::Init( void ) {
 // jnewquist: Make sure the superclass was actually registered!
 		if ( c->super == NULL && (c->superclass && idStr::Cmp(c->superclass, "NULL")) ) {
 			common->Error("Superclass %s of %s was never registered!", c->superclass, c->classname);
-		}		
+		}
 // RAVEN END
 		c->Init();
 	}
@@ -656,9 +656,9 @@ bool idClass::PostEventArgs( const idEventDef *ev, int time, int numargs, ... ) 
 	idTypeInfo	*c;
 	idEvent		*event;
 	va_list		args;
-	
+
 	assert( ev );
-	
+
 	if ( !idEvent::initialized ) {
 		return false;
 	}
@@ -674,7 +674,7 @@ bool idClass::PostEventArgs( const idEventDef *ev, int time, int numargs, ... ) 
 	// we allow threads to run fine, though.
 // RAVEN BEGIN
 // bdube: added a check to see if this is a client entity
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	bool isClient = !IsClient() && gameLocal.isClient;
 
 #ifdef _XENON
@@ -870,7 +870,7 @@ bool idClass::ProcessEventArgs( const idEventDef *ev, int numargs, ... ) {
 	int			num;
 	int			data[ D_EVENT_MAXARGS ];
 	va_list		args;
-	
+
 	assert( ev );
 	assert( idEvent::initialized );
 
@@ -985,7 +985,7 @@ bool idClass::ProcessEventArgPtr( const idEventDef *ev, int *data ) {
 	assert( idEvent::initialized );
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( g_debugTriggers.GetBool() && ( ev == &EV_Activate ) && IsType( idEntity::GetClassType() ) ) {
 // RAVEN END
 		const idEntity *ent = *reinterpret_cast<idEntity **>( data );
@@ -1132,7 +1132,7 @@ stateResult_t idClass::ProcessState ( const rvStateFunc<idClass>* state, const s
 stateResult_t idClass::ProcessState ( const char* name, const stateParms_t& parms ) {
 	int				i;
 	idTypeInfo*		cls;
-	
+
 	for ( cls = GetType(); cls; cls = cls->super ) {
 		for ( i = 0; cls->stateCallbacks[i].function; i ++ ) {
 			if ( !idStr::Icmp ( cls->stateCallbacks[i].name, name ) ) {
@@ -1140,7 +1140,7 @@ stateResult_t idClass::ProcessState ( const char* name, const stateParms_t& parm
 			}
 		}
 	}
-	
+
 	return SRESULT_ERROR;
 }
 
@@ -1152,7 +1152,7 @@ idClass::FindState
 const rvStateFunc<idClass>* idClass::FindState ( const char* name ) const {
 	int				i;
 	idTypeInfo*		cls;
-	
+
 	for ( cls = GetType(); cls; cls = cls->super ) {
 		for ( i = 0; cls->stateCallbacks[i].function; i ++ ) {
 			if ( !idStr::Icmp ( cls->stateCallbacks[i].name, name ) ) {
@@ -1160,7 +1160,7 @@ const rvStateFunc<idClass>* idClass::FindState ( const char* name ) const {
 			}
 		}
 	}
-	
+
 	return NULL;
 }
 

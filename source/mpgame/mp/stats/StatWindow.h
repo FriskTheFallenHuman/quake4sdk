@@ -28,7 +28,7 @@ private:
 	idList<idPlayer*>			marinePlayers;
 	idList<idPlayer*>			players;
 	idList<idPlayer*>			spectators;
-	
+
 	idUserInterface*			statHud;
 };
 

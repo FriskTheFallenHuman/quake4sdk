@@ -122,7 +122,7 @@ loop:
 	// qsort
 	int leftA, leftB, rightC, rightD, r;
 	leftA = leftB = low + 1;
-	rightC = rightD = low + n - 1; 
+	rightC = rightD = low + n - 1;
 	for (;;) {
 		while ( leftB <= rightC && (r = Compare( &list[ leftB ], &list[ low ] )) <= 0) {
 			if (r == 0) {
@@ -150,7 +150,7 @@ loop:
 		type t = list[ leftB ];
 		list[ leftB ] = list[ rightC ];
 		list[ rightC ] = t;
-		swap_cnt = 1;	
+		swap_cnt = 1;
 		leftB++;
 		rightC--;
 	}
@@ -170,14 +170,14 @@ loop:
 	for( int i = 0; i < r; i++ ) {
 		type t = list[ low + i ];
 		list[ low + i ] = list[ leftB - r + i ];
-		list[ leftB - r + i ] = t;	
+		list[ leftB - r + i ] = t;
 	}
-	
+
 	r = Min( rightD - rightC, highBound - rightD - 1 );
 	for( int i = 0; i < r; i++ ) {
 		type t = list[ leftB + i ];
 		list[ leftB + i ] = list[ highBound - r + i ];
-		list[ highBound - r + i ] = t;	
+		list[ highBound - r + i ] = t;
 	}
 
 	if ( (r = leftB - leftA) > 1 ) {

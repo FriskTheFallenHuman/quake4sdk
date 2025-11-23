@@ -41,7 +41,7 @@ private:
 
 class rvAASFindGoalOutOfRange : public idAASCallback {
 public:
-	
+
 	rvAASFindGoalOutOfRange ( idAI* _owner );
 
 protected:
@@ -69,19 +69,19 @@ public:
 
 	virtual void		Init			( void );
 	virtual void		Finish			( void );
-	
+
 private:
 
 	virtual bool		TestArea		( class idAAS *aas, int areaNum, const aasArea_t& area );
 	virtual bool		TestPoint		( class idAAS *aas, const idVec3& point, const float zAllow=0.0f );
-	
+
 	bool				TestCachedGoal	( int index );
 
 	idAI*				owner;
-	
+
   	pvsHandle_t			targetPVS;
   	int					PVSAreas[ idEntity::MAX_PVS_AREAS ];
-	
+
 	idList<aasGoal_t>	cachedGoals;
 	int					cachedIndex;
 	int					cachedAreaNum;

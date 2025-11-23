@@ -3,8 +3,8 @@
 
 AI_Move.cpp
 
-This file has all movement related functions.  It and its sister H file were 
-split from AI.h and AI.cpp in order to prevent merge conflicts and to make 
+This file has all movement related functions.  It and its sister H file were
+split from AI.h and AI.cpp in order to prevent merge conflicts and to make
 further changes to the system possible.
 
 ===============================================================================
@@ -79,7 +79,7 @@ idMoveState::idMoveState() {
 	fly_bob_vert		= 0.0f;
 	fly_bob_horz		= 0.0f;
 	currentDirection	= MOVEDIR_FORWARD;
-	idealDirection		= MOVEDIR_FORWARD;		
+	idealDirection		= MOVEDIR_FORWARD;
 	current_yaw			= 0.0f;
 	ideal_yaw			= 0.0f;
 	flyTiltJoint		= INVALID_JOINT;
@@ -111,9 +111,9 @@ void idMoveState::Spawn( idDict &spawnArgs ) {
 	fl.disabled				= spawnArgs.GetBool ( "noMove", "0" );
 	walkRange				= spawnArgs.GetFloat ( "walkRange", "100" );
 	walkTurn				= spawnArgs.GetFloat ( "walkTurn", "45" );
-	followRange				= spawnArgs.GetVec2 ( "followRange", "70 250" ); 
-	searchRange				= spawnArgs.GetVec2 ( "searchRange", "0 1024" ); 
-	attackPositionRange		= spawnArgs.GetFloat ( "attackPositionRange", "0" ); 
+	followRange				= spawnArgs.GetVec2 ( "followRange", "70 250" );
+	searchRange				= spawnArgs.GetVec2 ( "searchRange", "0 1024" );
+	attackPositionRange		= spawnArgs.GetFloat ( "attackPositionRange", "0" );
 	turnDelta				= spawnArgs.GetFloat ( "turnDelta", "10" );
 	blockTime				= 0;
 
@@ -151,7 +151,7 @@ void idMoveState::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt( (int)moveStatus );
 	savefile->WriteVec3( moveDest );
 	savefile->WriteVec3( moveDir );
-	
+
 	savefile->WriteInt( toAreaNum );
 	savefile->WriteInt( startTime );
 	savefile->WriteInt( duration );
@@ -241,7 +241,7 @@ void idMoveState::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( (int&)moveStatus );
 	savefile->ReadVec3( moveDest );
 	savefile->ReadVec3( moveDir );
-	
+
 	savefile->ReadInt( toAreaNum );
 	savefile->ReadInt( startTime );
 	savefile->ReadInt( duration );
@@ -326,19 +326,19 @@ void idAI::SetMoveType ( moveType_t moveType ) {
 	if ( move.moveType == moveType ) {
 		return;
 	}
-	
+
 	StopSound ( SND_CHANNEL_HEART, false );
-	
+
 	switch ( moveType ) {
 		case MOVETYPE_STATIC:
-			move.travelFlags = 0;	
+			move.travelFlags = 0;
 			break;
-		
+
 		case MOVETYPE_FLY:
 			move.travelFlags = TFL_FLY|TFL_WALK|TFL_AIR;
 			StartSound ( "snd_fly", SND_CHANNEL_HEART, 0, false, NULL );
 			break;
-			
+
 		case MOVETYPE_ANIM:
 			move.travelFlags = TFL_WALK|TFL_AIR;
 			break;
@@ -346,7 +346,7 @@ void idAI::SetMoveType ( moveType_t moveType ) {
 		case MOVETYPE_CUSTOM:
 			move.travelFlags = TFL_WALK|TFL_AIR|TFL_WALKOFFLEDGE;
 			break;
-	}	
+	}
 
 	move.moveType = moveType;
 }
@@ -461,7 +461,7 @@ void idAI::KickObstacles( const idVec3 &dir, float force, idEntity *alwaysKick )
 		}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if (( obEnt->IsType( idMoveable::GetClassType() ) || obEnt->IsType( idAFAttachment::GetClassType() )) && obEnt->GetPhysics()->IsPushable() ) {
 // RAVEN END
 			delta = obEnt->GetPhysics()->GetOrigin() - org;
@@ -552,7 +552,7 @@ bool idAI::ReachedPos( const idVec3 &pos, const aiMoveCommand_t moveCommand, flo
 		}
 		return false;
 	}
-	
+
 	// Dont add vertical bias when using fly move
 	if ( move.moveType == MOVETYPE_FLY ) {
 		float offset;
@@ -561,10 +561,10 @@ bool idAI::ReachedPos( const idVec3 &pos, const aiMoveCommand_t moveCommand, flo
 		} else {
 			offset = move.fly_offset;
 		}
-		
+
 		idBounds bnds;
 		bnds = idBounds ( idVec3(-range,-range,-range), idVec3(range,range,range+offset) );
-		bnds.TranslateSelf( physicsObj.GetOrigin() );	
+		bnds.TranslateSelf( physicsObj.GetOrigin() );
 		return bnds.ContainsPoint( pos );
 	}
 
@@ -575,20 +575,20 @@ bool idAI::ReachedPos( const idVec3 &pos, const aiMoveCommand_t moveCommand, flo
 			return false;
 		}
 	}
-	
+
 	// Excluded z height when determining reached
 	if ( move.toAreaNum > 0 ) {
 		if ( PointReachableAreaNum( physicsObj.GetOrigin() ) == move.toAreaNum ) {
 			idBounds bnds;
 			bnds = idBounds ( idVec3(-range,-range,-4096.0f), idVec3(range,range,4096.0f) );
-			bnds.TranslateSelf( physicsObj.GetOrigin() );	
+			bnds.TranslateSelf( physicsObj.GetOrigin() );
 			return bnds.ContainsPoint( pos );
 		}
 	}
-				
+
 	idBounds bnds;
 	bnds = idBounds ( idVec3(-range,-range,-16.0f), idVec3(range,range,64.0f) );
-	bnds.TranslateSelf( physicsObj.GetOrigin() );	
+	bnds.TranslateSelf( physicsObj.GetOrigin() );
 	return bnds.ContainsPoint( pos );
 }
 
@@ -765,7 +765,7 @@ void idAI::ScriptedPlaybackMove ( const char* playback, int flags, int numFrames
 		ScriptedEnd ( );
 		return;
 	}
-	
+
 	move.goalEntity		= NULL;
 	move.moveCommand	= MOVE_RV_PLAYBACK;
 	move.moveType		= MOVETYPE_PLAYBACK;
@@ -797,7 +797,7 @@ bool idAI::FaceEnemy( void ) {
 	move.moveStatus			= MOVE_STATUS_WAITING;
 	move.startTime			= gameLocal.time;
 	move.speed				= 0.0f;
-	
+
 	move.fl.done			= true;
 	move.fl.moving			= false;
 	move.fl.goalUnreachable	= false;
@@ -827,7 +827,7 @@ bool idAI::FaceEntity( idEntity *ent ) {
 	move.moveStatus		= MOVE_STATUS_WAITING;
 	move.startTime		= gameLocal.time;
 	move.speed			= 0.0f;
-	
+
 	move.fl.done			= false;
 	move.fl.moving			= false;
 	move.fl.goalUnreachable	= false;
@@ -860,7 +860,7 @@ bool idAI::StartMove ( aiMoveCommand_t command, const idVec3& goalOrigin, int go
 	move.speed				= move.fly_speed;
 	move.startTime			= gameLocal.time;
 	move.range				= range;
-	
+
 	move.fl.done			= false;
 	move.fl.goalUnreachable	= false;
 	move.fl.moving			= true;
@@ -868,7 +868,7 @@ bool idAI::StartMove ( aiMoveCommand_t command, const idVec3& goalOrigin, int go
 	aasSensor->Reserve ( feature );
 
 	OnStartMoving ( );
-	
+
 	return true;
 }
 
@@ -904,11 +904,11 @@ void idAI::StopMove( moveStatus_t status ) {
 	move.range				= 0.0f;
 	move.speed				= 0.0f;
  	move.anim				= 0;
- 	
+
 	move.moveDir.Zero();
 	move.lastMoveOrigin.Zero();
 	move.lastMoveTime	= gameLocal.time;
-	
+
 	// Callback for handling stopping
 	if ( oldCommand != MOVE_NONE ) {
 		OnStopMoving ( oldCommand );
@@ -927,8 +927,8 @@ bool idAI::MoveToTether ( rvAITether* tether ) {
 	if ( !aas || !tether ) {
 		return false;
 	}
-	
-	if ( !tether->FindGoal ( this, goal ) ) {		
+
+	if ( !tether->FindGoal ( this, goal ) ) {
 		//This is extremely bad - if 2 guys both try to get to the center of a tether, they get hosed.
 		return MoveTo ( tether->GetPhysics()->GetOrigin ( ), tether->GetOriginReachedRange() );
 	}
@@ -938,25 +938,25 @@ bool idAI::MoveToTether ( rvAITether* tether ) {
 		//float areaTop = aas->AreaCeiling( goal.areaNum );
 		goal.origin.z = tether->GetPhysics()->GetOrigin().z;
 	}
-	
+
 	return StartMove ( MOVE_TO_TETHER, goal.origin, goal.areaNum, NULL, NULL, AI_TETHER_MINRANGE );
 }
 
 /*
 =====================
-idAI::MoveToAttack 
+idAI::MoveToAttack
 =====================
 */
 bool idAI::MoveToAttack ( idEntity *ent, int attack_anim ) {
 	aasObstacle_t	obstacle;
 	aasGoal_t		goal;
-	idBounds		bounds; 
+	idBounds		bounds;
 	idVec3			pos;
 
 	if ( !aas || !ent ) {
 		return false;
 	}
-	
+
 	const idVec3 &org  = physicsObj.GetOrigin();
 	obstacle.absBounds = ent->GetPhysics()->GetAbsBounds();
 	pos				   = LastKnownPosition ( ent );
@@ -972,7 +972,7 @@ bool idAI::MoveToAttack ( idEntity *ent, int attack_anim ) {
 	}
 
 	assert ( aasFind );
-	
+
 	// Test some more points with the existing find
 	rvAASFindGoalForAttack* aasFindAttack = static_cast<rvAASFindGoalForAttack*>(aasFind);
 	if ( !aasFindAttack->TestCachedGoals ( aifl.simpleThink ? 1 : 4, goal ) ) {
@@ -982,14 +982,14 @@ bool idAI::MoveToAttack ( idEntity *ent, int attack_anim ) {
 	}
 
 	// Havent found a goal yet but exhaused our trace count
-	if ( !goal.areaNum ) { 
+	if ( !goal.areaNum ) {
 		return false;
 	}
-		
+
 	// Dont need the find anymore
 	delete aasFind;
 	aasFind = NULL;
-	
+
 	if ( move.moveType == MOVETYPE_FLY ) {
 		//float up above the ground?
 		if ( aas && aas->GetFile() ) {
@@ -1028,7 +1028,7 @@ bool idAI::MoveToEnemy( void ) {
 
 //	pos = LastKnownPosition ( enemy.ent );
 	pos = enemy.ent->GetPhysics()->GetOrigin ( );
-	
+
 	// If we are already moving to the entity and its position hasnt changed then we are done
 	if ( move.moveCommand == MOVE_TO_ENEMY && move.goalEntity == enemy.ent && move.goalEntityOrigin == pos ) {
 		return true;
@@ -1199,7 +1199,7 @@ bool idAI::MoveTo ( const idVec3 &pos, float range ) {
 	if ( !PathToGoal( path, areaNum, physicsObj.GetOrigin(), PointReachableAreaNum( physicsObj.GetOrigin() ), org ) ) {
 		return false;
 	}
-	
+
 	// Start moving
 	return StartMove ( MOVE_TO_POSITION, org, areaNum, NULL, NULL, range );
 }
@@ -1219,7 +1219,7 @@ bool idAI::MoveToCover( float minRange, float maxRange, aiTactical_t coverType )
 	if ( !aas ) {
 		return false;
 	}
-			
+
 	// Look for nearby cover
 	switch ( coverType ) {
 		case AITACTICAL_HIDE:			aasSensor->SearchHide();	break;
@@ -1232,22 +1232,22 @@ bool idAI::MoveToCover( float minRange, float maxRange, aiTactical_t coverType )
 			aasSensor->SearchCover();
 			break;
 	}
-				
+
 	if ( !aasSensor->FeatureCount ( ) ) {
 		return false;
-	}	
+	}
 
 	feature		  = aasSensor->Feature ( 0 );
 	featureOrigin = feature->Origin ( );
 	org			  = featureOrigin;
 	areaNum		  = 0;
-	
+
 	// Find the aas area our cover point is in
 	areaNum = PointReachableAreaNum( org );
 	if ( !areaNum ) {
 		return false;
 	}
-	
+
 	// See if there is a path to our goal or not
 	aas->PushPointIntoAreaNum( areaNum, org );
 /*
@@ -1278,7 +1278,7 @@ bool idAI::MoveToHide ( void ) {
 		return false;
 	}
 
-	const idVec3& org  = physicsObj.GetOrigin();	
+	const idVec3& org  = physicsObj.GetOrigin();
 	obstacle.absBounds = enemy.ent->GetPhysics()->GetAbsBounds();
 	pos				   = LastKnownPosition ( enemy.ent );
 
@@ -1306,12 +1306,12 @@ bool idAI::SlideToPosition( const idVec3 &pos, float time ) {
 	move.moveStatus		= MOVE_STATUS_MOVING;
 	move.startTime		= gameLocal.time;
 	move.duration		= idPhysics::SnapTimeToPhysicsFrame( SEC2MS( time ) );
-	
+
 	move.fl.done			= false;
 	move.fl.goalUnreachable	= false;
 	move.fl.moving			= false;
 	aifl.simpleThink		= false;
-		
+
 	move.fl.allowAnimMove				= false;
 
 	if ( move.duration > 0 ) {
@@ -1332,9 +1332,9 @@ idAI::WanderAround
 */
 bool idAI::WanderAround( void ) {
 	idVec3 dest;
-	
+
 	StopMove( MOVE_STATUS_DONE );
-	
+
 	dest = physicsObj.GetOrigin() + viewAxis[ 0 ] * physicsObj.GetGravityAxis() * 256.0f;
 	if ( !NewWanderDir( dest ) ) {
 		StopMove( MOVE_STATUS_DEST_UNREACHABLE );
@@ -1535,15 +1535,15 @@ bool idAI::GetMovePos( idVec3 &seekPos, idReachability** seekReach ) {
 				StopMove( MOVE_STATUS_DONE );
 			}
 			return false;
-	
+
 		case MOVE_SLIDE_TO_POSITION :
 			seekPos = org;
 			return false;
-			
+
 		case MOVE_TO_ENTITY:
 			MoveToEntity( move.goalEntity.GetEntity(), move.range );
 			break;
-			
+
 		case MOVE_TO_ENEMY:
 			if ( !MoveToEnemy() && combat.tacticalCurrent == AITACTICAL_MELEE ) {
 				StopMove( MOVE_STATUS_DEST_UNREACHABLE );
@@ -1568,7 +1568,7 @@ bool idAI::GetMovePos( idVec3 &seekPos, idReachability** seekReach ) {
 
 	move.moveStatus = MOVE_STATUS_MOVING;
 	result = false;
-	
+
 	if ( move.moveCommand == MOVE_WANDER ) {
 		move.moveDest = org + viewAxis[ 0 ] * physicsObj.GetGravityAxis() * 256.0f;
 	} else {
@@ -1726,7 +1726,7 @@ bool idAI::TurnTowardLeader( bool faceLeaderByDefault ) {
 	end.z = start.z;
 	idVec3 currentLookDir = viewAxis[0];
 	currentLookDir.Normalize();
-	
+
 	if ( !GetEnemy() && (!leader->IsType(idPlayer::GetClassType()) || !((idPlayer*)leader.GetEntity())->IsFlashlightOn()) ) {
 		//Not in combat and leader isn't looking around with flashlight
 		if ( myLookDir*currentLookDir > 0.666f ) {
@@ -1736,7 +1736,7 @@ bool idAI::TurnTowardLeader( bool faceLeaderByDefault ) {
 	}
 	gameLocal.TracePoint( this, tr, start, end, MASK_OPAQUE, this );
 	idEntity* traceEnt = gameLocal.entities[ tr.c.entityNum ];
-	if ( tr.fraction < 1.0f 
+	if ( tr.fraction < 1.0f
 		&& (tr.fraction<0.5f||!traceEnt||!traceEnt->IsType(idDoor::GetClassType())) ) {
 		//wall there - NOTE: okay to look at doors
 		if ( faceLeaderByDefault//want to face leader by default
@@ -1780,8 +1780,8 @@ bool idAI::DirectionalTurnToward ( const idVec3 &pos ) {
 	if ( combat.tacticalCurrent != AITACTICAL_MOVE_PLAYERPUSH ) {
 		//always move directionally when getting out of the player's way
 		if( !combat.fl.aware || focusType < AIFOCUS_USE_DIRECTIONAL_MOVE || !move.fl.moving || move.moveCommand == MOVE_TO_ENEMY || !move.fl.allowDirectional ) {
-			move.idealDirection = MOVEDIR_FORWARD;		
-			return TurnToward ( pos );		
+			move.idealDirection = MOVEDIR_FORWARD;
+			return TurnToward ( pos );
 		}
 	}
 
@@ -1790,14 +1790,14 @@ bool idAI::DirectionalTurnToward ( const idVec3 &pos ) {
 	TurnToward ( pos );
 	moveYaw = move.ideal_yaw;
 
-	// Turn towards the goal entity and determine the angle difference 
+	// Turn towards the goal entity and determine the angle difference
 	TurnToward ( currentFocusPos );
 
-	// Check for a direction change only when we can no longer see 
+	// Check for a direction change only when we can no longer see
 	// where we need to look and where we are looking is greater than 3/4ths the maximum look
-	if ( (pos - GetPhysics()->GetOrigin()).LengthFast ( ) > 8.0f ) 
-	if ( !FacingIdeal ( ) ) 
-	if ( fabs ( idMath::AngleNormalize180 ( move.ideal_yaw - move.current_yaw ) ) >= fabs(lookMax[YAW]) || 
+	if ( (pos - GetPhysics()->GetOrigin()).LengthFast ( ) > 8.0f )
+	if ( !FacingIdeal ( ) )
+	if ( fabs ( idMath::AngleNormalize180 ( move.ideal_yaw - move.current_yaw ) ) >= fabs(lookMax[YAW]) ||
 	     fabs ( idMath::AngleNormalize180 ( idMath::AngleNormalize180 ( moveDirOffset[move.idealDirection] + moveYaw ) - move.current_yaw ) ) >= 80.0f ) {
 
 		float diffYaw;
@@ -1807,11 +1807,11 @@ bool idAI::DirectionalTurnToward ( const idVec3 &pos ) {
 			move.idealDirection = MOVEDIR_FORWARD;
 		} else if ( diffYaw < -135.0f || diffYaw > 135.0f ) {
 			move.idealDirection = MOVEDIR_BACKWARD;
-		} else if ( diffYaw < 0.0f ) { 
+		} else if ( diffYaw < 0.0f ) {
 			move.idealDirection = MOVEDIR_LEFT;
 		} else {
 			move.idealDirection = MOVEDIR_RIGHT;
-		} 
+		}
 	}
 
 	return TurnToward( idMath::AngleNormalize180 ( moveDirOffset[move.idealDirection] + moveYaw ) );
@@ -1868,7 +1868,7 @@ void idAI::Turn( void ) {
 		} else {
 			move.turnVel += AI_TURN_SCALE * diff * MS2SEC( gameLocal.msec );
 		}
-		
+
 		if ( move.turnVel > move.turnRate ) {
 			move.turnVel = move.turnRate;
 		} else if ( move.turnVel < -move.turnRate ) {
@@ -1938,7 +1938,7 @@ void idAI::AnimTurn ( float angles, bool force ) {
 
 		if ( force ) {
 			move.anim_turn_amount = angles;
-		} else { 
+		} else {
 			move.anim_turn_amount = idMath::Fabs( idMath::AngleNormalize180( move.current_yaw - move.ideal_yaw ) );
 			if ( move.anim_turn_amount > move.anim_turn_angles ) {
 				move.anim_turn_amount = move.anim_turn_angles;
@@ -2167,7 +2167,7 @@ bool idAI::TestAnimMove ( int animNum, idEntity *ignore, idVec3 *pMoveVec ) {
 	const idAnim*	anim;
 	predictedPath_t path;
 	idVec3			moveVec;
-	
+
 	anim = GetAnimator()->GetAnim ( animNum );
 	assert ( anim );
 
@@ -2338,7 +2338,7 @@ void idAI::AdjustFlyHeight( idVec3 &vel, const idVec3 &goalPos ) {
 			vel.z += addVel.z;
 			goLower = true;
 		}
-        
+
 		if ( DebugFilter(ai_debugMove) ) { // Fly Height
 			gameRenderWorld->DebugBounds( goLower ? colorRed : colorGreen, physicsObj.GetBounds(), path.endPos, gameLocal.msec );
 		}
@@ -2377,7 +2377,7 @@ idAI::FlySeekGoal
 */
 void idAI::FlySeekGoal( idVec3 &vel, idVec3 &goalPos ) {
 	idVec3 seekVel;
-	
+
 	// seek the goal position
 	seekVel = Seek( vel, physicsObj.GetOrigin(), goalPos, AI_SEEK_PREDICTION );
 	seekVel *= move.fly_seek_scale;
@@ -2394,12 +2394,12 @@ idAI::AdjustFlySpeed
 void idAI::AdjustFlySpeed( idVec3 &vel ) {
 	float goalSpeed;
 
-	// Slow down movespeed when we close to goal (this is similar to how AnimMove ai will 
+	// Slow down movespeed when we close to goal (this is similar to how AnimMove ai will
 	// switch to walking when they are close, it allows for more fine control of movement)
 	if ( move.walkRange > 0.0f ) {
 		float distSqr;
 		distSqr	  = (physicsObj.GetOrigin ( ) - move.moveDest).LengthSqr ( );
-		goalSpeed = move.speed * idMath::ClampFloat ( 0.1f, 1.0f, distSqr / Square ( move.walkRange ) );		
+		goalSpeed = move.speed * idMath::ClampFloat ( 0.1f, 1.0f, distSqr / Square ( move.walkRange ) );
 	} else {
 		goalSpeed = move.speed;
 	}
@@ -2444,7 +2444,7 @@ void idAI::FlyTurn( void ) {
 			TurnToward( vel.ToYaw() );
 		}
 	}
-	
+
 	Turn();
 }
 
@@ -2573,12 +2573,12 @@ idAI::UpdatePlayback
 void idAI::UpdatePlayback ( idVec3 &goalPos, idVec3 &delta, idVec3 &oldorigin, idMat3 &oldaxis ) {
 	rvDeclPlaybackData	pbd;
 	bool				atDest;
-	
+
 	// New playback stuff
 	if( !mPlayback.IsActive() ) {
 		return;
 	}
-			
+
 	atDest = mPlayback.UpdateFrame( this, pbd );
 
 	goalPos = pbd.GetPosition();
@@ -2589,7 +2589,7 @@ void idAI::UpdatePlayback ( idVec3 &goalPos, idVec3 &delta, idVec3 &oldorigin, i
 	idVec3 local_dir;
 	physicsObj.GetGravityAxis().ProjectVector( viewAxis[ 0 ], local_dir );
 	move.current_yaw		= local_dir.ToYaw();
-	move.ideal_yaw		= idMath::AngleNormalize180( move.current_yaw );	
+	move.ideal_yaw		= idMath::AngleNormalize180( move.current_yaw );
 
 	OnUpdatePlayback ( pbd );
 }
@@ -2632,7 +2632,7 @@ void idAI::PlaybackMove( void ){
 	moveResult = physicsObj.GetMoveResult();
 	idEntity *blockEnt = physicsObj.GetSlideMoveEntity();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( blockEnt && blockEnt->IsType( idMoveable::GetClassType() ) && blockEnt->GetPhysics()->IsPushable() ) {
 // RAVEN END
 		KickObstacles( viewAxis[ 0 ], move.kickForce, blockEnt );
@@ -2708,7 +2708,7 @@ void idAI::SlideMove( void ) {
 
 	move.fl.blocked = false;
 
-	if ( move.moveCommand < NUM_NONMOVING_COMMANDS ){ 
+	if ( move.moveCommand < NUM_NONMOVING_COMMANDS ){
 		move.lastMoveOrigin.Zero();
 		move.lastMoveTime = gameLocal.time;
 	}
@@ -2780,7 +2780,7 @@ void idAI::SlideMove( void ) {
 	moveResult = physicsObj.GetMoveResult();
 	idEntity *blockEnt = physicsObj.GetSlideMoveEntity();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( blockEnt && blockEnt->IsType( idMoveable::GetClassType() ) && blockEnt->GetPhysics()->IsPushable() ) {
 // RAVEN END
 		KickObstacles( viewAxis[ 0 ], move.kickForce, blockEnt );
@@ -2828,7 +2828,7 @@ void idAI::AnimMove( void ) {
 	idVec3 oldorigin = physicsObj.GetOrigin();
 	idMat3 oldaxis = viewAxis;
 
-	if ( move.moveCommand < NUM_NONMOVING_COMMANDS ){ 
+	if ( move.moveCommand < NUM_NONMOVING_COMMANDS ){
 		move.lastMoveOrigin.Zero();
 		//move.lastMoveTime = gameLocal.time;
 	}
@@ -2845,7 +2845,7 @@ void idAI::AnimMove( void ) {
 	} else if ( move.moveCommand >= NUM_NONMOVING_COMMANDS ) {
 		if ( ReachedPos( move.moveDest, move.moveCommand, move.range ) ) {
 			StopMove( MOVE_STATUS_DONE );
-		} else { 
+		} else {
 			move.moveStatus = MOVE_STATUS_MOVING;
 
 			// Otherwise, Update The Seek Pos
@@ -2890,7 +2890,7 @@ void idAI::AnimMove( void ) {
 		delta.Zero();
 	}
 
-	if ( move.moveCommand > NUM_NONMOVING_COMMANDS ) { 
+	if ( move.moveCommand > NUM_NONMOVING_COMMANDS ) {
 		//actually *trying* to move to a goal
 		if ( goalDist < delta.LengthFast() ) {
 			delta = goalDelta;
@@ -2902,11 +2902,11 @@ void idAI::AnimMove( void ) {
 
 	RunPhysics();
 
-	
+
 	moveResult = physicsObj.GetMoveResult();
 	idEntity *blockEnt = physicsObj.GetSlideMoveEntity();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( blockEnt && blockEnt->IsType( idMoveable::GetClassType() ) && blockEnt->GetPhysics()->IsPushable() ) {
 // RAVEN END
 		KickObstacles( viewAxis[ 0 ], move.kickForce, blockEnt );
@@ -2963,7 +2963,7 @@ const float		REACHED_RADIUS_SQUARE	= REACHED_RADIUS*REACHED_RADIUS;
 =====================
 LineIntersection2D
 =====================
-*/	
+*/
 bool  LineIntersection2D(const idVec3& A, const idVec3& B, const idVec3& C, const idVec3& D, idVec3& contactPoint) {
 
 	// Test If Parallel
@@ -3022,7 +3022,7 @@ struct rvWindingBox {
 	=====================
 	Initialize
 	=====================
-	*/	
+	*/
 	void Initialize() {
 		for (int i=0; i<4; i++) {
 			verts[i]		= vec3_zero;
@@ -3035,7 +3035,7 @@ struct rvWindingBox {
 	=====================
 	FromBounds
 	=====================
-	*/	
+	*/
 	void FromBounds(const idBounds& b) {
 		verts[0].x	= b[0].x;
 		verts[0].y	= b[0].y;
@@ -3058,7 +3058,7 @@ struct rvWindingBox {
 	=====================
 	LineIntersection
 	=====================
-	*/	
+	*/
 	bool  LineIntersection(const idVec3& start, const idVec3& end, idVec3& contactPoint, int& v1, int& v2) const  {
 		for (int i=0; i<4; i++) {
 			v1 = i;
@@ -3075,7 +3075,7 @@ struct rvWindingBox {
 	=====================
 	PointInside
 	=====================
-	*/	
+	*/
 	bool PointInside(const idVec3& point) const {
 		for (int i=0; i<4; i++) {
 			const idVec3& vert1 = verts[i];
@@ -3092,7 +3092,7 @@ struct rvWindingBox {
 	=====================
 	DrawDebugGraphics
 	=====================
-	*/	
+	*/
 	bool DrawDebugGraphics() const  {
 		for (int i=0; i<4; i++) {
 			const idVec3& vert1 = verts[i];
@@ -3116,7 +3116,7 @@ struct rvWindingBox {
 =====================
 rvMarker
 
-A marker represents an obstacle within 
+A marker represents an obstacle within
 an area.  Any single obstacle can have
 any number of markers in any number of
 areas that it touches
@@ -3320,7 +3320,7 @@ struct rvObstacle {
 		static int					aasFileNum, t, v, a;
 		static idList<rvObstacle*>	touched;
 		static rvWindingBox*		myWinding;
-		
+
 
 		pendingUpdate = false;
 		idEntity* ent = entity.GetEntity();
@@ -3372,7 +3372,7 @@ struct rvObstacle {
 
 			areas.Clear();
 			touched.Clear();
-	
+
 			myWinding		= &windings[aasFileNum];
 			searchFile		= gameLocal.GetAAS(aasFileNum)->GetFile();
 			searchBounds	= physics->GetAbsBounds();
@@ -3452,7 +3452,7 @@ struct rvObstacle {
 	=====================
 	VertexValid
 	=====================
-	*/	
+	*/
 	static bool VertexValid(const rvWindingBox& bounds, int v, const aasArea_t* inArea, const idEntity* ignore)  {
 		return (bounds.areas[v] && (bounds.obstacles[v]==NULL || bounds.obstacles[v]->entity.GetEntity()==ignore));
 	}
@@ -3927,7 +3927,7 @@ public:
 			pathSeek_t& pathPrev	= myMove->path[at+1];
 			pathSeek_t& pathAt		= myMove->path[at];
 			pathSeek_t& pathNext	= myMove->path[at-1];
-			
+
 			myAAS->GetEdge(pathAt.reach->edgeNum, edgeA, edgeB);
 
 			// Smooth The Path One Pass
@@ -4139,7 +4139,7 @@ public:
 
 		// Compute Standard Distance
 		//---------------------------
-		distance = start.Dist(stop); 
+		distance = start.Dist(stop);
 		if (from) {
 			distance += from->travelCost + from->reach->travelTime;
 		}
@@ -4202,7 +4202,7 @@ public:
 			visit				= &visited[visitedCount];
 			visit->reach		= reach;
 			visit->vertexNum	= vertexNum;
-			visit->costToGoal	= pos.Dist(myMove->goalPos); 
+			visit->costToGoal	= pos.Dist(myMove->goalPos);
 
 			// Temporary Data
 			//----------------
@@ -4272,10 +4272,10 @@ public:
 
 		// If Edge Is Far From Start and Goal, Don't Add Verts
 		//-----------------------------------------------------
-		if (!reach->fromAreaNum!=myMove->myArea && 
-			!reach->toAreaNum!=myMove->myArea && 
-			!reach->fromAreaNum!=myMove->goalArea && 
-			!reach->toAreaNum!=myMove->goalArea && 
+		if (!reach->fromAreaNum!=myMove->myArea &&
+			!reach->toAreaNum!=myMove->myArea &&
+			!reach->fromAreaNum!=myMove->goalArea &&
+			!reach->toAreaNum!=myMove->goalArea &&
 			reach->start.Dist2XY(myMove->myPos)>22500.0f/*(250*250)*/ && reach->start.Dist2XY(myMove->goalPos)>22500.0f/*(250*250)*/) {
 			return;
 		}
@@ -4380,7 +4380,7 @@ public:
 		// Special Case For Starting In The Goal Area
 		//--------------------------------------------
 		if (myMove->myArea==myMove->goalArea) {
-			
+
 			// Test For Any Obstacles In The Way
 			//-----------------------------------
 			if (!obstacleFinder.RayTrace(0.0f, myArea, myMove->myPos, myMove->goalPos, 0/*CDR_TODO: Get myAASNum*/, myIgnoreEntity, myIgnoreEntity2)) {
@@ -4575,7 +4575,7 @@ void idAI::RVMasterMove( void ) {
 	//====================================================================
 	// STEERING
 	//   The seek target is where AI will attempt to turn and move toward
-	//   With simple commands the seek origin is just the goal origin, 
+	//   With simple commands the seek origin is just the goal origin,
 	//   however with pathfinding and obsticle avoidance the seek origin
 	//   will usually be somewhere between the actor and his goal.
 	//====================================================================
@@ -4595,7 +4595,7 @@ void idAI::RVMasterMove( void ) {
 			rvObstacleFinder::traceResult_t& tr = obstacleFinder.contact;
 
 			move.obstacle				= tr.obstacle->entity;
-			const rvWindingBox& bounds	= tr.obstacle->windings[0/*CDR_TODO: Get actual aasNumber*/]; 
+			const rvWindingBox& bounds	= tr.obstacle->windings[0/*CDR_TODO: Get actual aasNumber*/];
 
 			// Is The Obstacle Standing On Seek Position
 			//-------------------------------------------
@@ -4612,7 +4612,7 @@ void idAI::RVMasterMove( void ) {
 					move.blockTime		= gameLocal.time + 1050;
 					// CDR_TODO: Issue MoveDestInvalid() Callback Here
 				}
-			} 
+			}
 
 			// Is The Obstacle About To Cross My Path?
 			//-----------------------------------------

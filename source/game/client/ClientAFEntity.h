@@ -69,7 +69,7 @@ protected:
 /*
 ===============================================================================
 
-rvClientAFAttachment - a regular idAFAttachment spawned client-side - links to an 
+rvClientAFAttachment - a regular idAFAttachment spawned client-side - links to an
 						idAnimatedEntity rather than rvClientAnimatedEntity
 
 ===============================================================================

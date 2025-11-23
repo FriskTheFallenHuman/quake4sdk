@@ -72,7 +72,7 @@ float idPhysics_Player::CmdScale( const usercmd_t &cmd ) const {
 	// otherwise crouch speed will be lower than specified
 	if ( walking ) {
 		upmove = 0;
-	} else { 
+	} else {
 		upmove = cmd.upmove;
 	}
 
@@ -122,7 +122,7 @@ void idPhysics_Player::Accelerate( const idVec3 &wishdir, const float wishspeed,
 	if ( accelspeed > addspeed ) {
 		accelspeed = addspeed;
 	}
-	
+
 	current.velocity += accelspeed * wishdir;
 
 #else
@@ -347,7 +347,7 @@ bool idPhysics_Player::SlideMove( bool gravity, bool stepUp, bool stepDown, bool
 				current.velocity *= 1.0f - idMath::ClampFloat( 0.0f, 1000.0f, totalMass - 20.0f ) * ( 1.0f / 950.0f );
 				pushed = true;
 			}
-	
+
 			current.origin = trace.endpos;
 			time_left -= time_left * trace.fraction;
 
@@ -398,7 +398,7 @@ bool idPhysics_Player::SlideMove( bool gravity, bool stepUp, bool stepDown, bool
 		//
 		// modify velocity so it parallels all of the clip planes
 		//
-		
+
 		// find a plane that it enters
 		for ( i = 0; i < numplanes; i++ ) {
 			into = current.velocity * planes[i];
@@ -692,8 +692,8 @@ void idPhysics_Player::AirMove( void ) {
 	float		scale;
 
 	// if the player isnt pressing crouch and heading down then accumulate slide time
-	if ( command.upmove >= 0 && current.velocity * gravityNormal > 0 ) {	
-		current.crouchSlideTime = idMath::ClampInt( 0, 2000, current.crouchSlideTime + framemsec * 2 ); 
+	if ( command.upmove >= 0 && current.velocity * gravityNormal > 0 ) {
+		current.crouchSlideTime = idMath::ClampInt( 0, 2000, current.crouchSlideTime + framemsec * 2 );
 	}
 
 	idPhysics_Player::Friction();
@@ -1089,7 +1089,7 @@ void idPhysics_Player::CheckGround( bool checkStuck ) {
 	if ( ( groundTrace.c.normal * -gravityNormal ) < MIN_WALK_NORMAL ) {
 		// in multiplayer, instead of sliding push the player out from the normal for some free fall
 		current.origin += groundTrace.c.normal;
-			
+
 		groundPlane = false;
 		walking = false;
 
@@ -1112,7 +1112,7 @@ void idPhysics_Player::CheckGround( bool checkStuck ) {
 			// don't allow another jump for a little while
 			current.movementFlags |= PMF_TIME_LAND;
 			current.movementTime = 250;
-		}		
+		}
 	}
 
 	// let the entity know about the collision
@@ -1165,7 +1165,7 @@ void idPhysics_Player::CheckDuck( void ) {
 			if ( !current.crouchSlideTime ) {
 				playerSpeed = crouchSpeed;
 			}
-			maxZ = pm_crouchheight.GetFloat();			
+			maxZ = pm_crouchheight.GetFloat();
 		} else {
 			maxZ = pm_normalheight.GetFloat();
 			if ( groundPlane && current.crouchSlideTime ) {
@@ -1175,7 +1175,7 @@ void idPhysics_Player::CheckDuck( void ) {
 	}
 	// if the clipModel height should change
 	if ( clipModel->GetBounds()[1][2] != maxZ ) {
-		
+
 		bounds = clipModel->GetBounds();
 		bounds[1][2] = maxZ;
 
@@ -1209,7 +1209,7 @@ void idPhysics_Player::CheckLadder( void ) {
 	idVec3		forward, start, end;
 	trace_t		trace;
 	float		tracedist;
-	
+
 	if ( current.movementTime ) {
 		return;
 	}
@@ -1291,7 +1291,7 @@ bool idPhysics_Player::CheckJump( void ) {
 	if ( current.velocity * groundTrace.c.normal < 0.0f ) {
 		current.velocity = AdjustVertically( groundTrace.c.normal, current.velocity );
 	}
-	
+
 	addVelocity = 2.0f * maxJumpHeight * -gravityVector;
 	addVelocity *= idMath::Sqrt( addVelocity.Normalize() );
 	current.velocity += addVelocity;
@@ -1374,7 +1374,7 @@ void idPhysics_Player::SetWaterLevel( void ) {
 
 	// check at feet level
 	point = current.origin - ( bounds[0][2] + 1.0f ) * gravityNormal;
-	contents = gameLocal.Contents( self, point, NULL, mat3_identity, -1, self, &other );	
+	contents = gameLocal.Contents( self, point, NULL, mat3_identity, -1, self, &other );
 	if ( contents & MASK_WATER ) {
 
 		waterType = contents;
@@ -1413,7 +1413,7 @@ void idPhysics_Player::DropTimers( void ) {
 			current.movementTime -= framemsec;
 		}
 	}
-	
+
 	if ( groundPlane && current.crouchSlideTime ) {
 		if ( framemsec >= current.crouchSlideTime ) {
 			current.crouchSlideTime = 0;
@@ -1678,9 +1678,9 @@ void idPhysics_Player_SavePState( idSaveGame *savefile, const playerPState_t &st
 	savefile->WriteVec3( state.velocity );
 	savefile->WriteVec3( state.localOrigin );
 	savefile->WriteVec3( state.pushVelocity );
-	
+
 	savefile->WriteVec3( state.lastPushVelocity );	// cnicholson Added unsaved var
-	
+
 	savefile->WriteFloat( state.stepUp );
 	savefile->WriteInt( state.movementType );
 	savefile->WriteInt( state.movementFlags );
@@ -2200,7 +2200,7 @@ idPhysics_Player::ReadFromSnapshot
 ================
 */
 void idPhysics_Player::ReadFromSnapshot( const idBitMsgDelta &msg ) {
-	
+
 	idVec3 oldOrigin = current.origin;
 
 	current.origin[0] = msg.ReadFloat();
@@ -2230,7 +2230,7 @@ void idPhysics_Player::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 
 	current.stepUp = msg.ReadDeltaFloat( 0.0f );
 	current.movementType = msg.ReadBits( PLAYER_MOVEMENT_TYPE_BITS );
-	
+
 	current.movementFlags = msg.ReadBits( PLAYER_MOVEMENT_FLAGS_BITS );
 
 	current.movementTime = msg.ReadDeltaLong( 0 );

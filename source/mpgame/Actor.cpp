@@ -37,7 +37,7 @@ idAnimState::idAnimState() {
 	disabled		= true;
 	channel			= ANIMCHANNEL_ALL;
 	animBlendFrames = 0;
-	lastAnimBlendFrames = 0;	
+	lastAnimBlendFrames = 0;
 }
 
 /*
@@ -117,7 +117,7 @@ void idAnimState::Init( idEntity *owner, idAnimator *_animator, int animchannel 
 	channel = animchannel;
 
 	stateThread.SetName ( va("%s_anim_%d", owner->GetName(), animchannel ) );
-	stateThread.SetOwner ( owner );	
+	stateThread.SetOwner ( owner );
 }
 
 /*
@@ -216,7 +216,7 @@ idAnimState::AnimDone
 */
 bool idAnimState::AnimDone( int blendFrames ) const {
 	int animDoneTime;
-	
+
 	animDoneTime = animator->CurrentAnim( channel )->GetEndTime();
 	if ( animDoneTime < 0 ) {
 		// playing a cycle
@@ -444,7 +444,7 @@ idActor::idActor( void )
 	inDamageEvent		= false;
 	disablePain			= true;
 	allowEyeFocus		= false;
-	
+
 	blink_anim			= NULL;
 	blink_time			= 0;
 	blink_min			= 0;
@@ -463,7 +463,7 @@ idActor::idActor( void )
 	flashlightHandle = -1;
 
 	deathPushTime	= 0;
-	
+
 	lightningEffects = 0;
 	lightningNextTime = 0;
 }
@@ -523,7 +523,7 @@ void idActor::Spawn( void ) {
 	spawnArgs.GetInt( "team", "0", team );
 	spawnArgs.GetVector( "offsetModel", "0 0 0", modelOffset );
 
-	spawnArgs.GetBool( "use_combat_bbox", "0", use_combat_bbox );	
+	spawnArgs.GetBool( "use_combat_bbox", "0", use_combat_bbox );
 
 	viewAxis = GetPhysics()->GetAxis();
 
@@ -561,7 +561,7 @@ void idActor::Spawn( void ) {
 
 		// don't let them drop to the floor
 		args.Set( "dropToFloor", "0" );
-		
+
 		gameLocal.SpawnEntityDef( args, &ent );
 		if ( !ent ) {
 			gameLocal.Error( "Couldn't spawn '%s' to attach to entity '%s'", kv->GetValue().c_str(), name.c_str() );
@@ -612,13 +612,13 @@ void idActor::Spawn( void ) {
 	memset( &flashlight, 0, sizeof( flashlight ) );
 	flashlight.suppressLightInViewID = entityNumber + 1;
 	flashlight.allowLightInViewID = 0;
-	flashlight.lightId = 1 + entityNumber;	
+	flashlight.lightId = 1 + entityNumber;
 
 	flashlight.allowLightInViewID = 1;
 
 	idVec3	color;
 	spawnArgs.GetVector ( "flashlightColor", "1 1 1", color );
-	
+
 	flashlight.pointLight							= spawnArgs.GetBool( "flashlightPointLight", "1" );
 	flashlight.shader								= declManager->FindMaterial( spawnArgs.GetString( "mtr_flashlight", "muzzleflash" ), false );
 	flashlight.shaderParms[ SHADERPARM_RED ]		= color[0];
@@ -631,7 +631,7 @@ void idActor::Spawn( void ) {
 	flashlight.detailLevel = DEFAULT_LIGHT_DETAIL_LEVEL;
 // RAVEN END
 
-	flashlight.lightRadius[0] = flashlight.lightRadius[1] = 
+	flashlight.lightRadius[0] = flashlight.lightRadius[1] =
 		flashlight.lightRadius[2] = spawnArgs.GetFloat ( "flashlightRadius" );
 
 	if ( !flashlight.pointLight ) {
@@ -640,7 +640,7 @@ void idActor::Spawn( void ) {
 		flashlight.right	= spawnArgs.GetVector( "flashlightRight" );
 		flashlight.end		= spawnArgs.GetVector( "flashlightTarget" );
 	}
-	
+
 	spawnArgs.GetVector ( "flashlightOffset", "0 0 0", flashlightOffset );
 
 	if ( spawnArgs.GetString( "flashlight_flaresurf", NULL ) ) {
@@ -692,8 +692,8 @@ void idActor::SetupHead( const char* headDefName, idVec3 headOffset ) {
 	if( !headDefName[ 0 ] ) {
 		headDefName = spawnArgs.GetString( "def_head", "" );
 // jshepard: allow for heads to override persona defs
-		headDefName = spawnArgs.GetString( "override_head", headDefName );		
-	} 
+		headDefName = spawnArgs.GetString( "override_head", headDefName );
+	}
 
 	if ( headDefName[ 0 ] ) {
 		// free the old head if we want a new one
@@ -741,7 +741,7 @@ void idActor::SetupHead( const char* headDefName, idVec3 headOffset ) {
 		}
 
 		headEnt->BindToJoint( this, joint, true );
-		headEnt->GetPhysics()->SetOrigin( vec3_origin + headOffset );		
+		headEnt->GetPhysics()->SetOrigin( vec3_origin + headOffset );
 		headEnt->GetPhysics()->SetAxis( mat3_identity );
 	} else if ( head ) {
 		head->PostEventMS( &EV_Remove, 0 );
@@ -757,7 +757,7 @@ void idActor::SetupHead( const char* headDefName, idVec3 headOffset ) {
 				break;
 			}
 		}
-		
+
 		head->InitCopyJoints ( );
 		head->SetInstance( instance );
 	}
@@ -835,7 +835,7 @@ void idActor::Save( idSaveGame *savefile ) const {
 	savefile->WriteJoint( leftEyeJoint );
 	savefile->WriteJoint( rightEyeJoint );
 	savefile->WriteJoint( soundJoint );
-	savefile->WriteJoint( eyeOffsetJoint );	
+	savefile->WriteJoint( eyeOffsetJoint );
 	savefile->WriteJoint( chestOffsetJoint );
 	savefile->WriteJoint( neckJoint );
 	savefile->WriteJoint( headJoint );
@@ -845,7 +845,7 @@ void idActor::Save( idSaveGame *savefile ) const {
 	savefile->WriteString( animPrefix );
 	savefile->WriteString( painType );
 	savefile->WriteString( painAnim );
-	
+
 	savefile->WriteInt( blink_anim );
 	savefile->WriteInt( blink_time );
 	savefile->WriteInt( blink_min );
@@ -948,7 +948,7 @@ void idActor::Restore( idRestoreGame *savefile ) {
 	savefile->ReadJoint( leftEyeJoint );
 	savefile->ReadJoint( rightEyeJoint );
 	savefile->ReadJoint( soundJoint );
-	savefile->ReadJoint( eyeOffsetJoint );	
+	savefile->ReadJoint( eyeOffsetJoint );
 	savefile->ReadJoint( chestOffsetJoint );
 	savefile->ReadJoint( neckJoint );
 	savefile->ReadJoint( headJoint );
@@ -958,7 +958,7 @@ void idActor::Restore( idRestoreGame *savefile ) {
 	savefile->ReadString( animPrefix );
 	savefile->ReadString( painType );
 	savefile->ReadString( painAnim );
-	
+
 	savefile->ReadInt( blink_anim );
 	savefile->ReadInt( blink_time );
 	savefile->ReadInt( blink_min );
@@ -995,7 +995,7 @@ void idActor::Restore( idRestoreGame *savefile ) {
 	savefile->ReadJoint ( flashlightJoint );
 	savefile->ReadVec3 ( flashlightOffset );
 	savefile->ReadRenderLight ( flashlight );
-	if ( flashlightHandle != -1 ) {		
+	if ( flashlightHandle != -1 ) {
 		flashlightHandle = gameRenderWorld->AddLightDef( &flashlight );
 	}
 
@@ -1027,7 +1027,7 @@ void idActor::Hide( void ) {
 		if ( ent->GetBindMaster() == this ) {
 			ent->Hide();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( ent->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 				static_cast<idLight *>( ent )->Off();
@@ -1055,7 +1055,7 @@ void idActor::Show( void ) {
 		if ( ent->GetBindMaster() == this ) {
 			ent->Show();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( ent->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 				static_cast<idLight *>( ent )->On();
@@ -1134,25 +1134,25 @@ void idActor::SetupBody( void ) {
 	} else {
 		headAnimator = GetAnimator( );
 	}
-	
+
 	// Get left eye joint
-	if ( !headEnt || !headEnt->spawnArgs.GetString ( "joint_leftEye", "", &jointname ) ) {		
+	if ( !headEnt || !headEnt->spawnArgs.GetString ( "joint_leftEye", "", &jointname ) ) {
 		jointname = spawnArgs.GetString( "joint_leftEye" );
 	}
 	leftEyeJoint = headAnimator->GetJointHandle( jointname );
 
 	// Get right eye joint
-	if ( !headEnt || !headEnt->spawnArgs.GetString ( "joint_rightEye", "", &jointname ) ) {		
+	if ( !headEnt || !headEnt->spawnArgs.GetString ( "joint_rightEye", "", &jointname ) ) {
 		jointname = spawnArgs.GetString( "joint_rightEye" );
 	}
 	rightEyeJoint = headAnimator->GetJointHandle( jointname );
-				
+
 	// If head height is specified, just use that
 	if ( spawnArgs.GetFloat( "eye_height", "0", height ) ) {
 		SetEyeHeight( height );
-	} else { 
+	} else {
 		// See if there is an eye offset joint specified, if not just use the left eye joint
-		if ( !headEnt || !headEnt->spawnArgs.GetString( "joint_eyeOffset", "", &jointname ) ) {		
+		if ( !headEnt || !headEnt->spawnArgs.GetString( "joint_eyeOffset", "", &jointname ) ) {
 			jointname = spawnArgs.GetString( "joint_eyeOffset" );
 		}
 		// Get the eye offset joint
@@ -1162,7 +1162,7 @@ void idActor::SetupBody( void ) {
 	// If eye height is specified, just use that
 	if ( spawnArgs.GetFloat( "chest_height", "0", height ) ) {
 		SetChestHeight( height );
-	} else { 
+	} else {
 		// See if there is an eye offset joint specified, if not just use the left eye joint
 		spawnArgs.GetString( "joint_chestOffset", "", &jointname );
 		// Get the chest offset joint
@@ -1452,7 +1452,7 @@ void idActor::Event_PreExitVehicle ( bool force ) {
 idActor::Event_Flashlight
 =====================
 */
-void idActor::Event_Flashlight( bool on ) {	
+void idActor::Event_Flashlight( bool on ) {
 	if ( on ) {
 		FlashlightUpdate(true);
 	} else {
@@ -1499,7 +1499,7 @@ void idActor::FlashlightUpdate ( bool forceOn ) {
 	// the flash has an explicit joint for locating it
 	GetJointWorldTransform ( flashlightJoint, gameLocal.time, flashlight.origin, flashlight.axis );
 	flashlight.origin += flashlightOffset * flashlight.axis;
-	
+
 	if ( flashlightHandle != -1 ) {
 		gameRenderWorld->UpdateLightDef( flashlightHandle, &flashlight );
 	} else {
@@ -1534,11 +1534,11 @@ bool idActor::CheckFOV( const idVec3 &pos, float ang ) const {
 	if(!GetPhysics()) {
 		return false;
 	}
-	
+
 	float	dot;
 	float	dist;
 	idVec3	delta;
-	
+
 	delta = pos - GetEyePosition();
 	dist = delta.LengthFast();
 
@@ -1847,7 +1847,7 @@ bool idActor::UpdateAnimationControllers( void ) {
 	if ( !headEnt ) {
 		headEnt = this;
 	}
-	
+
 	// Dynamically update the eye offset if a joint was specified
 	if ( eyeOffsetJoint != INVALID_JOINT ) {
 		headEnt->GetJointWorldTransform( eyeOffsetJoint, gameLocal.time, eyeOffset, axis );
@@ -2022,7 +2022,7 @@ idActor *idActor::ClosestEnemyToPoint( const idVec3 &pos, float maxRange, bool r
 	float		distSquared;
 	idVec3		delta;
 	pvsHandle_t pvs;
-	
+
 	//just to supress the compiler warning
     pvs.i = 0;
 
@@ -2042,7 +2042,7 @@ idActor *idActor::ClosestEnemyToPoint( const idVec3 &pos, float maxRange, bool r
 		if ( distSquared < bestDistSquared ) {
 			if ( checkPVS ) {
 				// If this enemy isnt in the same pvps then use them as a backup
-				if ( pvs.i > 0 
+				if ( pvs.i > 0
 					&& pvs.i < MAX_CURRENT_PVS
 					&& !gameLocal.pvs.InCurrentPVS( pvs, ent->GetPVSAreas(), ent->GetNumPVSAreas() ) ) {
 					continue;
@@ -2105,7 +2105,7 @@ void idActor::GetAASLocation( idAAS *aas, idVec3 &pos, int &areaNum ) const {
 		areaNum = 0;
 		return;
 	}
-	
+
 	size = aas->GetSettings()->boundingBoxes[0][1];
 	bounds[0] = -size;
 	size.z = 32.0f;
@@ -2151,7 +2151,7 @@ void idActor::SetAnimState( int channel, const char *statename, int blendFrames,
 		case ANIMCHANNEL_HEAD :
 			headAnim.GetStateThread().Clear();
 			break;
-			
+
 		case ANIMCHANNEL_TORSO :
 			torsoAnim.GetStateThread().Clear();
 			legsAnim.Enable( blendFrames );
@@ -2161,10 +2161,10 @@ void idActor::SetAnimState( int channel, const char *statename, int blendFrames,
 			legsAnim.GetStateThread().Clear();
 			torsoAnim.Enable( blendFrames );
 			break;
-	}		
+	}
 
 	OnStateChange( channel );
-	
+
 	PostAnimState( channel, statename, blendFrames, flags );
 }
 
@@ -2329,7 +2329,7 @@ void idActor::Gib( const idVec3 &dir, const char *damageDefName ) {
 		head.GetEntity()->Hide();
 	}
 	StopSound( SND_CHANNEL_VOICE, false );
-	
+
 	gameLocal.PlayEffect ( spawnArgs, "fx_gib", GetPhysics()->GetOrigin(), GetPhysics()->GetAxis() );
 }
 
@@ -2376,7 +2376,7 @@ Bleeding wounds and surface overlays are applied in the collision code that
 calls Damage()
 ============
 */
-void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 					  const char *damageDefName, const float damageScale, const int location ) {
 	if ( !fl.takedamage ) {
 		return;
@@ -2400,23 +2400,23 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 	// friendly fire damage
 	bool noDmgFeedback = false;
 	if ( attacker->IsType ( idActor::Type ) && static_cast<idActor*>(attacker)->team == team ) {
-		
+
 		OnFriendlyFire ( static_cast<idActor*>(attacker) );
-		
+
 		// jshepard:
 		// if the player deals friendly fire damage it is reduced to 0. If the damage is splash damage,
 		// then the victim should use a pain anim.
 		if( static_cast<idPlayer*>( attacker ) == gameLocal.GetLocalPlayer() )	{
-			
+
 			//play pain (maybe one day a special anim?) for damages that have the cower keyword
 			if ( damageDef->GetBool( "cower" ))	{
 				Pain( inflictor, attacker, damage, dir, location );
 			}
-			
+
 			//reduce the damage
 			damage = 0;
 			noDmgFeedback = true;
-		}		
+		}
 
 		// reduce friendly fire damage by the teamscale
 		damage = floor( damage * damageDef->GetFloat ( "teamScale", "0.5" ) );
@@ -2442,7 +2442,7 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 	// singleplayer stat reporting.
 	if(!gameLocal.isMultiplayer) {
 		int methodOfDeath = -1;
-		// jnewquist: Use accessor for static class type 
+		// jnewquist: Use accessor for static class type
 		if ( inflictor->IsType( idProjectile::GetClassType() ) ) {
 		// RAVEN END
 			methodOfDeath = static_cast<idProjectile*>(inflictor)->methodOfDeath;
@@ -2500,8 +2500,8 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 			bool canDMG_Gib = (spawnArgs.GetBool( "gib" ) | spawnArgs.GetBool( "DMG_gib" ));
 			if ( health < -20 )
 			{
-				if ( (spawnArgs.GetBool( "gib" ) && damageDef->GetBool( "gib" )) || 
-					 (canDMG_Gib && damageDef->GetBool( "DMG_gib"))) 
+				if ( (spawnArgs.GetBool( "gib" ) && damageDef->GetBool( "gib" )) ||
+					 (canDMG_Gib && damageDef->GetBool( "DMG_gib")))
 				{
 					gibbed = true;
 				}
@@ -2510,14 +2510,14 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 			gibbed = saveGibbed;
 			if ( health < -20 )
 			{
-				if ( (spawnArgs.GetBool( "gib" ) && damageDef->GetBool( "gib" )) || 
-					 (canDMG_Gib && damageDef->GetBool( "DMG_gib"))) 
+				if ( (spawnArgs.GetBool( "gib" ) && damageDef->GetBool( "gib" )) ||
+					 (canDMG_Gib && damageDef->GetBool( "DMG_gib")))
 				{
 					Gib( dir, damageDefName );
 				}
 			}
 
-			if ( oldHealth > 0 && !gibbed && !fl.quickBurn) {	
+			if ( oldHealth > 0 && !gibbed && !fl.quickBurn) {
   				float pushScale = 1.0f;
   				if ( inflictor && inflictor->IsType ( idPlayer::GetClassType() ) ) {
   					pushScale = static_cast<idPlayer*>(inflictor)->PowerUpModifier ( PMOD_PROJECTILE_DEATHPUSH );
@@ -2554,17 +2554,17 @@ void idActor::InitDeathPush ( const idVec3& dir, int location, const idDict* dam
 	if( !af.IsActive() ) {
 		return;
 	}
-	
-	if ( deathPushTime > gameLocal.time ) { 
+
+	if ( deathPushTime > gameLocal.time ) {
 		return;
 	}
-	
+
 	if ( !damageDict->GetInt ( "deathPush", "0", deathPushTime ) || deathPushTime <= 0 ) {
 		return;
 	}
-	
-	damageDict->GetVec2( "deathPushMin", "", forceMin );	
-	damageDict->GetVec2( "deathPushMax", "", forceMax );	
+
+	damageDict->GetVec2( "deathPushMin", "", forceMin );
+	damageDict->GetVec2( "deathPushMax", "", forceMax );
 
 /*
 	forceMin *= (pushScale * GetPhysics()->GetMass());
@@ -2575,9 +2575,9 @@ void idActor::InitDeathPush ( const idVec3& dir, int location, const idDict* dam
 
 	deathPushForce = dir;
 	deathPushForce.Normalize ( );
-	deathPushForce = rvRandom::flrand ( forceMin.x, forceMax.x ) * deathPushForce + 
+	deathPushForce = rvRandom::flrand ( forceMin.x, forceMax.x ) * deathPushForce +
 		    -rvRandom::flrand ( forceMin.y, forceMax.y ) * GetPhysics()->GetGravityNormal ( );
-	
+
 	deathPushTime += gameLocal.time;
 	deathPushJoint = (jointHandle_t) location;
 }
@@ -2596,7 +2596,7 @@ void idActor::DeathPush ( void ) {
 	center = GetPhysics()->GetAbsBounds ( ).GetCenter();
 
 	GetPhysics()->ApplyImpulse ( 0, center, -0.5f * GetPhysics()->GetMass () * MS2SEC(gameLocal.GetMSec()) * GetPhysics()->GetGravity ( ) );
-	
+
 	if ( deathPushJoint != INVALID_JOINT ) {
 		idVec3 origin;
 		idMat3 axis;
@@ -2612,7 +2612,7 @@ void idActor::DeathPush ( void ) {
 idActor::SkipImpulse
 =====================
 */
-bool idActor::SkipImpulse( idEntity* ent, int id ) {	
+bool idActor::SkipImpulse( idEntity* ent, int id ) {
 	return idAFEntity_Gibbable::SkipImpulse( ent, id ) || health <= 0 || gibbed || ent->IsType( idActor::GetClassType() ) || ent->IsType( idProjectile::GetClassType() );
 }
 
@@ -2656,7 +2656,7 @@ bool idActor::Pain( idEntity *inflictor, idEntity *attacker, int damage, const i
 	if ( gameLocal.time < pain_debounce_time ) {
 		return false;
 	}
-	
+
 	// No pain if being hit by a friendly target
 	// jshepard: friendly targets can now cause pain
 /*
@@ -2710,7 +2710,7 @@ bool idActor::Pain( idEntity *inflictor, idEntity *attacker, int damage, const i
 			painAnim.Clear ( );
 		}
 	}
-	
+
 	// Do we have a pain anim for just the pain type?
 	if ( !painAnim.Length ( ) && painType.Length ( ) ) {
 		painAnim = va ( "pain_%s", painType.c_str() );
@@ -2725,14 +2725,14 @@ bool idActor::Pain( idEntity *inflictor, idEntity *attacker, int damage, const i
 		if ( !animator.HasAnim ( painAnim ) ) {
 			painAnim.Clear ( );
 		}
-	}	
+	}
 
 	if ( !painAnim.Length() ) {
 		painAnim = "pain";
 	}
 
 	if ( g_debugDamage.GetBool() ) {
-		gameLocal.Printf( "Damage: joint: '%s', zone '%s', anim '%s'\n", animator.GetJointName( ( jointHandle_t )location ), 
+		gameLocal.Printf( "Damage: joint: '%s', zone '%s', anim '%s'\n", animator.GetJointName( ( jointHandle_t )location ),
 			damageGroup.c_str(), painAnim.c_str() );
 	}
 
@@ -2835,7 +2835,7 @@ idActor::ExitVehicle
 ==============
 */
 bool idActor::ExitVehicle ( bool force ) {
-	idMat3	axis;			
+	idMat3	axis;
 	idVec3	origin;
 
 	if ( !IsInVehicle ( ) ) {
@@ -2865,7 +2865,7 @@ bool idActor::ExitVehicle ( bool force ) {
 	viewAxis = axis[0].ToMat3();
 	GetPhysics()->SetAxis( mat3_identity );
 	GetPhysics()->SetLinearVelocity( vec3_origin );
-	
+
 	return true;
 }
 
@@ -2876,17 +2876,17 @@ idActor::EnterVehicle
 */
 bool idActor::EnterVehicle ( idEntity* ent ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( IsInVehicle ( ) || !ent->IsType ( rvVehicle::GetClassType() ) ) {
 // RAVEN END
 		return false ;
-	}	
+	}
 
-	// Get in the vehicle	
+	// Get in the vehicle
 	if ( !vehicleController.Drive ( static_cast<rvVehicle*>(ent), this ) ) {
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -2915,7 +2915,7 @@ void idActor::FootStep( void ) {
 	// start footstep sound based on material type
 	materialType = GetPhysics()->GetContact( 0 ).materialType;
 	sound		 = NULL;
-	
+
 	// Sound based on material type?
 	if ( materialType ) {
 		sound = spawnArgs.GetString( va( "snd_footstep_%s", materialType->GetName() ) );
@@ -2923,7 +2923,7 @@ void idActor::FootStep( void ) {
 	if ( !sound || !*sound ) {
 		sound = spawnArgs.GetString( "snd_footstep" );
 	}
-	
+
 	// If we have a sound then play it
 	if ( sound && *sound ) {
 		StartSoundShader( declManager->FindSound( sound ), SND_CHANNEL_BODY, 0, false, NULL );
@@ -2947,7 +2947,7 @@ idActor::Event_DisableEyeFocus
 */
 void idActor::Event_DisableEyeFocus( void ) {
 	allowEyeFocus = false;
-	
+
 	idEntity *headEnt = head.GetEntity();
 	if ( headEnt ) {
 		headEnt->GetAnimator()->Clear( ANIMCHANNEL_EYELIDS, gameLocal.time, FRAME2MS( 2 ) );
@@ -3113,7 +3113,7 @@ idAI::DebugFilter
 bool idActor::DebugFilter ( const idCVar& test )  const {
 	return ( health>0 && (test.GetBool() || test.GetInteger()>0) && (!ai_debugFilterString.GetString()[0] || !stricmp( name.c_str(), ai_debugFilterString.GetString() )));
 }
- 
+
 /*
 ===============
 idActor::Event_IdleAnim
@@ -3121,8 +3121,8 @@ idActor::Event_IdleAnim
 */
 void idActor::Event_IdleAnim( int channel, const char *animname ) {
 	int anim;
-	
-	anim = GetAnim( channel, animname );	
+
+	anim = GetAnim( channel, animname );
 	if ( !anim ) {
 		if ( ( channel == ANIMCHANNEL_HEAD ) && head.GetEntity() ) {
 			gameLocal.Warning( "missing '%s' animation on '%s' (%s)", animname, name.c_str(), spawnArgs.GetString( "def_head", "" ) );
@@ -3475,7 +3475,7 @@ void idActor::Event_SetAnimRate( float multiplier ) {
 /*
 ===============================================================================
 
-	Wait States 
+	Wait States
 
 ===============================================================================
 */
@@ -3532,7 +3532,7 @@ int idActor::PlayAnim ( int channel, const char *animname, int blendFrames ) {
 	if ( blendFrames != -1 ) {
 		Event_SetBlendFrames ( channel, blendFrames );
 	}
-	
+
 	anim = GetAnim( channel, animname );
 
 	if( ai_animShow.GetBool() ){
@@ -3604,7 +3604,7 @@ int idActor::PlayAnim ( int channel, const char *animname, int blendFrames ) {
 		gameLocal.Error( "Unknown anim group" );
 		break;
 	}
-	
+
 	return animator.CurrentAnim( channel )->Length();
 }
 
@@ -3620,7 +3620,7 @@ bool idActor::PlayCycle ( int channel, const char *animname, int blendFrames ) {
 	if ( blendFrames != -1 ) {
 		Event_SetBlendFrames ( channel, blendFrames );
 	}
-	
+
 	anim = GetAnim( channel, animname );
 	if ( !anim ) {
 		if ( ( channel == ANIMCHANNEL_HEAD ) && head.GetEntity() ) {
@@ -3681,7 +3681,7 @@ bool idActor::PlayCycle ( int channel, const char *animname, int blendFrames ) {
 	default:
 		gameLocal.Error( "Unknown anim group" );
 	}
-	
+
 	return true;
 }
 
@@ -3743,7 +3743,7 @@ void idActor::GetDebugInfo ( debugInfoProc_t proc, void* userData ) {
 
 	proc ( "idActor", "head_state",		headAnim.GetStateThread().GetState()?headAnim.GetStateThread().GetState()->state->name:"<none>", userData );
 	proc ( "idActor", "head_disabled",	headAnim.Disabled()?"true":"false", userData );
-	proc ( "idActor", "head_anim",		GetAnimator()->CurrentAnim ( ANIMCHANNEL_HEAD ) ? GetAnimator()->CurrentAnim ( ANIMCHANNEL_HEAD )->AnimName ( ) : "<none>", userData );	
+	proc ( "idActor", "head_anim",		GetAnimator()->CurrentAnim ( ANIMCHANNEL_HEAD ) ? GetAnimator()->CurrentAnim ( ANIMCHANNEL_HEAD )->AnimName ( ) : "<none>", userData );
 
 	proc ( "idActor", "painAnim",		painAnim.c_str(), userData );
 	proc ( "idActor", "animPrefix",		animPrefix.c_str(), userData );

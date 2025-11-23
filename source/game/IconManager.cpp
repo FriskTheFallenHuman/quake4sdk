@@ -25,7 +25,7 @@ void rvIconManager::AddIcon( int clientNum, const char* iconName ) {
 	assert( gameLocal.GetLocalPlayer() );
 
 	idPlayer* player = gameLocal.GetLocalPlayer();
-  
+
   	icons[ clientNum ].Append( rvPair<rvIcon*, int>(new rvIcon(), gameLocal.time + ICON_STAY_TIME) );
   	icons[ clientNum ][ icons[ clientNum ].Num() - 1 ].First()->CreateIcon( player->spawnArgs.GetString( iconName ), (clientNum == gameLocal.localClientNum ? gameLocal.localClientNum + 1 : 0) );
 }
@@ -82,9 +82,9 @@ void rvIconManager::UpdateIcons( void ) {
 				}
 				totalWidth += icons[ i ][ j ].First()->GetWidth();
 			}
-			
+
 			idVec3 centerIconPosition = player->spawnArgs.GetVector( (player->team ? "team_icon_height_strogg" : "team_icon_height_marine") );
-			
+
 
 			if( teamIcons[ player->entityNumber ].GetHandle() >= 0 ) {
 				centerIconPosition[ 2 ] += teamIcons[ player->entityNumber ].GetHeight();
@@ -109,7 +109,7 @@ void rvIconManager::UpdateTeamIcons( void ) {
 	int localTeam = localPlayer->team;
 	bool spectating = localPlayer->spectating;
 
-	if( localPlayer->spectating ) { 
+	if( localPlayer->spectating ) {
 		idPlayer* spec = (idPlayer*)gameLocal.entities[ localPlayer->spectator ];
 		if( spec ) {
 			localTeam = spec->team;
@@ -126,7 +126,7 @@ void rvIconManager::UpdateTeamIcons( void ) {
 		//if entity i is a player, manage his icon.
 		if( gameLocal.entities[ i ] && gameLocal.entities[ i ]->IsType( idPlayer::GetClassType() ) && !gameLocal.entities[ i ]->fl.networkStale && !spectating ) {
 			idPlayer* player = static_cast<idPlayer*>(gameLocal.entities[ i ]);
-			
+
 			//if the player is alive and not hidden, show his icon.
 			if( player->team == localTeam && !player->IsHidden() && !player->pfl.dead && gameLocal.mpGame.IsInGame( i ) ) {
 				if( teamIcons[ i ].GetHandle() < 0 ) {
@@ -141,7 +141,7 @@ void rvIconManager::UpdateTeamIcons( void ) {
 			}
 		//if entity i is not a player, free icon i from the map.
 		} else if( teamIcons[ i ].GetHandle() >= 0 ) {
-			teamIcons[ i ].FreeIcon();	
+			teamIcons[ i ].FreeIcon();
 		}
 	}
 }
@@ -157,10 +157,10 @@ void rvIconManager::UpdateChatIcons( void ) {
 		if ( gameLocal.entities[ i ] && gameLocal.entities[ i ]->IsType( idPlayer::GetClassType() ) && !gameLocal.entities[ i ]->fl.networkStale ) {
 			idPlayer *player = static_cast< idPlayer* >( gameLocal.entities[ i ] );
 
-			if ( player->isChatting && 
-				!player->IsHidden() && 
-				!( ( idPhysics_Player* )player->GetPhysics() )->IsDead() && 
-				gameLocal.mpGame.IsInGame( i ) 
+			if ( player->isChatting &&
+				!player->IsHidden() &&
+				!( ( idPhysics_Player* )player->GetPhysics() )->IsDead() &&
+				gameLocal.mpGame.IsInGame( i )
 				&& (localInst == player->GetInstance())) {
 				if ( chatIcons[ i ].GetHandle() < 0 ) {
 					chatIcons[ i ].CreateIcon( player->spawnArgs.GetString( "mtr_icon_chatting" ), ( player == gameLocal.GetLocalPlayer() ? player->entityNumber + 1 : 0) );

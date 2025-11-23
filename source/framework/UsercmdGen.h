@@ -218,10 +218,10 @@ public:
 
 // nrausch: Stuff an arbitrary impulse in, which will override any other impulse this cycle
 	virtual void		StuffImpulse( int impulse ) = 0;
-	
+
 	virtual void		StuffKey( const char *keyName, bool down ) = 0;
 
-#ifdef _XENON	
+#ifdef _XENON
 	virtual void		GetInputs( int &y, int &p, int &r, int &f ) = 0;
 #endif
 

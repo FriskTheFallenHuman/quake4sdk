@@ -10,7 +10,7 @@
 ===============================================================================
 
 	Player entity.
-	
+
 ===============================================================================
 */
 
@@ -120,11 +120,11 @@ typedef struct {
 // powerups
 enum {
 	// standard powerups
-	POWERUP_QUADDAMAGE = 0, 
+	POWERUP_QUADDAMAGE = 0,
 	POWERUP_HASTE,
 	POWERUP_REGENERATION,
 	POWERUP_INVISIBILITY,
-		
+
 	// ctf powerups
 	POWERUP_CTF_MARINEFLAG,
 	POWERUP_CTF_STROGGFLAG,
@@ -137,14 +137,14 @@ enum {
 	POWERUP_SCOUT,	// == 1.2 / protocol 69's POWERUP_MAX-1
 
 	POWERUP_MODERATOR, // Note: This has to be here.  Otherwise, it breaks syncronization with some list elsewhere
-		
+
 	POWERUP_DEADZONE,
 
 	// Team Powerups
 	POWERUP_TEAM_AMMO_REGEN,
 	POWERUP_TEAM_HEALTH_REGEN,
 	POWERUP_TEAM_DAMAGE_MOD,
-	
+
 	POWERUP_MAX
 };
 
@@ -175,7 +175,7 @@ enum {
 	INFLUENCE_LEVEL3,			// slow player movement
 };
 
-typedef enum { 
+typedef enum {
 	PTS_UNKNOWN = 0,
 	PTS_ADVANCED,
 	PTS_ELIMINATED,
@@ -216,7 +216,7 @@ public:
 	int						startingAmmo[ MAX_WEAPONS ];
 
  	int						lastGiveTime;
- 	
+
 	idList<idDict *>		items;
 	idStrList				pdas;
 	idStrList				pdaSecurity;
@@ -247,7 +247,7 @@ public:
 // mekberg: if the player can pick up the ammo at this time
 	bool					DetermineAmmoAvailability( idPlayer* owner, const char *ammoName, int ammoIndex, int ammoAmount, int ammoMax );
 // RAVEN END
-	
+
 	int						AmmoIndexForWeaponIndex( int weaponIndex );
 	int						StartingAmmoForWeaponIndex( int weaponIndex );
 	int						AmmoRegenStepForWeaponIndex( int weaponIndex );
@@ -263,7 +263,7 @@ public:
 	idList<idItemInfo>		pickupItemNames;
 	idList<idObjectiveInfo>	objectiveNames;
 //	idList<rvDatabaseEntry>	database;
-	
+
 	int						secretAreasDiscovered;
 };
 
@@ -328,7 +328,7 @@ public:
 		bool		objectiveFailed	:1;
 		bool		noFallingDamage :1;
 	} pfl;
-		
+
 	// inventory
 	idInventory				inventory;
 
@@ -340,7 +340,7 @@ public:
 
  	idUserInterface *		hud;				// Common hud
 	idUserInterface *		mphud;				// hud overlay containing MP elements
-	
+
 	idUserInterface *		objectiveSystem;
 	idUserInterface *		cinematicHud;
 	bool					objectiveSystemOpen;
@@ -371,7 +371,7 @@ public:
 	bool					lastHitArmor;
 	bool					forcedReady;
 	int						lastArenaChange;
-	
+
 	bool					wantSpectate;			// from userInfo
 
  	bool					weaponGone;				// force stop firing
@@ -404,7 +404,7 @@ public:
 	rvAASTacticalSensor*	aasSensor;
 
 	idEntityPtr<idEntity>	extraProjPassEntity;
-	
+
 	bool					vsMsgState;
 
 	int						lastPickupTime;
@@ -487,7 +487,7 @@ public:
 	void					SmoothenRenderView( bool firstPerson );
 	void					CalculateRenderView( void );	// called every tic by player code
 	void					CalculateFirstPersonView( void );
-	
+
 	void					DrawShadow( renderEntity_t *headRenderEnt );
 	void					DrawHUD( idUserInterface *hud );
 	void					DrawInput();
@@ -508,7 +508,7 @@ public:
 	bool					Give( const char *statname, const char *value, bool dropped = false );
 	bool					GiveItem( idItem *item );
 	void					GiveItem( const char *name );
-	
+
 	// Inventory
 	bool					GiveInventoryItem( idDict *item );
 	void					RemoveInventoryItem( idDict *item );
@@ -526,7 +526,7 @@ public:
 
 	// Secret Areas
 	void					DiscoverSecretArea			( const char *description);
-	
+
 	void					StartBossBattle				( idEntity* ent );
 
 	// Powerups
@@ -535,7 +535,7 @@ public:
 
 	void					StartPowerUpEffect			( int powerup );
 	void					StopPowerUpEffect			( int powerup );
-	
+
 	bool					PowerUpActive				( int powerup ) const;
 	float					PowerUpModifier				( int type );
 	void					ClearPowerup				( int i );
@@ -552,7 +552,7 @@ public:
 
 	int						SlotForWeapon				( const char *weaponName );
 
-	idEntity*				DropItem					( const char* itemClass, const idDict& customArgs, const idVec3& velocity = vec3_origin ) const; 
+	idEntity*				DropItem					( const char* itemClass, const idDict& customArgs, const idVec3& velocity = vec3_origin ) const;
 	void					DropPowerups				( void );
 	idEntity*				ResetFlag					( const char* itemClass, const idDict& customArgs ) const;
 	void					RespawnFlags				( void );
@@ -639,7 +639,7 @@ public:
 	virtual bool			GetPhysicsToSoundTransform( idVec3 &origin, idMat3 &axis );
 
 	virtual bool			ClientReceiveEvent( int event, int time, const idBitMsg &msg );
-	
+
 	bool					IsBeingTalkedTo	( void );
  	bool					IsReady			( void );
  	bool					IsRespawning	( void );
@@ -647,13 +647,13 @@ public:
 	bool					IsZoomed		( void );
 	bool					IsFlashlightOn	( void );
 	virtual bool			IsCrouching		( void ) const;
-	
+
 	// voice com muting
 	bool					IsPlayerMuted	( idPlayer* player ) const;
 	bool					IsPlayerMuted	( int clientNum ) const;
 	void					MutePlayer		( idPlayer* player, bool mute );
 	void					MutePlayer		( int clientNum, bool mute );
-	
+
 
 	// buddy list
 	void					SetFriend		( idPlayer* player, bool isFriend );
@@ -667,7 +667,7 @@ public:
 
 	// emotes
 	void					SetEmote		( playerEmote_t emote );
-    
+
 	// rankings
 	int						GetRank			( void ) const;
 	void					SetRank			( int newRank );
@@ -705,7 +705,7 @@ public:
 
 	void					RemoveClientModel ( const char* entityDefName );
 	void					RemoveClientModels ( void );
-	
+
 	rvClientEntityPtr<rvClientModel> AddClientModel ( const char* entityDefName, const char* shaderName = NULL );
 
 	void					ClientGib			( const idVec3& dir );
@@ -724,7 +724,7 @@ public:
 	virtual int				GetClipWorld( void ) const;
 
 	virtual idEntity*		GetGroundElevator( idEntity* testElevator=NULL ) const;
-	
+
 	int						GetWeaponIndex( const char* weaponName ) const;
 
 	virtual void			SetInstance( int newInstance );
@@ -807,7 +807,7 @@ private:
 	idVec3					viewBob;
 	int						landChange;
 	int						landTime;
-	
+
 	// ddynerman: we read fall deltas from spawnargs, cache them to save some lookups
 	float					fatalFallDelta;
 	float					hardFallDelta;
@@ -886,7 +886,7 @@ private:
 	int						focusTime;
 	playerFocus_t			focusType;
 	idEntityPtr<idEntity>	focusEnt;
-	idUserInterface *		focusBrackets;	
+	idUserInterface *		focusBrackets;
 	int						focusBracketsTime;
 
 	bool					targetFriendly;
@@ -897,7 +897,7 @@ private:
 
 	idUserInterface *		overlayHud;			// a temporary hud overlay
 	int						overlayHudTime;
-	
+
 	// full screen guis track mouse movements directly
 	int						oldMouseX;
 	int						oldMouseY;
@@ -924,21 +924,21 @@ private:
  	bool					leader;					// for sudden death situations
  	bool					weaponCatchup;			// raise up the weapon silently ( state catchups )
 	bool					isTelefragged;			// proper obituaries
-	
+
 	int						lastSpectateChange;
  	int						lastTeleFX;
  	unsigned int			lastSnapshotSequence;	// track state hitches on clients
- 	
+
 	int						aimClientNum;			// player num in aim
 
 	idPlayer*				lastImpulsePlayer;		// the last player who gave me an impulse, may be null
-	
+
 	int						arena;					// current arena for tourney gameplay
 
 	int						connectTime;
 	int						mutedPlayers;			// bitfield set to which clients this player wants muted
 	int						friendPlayers;			// bitfield set to which clients this player has marked as friends
-	
+
 	int						voiceDest[MAX_CONCURRENT_VOICES];
 	int						voiceDestTimes[MAX_CONCURRENT_VOICES];
 
@@ -1041,7 +1041,7 @@ private:
 	void					UpdateFocus					( void );
  	void					UpdateLocation				( void );
 	void					UpdateObjectiveInfo			( void );
-	void					UpdateIntentDir				( void );	
+	void					UpdateIntentDir				( void );
 
 	void					LoadDeferredModel			( void );
 
@@ -1050,13 +1050,13 @@ private:
 	void					SetFocus					( playerFocus_t type, int focusTime, idEntity* ent, idUserInterface* ui );
 
 	void					UpdateDeathShader			( bool state_hitch );
-	
+
 //	void					InitWeapon					( void );
 
 	bool					IsLegsIdle					( bool crouching ) const;
 
 	void					CheckAckReply				( void ) const;
-	
+
 	void					Event_GetButtons			( void );
 	void					Event_GetMove				( void );
 	void					Event_GetViewAngles			( void );
@@ -1074,18 +1074,18 @@ private:
 	void					Event_GetViewPos			( void );
 	void					Event_TeleportPlayer		( idVec3 &newPos, idVec3 &newAngles );
 	void					Event_Freeze				( float f );
-	void					Event_HideDatabaseEntry		( void );	
+	void					Event_HideDatabaseEntry		( void );
 	void					Event_ZoomIn				( void );
 	void					Event_ZoomOut				( void );
 	void					Event_FinishHearingLoss		( float fadeTime );
 	void					Event_GetAmmoData			( const char *ammoClass );
 	void					Event_RefillAmmo			( void );
 	void					Event_AllowFallDamage		( int toggle );
-	
+
 	void					Event_EnableTarget			( void );
 	void					Event_DisableTarget			( void );
 	virtual void			Event_DamageOverTimeEffect	( int endTime, int interval, const char *damageDefName );
-	
+
 	// RAVEN BEGIN
 	// twhitaker: added Event_ApplyImpulse
 	void					Event_ApplyImpulse			( idEntity* ent, idVec3 &point, idVec3 &impulse	);
@@ -1106,7 +1106,7 @@ private:
 
 	stateResult_t			State_Wait_Alive				( const stateParms_t& parms );
 	stateResult_t			State_Wait_ReloadAnim			( const stateParms_t& parms );
-	
+
 	stateResult_t			State_Torso_Idle				( const stateParms_t& parms );
 	stateResult_t			State_Torso_IdleThink			( const stateParms_t& parms );
 	stateResult_t			State_Torso_Teleport			( const stateParms_t& parms );
@@ -1119,7 +1119,7 @@ private:
 	stateResult_t			State_Torso_Pain				( const stateParms_t& parms );
 	stateResult_t			State_Torso_Dead				( const stateParms_t& parms );
 	stateResult_t			State_Torso_Emote				( const stateParms_t& parms );
-	
+
 	stateResult_t			State_Legs_Idle					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Run_Forward			( const stateParms_t& parms );
 	stateResult_t			State_Legs_Run_Backward			( const stateParms_t& parms );
@@ -1138,7 +1138,7 @@ private:
 	stateResult_t			State_Legs_Fall					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Land					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Dead					( const stateParms_t& parms );
-	
+
  	CLASS_STATES_PROTOTYPE( idPlayer );
 };
 
@@ -1200,7 +1200,7 @@ ID_INLINE int idPlayer::GetClipWorld( void ) const {
 
 ID_INLINE void idPlayer::SetClipWorld( int newCW ) {
 	idEntity::SetClipWorld( newCW );
-	
+
 	if( head.GetEntity() ) {
 		head.GetEntity()->SetClipWorld( newCW );
 
@@ -1274,7 +1274,7 @@ ID_INLINE bool idPlayer::IsFriend( int clientNum ) const {
 
 ID_INLINE void idPlayer::SetFriend( idPlayer* player, bool isFriend ) {
 	if( isFriend ) {
-		friendPlayers |= ( 1 << player->entityNumber ); 
+		friendPlayers |= ( 1 << player->entityNumber );
 	} else {
 		friendPlayers &= ~( 1 << player->entityNumber );
 	}

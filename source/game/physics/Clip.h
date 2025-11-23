@@ -253,7 +253,7 @@ public:
 								const idClipModel *mdl, const idMat3 &trmAxis, int contentMask, const idEntity *passEntity );
 // RAVEN BEGIN
 // AReis: Added ability to get the entity that was touched as well.
-	int						Contents( const idVec3 &start, 
+	int						Contents( const idVec3 &start,
 								const idClipModel *mdl, const idMat3 &trmAxis, int contentMask, const idEntity *passEntity, idEntity **touchedEntity = NULL );
 // RAVEN END
 
@@ -320,7 +320,7 @@ public:
 // ddynerman: SD's clip sector code
 	void					CoordsForBounds( int* coords, idBounds& bounds ) const;
 	void					DrawClipSectors( void ) const;
-	void					DrawAreaClipSectors( float range ) const;	
+	void					DrawAreaClipSectors( float range ) const;
 	static void				UpdateDynamicContents( struct clipSector_s* sector );
 	static void				UpdateDynamicContents( idClipModel* clipModel );
 // RAVEN END

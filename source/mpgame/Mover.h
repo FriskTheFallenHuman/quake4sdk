@@ -180,7 +180,7 @@ private:
 	void					VectorForDir( float dir, idVec3 &vec );
 	idCurve_Spline<idVec3> *GetSpline( idEntity *splineEntity ) const;
 
-	void					Event_SetCallback( void );	
+	void					Event_SetCallback( void );
 	void					Event_TeamBlocked( idEntity *blockedPart, idEntity *blockingEntity );
 	void					Event_StopMoving( void );
 	void					Event_StopRotating( void );
@@ -594,7 +594,7 @@ public:
 							~idMover_Periodic( void );
 
 	void					Spawn( void );
-	
+
 	void					Save( idSaveGame *savefile ) const;
 	void					Restore( idRestoreGame *savefile );
 
@@ -673,18 +673,18 @@ public:
 
 	void					Spawn( void );
 	void					Think ( void );
-	
+
 	void					Save( idSaveGame *savefile ) const;
 	void					Restore( idRestoreGame *savefile );
 private:
 
 	idVec3					moveDir;
 	float					moveSpeed;
-	
+
 	void					Event_FindTargets	 ( void );
 };
 
-// nrausch: 
+// nrausch:
 class rvPusher : public idMover {
 public:
 	CLASS_PROTOTYPE( rvPusher );

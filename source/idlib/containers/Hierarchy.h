@@ -16,7 +16,7 @@ public:
 
 						idHierarchy();
 						~idHierarchy();
-	
+
 	void				SetOwner( type *object );
 	type *				Owner( void ) const;
 	void				ParentTo( idHierarchy &node );
@@ -49,7 +49,7 @@ idHierarchy<type>::idHierarchy
 template< class type >
 idHierarchy<type>::idHierarchy() {
 	owner	= NULL;
-	parent	= NULL;	
+	parent	= NULL;
 	sibling	= NULL;
 	child	= NULL;
 }

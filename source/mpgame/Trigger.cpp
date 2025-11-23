@@ -9,7 +9,7 @@
 ===============================================================================
 
   idTrigger
-	
+
 ===============================================================================
 */
 
@@ -131,7 +131,7 @@ idTrigger::GetScriptFunction
 */
 const function_t *idTrigger::GetScriptFunction( void ) const {
 // RAVEN BEGIN
-// abahr: 
+// abahr:
 	return (scriptFunctions.Num()) ? scriptFunctions[0].GetFunc() : NULL;
 // RAVEN END
 }
@@ -227,7 +227,7 @@ void idTrigger::Spawn( void ) {
 ===============================================================================
 
   idTrigger_Multi
-	
+
 ===============================================================================
 */
 
@@ -346,7 +346,7 @@ void idTrigger_Multi::Spawn( void ) {
 	spawnArgs.GetFloat( "random", "0", random );
 	spawnArgs.GetFloat( "delay", "0", delay );
 	spawnArgs.GetFloat( "random_delay", "0", random_delay );
-	
+
 	if ( random && ( random >= wait ) && ( wait >= 0 ) ) {
 		random = wait - 1;
 		gameLocal.Warning( "idTrigger_Multi '%s' at (%s) has random >= wait", name.c_str(), GetPhysics()->GetOrigin().ToString(0) );
@@ -449,13 +449,13 @@ idTrigger_Multi::TriggerAction
 void idTrigger_Multi::TriggerAction( idEntity *activator ) {
 // RAVEN BEGIN
 // jdischler: added for Aweldon.  The trigger, when activated, will call the listed func with all attached targets, then return.
-	if ( spawnArgs.GetBool( "_callWithTargets", "0" )) 
+	if ( spawnArgs.GetBool( "_callWithTargets", "0" ))
 	{
 		idEntity *ent;
-		for( int i = 0; i < targets.Num(); i++ ) 
+		for( int i = 0; i < targets.Num(); i++ )
 		{
 			ent = targets[ i ].GetEntity();
-			if ( !ent ) 
+			if ( !ent )
 			{
 				continue;
 			}
@@ -498,7 +498,7 @@ so wait for the delay time before firing
 */
 void idTrigger_Multi::Event_Trigger( idEntity *activator ) {
 // RAVEN BEGIN
-// bdube: moved trigger first 
+// bdube: moved trigger first
 	if ( triggerFirst ) {
 		triggerFirst = false;
 		return;
@@ -638,7 +638,7 @@ idTrigger_Multi::Think
 void idTrigger_Multi::Think()
 {
 	// Control zone handling
-	if ( controlZoneTrigger > 0 ) 
+	if ( controlZoneTrigger > 0 )
 		HandleControlZoneTrigger();
 }
 
@@ -660,7 +660,7 @@ void idTrigger_Multi::Event_Touch( idEntity *other, trace_t *trace ) {
 		}
 	} else {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		bool player = other->IsType( idPlayer::GetClassType() );
 // RAVEN END
 		if ( player ) {
@@ -681,7 +681,7 @@ void idTrigger_Multi::Event_Touch( idEntity *other, trace_t *trace ) {
 				    p->inBuyZonePrev = true;
 			    }
 		    }
-    
+
 		    // Control zone handling
 		    if ( controlZoneTrigger > 0 ) {
 			    idPlayer *p = static_cast< idPlayer * >( other );
@@ -814,7 +814,7 @@ void idTrigger_Multi::Event_EarthQuake(float requiresLOS)
 ===============================================================================
 
   idTrigger_EntityName
-	
+
 ===============================================================================
 */
 
@@ -850,7 +850,7 @@ void idTrigger_EntityName::Save( idSaveGame *savefile ) const {
 	savefile->WriteFloat( random_delay );
 	savefile->WriteInt( nextTriggerTime );
 	savefile->WriteBool( triggerFirst );
-	savefile->WriteString( entityName );	
+	savefile->WriteString( entityName );
 }
 
 /*
@@ -878,7 +878,7 @@ void idTrigger_EntityName::Spawn( void ) {
 	spawnArgs.GetFloat( "random", "0", random );
 	spawnArgs.GetFloat( "delay", "0", delay );
 	spawnArgs.GetFloat( "random_delay", "0", random_delay );
-	
+
 	if ( random && ( random >= wait ) && ( wait >= 0 ) ) {
 		random = wait - 1;
 		gameLocal.Warning( "idTrigger_EntityName '%s' at (%s) has random >= wait", name.c_str(), GetPhysics()->GetOrigin().ToString(0) );
@@ -1027,7 +1027,7 @@ void idTrigger_EntityName::Event_Touch( idEntity *other, trace_t *trace ) {
 ===============================================================================
 
   idTrigger_Timer
-	
+
 ===============================================================================
 */
 
@@ -1171,7 +1171,7 @@ void idTrigger_Timer::Event_Use( idEntity *activator ) {
 ===============================================================================
 
   idTrigger_Count
-	
+
 ===============================================================================
 */
 
@@ -1261,7 +1261,7 @@ void idTrigger_Count::Event_TriggerAction( idEntity *activator ) {
 ===============================================================================
 
   idTrigger_Hurt
-	
+
 ===============================================================================
 */
 
@@ -1293,7 +1293,7 @@ void idTrigger_Hurt::Save( idSaveGame *savefile ) const {
 // RAVEN BEGIN
 // bdube: playeronly flag
 	savefile->WriteBool ( playerOnly );
-// RAVEN END	
+// RAVEN END
 }
 
 /*
@@ -1308,7 +1308,7 @@ void idTrigger_Hurt::Restore( idRestoreGame *savefile ) {
 // RAVEN BEGIN
 // bdube: playeronly flag
 	savefile->ReadBool( playerOnly );
-// RAVEN END	
+// RAVEN END
 }
 
 /*
@@ -1342,7 +1342,7 @@ void idTrigger_Hurt::Event_Touch( idEntity *other, trace_t *trace ) {
 
 // RAVEN BEGIN
 // kfuller: playeronly flag
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( playerOnly && !other->IsType( idPlayer::GetClassType() ) ) {
 		return;
 	}
@@ -1404,7 +1404,7 @@ void idTrigger_Fade::Event_Trigger( idEntity *activator ) {
 ===============================================================================
 
   idTrigger_Touch
-	
+
 ===============================================================================
 */
 
@@ -1554,7 +1554,7 @@ void idTrigger_Touch::TouchEntities( void ) {
 		if ( !entity ) {
 			continue;
 		}
-		
+
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
 		if ( !gameLocal.ContentsModel( this, cm->GetOrigin(), cm, cm->GetAxis(), -1,

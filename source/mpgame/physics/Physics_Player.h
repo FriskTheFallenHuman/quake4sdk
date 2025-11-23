@@ -35,7 +35,7 @@ typedef struct playerPState_s {
 	idVec3					origin;
 	idVec3					velocity;
 	idVec3					localOrigin;
-	idVec3					pushVelocity;	
+	idVec3					pushVelocity;
 	idVec3					lastPushVelocity;
 	float					stepUp;
 	int						movementType;

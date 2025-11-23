@@ -380,7 +380,7 @@ idBitMsg::ReadString
 */
 int idBitMsg::ReadString( char *buffer, int bufferSize ) const {
 	int	l, c;
-	
+
 	ReadByteAlign();
 	l = 0;
 	while( 1 ) {
@@ -401,7 +401,7 @@ int idBitMsg::ReadString( char *buffer, int bufferSize ) const {
 			l++;
 		}
 	}
-	
+
 	buffer[l] = 0;
 	return l;
 }
@@ -439,7 +439,7 @@ idBitMsg::ReadNetadr
 */
 void idBitMsg::ReadNetadr( netadr_t *adr ) const {
 	int i;
- 
+
 	adr->type = NA_IP;
 	for ( i = 0; i < 4; i++ ) {
 		adr->ip[ i ] = ReadByte();
@@ -1080,7 +1080,7 @@ bool idMsgQueue::AddConcat( const byte *data1, const int size1, const byte *data
 	}
 
 	assert( size1 && size2 );
-	
+
 	WriteUShort( size1 + size2 );
 	if ( sequencing ) {
 		WriteLong( last );

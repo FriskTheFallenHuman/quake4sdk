@@ -22,7 +22,7 @@ public:
 	void				Think							( void );
 	void				Save							( idSaveGame *savefile ) const;
 	void				Restore							( idRestoreGame *savefile );
-	
+
 	virtual void		Show							( void );
 
 	virtual void		TalkTo							( idActor *actor );
@@ -70,7 +70,7 @@ private:
 	bool				wasIgnoreEnemies;
 
 	void				SetHealValues					( idPlayer* player );
- 	
+
 	void				TakePatient						( idPlayer* pPatient );
 	void				DropPatient						( void );
  	bool				CheckTakePatient				( idPlayer* actor );
@@ -78,7 +78,7 @@ private:
  	bool				AvailableToTakePatient			( void );
 
 	stateResult_t		State_Medic						( const stateParms_t& parms );
-	
+
 	void				Event_EnableHeal				( void );
 	void				Event_DisableHeal				( void );
 	void				Event_EnableMovement			( void );

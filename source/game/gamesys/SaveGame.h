@@ -64,13 +64,13 @@ public:
 	void					WriteInterpolate( const idInterpolateAccelDecelLinear<int>& lerp );
 	void					WriteInterpolate( const idInterpolateAccelDecelLinear<float>& lerp );
 	void					WriteInterpolate( const idInterpolateAccelDecelLinear<idVec3>& lerp );
-	void					WriteInterpolate( const idInterpolate<int>& lerp ); 
-	void					WriteInterpolate( const idInterpolate<float>& lerp ); 
-	void					WriteInterpolate( const idInterpolate<idVec3>& lerp ); 
+	void					WriteInterpolate( const idInterpolate<int>& lerp );
+	void					WriteInterpolate( const idInterpolate<float>& lerp );
+	void					WriteInterpolate( const idInterpolate<idVec3>& lerp );
 	void					WriteRenderEffect( const renderEffect_t &renderEffect );
 	void					WriteFrustum( const idFrustum& frustum );
 	void					WriteSyncId( void );
-// RAVEN END		
+// RAVEN END
 	void					WriteUserInterface( const idUserInterface *ui, bool unique );
 	void					WriteRenderEntity( const renderEntity_t &renderEntity );
 	void					WriteRenderLight( const renderLight_t &renderLight );
@@ -155,7 +155,7 @@ public:
 	void					ReadFrustum( idFrustum& frustum );
 	void					ReadSyncId( const char *detail = "unspecified", const char *classname = NULL ) { file->ReadSyncId( detail, classname ); }
 	void					ReadRenderEntity( renderEntity_t &renderEntity, const idDict *args );
-// RAVEN END		
+// RAVEN END
 	void					ReadRenderLight( renderLight_t &renderLight );
 	void					ReadRefSound( refSound_t &refSound );
 	void					ReadRenderView( renderView_t &view );

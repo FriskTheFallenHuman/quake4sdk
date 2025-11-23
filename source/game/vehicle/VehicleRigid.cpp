@@ -20,13 +20,13 @@ rvVehicleRigid::~rvVehicleRigid ( void ) {
 	SetPhysics( NULL );
 }
 
-/* 
+/*
 ================
 rvVehicleRigid::Spawn
 ================
 */
 void rvVehicleRigid::Spawn( void ) {
-	physicsObj.SetSelf( this );	
+	physicsObj.SetSelf( this );
 
 	SetClipModel ( );
 
@@ -38,10 +38,10 @@ void rvVehicleRigid::Spawn( void ) {
 	physicsObj.SetBouncyness ( spawnArgs.GetFloat ( "bouncyness", "0.6" ) );
 	physicsObj.SetGravity( gameLocal.GetGravity() );
 	SetPhysics( &physicsObj );
-	
-	animator.CycleAnim ( ANIMCHANNEL_ALL, animator.GetAnim( spawnArgs.GetString( "anim", "idle" ) ), gameLocal.time, 0 );	
 
-	BecomeActive( TH_THINK );		
+	animator.CycleAnim ( ANIMCHANNEL_ALL, animator.GetAnim( spawnArgs.GetString( "anim", "idle" ) ), gameLocal.time, 0 );
+
+	BecomeActive( TH_THINK );
 }
 
 /*
@@ -49,7 +49,7 @@ void rvVehicleRigid::Spawn( void ) {
 rvVehicleRigid::SetClipModel
 ================
 */
-void rvVehicleRigid::SetClipModel ( void ) {	
+void rvVehicleRigid::SetClipModel ( void ) {
 	idStr			clipModelName;
 	idTraceModel	trm;
 	float			mass;
@@ -145,8 +145,8 @@ void rvVehicleRigid::Restore ( idRestoreGame *savefile ) {
 
 	savefile->ReadVec3 ( storedVelocity ); // cnicholson: Added unrestored var
 
-	physicsObj.SetSelf( this );	
-	
+	physicsObj.SetSelf( this );
+
 	SetClipModel ( );
 
 	savefile->ReadStaticObject ( physicsObj );
@@ -158,6 +158,6 @@ void rvVehicleRigid::Restore ( idRestoreGame *savefile ) {
 rvVehicleRigid::SkipImpulse
 =====================
 */
-bool rvVehicleRigid::SkipImpulse( idEntity* ent, int id ) {	
+bool rvVehicleRigid::SkipImpulse( idEntity* ent, int id ) {
 	return false;
 }

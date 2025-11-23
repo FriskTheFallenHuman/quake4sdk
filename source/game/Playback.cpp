@@ -34,7 +34,7 @@ rvGamePlayback::rvGamePlayback( void )
 	const idVec3 trace_maxs( 1.0f, 1.0f, 1.0f );
 	const idBounds trace_bounds( trace_mins, trace_maxs );
 	idTraceModel	traceModel( trace_bounds );
-		
+
 	mStartTime = gameLocal.time;
 	mOldFlags = 0;
 	mClipModel = new idClipModel( traceModel );
@@ -84,12 +84,12 @@ void rvGamePlayback::RecordData( const usercmd_t &cmd, idEntity *source )
 
 	case 2:
 		gameLocal.GetPlayerView( start, axis );
-		
+
 		end = start + axis[0] * RECORD_STATE_TRACE_LEN;
 
 		gameLocal.Translation( gameLocal.GetLocalPlayer(), trace, start, end, mClipModel, mat3_identity, CONTENTS_SOLID | CONTENTS_RENDERMODEL, source );
 
-		if( trace.fraction != 1.0f ) 
+		if( trace.fraction != 1.0f )
 		{
 			info.SetPosition( trace.endpos );
 			info.SetAngles( trace.c.normal.ToAngles() );
@@ -101,7 +101,7 @@ void rvGamePlayback::RecordData( const usercmd_t &cmd, idEntity *source )
 		if( source->IsType( idPlayer::GetClassType() ) )
 		{
 			player = static_cast<idPlayer *>( source );
-			info.SetPosition( player->GetEyePosition() ); 
+			info.SetPosition( player->GetEyePosition() );
 			info.SetAngles( source->GetPhysics()->GetAxis().ToAngles() );
 		}
 		break;
@@ -154,7 +154,7 @@ void idGameEdit::DrawPlaybackDebugInfo( void )
 void idGameEdit::RecordPlayback( const usercmd_t &cmd, idEntity *source )
 {
 	// Not recording - so instantly exit
-	if( !g_recordPlayback.GetInteger() && !gamePlayback ) 
+	if( !g_recordPlayback.GetInteger() && !gamePlayback )
 	{
 		return;
 	}
@@ -180,7 +180,7 @@ void idGameEdit::RecordPlayback( const usercmd_t &cmd, idEntity *source )
 bool idGameEdit::PlayPlayback( void )
 {
 	// Not playing - so instantly exit
-	if( !g_playPlayback.GetInteger() && !playbackCamera ) 
+	if( !g_playPlayback.GetInteger() && !playbackCamera )
 	{
 		return( false );
 	}
@@ -296,7 +296,7 @@ void PlaybackCallback( int type, float time, const void *data )
 ============
 rvPlaybackDriver::UpdateFrame
 
-Blend two playbacks together 
+Blend two playbacks together
 ============
 */
 bool rvPlaybackDriver::UpdateFrame( idEntity *ent, rvDeclPlaybackData &out )
@@ -305,7 +305,7 @@ bool rvPlaybackDriver::UpdateFrame( idEntity *ent, rvDeclPlaybackData &out )
 	float				blend, invBlend;
 	idStr				ret;
 	bool				expired, oldExpired;
-	
+
 	// Get the current playback position
 	pbd.Init();
 	pbd.SetCallback( ent, PlaybackCallback );
@@ -351,7 +351,7 @@ bool rvPlaybackDriver::UpdateFrame( idEntity *ent, rvDeclPlaybackData &out )
 	{
 		// Linear zero to one
 		blend = idMath::ClampFloat( 0.0f, 1.0f, ( gameLocal.time - mStartTime ) / ( float )mTransitionTime );
-		
+
 		// Sinusoidal
 		blend = idMath::Sin( blend * idMath::HALF_PI );
 		invBlend = 1.0f - blend;

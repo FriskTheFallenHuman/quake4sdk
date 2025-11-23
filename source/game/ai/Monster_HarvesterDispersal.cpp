@@ -17,7 +17,7 @@ public:
 	CLASS_PROTOTYPE( rvMonsterHarvesterDispersal );
 
 	rvMonsterHarvesterDispersal ( void );
-	
+
 	void				InitSpawnArgsVariables			( void );
 	void				Spawn							( void );
 	void				Save							( idSaveGame *savefile ) const;
@@ -33,7 +33,7 @@ protected:
 	virtual bool		CheckActions			( void );
 	virtual int			FilterTactical			( int availableTactical );
 
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 
@@ -78,7 +78,7 @@ rvMonsterHarvesterDispersal::Spawn
 */
 void rvMonsterHarvesterDispersal::Spawn ( void ) {
 	actionSprayScream.Init ( spawnArgs, "action_sprayScream", "State_SprayScream", AIACTIONF_ATTACK );
-	
+
 	InitSpawnArgsVariables();
 	shots	 = 0;
 }
@@ -114,7 +114,7 @@ void rvMonsterHarvesterDispersal::Restore ( idRestoreGame *savefile ) {
 rvMonsterHarvesterDispersal::SkipImpulse
 =====================
 */
-bool rvMonsterHarvesterDispersal::SkipImpulse( idEntity* ent, int id ) {	
+bool rvMonsterHarvesterDispersal::SkipImpulse( idEntity* ent, int id ) {
 	return true;
 }
 
@@ -202,7 +202,7 @@ int rvMonsterHarvesterDispersal::FilterTactical ( int availableTactical ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -226,17 +226,17 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_RangedAttack ( const stat
 		STAGE_ATTACK_WAIT,
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT: 
+		case STAGE_INIT:
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_ATTACK );
-		
-		case STAGE_ATTACK: 
+
+		case STAGE_ATTACK:
 			if ( !enemy.ent )
 			{
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			if ( !move.fl.moving )
 			{
@@ -244,7 +244,7 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_RangedAttack ( const stat
 			}
 			PlayAnim ( ANIMCHANNEL_TORSO, "fire_forward", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				shots--;
@@ -270,8 +270,8 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_RangedAttack ( const stat
 rvMonsterHarvesterDispersal::State_Torso_TurnRight90
 ================
 */
-stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -281,7 +281,7 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnRight90 ( const state
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_90_rt", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 ) || !strstr( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_90_rt" ) ) {
 				AnimTurn ( 0, true );
@@ -291,7 +291,7 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnRight90 ( const state
 
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -299,8 +299,8 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnRight90 ( const state
 rvMonsterHarvesterDispersal::State_Torso_TurnLeft90
 ================
 */
-stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -310,7 +310,7 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnLeft90 ( const stateP
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_90_lt", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 ) || !strstr( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_90_lt" ) ) {
 				AnimTurn ( 0, true );
@@ -320,7 +320,7 @@ stateResult_t rvMonsterHarvesterDispersal::State_Torso_TurnLeft90 ( const stateP
 
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -329,7 +329,7 @@ rvMonsterHarvesterDispersal::State_Torso_SprayAttack
 ================
 */
 stateResult_t rvMonsterHarvesterDispersal::State_SprayScream ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_SWEEP,
 		STAGE_END,
@@ -348,14 +348,14 @@ stateResult_t rvMonsterHarvesterDispersal::State_SprayScream ( const stateParms_
 			lookTarget = GetEnemy();
 			PlayAnim ( ANIMCHANNEL_TORSO, "fire_forward_spray_start", 0 );
 			return SRESULT_STAGE ( STAGE_SWEEP );
-		
+
 		case STAGE_SWEEP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				sweepCount++;
 				PlayAnim ( ANIMCHANNEL_TORSO, "fire_forward_spray_loop", 0 );
 				return SRESULT_STAGE ( STAGE_END );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_END:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
@@ -366,13 +366,13 @@ stateResult_t rvMonsterHarvesterDispersal::State_SprayScream ( const stateParms_
 					return SRESULT_STAGE ( STAGE_FINISH );
 				}
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_FINISH:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_SCREAM );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_SCREAM:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
@@ -380,15 +380,15 @@ stateResult_t rvMonsterHarvesterDispersal::State_SprayScream ( const stateParms_
 				PlayAnim ( ANIMCHANNEL_TORSO, "dispersal_vent", 0 );
 				return SRESULT_STAGE ( STAGE_FINISH_SCREAM );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_FINISH_SCREAM:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				ActivateTargets( this );//toggle vent steam off
 				return SRESULT_STAGE ( STAGE_START );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 

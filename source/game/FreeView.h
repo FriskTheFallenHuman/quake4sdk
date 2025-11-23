@@ -15,7 +15,7 @@ public:
 
 	// pick a random spawn in the map
 	void PickRandomSpawn( void );
-	
+
 	// update view and position
 	void Fly( const usercmd_t &ucmd );
 

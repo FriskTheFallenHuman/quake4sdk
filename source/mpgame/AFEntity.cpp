@@ -39,8 +39,8 @@ idMultiModelAF::~idMultiModelAF( void ) {
 			modelDefHandles[i] = -1;
 		}
 	}
-	
-	SetPhysics( NULL );	
+
+	SetPhysics( NULL );
 }
 
 /*
@@ -283,8 +283,8 @@ idAFAttachment::idAFAttachment( void ) {
 
 // RAVEN BEGIN
 // jscott: Lip Syncing variables
-	lipSyncAnim		= 0;			
-	lipSyncData		= NULL;			
+	lipSyncAnim		= 0;
+	lipSyncData		= NULL;
 	soundJoint		= INVALID_JOINT;
 // MCG
 	noPlayerImpactFX = false;
@@ -359,7 +359,7 @@ void idAFAttachment::InitCopyJoints ( void ) {
 	if ( !body ) {
 		return;
 	}
-	
+
 	bodyAnimator = body->GetAnimator ( );
 
 	// set up the list of joints to copy to the head
@@ -370,12 +370,12 @@ void idAFAttachment::InitCopyJoints ( void ) {
 		}
 
 		if ( !body->spawnArgs.GetString ( va("copy_joint_world %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName ) ) {
-			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;			
+			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;
 			body->spawnArgs.GetString ( va("copy_joint %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName );
 		} else {
 			copyJoint.mod = JOINTMOD_WORLD_OVERRIDE;
 		}
-		
+
 		copyJoint.from = bodyAnimator->GetJointHandle ( jointName );
 		if ( copyJoint.from == INVALID_JOINT ) {
 			gameLocal.Warning( "Unknown copy_joint '%s' on entity %s", jointName, name.c_str() );
@@ -405,7 +405,7 @@ void idAFAttachment::CopyJointsFromBody ( void ) {
 	idMat3		mat;
 	idMat3		axis;
 	idVec3		pos;
-	
+
 	if ( !body ) {
 		return;
 	}
@@ -424,7 +424,7 @@ void idAFAttachment::CopyJointsFromBody ( void ) {
 			animator.SetJointPos( copyJoints[ i ].to, copyJoints[ i ].mod, pos );
 			animator.SetJointAxis( copyJoints[ i ].to, copyJoints[ i ].mod, axis );
 		}
-	}	
+	}
 }
 
 /*
@@ -571,9 +571,9 @@ idAFAttachment::Damage
 Pass damage to body at the bindjoint
 ============
 */
-void idAFAttachment::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void idAFAttachment::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 	const char *damageDefName, const float damageScale, const int location ) {
-	
+
 	if ( body ) {
 		body->Damage( inflictor, attacker, dir, damageDefName, damageScale, damageJoint );
 	}
@@ -782,7 +782,7 @@ void idAFAttachment::UnlinkCombat( void ) {
 idAFAttachment::GetDamageEntity
 ================
 */
-idEntity* idAFAttachment::GetDamageEntity ( void ) { 
+idEntity* idAFAttachment::GetDamageEntity ( void ) {
 	return body ? body : this;
 }
 
@@ -943,7 +943,7 @@ idAFEntity_Base::LoadAF
 */
 bool idAFEntity_Base::LoadAF( const char* keyname ) {
 	idStr fileName;
-	
+
 	if ( !keyname || !*keyname ) {
 		keyname = "articulatedFigure";
 	}
@@ -1621,7 +1621,7 @@ void idAFEntity_Gibbable::Gib( const idVec3 &dir, const char *damageDefName ) {
 // RAVEN BEGIN
 // bdube: default is to remove the character immediately
 	// however, this is bad in the case of the player.  What was happening is that the
-	//	player was being removed right away, but the respawn logic runs off of 
+	//	player was being removed right away, but the respawn logic runs off of
 	//  idPlayer::EvaluateControls, which no longer gets run when the player is gibbed and removed.
 	//	So...the game effectively sits locked on a black screen and you never get a menu..
 	if ( !gameLocal.isMultiplayer && this->IsType( idPlayer::GetClassType() )) {
@@ -1881,8 +1881,8 @@ void idAFEntity_WithAttachedHead::SetupHead( const char* headDefName ) {
 
 	// If we don't pass in a specific head model, try looking it up
 	if( !headDefName[ 0 ] ) {
-		headDefName = spawnArgs.GetString( "def_head", "" );		
-	} 
+		headDefName = spawnArgs.GetString( "def_head", "" );
+	}
 
 	if ( headDefName[ 0 ] ) {
 		jointName = spawnArgs.GetString( "joint_head" );
@@ -1915,11 +1915,11 @@ void idAFEntity_WithAttachedHead::SetupHead( const char* headDefName ) {
 			headEnt = head.GetEntity();
 			headEnt->GetRenderEntity()->suppressSurfaceInViewID = entityNumber + 1;
 		}
-		
+
 		headEnt->BindToJoint( this, joint, true );
-		headEnt->GetPhysics()->SetOrigin( vec3_origin );		
+		headEnt->GetPhysics()->SetOrigin( vec3_origin );
 		headEnt->GetPhysics()->SetAxis( mat3_identity );
-		
+
 		head->InitCopyJoints ( );
 	} else if ( head ) {
 		head->PostEventMS( &EV_Remove, 0 );
@@ -2128,7 +2128,7 @@ void idAFEntity_Vehicle::Spawn( void ) {
 	steeringWheelJoint = animator.GetJointHandle( steeringWheelJointName );
 
 	spawnArgs.GetFloat( "wheelRadius", "20", wheelRadius );
-	spawnArgs.GetFloat( "steerSpeed", "5", steerSpeed ); 
+	spawnArgs.GetFloat( "steerSpeed", "5", steerSpeed );
 
 	player = NULL;
 	steerAngle = 0.0f;
@@ -2855,7 +2855,7 @@ bool idGameEdit::AF_SpawnEntity( const char *fileName ) {
 	args.Set( "articulatedFigure", fileName );
 	args.Set( "nodrop", "1" );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	ent = static_cast<idAFEntity_Generic *>(gameLocal.SpawnEntityType( idAFEntity_Generic::GetClassType(), &args));
 // RAVEN END
 
@@ -2885,7 +2885,7 @@ void idGameEdit::AF_UpdateEntities( const char *fileName ) {
 	// reload any idAFEntity_Generic which uses the given articulated figure file
 	for( ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->IsType( idAFEntity_Base::GetClassType() ) ) {
 // RAVEN END
 			af = static_cast<idAFEntity_Base *>(ent);
@@ -2921,7 +2921,7 @@ void idGameEdit::AF_UndoChanges( void ) {
 		// reload all AF entities using the file
 		for( ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( ent->IsType( idAFEntity_Base::GetClassType() ) ) {
 // RAVEN END
 				af = static_cast<idAFEntity_Base *>(ent);

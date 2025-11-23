@@ -12,21 +12,21 @@ public:
 
 	rvVehiclePosition( void );
 	virtual ~rvVehiclePosition( void );
-	
+
 	usercmd_t				mInputCmd;
 	idAngles				mInputAngles;
 	usercmd_t				mOldInputCmd;
-	idAngles				mOldInputAngles;	
+	idAngles				mOldInputAngles;
 	int						mOldInputFlags;
-	
+
 	int						mCurrentWeapon;
 
 	idEntityPtr<idActor>	mDriver;
 	idEntityPtr<rvVehicle>	mParent;
 
 	rvVehiclePartList_t		mParts;
-	rvVehiclePartList_t		mWeapons;	
-	
+	rvVehiclePartList_t		mWeapons;
+
 	idVec3					mEyeOrigin;
 	idMat3					mEyeAxis;
 
@@ -62,21 +62,21 @@ public:
 		bool		bindDriver			:1;
 		bool		stalled				:1;
 	} fl;
-		
-	void					Init				( rvVehicle* parent, const idDict& args  );			
+
+	void					Init				( rvVehicle* parent, const idDict& args  );
 
 	int						AddPart				( const idTypeInfo &classdef, const idDict& args );
 	rvVehiclePart*			GetPart				( int partIndex );
-	
+
 	bool					IsOccupied			( void ) const;
 	bool					IsEngine			( void ) const;
 
 	bool					SetDriver			( idActor* driver );
 	void					SetInput			( const usercmd_t& cmd, const idAngles& newAngles );
 	void					GetInput			( usercmd_t& cmd, idAngles& newAngles ) const;
-	
+
 	bool					EjectDriver			( bool force = false );
-	
+
 	void					RunPrePhysics		( void );
 	void					RunPostPhysics		( void );
 
@@ -90,7 +90,7 @@ public:
 	virtual idVec3			GetOrigin			( const idVec3& offset = vec3_zero ) const;
 
 	const idVec3&			GetEyeOrigin		( void ) const;
-	const idMat3&			GetEyeAxis			( void ) const;	
+	const idMat3&			GetEyeAxis			( void ) const;
 	rvVehicle*				GetParent			( void ) const;
 	idActor*				GetDriver			( void ) const;
 
@@ -113,7 +113,7 @@ private:
 
 	void					SetParts			( const idDict& args );
 	void					ActivateParts		( bool active );
-	
+
 	int						mSoundPart;
 	float					mSoundMaxSpeed;
 };
@@ -148,7 +148,7 @@ public:
 	virtual	void			Damage					( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
 	virtual void			Killed					( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
 	virtual void			AddDamageEffect			( const trace_t &collision, const idVec3 &velocity, const char *damageDefName, idEntity* inflictor );
-	
+
 	virtual bool			GetPhysicsToVisualTransform ( idVec3 &origin, idMat3 &axis ) { return false; }
 
 	virtual const idMat3&	GetAxis					( int id = 0 ) const;
@@ -164,7 +164,7 @@ public:
 	int						GetNumPositions			( void ) const;
 	int						GetNumDrivers			( void ) const;
 	bool					HasOpenPositions		( void ) const;
-	
+
 	bool					Collide					( const trace_t &collision, const idVec3 &velocity );
 
 	virtual void			UpdateState				();
@@ -176,7 +176,7 @@ public:
 	bool					IsFrozen				( void ) const;
 	bool					IsLocked				( void ) const;
 	bool					HasDrivers				( void ) const;
-	
+
 	bool					IsShootingEnabled		( void ) const;
 	bool					IsMovementEnabled		( void ) const;
 
@@ -193,16 +193,16 @@ public:
 	void					UpdateCursorGUI			( int position, idUserInterface* ui );
 	virtual void			SetInput				( int position, const usercmd_t& cmd, const idAngles& newAngles );
 	void					GetInput				( int position, usercmd_t& cmd, idAngles& newAngles ) const;
-	
+
 	void					IssueHazardWarning		( void );
 	void					IssueLockedWarning		( void );
-	
+
 	void					AddToBounds				( const idVec3& vec );
 
 	virtual void			UpdateHUD				( idActor* driver, idUserInterface* gui ) {}
 
 	float					FocusLength				( void ) const { return spawnArgs.GetFloat("focusLength_enter", "60"); }
-	
+
 	bool					IsAutoCorrecting		( void ) const { return autoCorrectionBegin != 0; }
 	bool					IsStalled				( void ) const { return vfl.stalled; }
 
@@ -219,9 +219,9 @@ protected:
 
 	void					UpdateDrivers			( int delta );
 	virtual void			UpdateHUD				( int position, idUserInterface* gui );
-	
+
 	void					SetPositions			( void );
-	
+
 	void					SetCombatModel			( void );
 	void					LinkCombat				( void );
 
@@ -235,7 +235,7 @@ protected:
 	int							drivers;
 
 	idUserInterface *			hud;
-	
+
 	float						crashSpeedSmall;
 	float						crashSpeedMedium;
 	float						crashSpeedLarge;
@@ -243,7 +243,7 @@ protected:
 	rvClientEffectPtr			crashEffect;
 	int							crashNextSound;
 	int							crashTime;
-	
+
 	float						autoRightDir;
 	bool						autoRight;
 
@@ -271,7 +271,7 @@ protected:
 	} vfl;
 
 	float						damageStaticChance;
-	
+
 	// Shields
 	float						shieldMaxHealth;
 	idInterpolate<int>			shieldHealth;
@@ -291,7 +291,7 @@ protected:
 	int							godModeDamage;
 
 	int							cachedContents;
-	
+
 	rvVehicleFuncs_t			funcs;
 
 	float						crashVelocitySmall;
@@ -301,11 +301,11 @@ protected:
 	bool						alwaysImpactDamage;
 
 	void					UpdateIncomingProjectiles( void );
-	
+
 public:
 	idList< idEntityPtr< idGuidedProjectile > >	incomingProjectiles;
 private:
-	
+
 	void					Event_Lock				( bool locked );
 	void					Event_IsLocked			( void );
 	void					Event_EnableWeapon		( void );

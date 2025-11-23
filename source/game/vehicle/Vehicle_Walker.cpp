@@ -10,7 +10,7 @@ public:
 	CLASS_PROTOTYPE( rvVehicleWalker );
 
 	rvVehicleWalker ( void );
-	
+
 	void				Think					( void );
 	void				Spawn					( void );
 	void				Save					( idSaveGame *savefile ) const;
@@ -135,7 +135,7 @@ void rvVehicleWalker::UpdateState ( void ) {
   	vfl.forward		= (vfl.driver && cmd.forwardmove > 0);
   	vfl.backward	= (vfl.driver && cmd.forwardmove < 0);
   	vfl.right		= (vfl.driver && cmd.rightmove < 0);
-  	vfl.left		= (vfl.driver && cmd.rightmove > 0);	
+  	vfl.left		= (vfl.driver && cmd.rightmove > 0);
 	vfl.strafe		= (vfl.driver && cmd.buttons & BUTTON_STRAFE );
 
 	if ( g_vehicleMode.GetInteger() != 0 ) {
@@ -238,7 +238,7 @@ bool rvVehicleWalker::FindClearExitPoint( int pos, idVec3& origin, idMat3& axis 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -250,7 +250,7 @@ CLASS_STATES_DECLARATION ( rvVehicleWalker )
 	STATE ( "BackwardRight",		rvVehicleWalker::Frame_BackwardRight )
 
 	STATE ( "Wait_OnlineAnim",		rvVehicleWalker::State_Wait_OnlineAnim )
-	
+
 	STATE ( "State_Idle",			rvVehicleWalker::State_Idle )
 	STATE ( "State_IdleThink",		rvVehicleWalker::State_IdleThink )
 	STATE ( "State_IdleOffline",	rvVehicleWalker::State_IdleOffline )
@@ -262,7 +262,7 @@ CLASS_STATES_DECLARATION ( rvVehicleWalker )
 	STATE ( "State_BackwardStart",	rvVehicleWalker::State_BackwardStart )
 	STATE ( "State_Backward",		rvVehicleWalker::State_Backward )
 	STATE ( "State_Stop",			rvVehicleWalker::State_Stop )
-	STATE ( "State_Turn",			rvVehicleWalker::State_Turn )	
+	STATE ( "State_Turn",			rvVehicleWalker::State_Turn )
 	STATE ( "State_TurnThink",		rvVehicleWalker::State_TurnThink )
 	STATE ( "State_ScriptedAnim",	rvVehicleWalker::State_ScriptedAnim )
 END_CLASS_STATES
@@ -278,7 +278,7 @@ stateResult_t rvVehicleWalker::State_IdleOffline ( const stateParms_t& parms ) {
 	PlayCycle ( ANIMCHANNEL_LEGS, "idle_offline", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "Wait_Driver", 2 );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_Online", 2 );
-	
+
 	return SRESULT_DONE;
 }
 
@@ -287,9 +287,9 @@ stateResult_t rvVehicleWalker::State_IdleOffline ( const stateParms_t& parms ) {
 rvVehicleWalker::State_Online
 ================
 */
-stateResult_t rvVehicleWalker::State_Online ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleWalker::State_Online ( const stateParms_t& parms ) {
 	vfl.frozen = false;
-	
+
 	PlayAnim ( ANIMCHANNEL_LEGS, "start", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "Wait_OnlineAnim", 4 );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", 4 );
@@ -302,7 +302,7 @@ stateResult_t rvVehicleWalker::State_Online ( const stateParms_t& parms ) {
 rvVehicleWalker::State_Offline
 ================
 */
-stateResult_t rvVehicleWalker::State_Offline ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleWalker::State_Offline ( const stateParms_t& parms ) {
 	PlayAnim ( ANIMCHANNEL_LEGS, "stop", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "Wait_TorsoAnim", 4 );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_IdleOffline", 4 );
@@ -314,14 +314,14 @@ stateResult_t rvVehicleWalker::State_Offline ( const stateParms_t& parms ) {
 rvVehicleWalker::State_Idle
 ================
 */
-stateResult_t rvVehicleWalker::State_Idle ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleWalker::State_Idle ( const stateParms_t& parms ) {
 	if ( SRESULT_WAIT != State_IdleThink ( parms ) ) {
 		return SRESULT_DONE;
 	}
-	
+
 	PlayCycle( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_IdleThink", 2 );
-	
+
 	return SRESULT_DONE;
 }
 
@@ -330,7 +330,7 @@ stateResult_t rvVehicleWalker::State_Idle ( const stateParms_t& parms ) {
 rvVehicleWalker::State_Idle
 ================
 */
-stateResult_t rvVehicleWalker::State_IdleThink ( const stateParms_t& parms ) { 
+stateResult_t rvVehicleWalker::State_IdleThink ( const stateParms_t& parms ) {
 	if ( !vfl.driver || vfl.stalled ) {
 		PostAnimState ( ANIMCHANNEL_LEGS, "State_Offline", parms.blendFrames );
 		return SRESULT_DONE;
@@ -341,18 +341,18 @@ stateResult_t rvVehicleWalker::State_IdleThink ( const stateParms_t& parms ) {
 			PostAnimState ( ANIMCHANNEL_LEGS, "State_ForwardStart", 2 );
 			return SRESULT_DONE;
 		}
-		
+
 		if ( vfl.backward ) {
 			PostAnimState ( ANIMCHANNEL_LEGS, "State_BackwardStart", 2 );
 			return SRESULT_DONE;
 		}
-		
+
 		if ( vfl.right || vfl.left ) {
 			PostAnimState ( ANIMCHANNEL_LEGS, "State_Turn", 2 );
 			return SRESULT_DONE;
 		}
 	}
-	
+
 	return SRESULT_WAIT;
 }
 
@@ -408,7 +408,7 @@ stateResult_t rvVehicleWalker::State_Backward ( const stateParms_t& parms ) {
 		SetAnimState ( ANIMCHANNEL_LEGS, "State_Stop", 2 );
 		return SRESULT_DONE;
 	}
-		
+
 	if ( !parms.stage ) {
 	PlayCycle( ANIMCHANNEL_LEGS, "backward", 2 );
 		return SRESULT_STAGE(parms.stage + 1);
@@ -427,7 +427,7 @@ stateResult_t rvVehicleWalker::State_Backward ( const stateParms_t& parms ) {
 rvVehicleWalker::State_Stop
 ================
 */
-stateResult_t rvVehicleWalker::State_Stop ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleWalker::State_Stop ( const stateParms_t& parms ) {
 	PlayAnim ( ANIMCHANNEL_LEGS, stopAnimName, parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "Wait_TorsoAnim", 2 );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", 2 );
@@ -448,9 +448,9 @@ stateResult_t rvVehicleWalker::State_Turn ( const stateParms_t& parms ) {
 		PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", parms.blendFrames );
 		return SRESULT_DONE;
 	}
-	
+
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_TurnThink", 16 );
-	
+
 	return SRESULT_DONE;
 }
 
@@ -462,7 +462,7 @@ rvVehicleWalker::State_TurnThink
 stateResult_t rvVehicleWalker::State_TurnThink ( const stateParms_t& parms ) {
 	// If moving again bail on the turn, reguardless of whether its in mid animation
 	if ( vfl.forward || vfl.backward ) {
-		PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", parms.blendFrames );		
+		PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", parms.blendFrames );
 		return SRESULT_DONE;
 	}
 	// If the animation is done then repeat
@@ -534,12 +534,12 @@ stateResult_t rvVehicleWalker::Frame_BackwardRight ( int ) {
 rvVehicleWalker::State_Wait_OnlineAnim
 ================
 */
-stateResult_t rvVehicleWalker::State_Wait_OnlineAnim ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleWalker::State_Wait_OnlineAnim ( const stateParms_t& parms ) {
 	if ( !AnimDone ( ANIMCHANNEL_LEGS, parms.blendFrames ) && vfl.driver ) {
 		return SRESULT_WAIT;
 	}
 	return SRESULT_DONE;
-}	
+}
 
 /*
 ================

@@ -40,9 +40,9 @@ public:	// common physics interface
 
 	void					SetMass( float mass, int id = -1 );
 	float					GetMass( int id = -1 ) const;
-	
+
 // RAVEN BEGIN
-// bdube: added center mass	
+// bdube: added center mass
 	idVec3					GetCenterMass ( int id = -1 ) const;
 // RAVEN END
 
@@ -70,7 +70,7 @@ public:	// common physics interface
 // RAVEN BEGIN
 // bdube: water interraction
 	bool					IsInWater ( void ) const;
-// RAVEN END	
+// RAVEN END
 
 	void					SaveState( void );
 	void					RestoreState( void );

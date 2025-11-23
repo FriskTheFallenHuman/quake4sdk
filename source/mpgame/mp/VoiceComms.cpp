@@ -15,7 +15,7 @@ void idMultiplayerGame::ReceiveAndForwardVoiceData( int clientNum, const idBitMs
 	int			i;
 	byte		msgBuf[MAX_VOICE_PACKET_SIZE + 2];
 	idPlayer *	from;
-	
+
 	from = ( idPlayer * )gameLocal.entities[clientNum];
 	if( !gameLocal.serverInfo.GetBool( "si_voiceChat" ) || !from ) {
 		return;
@@ -73,7 +73,7 @@ void idMultiplayerGame::ReceiveAndForwardVoiceData( int clientNum, const idBitMs
 	if ( gameLocal.isListenServer ) {
 		// Skip over control byte
 		outMsg.ReadByte();
-        
+
 		idPlayer* to = gameLocal.GetLocalPlayer();
 		if( to->GetUserInfo()->GetBool( "s_voiceChatReceive" ) )
 		{
@@ -182,7 +182,7 @@ void idMultiplayerGame::ReceiveAndPlayVoiceData( const idBitMsg &inMsg )
 	{
 		return;
 	}
-	
+
 	clientNum = inMsg.ReadByte();
 	soundSystem->PlayVoiceData( clientNum, inMsg.GetReadData(), inMsg.GetRemainingData() );
 	if( g_voiceChatDebug.GetInteger() & 4 )

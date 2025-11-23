@@ -16,7 +16,7 @@
 ===============================================================================
 
   idMoveable
-	
+
 ===============================================================================
 */
 
@@ -56,7 +56,7 @@ idMoveable::idMoveable( void ) {
 	unbindOnDeath		= false;
 	allowStep			= false;
  	canDamage			= false;
-	
+
 	lastAttacker		= NULL;
 }
 
@@ -83,7 +83,7 @@ void idMoveable::Spawn( void ) {
 	idStr clipModelName;
 	bool setClipModel = false;
 	idBounds bounds;
-	
+
 	// check if a clip model is set
 	spawnArgs.GetString( "clipmodel", "", clipModelName );
 	if ( !clipModelName[0] ) {
@@ -200,7 +200,7 @@ idMoveable::Save
 void idMoveable::Save( idSaveGame *savefile ) const {
 
 	savefile->WriteStaticObject( physicsObj );
-	
+
 	savefile->WriteString( brokenModel );
 	savefile->WriteString( damage );
 	savefile->WriteInt( nextCollideFxTime );
@@ -213,7 +213,7 @@ void idMoveable::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool( unbindOnDeath );
 	savefile->WriteBool( allowStep );
 	savefile->WriteBool( canDamage );
-    
+
 	lastAttacker.Save(savefile);		// cnicholson: Added unsaved var
 }
 
@@ -336,7 +336,7 @@ idMoveable::Damage
 */
 void idMoveable::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location ) {
 	idDamagable::Damage ( inflictor, attacker, dir, damageDefName, damageScale, location );
-	
+
 	// Cache the attacker to ensure credit for a kill is given to the entity that caused the damage
 	lastAttacker = inflictor;
 // jshepard:
@@ -357,18 +357,18 @@ void idMoveable::Killed( idEntity *inflictor, idEntity *attacker, int damage, co
 /*
 	// No more taking damage
 	fl.takedamage = false;
-	
+
 	// Should the moveable launch around when killed?
 	int launchTime;
-	launchTime = SEC2MS ( spawnArgs.GetFloat ( "launch_time", "0" );	
+	launchTime = SEC2MS ( spawnArgs.GetFloat ( "launch_time", "0" );
 	if ( launchTime > 0 ) {
 		launchOffset = spawnArgs.GetVector ( "launch_offset" );
-		launchDir    = spawnArgs.GetVector ( "		
+		launchDir    = spawnArgs.GetVector ( "
 	}
-	
-	spawnArgs.GetFloat ( "explode_lapse", 
+
+	spawnArgs.GetFloat ( "explode_lapse",
 	PostEventSec ( &EV_Remove, explodeLapse );
-	
+
 	// Two part explosion?
 	explode_impulse
 	explode_lapse
@@ -381,7 +381,7 @@ void idMoveable::Killed( idEntity *inflictor, idEntity *attacker, int damage, co
 		SetModel( brokenModel );
 	}
 
-	if ( explode ) {	
+	if ( explode ) {
 		if ( brokenModel == "" ) {
 			Hide();
 			physicsObj.PutToRest();
@@ -397,7 +397,7 @@ void idMoveable::Killed( idEntity *inflictor, idEntity *attacker, int damage, co
 		StartSound( "snd_explode", SND_CHANNEL_ANY );
 
 		StopAllEffects ( );
-		gameLocal.PlayEffect ( gameLocal.GetEffect(spawnArgs, "fx_explode"), GetPhysics()->GetOrigin(), (-GetPhysics()->GetGravityNormal()).ToMat3(), false, vec3_origin, true );				
+		gameLocal.PlayEffect ( gameLocal.GetEffect(spawnArgs, "fx_explode"), GetPhysics()->GetOrigin(), (-GetPhysics()->GetGravityNormal()).ToMat3(), false, vec3_origin, true );
 	}
 
 	if ( renderEntity.gui[ 0 ] ) {
@@ -437,9 +437,9 @@ void idMoveable::AddDamageEffect ( const trace_t &collision, const idVec3 &veloc
 	// Play an impact effect during this stage?
 	if ( stageDict ) {
 		PlayEffect ( gameLocal.GetEffect ( *stageDict, "fx_impact" ),
-					 collision.c.point, collision.c.normal.ToMat3(), 
+					 collision.c.point, collision.c.normal.ToMat3(),
 					 true, vec3_origin, true );
-	}					 
+	}
 }
 
 /*
@@ -682,7 +682,7 @@ void idMoveable::Event_RadiusDamage( idEntity *attacker, const char* splash ) {
 ===============================================================================
 
   idBarrel
-	
+
 ===============================================================================
 */
 
@@ -747,7 +747,7 @@ void idBarrel::BarrelThink( void ) {
 
 	// Progress to the next stage?
 	UpdateStage ( );
-	
+
 	// run physics
 	RunPhysics();
 
@@ -940,7 +940,7 @@ idExplodingBarrel::Restore
 ================
 */
 void idExplodingBarrel::Restore( idRestoreGame *savefile ) {
-	
+
 	savefile->ReadInt( (int &)state );
 	savefile->ReadVec3( spawnOrigin );
 	savefile->ReadMat3( spawnAxis );
@@ -948,7 +948,7 @@ void idExplodingBarrel::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( (int &)lightHandle );
 // RAVEN BEGIN
 	savefile->ReadRenderEntity( ipsEntity, &spawnArgs );
-// RAVEN END		
+// RAVEN END
 	savefile->ReadRenderLight( light );
 	if ( lightHandle != -1 ) {
 		//get the handle again as it's out of date after a restore!
@@ -964,7 +964,7 @@ void idExplodingBarrel::Restore( idRestoreGame *savefile ) {
 	if ( splash && *splash ) {
 		declManager->FindType( DECL_ENTITYDEF, splash, false, false );
 	}
-	
+
  	if ( ipsHandle != -1 ) {
  		ipsHandle = gameRenderWorld->AddEntityDef( &ipsEntity );
  	}
@@ -1046,7 +1046,7 @@ void idExplodingBarrel::Think( void ) {
 		gameRenderWorld->UpdateEntityDef( ipsHandle, &ipsEntity );
 	}
 }
-   
+
 /*
 ================
 idExplodingBarrel::AddIPS
@@ -1160,8 +1160,8 @@ void idExplodingBarrel::Killed( idEntity *inflictor, idEntity *attacker, int dam
 		state = BURNING;
 		PostEventSec( &EV_Explode, f );
 		StartSound( "snd_burn", SND_CHANNEL_ANY, 0, false, NULL );
-		PlayEffect ( gameLocal.GetEffect(spawnArgs,"fx_burn"), 
-					 vec3_origin, (-GetPhysics()->GetGravityNormal()).ToMat3(), true, vec3_origin, true );					 
+		PlayEffect ( gameLocal.GetEffect(spawnArgs,"fx_burn"),
+					 vec3_origin, (-GetPhysics()->GetGravityNormal()).ToMat3(), true, vec3_origin, true );
 		return;
 	} else {
 		state = EXPLODING;
@@ -1183,7 +1183,7 @@ void idExplodingBarrel::Killed( idEntity *inflictor, idEntity *attacker, int dam
 
 // RAVEN BEGIN
 // bdube: replaced with playing an effect
-/*	
+/*
 	//FIXME: need to precache all the debris stuff here and in the projectiles
 	const idKeyValue *kv = spawnArgs.MatchPrefix( "def_debris" );
 	// bool first = true;
@@ -1213,7 +1213,7 @@ void idExplodingBarrel::Killed( idEntity *inflictor, idEntity *attacker, int dam
 			debris->Launch();
 			debris->GetRenderEntity()->shaderParms[ SHADERPARM_TIME_OF_DEATH ] = ( gameLocal.time + 1500 ) * 0.001f;
 			debris->UpdateVisuals();
-			
+
 		}
 		kv = spawnArgs.MatchPrefix( "def_debris", kv );
 	}
@@ -1241,7 +1241,7 @@ void idExplodingBarrel::Killed( idEntity *inflictor, idEntity *attacker, int dam
 idExplodingBarrel::Think
 ================
 */
-void idExplodingBarrel::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void idExplodingBarrel::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 					  const char *damageDefName, const float damageScale, const int location ) {
 
 

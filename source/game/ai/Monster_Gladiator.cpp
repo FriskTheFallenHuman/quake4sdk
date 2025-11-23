@@ -38,7 +38,7 @@ protected:
 	rvAIAction				actionRailgunAttack;
 
 	// Blaster attack
-	int						maxShots;	
+	int						maxShots;
 	int						minShots;
 	int						shots;
 	int						lastShotTime;
@@ -117,18 +117,18 @@ void rvMonsterGladiator::Spawn ( void ) {
 
 	InitSpawnArgsVariables();
 
-	shots			= 0;	
+	shots			= 0;
 	lastShotTime	= 0;
 
 	railgunHealth	= spawnArgs.GetInt ( "railgunHealth", "100" );
 	railgunDestroyedTime = 0;
-	
-	actionRailgunAttack.Init	( spawnArgs, "action_railgunAttack",	"Torso_RailgunAttack",	 AIACTIONF_ATTACK );	
 
-	// Disable range attack until using shield	
+	actionRailgunAttack.Init	( spawnArgs, "action_railgunAttack",	"Torso_RailgunAttack",	 AIACTIONF_ATTACK );
+
+	// Disable range attack until using shield
 	//actionRangedAttack.fl.disabled = true;
 	const char  *func;
-	if ( spawnArgs.GetString( "script_postWeaponDestroyed", "", &func ) ) 
+	if ( spawnArgs.GetString( "script_postWeaponDestroyed", "", &func ) )
 	{
 		mPostWeaponDestroyed.Init( func );
 	}
@@ -179,7 +179,7 @@ bool rvMonsterGladiator::CheckActions ( void ) {
 		// Only ranged attack and melee attack are available when using shield
 		if ( PerformAction ( &actionMeleeAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack )							    ||
 			 PerformAction ( &actionRangedAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )   ||
-			 ( railgunHealth > 0 
+			 ( railgunHealth > 0
 				&& gameLocal.GetTime() - shieldStartTime > 2000
 				&& gameLocal.time - pain.lastTakenTime > 500
 				&& gameLocal.time - combat.shotAtTime > 300
@@ -201,7 +201,7 @@ bool rvMonsterGladiator::CheckActions ( void ) {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 	else
@@ -210,10 +210,10 @@ bool rvMonsterGladiator::CheckActions ( void ) {
 		{//not while rushing (NOTE: unless railgun was just destroyed?)
 			if ( enemy.fl.visible && enemy.fl.inFov )
 			{
-				if ( combat.fl.aware && shieldWaitTime < gameLocal.GetTime() ) 
+				if ( combat.fl.aware && shieldWaitTime < gameLocal.GetTime() )
 				{
 					if ( gameLocal.time - pain.lastTakenTime <= 1500
-						|| ( combat.shotAtAngle < 0 && gameLocal.time - combat.shotAtTime < 100 ) 
+						|| ( combat.shotAtAngle < 0 && gameLocal.time - combat.shotAtTime < 100 )
 						|| !gameLocal.random.RandomInt( 20 ) )
 					{
 						if ( !gameLocal.random.RandomInt( 5 ) )
@@ -229,7 +229,7 @@ bool rvMonsterGladiator::CheckActions ( void ) {
 			return true;
 		}
 	}
-	
+
 	return idAI::CheckActions ( );
 }
 
@@ -268,7 +268,7 @@ void rvMonsterGladiator::ShowShield	( void ) {
 		return;
 	}
 
-	usingShield						= true;		
+	usingShield						= true;
 	shieldWaitTime					= 0;
 	animPrefix						= "shield";
 	shieldStartTime					= gameLocal.time;
@@ -319,18 +319,18 @@ rvMonsterGladiator::DestroyRailgun
 void rvMonsterGladiator::DestroyRailgun ( void ) {
 	HideSurface ( "models/monsters/gladiator/glad_railgun" );
 	railgunHealth = -1;
-	
+
 	idVec3			origin;
 	idMat3			axis;
 	jointHandle_t	joint;
-	
+
 	joint = animator.GetJointHandle ( spawnArgs.GetString ( "joint_railgun_explode", "gun_main_jt" ) );
 	GetJointWorldTransform ( joint, gameLocal.time, origin, axis );
-	gameLocal.PlayEffect ( spawnArgs, "fx_railgun_explode", origin, axis );	
+	gameLocal.PlayEffect ( spawnArgs, "fx_railgun_explode", origin, axis );
 	PlayEffect ( "fx_railgun_burn", joint, true );
-	
+
 	GetAFPhysics()->GetBody ( "b_railgun" )->SetClipMask ( 0 );
-	
+
 	pain.takenThisFrame = pain.threshold;
 	pain.lastTakenTime = gameLocal.time;
 
@@ -346,7 +346,7 @@ void rvMonsterGladiator::DestroyRailgun ( void ) {
 
 	combat.attackRange[1] = 200;
 	combat.aggressiveRange = 400;
-	
+
 	spawnArgs.SetFloat( "action_meleeAttack_rate", 0.3f );
 	actionMeleeAttack.Init( spawnArgs, "action_meleeAttack", NULL, AIACTIONF_ATTACK );
 	actionMeleeAttack.failRate = 200;
@@ -388,7 +388,7 @@ bool rvMonsterGladiator::UpdateRunStatus ( void ) {
 		move.fl.idealRunning = false;
 		return move.fl.running != move.fl.idealRunning;
 	}
-	
+
 	return idAI::UpdateRunStatus ( );
 }
 
@@ -423,7 +423,7 @@ int rvMonsterGladiator::FilterTactical ( int availableTactical ) {
 	} else if ( gameLocal.GetTime() - railgunDestroyedTime < 6000 )	{
 		availableTactical = AITACTICAL_MELEE_BIT;
 	}
-	
+
 	return idAI::FilterTactical ( availableTactical );
 }
 
@@ -440,8 +440,8 @@ void rvMonsterGladiator::AddDamageEffect( const trace_t &collision, const idVec3
 		shieldStartTime = gameLocal.time;
 		return;
 	}
-	
-	return idAI::AddDamageEffect ( collision, velocity, damageDefName, inflictor );		
+
+	return idAI::AddDamageEffect ( collision, velocity, damageDefName, inflictor );
 }
 
 /*
@@ -461,7 +461,7 @@ int rvMonsterGladiator::GetDamageForLocation( int damage, int location ) {
 		}
 		return 0;
 	}
-	 
+
 	return idAI::GetDamageForLocation ( damage, location );
 }
 
@@ -482,9 +482,9 @@ bool rvMonsterGladiator::CanTurn ( void ) const {
 rvMonsterGladiator::Damage
 ================
 */
-void rvMonsterGladiator::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
-					  const char *damageDefName, const float damageScale, const int location ) 
-{	
+void rvMonsterGladiator::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
+					  const char *damageDefName, const float damageScale, const int location )
+{
 	const idDict *damageDef = gameLocal.FindEntityDefDict( damageDefName, false );
 	if ( damageDef )
 	{
@@ -508,7 +508,7 @@ void rvMonsterGladiator::Damage( idEntity *inflictor, idEntity *attacker, const 
 				}
 			}
 
-			if ( idStr::Icmp ( GetDamageGroup ( location ), "shield" ) == 0 ) 
+			if ( idStr::Icmp ( GetDamageGroup ( location ), "shield" ) == 0 )
 			{//Hit in shield
 				if ( damageDef->GetString( "filter_electricity", NULL ) )
 				{//by electricity
@@ -523,7 +523,7 @@ void rvMonsterGladiator::Damage( idEntity *inflictor, idEntity *attacker, const 
 						HideShield( gameLocal.random.RandomInt(3000)+2000 );//FIXME: when it does come back on, flicker back on?
 						painAnim = "pain_con";
 						AnimTurn( 0, true );
-						PerformAction ( "Torso_Pain", 2, true );	
+						PerformAction ( "Torso_Pain", 2, true );
 					}
 					combat.shotAtTime = gameLocal.GetTime();
 				}
@@ -551,8 +551,8 @@ rvMonsterGladiator::Save
 ================
 */
 void rvMonsterGladiator::Save( idSaveGame *savefile ) const {
-	actionRailgunAttack.Save ( savefile ) ;	
-	
+	actionRailgunAttack.Save ( savefile ) ;
+
 	savefile->WriteInt ( shots );
 	savefile->WriteInt ( lastShotTime );
 
@@ -563,7 +563,7 @@ void rvMonsterGladiator::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt ( shieldHealth );
 	savefile->WriteInt ( shieldConsecutiveHits );
 	savefile->WriteInt ( shieldLastHitTime );
-	
+
 	savefile->WriteInt ( railgunHealth );
 	savefile->WriteInt ( railgunDestroyedTime );
 	savefile->WriteInt ( nextTurnTime ); // cnicholson: added unsaved var
@@ -576,7 +576,7 @@ rvMonsterGladiator::Restore
 ================
 */
 void rvMonsterGladiator::Restore( idRestoreGame *savefile ) {
-	actionRailgunAttack.Restore ( savefile ) ;	
+	actionRailgunAttack.Restore ( savefile ) ;
 
 	savefile->ReadInt ( shots );
 	savefile->ReadInt ( lastShotTime );
@@ -604,14 +604,14 @@ rvMonsterGladiator::GetDebugInfo
 void rvMonsterGladiator::GetDebugInfo( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "action_RailgunAttack",	aiActionStatusString[actionRailgunAttack.status], userData );
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -627,7 +627,7 @@ CLASS_STATES_DECLARATION ( rvMonsterGladiator )
 	STATE ( "Torso_TurnRight90",			rvMonsterGladiator::State_Torso_TurnRight90 )
 	STATE ( "Torso_TurnLeft90",				rvMonsterGladiator::State_Torso_TurnLeft90 )
 	STATE ( "Torso_ShieldFire",				rvMonsterGladiator::State_Torso_ShieldFire )
-	
+
 END_CLASS_STATES
 
 /*
@@ -646,7 +646,7 @@ rvMonsterGladiator::State_Torso_ShieldStart
 ================
 */
 stateResult_t rvMonsterGladiator::State_Torso_ShieldStart ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -654,9 +654,9 @@ stateResult_t rvMonsterGladiator::State_Torso_ShieldStart ( const stateParms_t& 
 		case STAGE_INIT:
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			ShowShield ( );
-			PlayAnim ( ANIMCHANNEL_TORSO, "start", parms.blendFrames );		
+			PlayAnim ( ANIMCHANNEL_TORSO, "start", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!
@@ -668,7 +668,7 @@ stateResult_t rvMonsterGladiator::State_Torso_ShieldStart ( const stateParms_t& 
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -677,7 +677,7 @@ rvMonsterGladiator::State_Torso_ShieldEnd
 ================
 */
 stateResult_t rvMonsterGladiator::State_Torso_ShieldEnd ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -686,7 +686,7 @@ stateResult_t rvMonsterGladiator::State_Torso_ShieldEnd ( const stateParms_t& pa
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "end", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 2 ) //anim done
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
@@ -701,7 +701,7 @@ stateResult_t rvMonsterGladiator::State_Torso_ShieldEnd ( const stateParms_t& pa
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -710,7 +710,7 @@ rvMonsterGladiator::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterGladiator::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -724,7 +724,7 @@ stateResult_t rvMonsterGladiator::State_Torso_BlasterAttack ( const stateParms_t
 			//shots = 4;
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
@@ -732,11 +732,11 @@ stateResult_t rvMonsterGladiator::State_Torso_BlasterAttack ( const stateParms_t
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "blaster_loop", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
@@ -748,16 +748,16 @@ stateResult_t rvMonsterGladiator::State_Torso_BlasterAttack ( const stateParms_t
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
 				|| idStr::Icmp( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "blaster_loop" ) ) {//anim changed
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 
@@ -767,7 +767,7 @@ rvMonsterGladiator::State_Torso_RailgunAttack
 ================
 */
 stateResult_t rvMonsterGladiator::State_Torso_RailgunAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -778,20 +778,20 @@ stateResult_t rvMonsterGladiator::State_Torso_RailgunAttack ( const stateParms_t
 				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_RailgunAttack", parms.blendFrames );
 				return SRESULT_DONE;
 			}
-			
+
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "railgun_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
 				|| idStr::Icmp( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "railgun_attack" ) ) {//anim changed
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;		
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -799,8 +799,8 @@ stateResult_t rvMonsterGladiator::State_Torso_RailgunAttack ( const stateParms_t
 rvMonsterGladiator::State_Torso_TurnRight90
 ================
 */
-stateResult_t rvMonsterGladiator::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterGladiator::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -810,10 +810,10 @@ stateResult_t rvMonsterGladiator::State_Torso_TurnRight90 ( const stateParms_t& 
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_right", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
-			if ( move.fl.moving 
-				|| AnimDone ( ANIMCHANNEL_TORSO, 0 ) 
+			if ( move.fl.moving
+				|| AnimDone ( ANIMCHANNEL_TORSO, 0 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
 				|| idStr::Icmp( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_right" ) ) {//anim changed
 				AnimTurn ( 0, true );
@@ -822,7 +822,7 @@ stateResult_t rvMonsterGladiator::State_Torso_TurnRight90 ( const stateParms_t& 
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -830,8 +830,8 @@ stateResult_t rvMonsterGladiator::State_Torso_TurnRight90 ( const stateParms_t& 
 rvMonsterGladiator::State_Torso_TurnLeft90
 ================
 */
-stateResult_t rvMonsterGladiator::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterGladiator::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -841,10 +841,10 @@ stateResult_t rvMonsterGladiator::State_Torso_TurnLeft90 ( const stateParms_t& p
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_left", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
-			if ( move.fl.moving 
-				|| AnimDone ( ANIMCHANNEL_TORSO, 0 ) 
+			if ( move.fl.moving
+				|| AnimDone ( ANIMCHANNEL_TORSO, 0 )
 				|| animator.CurrentAnim( ANIMCHANNEL_TORSO )->GetEndTime() < 0//anim somehow cycled?!!!
 				|| idStr::Icmp( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_left" ) ) {//anim changed
 				AnimTurn ( 0, true );
@@ -853,7 +853,7 @@ stateResult_t rvMonsterGladiator::State_Torso_TurnLeft90 ( const stateParms_t& p
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -868,20 +868,20 @@ stateResult_t rvMonsterGladiator::State_Torso_ShieldFire ( const stateParms_t& p
 		STAGE_ATTACK_WAIT,
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT: 
+		case STAGE_INIT:
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			PlayCycle( ANIMCHANNEL_TORSO, "walk_aim", 1 );
 			return SRESULT_STAGE ( STAGE_ATTACK );
-		
-		case STAGE_ATTACK: 
+
+		case STAGE_ATTACK:
 			Attack( "blaster", animator.GetJointHandle( "lft_wrist_jt"), GetEnemy() );
 			PlayEffect( "fx_blaster_flash", animator.GetJointHandle("lft_wrist_jt") );
 			lastShotTime = gameLocal.GetTime();
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( move.fl.done )
 			{

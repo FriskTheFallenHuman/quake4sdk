@@ -6,7 +6,7 @@
 
 const idEventDef EV_Thread_Execute( "<execute>", NULL );
 const idEventDef EV_Thread_SetCallback( "<script_setcallback>", NULL );
-																	
+
 // script callable events
 const idEventDef EV_Thread_TerminateThread( "terminate", "d" );
 const idEventDef EV_Thread_Pause( "pause", NULL );
@@ -200,7 +200,7 @@ CLASS_DECLARATION( idClass, idThread )
 	EVENT( EV_Thread_DrawText,				idThread::Event_DrawText )
 	EVENT( EV_Thread_InfluenceActive,		idThread::Event_InfluenceActive )
 
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // kfuller: added events
 	EVENT( EV_Thread_SetSpawnVector,		idThread::Event_SetSpawnVector )
 	EVENT( EV_Thread_ArcSine,				idThread::Event_GetArcSine )
@@ -230,7 +230,7 @@ CLASS_DECLARATION( idClass, idThread )
 	EVENT( EV_Thread_SendNamedEvent,		idThread::Event_SendNamedEvent )
 // manual streaming
 	EVENT( EV_Thread_BeginManualStreaming,	idThread::Event_BeginManualStreaming )
-	EVENT( EV_Thread_EndManualStreaming,	idThread::Event_EndManualStreaming )	
+	EVENT( EV_Thread_EndManualStreaming,	idThread::Event_EndManualStreaming )
 	EVENT( EV_Thread_SetMatSort,				idThread::Event_SetMatSort )
 // RAVEN END
 END_CLASS
@@ -306,7 +306,7 @@ idThread::idThread
 */
 idThread::idThread( idEntity *self, const function_t *func ) {
 	assert( self );
-	
+
 	Init();
 	SetThreadName( self->name );
 	interpreter.EnterObjectFunction( self, func, false );
@@ -464,7 +464,7 @@ void idThread::Init( void ) {
 
 	threadNum = threadIndex;
 	threadList.Append( this );
-	
+
 	creationTime = gameLocal.time;
 	lastExecuteTime = 0;
 	manualControl = false;
@@ -501,19 +501,19 @@ idThread::DisplayInfo
 ================
 */
 void idThread::DisplayInfo( void ) {
-	gameLocal.Printf( 
+	gameLocal.Printf(
 		"%12i: '%s'\n"
 		"        File: %s(%d)\n"
 		"     Created: %d (%d ms ago)\n"
-		"      Status: ", 
-		threadNum, threadName.c_str(), 
-		interpreter.CurrentFile(), interpreter.CurrentLine(), 
+		"      Status: ",
+		threadNum, threadName.c_str(),
+		interpreter.CurrentFile(), interpreter.CurrentLine(),
 		creationTime, gameLocal.time - creationTime );
 
 	if ( interpreter.threadDying ) {
 		gameLocal.Printf( "Dying\n" );
 	} else if ( interpreter.doneProcessing ) {
-		gameLocal.Printf( 
+		gameLocal.Printf(
 			"Paused since %d (%d ms)\n"
 			"      Reason: ",  lastExecuteTime, gameLocal.time - lastExecuteTime );
 		if ( waitingForThread ) {
@@ -741,7 +741,7 @@ bool idThread::IsWaiting( void ) {
 }
 
 // RAVEN BEGIN
-// bgeisler: 
+// bgeisler:
 /*
 ================
 idThread::ListFunctions
@@ -808,7 +808,7 @@ idThread::PushString
 ================
 */
 void idThread::PushString( const char* string ) {
-	interpreter.PushString( string ); 
+	interpreter.PushString( string );
 }
 
 /*
@@ -1045,8 +1045,8 @@ void idThread::WaitFrame( void ) {
 
 /***********************************************************************
 
-  Script callable events  
-	
+  Script callable events
+
 ***********************************************************************/
 
 /*
@@ -1567,7 +1567,7 @@ void idThread::Event_OnSignal( int signal, idEntity *ent, const char *func ) {
 	if ( !ent ) {
 		Error( "Entity not found" );
 	}
-	
+
 	if ( ( signal < 0 ) || ( signal >= NUM_SIGNALS ) ) {
 		Error( "Signal out of range" );
 	}
@@ -1589,7 +1589,7 @@ void idThread::Event_ClearSignalThread( int signal, idEntity *ent ) {
 	if ( !ent ) {
 		Error( "Entity not found" );
 	}
-	
+
 	if ( ( signal < 0 ) || ( signal >= NUM_SIGNALS ) ) {
 		Error( "Signal out of range" );
 	}
@@ -1608,7 +1608,7 @@ void idThread::Event_ClearSignalAllThreads( int signal, idEntity *ent ) {
 	if ( !ent ) {
 		Error( "Entity not found" );
 	}
-	
+
 	if ( ( signal < 0 ) || ( signal >= NUM_SIGNALS ) ) {
 		Error( "Signal out of range" );
 	}
@@ -1629,7 +1629,7 @@ void idThread::Event_SetCamera( idEntity *ent ) {
 	}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !ent->IsType( idCamera::GetClassType() ) ) {
 // RAVEN END
 		Error( "Entity is not a camera" );
@@ -1731,7 +1731,7 @@ void idThread::Event_GetTraceJoint( void ) {
 	if ( trace.fraction < 1.0f && trace.c.id < 0 ) {
 		idAFEntity_Base *af = static_cast<idAFEntity_Base *>( gameLocal.entities[ trace.c.entityNum ] );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( af && af->IsType( idAFEntity_Base::GetClassType() ) && af->IsActiveAF() ) {
 // RAVEN END
 			ReturnString( af->GetAnimator()->GetJointName( CLIPMODEL_ID_TO_JOINT_HANDLE( trace.c.id ) ) );
@@ -1750,7 +1750,7 @@ void idThread::Event_GetTraceBody( void ) {
 	if ( trace.fraction < 1.0f && trace.c.id < 0 ) {
 		idAFEntity_Base *af = static_cast<idAFEntity_Base *>( gameLocal.entities[ trace.c.entityNum ] );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( af && af->IsType( idAFEntity_Base::GetClassType() ) && af->IsActiveAF() ) {
 // RAVEN END
 			int bodyId = af->BodyForClipModelId( trace.c.id );
@@ -1889,7 +1889,7 @@ void idThread::Event_StrLeft( const char *string, int num ) {
 
 /*
 ================
-idThread::Event_StrRight 
+idThread::Event_StrRight
 ================
 */
 void idThread::Event_StrRight( const char *string, int num ) {
@@ -1986,7 +1986,7 @@ void idThread::Event_RadiusDamage( const idVec3 &origin, idEntity *inflictor, id
 idThread::Event_IsClient
 ================
 */
-void idThread::Event_IsClient( void ) { 
+void idThread::Event_IsClient( void ) {
 	idThread::ReturnFloat( gameLocal.isClient );
 }
 
@@ -1995,7 +1995,7 @@ void idThread::Event_IsClient( void ) {
 idThread::Event_IsMultiplayer
 ================
 */
-void idThread::Event_IsMultiplayer( void ) { 
+void idThread::Event_IsMultiplayer( void ) {
 	idThread::ReturnFloat( gameLocal.isMultiplayer );
 }
 
@@ -2004,7 +2004,7 @@ void idThread::Event_IsMultiplayer( void ) {
 idThread::Event_GetFrameTime
 ================
 */
-void idThread::Event_GetFrameTime( void ) { 
+void idThread::Event_GetFrameTime( void ) {
 	idThread::ReturnFloat( MS2SEC( gameLocal.msec ) );
 }
 
@@ -2013,7 +2013,7 @@ void idThread::Event_GetFrameTime( void ) {
 idThread::Event_GetTicsPerSecond
 ================
 */
-void idThread::Event_GetTicsPerSecond( void ) { 
+void idThread::Event_GetTicsPerSecond( void ) {
 	idThread::ReturnFloat( gameLocal.GetMHz() );
 }
 
@@ -2095,7 +2095,7 @@ idThread::Event_PlayWorldEffect
 ================
 */
 void idThread::Event_PlayWorldEffect( const char *effectName, idVec3 &org, idVec3 &angle ) {
-	gameLocal.PlayEffect ( ( const idDecl * )declManager->FindEffect( effectName ), org, angle.ToMat3() ); 
+	gameLocal.PlayEffect ( ( const idDecl * )declManager->FindEffect( effectName ), org, angle.ToMat3() );
 }
 
 // abahr:
@@ -2231,7 +2231,7 @@ void idThread::Event_SendNamedEvent( int guiEnum, const char *namedEvent ) {
 			// but this way the scripter will be able to strictly enforce which hud the named event gets played on.  See idPlayer::GetHud()
 			if ( player->vehicleController.GetVehicle() ) {
 				idUserInterface * hud = player->vehicleController.GetVehicle()->GetHud();
-				
+
 				if ( hud ) {
 					hud->HandleNamedEvent( namedEvent );
 				}
@@ -2255,35 +2255,35 @@ void idThread::Event_SetMatSort( const char *name, const char *val ) const {
 	if ( mat ) {
 		int srt = SS_DECAL;
 		if ( idStr::Icmp( val, "SS_MIN" ) == 0 ) {
-			srt = SS_MIN;		
+			srt = SS_MIN;
 		} else if ( idStr::Icmp( val, "SS_SUBVIEW" ) == 0 ) {
-			srt = SS_SUBVIEW;		
+			srt = SS_SUBVIEW;
 		} else if ( idStr::Icmp( val, "SS_PREGUI" ) == 0 ) {
-			srt = SS_PREGUI;		
+			srt = SS_PREGUI;
 		} else if ( idStr::Icmp( val, "SS_GUI" ) == 0 ) {
-			srt = SS_GUI;		
+			srt = SS_GUI;
 		} else if ( idStr::Icmp( val, "SS_BAD" ) == 0 ) {
-			srt = SS_BAD;		
+			srt = SS_BAD;
 		} else if ( idStr::Icmp( val, "SS_OPAQUE" ) == 0 ) {
 			srt = SS_OPAQUE;
 		} else if ( idStr::Icmp( val, "SS_PORTAL_SKY" ) == 0 ) {
-			srt = SS_PORTAL_SKY;		
+			srt = SS_PORTAL_SKY;
 		} else if ( idStr::Icmp( val, "SS_DECAL" ) == 0 ) {
-			srt = SS_DECAL;		
+			srt = SS_DECAL;
 		} else if ( idStr::Icmp( val, "SS_FAR" ) == 0 ) {
-			srt = SS_FAR;		
+			srt = SS_FAR;
 		} else if ( idStr::Icmp( val, "SS_MEDIUM" ) == 0 ) {
-			srt = SS_MEDIUM;		
+			srt = SS_MEDIUM;
 		} else if ( idStr::Icmp( val, "SS_CLOSE" ) == 0 ) {
-			srt = SS_CLOSE;		
+			srt = SS_CLOSE;
 		} else if ( idStr::Icmp( val, "SS_ALMOST_NEAREST" ) == 0 ) {
-			srt = SS_ALMOST_NEAREST;		
+			srt = SS_ALMOST_NEAREST;
 		} else if ( idStr::Icmp( val, "SS_NEAREST" ) == 0 ) {
-			srt = SS_NEAREST;		
+			srt = SS_NEAREST;
 		} else if ( idStr::Icmp( val, "SS_POST_PROCESS" ) == 0 ) {
-			srt = SS_POST_PROCESS;		
+			srt = SS_POST_PROCESS;
 		}
-		
+
 		mat->SetSort( srt );
 	}
 }

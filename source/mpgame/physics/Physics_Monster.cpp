@@ -87,8 +87,8 @@ monsterMoveResult_t idPhysics_Monster::SlideMove( idVec3 &start, idVec3 &velocit
 
 		if ( tr.c.entityNum != ENTITYNUM_NONE ) {
 			blockingEntity = gameLocal.entities[ tr.c.entityNum ];
-		} 
-		
+		}
+
 		// clip the movement delta and velocity
 		move.ProjectOntoPlane( tr.c.normal, OVERCLIP );
 		velocity.ProjectOntoPlane( tr.c.normal, OVERCLIP );
@@ -125,7 +125,7 @@ monsterMoveResult_t idPhysics_Monster::StepMove( idVec3 &start, idVec3 &velocity
 // RAVEN BEGIN
 // bdube: dont step when there is no gravity
 		if ( gravityNormal == vec3_zero || forceDeltaMove ) {
-// RAVEN END		
+// RAVEN END
 			start = noStepPos;
 			return MM_OK;
 		}
@@ -146,7 +146,7 @@ monsterMoveResult_t idPhysics_Monster::StepMove( idVec3 &start, idVec3 &velocity
 	}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( blockingEntity && blockingEntity->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 		// try to step down in case walking into an actor while going down steps
@@ -169,7 +169,7 @@ monsterMoveResult_t idPhysics_Monster::StepMove( idVec3 &start, idVec3 &velocity
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
 	gameLocal.Translation( self, tr, start, up, clipModel, clipModel->GetAxis(), clipMask, self );
-// RAVEN END	
+// RAVEN END
 	if ( tr.fraction == 0.0f ) {
 		start = noStepPos;
 		velocity = noStepVel;
@@ -249,7 +249,7 @@ idPhysics_Monster::idPhysics_Monster( void ) {
 	memset( &current, 0, sizeof( current ) );
 	current.atRest = -1;
 	saved = current;
-	
+
 	delta.Zero();
 	maxStepHeight = 18.0f;
 	minFloorCosine = 0.7f;
@@ -311,7 +311,7 @@ void idPhysics_Monster::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool( fly );
 	savefile->WriteBool( useVelocityMove );
 	savefile->WriteBool( noImpact );
-	
+
 	savefile->WriteInt( (int)moveResult );
 	savefile->WriteObject( blockingEntity );
 }
@@ -548,7 +548,7 @@ bool idPhysics_Monster::Evaluate( int timeStepMSec, int endTimeMSec ) {
 	current.velocity += current.pushVelocity;
 	current.lastPushVelocity = current.pushVelocity;
 	current.pushVelocity.Zero();
-	
+
 	if ( IsOutsideWorld() ) {
 		gameLocal.Warning( "clip model outside world bounds for entity '%s' at (%s)", self->name.c_str(), current.origin.ToString(0) );
 		Rest();

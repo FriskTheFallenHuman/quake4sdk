@@ -59,7 +59,7 @@
 
 
 // RAVEN BEGIN
-// cdr: AASTactical 
+// cdr: AASTactical
 
 // feature bits
 #define FEATURE_COVER				BIT(0)		// provides cover
@@ -280,7 +280,7 @@ public:
 	int							tt_waterJump;
 	int							tt_startWalkOffLedge;
 
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // rjohnson: added more debug drawing
 	idVec4						debugColor;
 	bool						debugDraw;
@@ -347,7 +347,7 @@ typedef struct sizeEstimate_s {
 
 
 class idAASFile {
-public:	
+public:
 	virtual 						~idAASFile( void ) {}
 // RAVEN BEGIN
 // jscott: made pure virtual

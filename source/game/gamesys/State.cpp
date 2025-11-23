@@ -68,7 +68,7 @@ rvStateThread::rvStateThread ( void ) {
 
 	states.Clear ( );
 	interrupted.Clear ( );
-	
+
 	memset ( &fl, 0, sizeof(fl) );
 }
 
@@ -88,7 +88,7 @@ rvStateThread::SetOwner
 */
 void rvStateThread::SetOwner ( idClass* _owner ) {
 	owner = _owner;
-}	
+}
 
 /*
 =====================
@@ -97,7 +97,7 @@ rvStateThread::Post
 */
 stateResult_t rvStateThread::PostState ( const char* name, int blendFrames, int delay, int flags ) {
 	const rvStateFunc<idClass>* func;
-	
+
 	// Make sure the state exists before queueing it
 	if ( NULL == (func = owner->FindState ( name ) ) ) {
 		return SRESULT_ERROR;
@@ -121,7 +121,7 @@ stateResult_t rvStateThread::PostState ( const char* name, int blendFrames, int 
 	}
 
 	insertAfter = call;
-	
+
 	return SRESULT_OK;
 }
 
@@ -142,7 +142,7 @@ rvStateThread::InterruptState
 */
 stateResult_t rvStateThread::InterruptState ( const char* name, int blendFrames, int delay, int flags ) {
 	stateCall_t* call;
-	
+
 	// Move all states to the front of the interrupted list in the same order
 	for ( call = states.Prev(); call; call = states.Prev() ) {
 		call->node.Remove ( );
@@ -173,7 +173,7 @@ rvStateThread::Clear
 */
 void rvStateThread::Clear ( bool ignoreStateCalls ) {
 	stateCall_t* call;
-	
+
 	// Clear all states from the main state list
 	for( call = states.Next(); call != NULL; call = states.Next() ) {
 		if ( !ignoreStateCalls && (call->flags & (SFLAG_ONCLEAR|SFLAG_ONCLEARONLY) ) ) {
@@ -181,8 +181,8 @@ void rvStateThread::Clear ( bool ignoreStateCalls ) {
 		}
 		call->node.Remove();
 		delete call;
-	}		
-	
+	}
+
 	// Clear all interrupted states
 	for( call = interrupted.Next(); call != NULL; call = interrupted.Next() ) {
 		if ( !ignoreStateCalls && (call->flags & (SFLAG_ONCLEAR|SFLAG_ONCLEARONLY) ) ) {
@@ -190,13 +190,13 @@ void rvStateThread::Clear ( bool ignoreStateCalls ) {
 		}
 		call->node.Remove();
 		delete call;
-	}		
+	}
 
 	insertAfter		= NULL;
 	fl.stateCleared	= true;
-	
+
 	states.Clear ( );
-	interrupted.Clear ( );	
+	interrupted.Clear ( );
 }
 
 /*
@@ -214,7 +214,7 @@ stateResult_t rvStateThread::Execute ( void ) {
 	int				historyStart;
 	int				historyEnd;
 
-	// If our main state loop is empty copy over any states in the interrupted state		
+	// If our main state loop is empty copy over any states in the interrupted state
 	if ( !states.Next ( ) ) {
 		for ( call = interrupted.Next(); call; call = interrupted.Next() ) {
 			call->node.Remove ( );
@@ -222,19 +222,19 @@ stateResult_t rvStateThread::Execute ( void ) {
 		}
 		assert ( !interrupted.Next ( ) );
 	}
-	
+
 	// State thread is idle if there are no states
 	if ( !states.Next() ) {
 		return SRESULT_IDLE;
 	}
-	
+
 	fl.executing = true;
-	
+
 	// Run through the states until there are no more or one of them tells us to wait
 	count		 = 0;
 	historyStart = 0;
 	historyEnd	 = 0;
-				
+
 	for( call = states.Next(); call && count < HISTORY_COUNT; call = states.Next(), ++count ) {
 		insertAfter			= call;
 		fl.stateCleared		= false;
@@ -245,14 +245,14 @@ stateResult_t rvStateThread::Execute ( void ) {
 			call->node.Remove ( );
 			delete call;
 			continue;
-		}		
+		}
 
 		// If the call has a delay on it the time will be set to negative initially and then
 		// converted to game time.
 		if ( call->parms.time <= 0 ) {
 			call->parms.time = gameLocal.time;
 		}
-		
+
 		// Check for delayed states
 		if ( call->delay && gameLocal.time < call->parms.time + call->delay ) {
 			fl.executing = false;
@@ -264,11 +264,11 @@ stateResult_t rvStateThread::Execute ( void ) {
 			if ( *g_debugState.GetString ( ) && (*g_debugState.GetString ( ) == '*' || !idStr::Icmp ( g_debugState.GetString ( ), name ) ) ) {
 				if ( call->parms.stage ) {
 					gameLocal.Printf ( "%s: %s (%d)\n", name.c_str(), call->state->name, call->parms.stage );
-				} else { 
+				} else {
 					gameLocal.Printf ( "%s: %s\n", name.c_str(), call->state->name );
 				}
 			}
-		
+
 			// Keep a history of the called states so we can dump them on an overflow
 			historyState[historyEnd] = call->state->name;
 			historyStage[historyEnd] = call->parms.stage;
@@ -281,18 +281,18 @@ stateResult_t rvStateThread::Execute ( void ) {
 		// Cache name and stage for error messages
 		stateName  = call->state->name;
 		stateStage = call->parms.stage;
-		
-		// Actually call the state function 		
-		lastResult = owner->ProcessState ( call->state, call->parms );		
+
+		// Actually call the state function
+		lastResult = owner->ProcessState ( call->state, call->parms );
 		switch ( lastResult ) {
 			case SRESULT_WAIT:
 				fl.executing = false;
 				return SRESULT_WAIT;
-				
+
 			case SRESULT_ERROR:
 				gameLocal.Error ( "rvStateThread: error reported by state '%s (%d)'", stateName, stateStage );
 				fl.executing = false;
-				return SRESULT_ERROR;				
+				return SRESULT_ERROR;
 		}
 
 		// Dont remove the node if it was interrupted or cleared in the last process
@@ -308,23 +308,23 @@ stateResult_t rvStateThread::Execute ( void ) {
 
 			// Done with state so remove it from list
 			call->node.Remove ( );
-			delete call;		
+			delete call;
 		}
-		
+
 		// Finished the last state but wait a frame for next one
 		if ( lastResult == SRESULT_DONE_WAIT ) {
 			fl.executing = false;
 			return SRESULT_WAIT;
-		}	
+		}
 	}
-	
+
 	// Runaway state loop?
 	if ( count >= HISTORY_COUNT ) {
 		idFile *file;
 
 		fileSystem->RemoveFile ( "statedump.txt" );
 		file = fileSystem->OpenFileWrite( "statedump.txt" );
-		
+
 		for ( ; historyStart != historyEnd; historyStart = (historyStart + 1) % HISTORY_COUNT ) {
 			if ( historyStage[historyStart] ) {
 				gameLocal.Printf ( "rvStateThread: %s (%d)\n", historyState[historyStart], historyStage[historyStart] );
@@ -340,7 +340,7 @@ stateResult_t rvStateThread::Execute ( void ) {
 			}
 		}
 		if ( file ) {
-			fileSystem->CloseFile( file );	
+			fileSystem->CloseFile( file );
 		}
 
 		gameLocal.Error ( "rvStateThread: run away state loop '%s'", name.c_str() );
@@ -353,7 +353,7 @@ stateResult_t rvStateThread::Execute ( void ) {
 	if ( !states.Next() && interrupted.Next ( ) ) {
 		return Execute ( );
 	}
-				
+
 	return lastResult;
 }
 

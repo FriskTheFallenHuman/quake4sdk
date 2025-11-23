@@ -94,19 +94,19 @@ rvMonsterTeleportDropper::Spawn
 void rvMonsterTeleportDropper::Spawn ( void ) {
 	idEntity*	ent;
 	idDict		args;
-	
+
 	// Create the spawner entity
 	args.Clear ( );
 	args.Set ( "classname", spawnArgs.GetString ( "def_spawner" ) );
 	gameLocal.SpawnEntityDef ( args, &ent );
 
-	if ( ent ) {	
+	if ( ent ) {
 		spawner = static_cast<rvSpawner*>(ent);
 		spawner->ProcessEvent ( &EV_Activate, this );
 	}
 
-	// Define actions	
-	actionDropSpawners.Init ( spawnArgs, "action_dropSpawners",	"Torso_DropSpawners", 0 );		
+	// Define actions
+	actionDropSpawners.Init ( spawnArgs, "action_dropSpawners",	"Torso_DropSpawners", 0 );
 
 	InitSpawnArgsVariables();
 }
@@ -186,7 +186,7 @@ stateResult_t rvMonsterTeleportDropper::State_CombatHide ( const stateParms_t& p
 	// Perform actions
 	if ( UpdateAction ( ) ) {
 		return SRESULT_WAIT;
-	}	
+	}
 
 	return SRESULT_WAIT;
 }
@@ -272,11 +272,11 @@ int rvMonsterTeleportDropper::FilterTactical ( int availableTactical ) {
 	if ( !actionDropSpawners.timer.IsDone ( actionTime ) ) {
 		availableTactical &= AITACTICAL_HIDE_BIT;
 	}
-	
+
 	// Hide while the spawner is still active
 	if ( spawner && (spawner->GetNumSpawnPoints ( ) || spawner->GetNumActive ( ) > 1 ) ) {
 		availableTactical &= AITACTICAL_HIDE_BIT;
-	}	
+	}
 
 	if ( leftSideBlocked && rightSideBlocked )
 	{//both sides are blocked
@@ -302,7 +302,7 @@ bool rvMonsterTeleportDropper::CheckAction_DropSpawners ( rvAIAction* action, in
 	}
 	if ( spawner && (spawner->GetNumSpawnPoints ( ) || spawner->GetNumActive ( ) > 1 ) ) {
 		return false;
-	}	
+	}
 	if ( !IsEnemyRecentlyVisible ( ) ) {
 		return false;
 	}
@@ -384,7 +384,7 @@ rvMonsterTeleportDropper::CheckAction_LeapAttack
 bool rvMonsterTeleportDropper::CheckAction_LeapAttack ( rvAIAction* action, int animNum ) {
 	if ( combat.tacticalCurrent == AITACTICAL_HIDE )
 	{
-		if ( !move.fl.done 
+		if ( !move.fl.done
 			&& !move.fl.blocked )
 		{//still running away
 			return false;
@@ -433,7 +433,7 @@ rvMonsterTeleportDropper::AttackMissileExt
 */
 idProjectile* rvMonsterTeleportDropper::AttackRanged ( const char* attackName, const idDict* attackDict, jointHandle_t joint, idEntity* target, const idVec3& pushVelocity ) {
 	idProjectile* proj;
-	
+
 	// Launch the projectile
 	if ( leftSideBlocked || rightSideBlocked )
 	{
@@ -462,12 +462,12 @@ idProjectile* rvMonsterTeleportDropper::AttackRanged ( const char* attackName, c
 	if ( !proj ) {
 		return NULL;
 	}
-	
+
 	// If it was a spawner projectile set the spawer
 	if ( proj->IsType ( rvSpawnerProjectile::GetClassType() ) ) {
 		static_cast<rvSpawnerProjectile*>(proj)->SetSpawner ( spawner );
 	}
-	
+
 	return proj;
 }
 
@@ -491,7 +491,7 @@ rvMonsterTeleportDropper::GetDebugInfo
 void rvMonsterTeleportDropper::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "rvMonsterTeleportDropper", "action_dropSpawners",		aiActionStatusString[actionDropSpawners.status], userData );
 	//proc ( "rvMonsterTeleportDropper", "dropAtGoalOnly",		dropAtGoalOnly?"true":"false", userData );
 }
@@ -499,7 +499,7 @@ void rvMonsterTeleportDropper::GetDebugInfo	( debugInfoProc_t proc, void* userDa
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -520,17 +520,17 @@ stateResult_t rvMonsterTeleportDropper::State_Torso_DropSpawners ( const statePa
 		STAGE_WAIT
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT:			
+		case STAGE_INIT:
 			PlayAnim ( ANIMCHANNEL_TORSO, "drop_spawners", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				ForceTacticalUpdate ( );
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;			
+			return SRESULT_WAIT;
 	}
-	
+
 	return SRESULT_DONE;
 }

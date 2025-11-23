@@ -59,12 +59,12 @@ used in state processing for a idClass dervied class
 */
 #define CLASS_STATES_DECLARATION(nameofclass)				\
 rvStateFunc<nameofclass> nameofclass::stateCallbacks[] = {
-	
+
 /*
 ================
 STATE
 
-This macro declares a single state.  It must be surrounded by the CLASS_STATES_DECLARATION 
+This macro declares a single state.  It must be surrounded by the CLASS_STATES_DECLARATION
 and END_CLASS_STATES macros.
 ================
 */
@@ -100,32 +100,32 @@ public:
 
 	rvStateThread ( void );
 	~rvStateThread ( void );
-	
+
 	void			SetName			( const char* name );
 	void			SetOwner		( idClass* owner );
-	
+
 	bool			Interrupt		( void );
 
-	stateResult_t	InterruptState	( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );	
+	stateResult_t	InterruptState	( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
 	stateResult_t	PostState		( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
 	stateResult_t	SetState		( const char* state, int blendFrames = 0, int delay = 0, int flags = 0 );
 	stateCall_t*	GetState		( void ) const;
 	bool			CurrentStateIs	( const char* name ) const;
-	
+
 	stateResult_t	Execute			( void );
-	
+
 	void			Clear			( bool ignoreStateCalls = false );
-	
+
 	bool			IsIdle			( void ) const;
 	bool			IsExecuting		( void ) const;
 
 	void			Save( idSaveGame *saveFile ) const;
 	void			Restore( idRestoreGame *saveFile, idClass* owner );
-	
+
 protected:
 
 	struct flags {
-		bool		stateCleared		:1;		// State list was cleared 
+		bool		stateCleared		:1;		// State list was cleared
 		bool		stateInterrupted	:1;		// State list was interrupted
 		bool		executing			:1;		// Execute is currently processing states
 	} fl;

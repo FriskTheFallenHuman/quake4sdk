@@ -81,14 +81,14 @@ void rvVehicleSpline::Restore ( idRestoreGame *savefile ) {
 void rvVehicleSpline::Think( void ) {
 	float moveAmount = 0.0f;
 
-	if ( positions[0].IsOccupied ( ) && !IsFrozen () && IsMovementEnabled ( ) )	{	
+	if ( positions[0].IsOccupied ( ) && !IsFrozen () && IsMovementEnabled ( ) )	{
 
 		if ( accelWithStrafe != 0.0f ) {
 			moveAmount = positions[0].mInputCmd.rightmove * accelWithStrafe;
 		} else {
 			moveAmount = positions[0].mInputCmd.forwardmove;
 		}
-		
+
 		moveAmount = Sign( moveAmount );
 	}
 

@@ -19,16 +19,16 @@ public:
 	void					Spawn				( void );
 	void					Save				( idSaveGame *savefile ) const;
 	void					Restore				( idRestoreGame *savefile );
-		
+
 	virtual void			Think				( void );
-	
+
 	virtual bool			Collide				( const trace_t &collision, const idVec3 &velocity );
 	virtual	void			Damage				( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
 	virtual void			OnDeath				( void );
 	virtual	void			DeadMove			( void );
 
 	virtual bool			SkipImpulse			( idEntity *ent, int id );
-	
+
 	virtual int				FilterTactical		( int availableTactical );
 
 	virtual void			GetDebugInfo		( debugInfoProc_t proc, void* userData );
@@ -48,8 +48,8 @@ protected:
 	rvAIAction				actionBombAttack;
 	rvAIAction				actionStrafe;
 	rvAIAction				actionCircleStrafe;
-	
-	
+
+
 	virtual bool			CheckActions				( void );
 	virtual void			OnEnemyChange				( idEntity* oldEnemy );
 	virtual void			OnStartMoving				( void );
@@ -73,7 +73,7 @@ private:
 	float					deathRollRate;
 	float					deathSpeed;
 	float					deathGrav;
-	
+
 	int						markerCheckTime;
 
 	bool					MarkerPosValid					( void );
@@ -120,7 +120,7 @@ private:
 	jointHandle_t			jointHeadlightControl;
 
 	renderLight_t			renderLight;
-	int						lightHandle;	
+	int						lightHandle;
 //	bool					lightOn;
 
 	void					DoNamedAttack					( const char* attackName, jointHandle_t joint );
@@ -163,7 +163,7 @@ rvMonsterStroggHover::rvMonsterStroggHover ( ) {
 		effectHover[i] = NULL;
 	}
 	effectHeadlight = NULL;
-	
+
 	shots		= 0;
 	strafeTime	= 0;
 	strafeRight = false;
@@ -209,7 +209,7 @@ void rvMonsterStroggHover::InitSpawnArgsVariables( void )
 	for ( int i = 0; i < numHoverJoints; i++ ) {
 		jointHover[i]	= animator.GetJointHandle ( spawnArgs.GetString( va("joint_hover%d",i+1) ) );
 	}
-	
+
 	jointDust = animator.GetJointHandle ( spawnArgs.GetString( "joint_dust" ) );
 
 	jointMGun		= animator.GetJointHandle ( spawnArgs.GetString( "joint_mgun" ) );
@@ -277,7 +277,7 @@ void rvMonsterStroggHover::StartHeadlight( void )
 				renderLight.shaderParms[ SHADERPARM_BLUE ]		= color[2];
 				renderLight.shaderParms[ SHADERPARM_TIMESCALE ] = 1.0f;
 
-				renderLight.lightRadius[0] = renderLight.lightRadius[1] = 
+				renderLight.lightRadius[0] = renderLight.lightRadius[1] =
 					renderLight.lightRadius[2] = (float)spawnArgs.GetInt( "light_radius" );
 
 				if ( !renderLight.pointLight ) {
@@ -302,10 +302,10 @@ void rvMonsterStroggHover::StartHeadlight( void )
 
 		// Sounds shader when turning light
 		//spawnArgs.GetString ( "snd_on", "", soundOn );
-		
+
 		// Sound shader when turning light off
 		//spawnArgs.GetString ( "snd_off", "", soundOff);
-		
+
 		UpdateLightDef ( );
 	}
 }
@@ -332,7 +332,7 @@ void rvMonsterStroggHover::Spawn ( void ) {
 
 	actionStrafe.Init  ( spawnArgs, "action_strafe", "Torso_Strafe",	0 );
 	actionCircleStrafe.Init  ( spawnArgs, "action_circleStrafe", "Torso_CircleStrafe",	AIACTIONF_ATTACK );
-	
+
 	InitSpawnArgsVariables();
 
 	evadeDebounce = 0;
@@ -343,7 +343,7 @@ void rvMonsterStroggHover::Spawn ( void ) {
 			effectHover[i] = PlayEffect ( "fx_hover", jointHover[i], true );
 		}
 	}
-	
+
 	if ( !marker ) {
 		marker = gameLocal.SpawnEntityDef( "target_null" );
 	}
@@ -366,7 +366,7 @@ rvMonsterStroggHover::GetDebugInfo
 void rvMonsterStroggHover::GetDebugInfo( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "rvMonsterStroggHover", "action_mGunAttack",	aiActionStatusString[actionMGunAttack.status], userData );
 	proc ( "rvMonsterStroggHover", "action_missileAttack",aiActionStatusString[actionMissileAttack.status], userData );
 	proc ( "rvMonsterStroggHover", "action_bombAttack",	aiActionStatusString[actionBombAttack.status], userData );
@@ -376,7 +376,7 @@ void rvMonsterStroggHover::GetDebugInfo( debugInfoProc_t proc, void* userData ) 
 	proc ( "rvMonsterStroggHover", "inPursuit",			inPursuit?"true":"false", userData );
 	proc ( "rvMonsterStroggHover", "marker",			(!inPursuit||marker==NULL)?"0 0 0":va("%f %f %f",marker->GetPhysics()->GetOrigin().x,marker->GetPhysics()->GetOrigin().y,marker->GetPhysics()->GetOrigin().z), userData );
 	proc ( "rvMonsterStroggHover", "holdPosTime",		va("%d",holdPosTime), userData );
-	
+
 	proc ( "rvMonsterStroggHover", "circleStrafing",	circleStrafing?"true":"false", userData );
 	proc ( "rvMonsterStroggHover", "strafeRight",		strafeRight?"true":"false", userData );
 	proc ( "rvMonsterStroggHover", "strafeTime",		va("%d",strafeTime), userData );
@@ -425,19 +425,19 @@ void rvMonsterStroggHover::UpdateLightDef ( void ) {
 		}
 
 		GetJointWorldTransform ( jointHeadlight, gameLocal.time, origin, axis );
-	
+
 		//origin += (localOffset * axis);
-		
-		// Include this part in the total bounds 
+
+		// Include this part in the total bounds
 		// FIXME: bounds are local
 		//parent->AddToBounds ( worldOrigin );
 		//UpdateOrigin ( );
-		
+
 		if ( lightHandle != -1 ) {
 			renderLight.origin = origin;
-			renderLight.axis   = axis;	
-			
-			gameRenderWorld->UpdateLightDef( lightHandle, &renderLight );	
+			renderLight.axis   = axis;
+
+			gameRenderWorld->UpdateLightDef( lightHandle, &renderLight );
 		}
 	}
 }
@@ -449,7 +449,7 @@ rvMonsterStroggHover::Think
 */
 void rvMonsterStroggHover::Think ( void ) {
 	idAI::Think ( );
-	
+
 	if ( !aifl.dead )
 	{
 		// If thinking we should play an effect on the ground under us
@@ -457,10 +457,10 @@ void rvMonsterStroggHover::Think ( void ) {
 			trace_t tr;
 			idVec3	origin;
 			idMat3	axis;
-			
+
 			// Project the effect 80 units down from the bottom of our bbox
 			GetJointWorldTransform ( jointDust, gameLocal.time, origin, axis );
-			
+
 	// RAVEN BEGIN
 	// ddynerman: multiple clip worlds
 			gameLocal.TracePoint ( this, tr, origin, origin + axis[0] * (GetPhysics()->GetBounds()[0][2]+80.0f), CONTENTS_SOLID, this );
@@ -470,14 +470,14 @@ void rvMonsterStroggHover::Think ( void ) {
 			if ( !effectDust ) {
 				effectDust = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_dust" ), tr.endpos, tr.c.normal.ToMat3(), true );
 			}
-			
+
 			// If the effect is playing we should update its attenuation as well as its origin and axis
 			if ( effectDust ) {
 				effectDust->Attenuate ( 1.0f - idMath::ClampFloat ( 0.0f, 1.0f, (tr.endpos - origin).LengthFast ( ) / 127.0f ) );
 				effectDust->SetOrigin ( tr.endpos );
 				effectDust->SetAxis ( tr.c.normal.ToMat3() );
 			}
-			
+
 			// If the hover effect is playing we can set its end origin to the ground
 			/*
 			if ( effectHover ) {
@@ -500,7 +500,7 @@ void rvMonsterStroggHover::Think ( void ) {
 			{
 				if ( GetEnemy() )
 				{
-					if ( DistanceTo( GetEnemy() ) > 2000.0f 
+					if ( DistanceTo( GetEnemy() ) > 2000.0f
 						|| (GetEnemy()->GetPhysics()->GetLinearVelocity()*(GetEnemy()->GetPhysics()->GetOrigin()-GetPhysics()->GetOrigin())) > 1000.0f )
 					{//enemy is far away or moving away from us at a pretty decent speed
 						TryStartPursuit();
@@ -544,7 +544,7 @@ void rvMonsterStroggHover::Think ( void ) {
 		}
 
 		//If using melee rush to nav to him, stop when we're close enough to attack
-		if ( combat.tacticalCurrent == AITACTICAL_MELEE 
+		if ( combat.tacticalCurrent == AITACTICAL_MELEE
 			&& move.moveCommand == MOVE_TO_ENEMY
 			&& !move.fl.done
 			&& nextBombFireTime < gameLocal.GetTime() - 3000
@@ -603,7 +603,7 @@ void rvMonsterStroggHover::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt	( markerCheckTime );
 
 	savefile->WriteVec3( attackPosOffset );
-	
+
 //	actionRocketAttack.Save ( savefile );
 //	actionBlasterAttack.Save ( savefile );
 	actionMGunAttack.Save ( savefile );
@@ -611,11 +611,11 @@ void rvMonsterStroggHover::Save ( idSaveGame *savefile ) const {
 	actionBombAttack.Save ( savefile );
 	actionStrafe.Save ( savefile );
 	actionCircleStrafe.Save ( savefile );
-	
+
 	for ( int i = 0; i < numHoverJoints; i++ ) {
 		effectHover[i].Save ( savefile );
 	}
-	
+
 	effectDust.Save ( savefile );
 	effectHeadlight.Save ( savefile );
 
@@ -652,7 +652,7 @@ void rvMonsterStroggHover::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadInt	( markerCheckTime );
 
 	savefile->ReadVec3( attackPosOffset );
-	
+
 //	actionRocketAttack.Restore ( savefile );
 //	actionBlasterAttack.Restore ( savefile );
 	actionMGunAttack.Restore ( savefile );
@@ -660,13 +660,13 @@ void rvMonsterStroggHover::Restore ( idRestoreGame *savefile ) {
 	actionBombAttack.Restore ( savefile );
 	actionStrafe.Restore ( savefile );
 	actionCircleStrafe.Restore ( savefile );
-	
+
 	InitSpawnArgsVariables();
 	//NOTE: if the def file changes the the number of numHoverJoints, this will be BAD...
 	for ( int i = 0; i < numHoverJoints; i++ ) {
 		effectHover[i].Restore ( savefile );
 	}
-	
+
 	effectDust.Restore ( savefile );
 	effectHeadlight.Restore ( savefile );
 
@@ -693,7 +693,7 @@ rvMonsterStroggHover::Collide
 ================
 */
 bool rvMonsterStroggHover::Collide( const trace_t &collision, const idVec3 &velocity ) {
-	if ( aifl.dead ) { 
+	if ( aifl.dead ) {
 		StopHeadlight();
 		//stop headlight
 		if ( effectHeadlight ) {
@@ -719,7 +719,7 @@ bool rvMonsterStroggHover::Collide( const trace_t &collision, const idVec3 &velo
 rvMonsterStroggHover::Damage
 ================
 */
-void rvMonsterStroggHover::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void rvMonsterStroggHover::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 								  const char *damageDefName, const float damageScale, const int location ) {
 	if ( attacker == this ) {
 		return;
@@ -770,7 +770,7 @@ void rvMonsterStroggHover::DeadMove( void ) {
 rvMonsterStroggHover::SkipImpulse
 =====================
 */
-bool rvMonsterStroggHover::SkipImpulse( idEntity* ent, int id ) {	
+bool rvMonsterStroggHover::SkipImpulse( idEntity* ent, int id ) {
 	return ((ent==this) || (move.moveCommand==MOVE_RV_PLAYBACK));
 }
 
@@ -894,7 +894,7 @@ bool rvMonsterStroggHover::CheckActions ( void ) {
 	if ( PerformAction ( &actionStrafe,  (checkAction_t)&rvMonsterStroggHover::CheckAction_Strafe ) ) {
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -905,7 +905,7 @@ rvMonsterStroggHover::OnEnemyChange
 */
 void rvMonsterStroggHover::OnEnemyChange ( idEntity* oldEnemy ) {
 	idAI::OnEnemyChange ( oldEnemy );
-	
+
 	if ( !enemy.ent ) {
 		return;
 	}
@@ -923,7 +923,7 @@ const char* rvMonsterStroggHover::GetIdleAnimName ( void ) {
 	}
 	*/
 	return idAI::GetIdleAnimName ( );
-}	
+}
 
 /*
 ================
@@ -959,7 +959,7 @@ int rvMonsterStroggHover::FilterTactical ( int availableTactical ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -985,7 +985,7 @@ rvMonsterStroggHover::State_Torso_MGunAttack
 ================
 */
 stateResult_t rvMonsterStroggHover::State_Torso_MGunAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_LOOP,
 		STAGE_WAITLOOP,
@@ -994,12 +994,12 @@ stateResult_t rvMonsterStroggHover::State_Torso_MGunAttack ( const stateParms_t&
 		case STAGE_INIT:
 			shots = gameLocal.random.RandomInt ( mGunMaxShots-mGunMinShots ) + mGunMinShots;
 			return SRESULT_STAGE ( STAGE_LOOP );
-			
+
 		case STAGE_LOOP:
 			DoNamedAttack( "mgun", jointMGun );
 			nextMGunFireTime = gameLocal.GetTime() + mGunFireRate;
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( nextMGunFireTime <= gameLocal.GetTime() ) {
 				if ( --shots <= 0 ) {
@@ -1010,7 +1010,7 @@ stateResult_t rvMonsterStroggHover::State_Torso_MGunAttack ( const stateParms_t&
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1019,7 +1019,7 @@ rvMonsterStroggHover::State_Torso_MissileAttack
 ================
 */
 stateResult_t rvMonsterStroggHover::State_Torso_MissileAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_LOOP,
 		STAGE_WAITLOOP,
@@ -1028,12 +1028,12 @@ stateResult_t rvMonsterStroggHover::State_Torso_MissileAttack ( const stateParms
 		case STAGE_INIT:
 			shots = gameLocal.random.RandomInt ( missileMaxShots-missileMinShots ) + missileMinShots;
 			return SRESULT_STAGE ( STAGE_LOOP );
-			
+
 		case STAGE_LOOP:
 			DoNamedAttack( "missile", jointMissile[gameLocal.random.RandomInt(numMissileJoints)] );
 			nextMissileFireTime = gameLocal.GetTime() + missileFireRate;
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( nextMissileFireTime <= gameLocal.GetTime() ) {
 				if ( --shots <= 0 || enemy.range < (actionMissileAttack.minRange*0.75f) ) {
@@ -1045,7 +1045,7 @@ stateResult_t rvMonsterStroggHover::State_Torso_MissileAttack ( const stateParms
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1054,7 +1054,7 @@ rvMonsterStroggHover::State_Torso_BombAttack
 ================
 */
 stateResult_t rvMonsterStroggHover::State_Torso_BombAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_LOOP,
 		STAGE_WAITLOOP,
@@ -1094,12 +1094,12 @@ stateResult_t rvMonsterStroggHover::State_Torso_BombAttack ( const stateParms_t&
 				MoveToEnemy();
 			}
 			return SRESULT_STAGE ( STAGE_LOOP );
-			
+
 		case STAGE_LOOP:
 			DoNamedAttack( "bomb", jointBomb );
 			nextBombFireTime = gameLocal.GetTime() + bombFireRate;
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( nextBombFireTime <= gameLocal.GetTime() ) {
 				if ( --shots <= 0 ) {
@@ -1111,7 +1111,7 @@ stateResult_t rvMonsterStroggHover::State_Torso_BombAttack ( const stateParms_t&
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1121,7 +1121,7 @@ rvMonsterStroggHover::State_Torso_BlasterAttack
 */
 /*
 stateResult_t rvMonsterStroggHover::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -1133,17 +1133,17 @@ stateResult_t rvMonsterStroggHover::State_Torso_BlasterAttack ( const stateParms
 			shots = gameLocal.random.RandomInt ( 8 ) + 4;
 			PlayAnim ( ANIMCHANNEL_TORSO, "blaster_1_preshoot", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "blaster_1_fire", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 ) {
@@ -1153,15 +1153,15 @@ stateResult_t rvMonsterStroggHover::State_Torso_BlasterAttack ( const stateParms
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				ForceTacticalUpdate();
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 */
 /*
@@ -1171,7 +1171,7 @@ rvMonsterStroggHover::State_Torso_RocketAttack
 */
 /*
 stateResult_t rvMonsterStroggHover::State_Torso_RocketAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -1183,14 +1183,14 @@ stateResult_t rvMonsterStroggHover::State_Torso_RocketAttack ( const stateParms_
 			//DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "rocket_range_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				ForceTacticalUpdate();
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}		
+	}
 
 	return SRESULT_ERROR;
 }
@@ -1244,7 +1244,7 @@ bool rvMonsterStroggHover::MarkerPosValid ( void )
 		if ( hitEnt && hitEnt->IsType( idActor::GetClassType() ) ) {
 			hitAct = static_cast<idActor*>(hitEnt);
 		}
-		if ( trace.fraction >= 1.0f 
+		if ( trace.fraction >= 1.0f
 			|| (enemyAct && enemyAct->IsInVehicle() && enemyAct->GetVehicleController().GetVehicle() == gameLocal.entities[trace.c.entityNum])
 			|| (enemyVeh && hitAct && hitAct->IsInVehicle() && hitAct->GetVehicleController().GetVehicle() == enemyVeh) )
 		{//have a clear LOS to enemy
@@ -1382,7 +1382,7 @@ stateResult_t rvMonsterStroggHover::State_CircleStrafe ( const stateParms_t& par
 }
 
 stateResult_t rvMonsterStroggHover::State_DeathSpiral ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_SPIRAL
 	};
@@ -1412,7 +1412,7 @@ stateResult_t rvMonsterStroggHover::State_DeathSpiral ( const stateParms_t& parm
 				deathGrav = gameLocal.random.RandomFloat()*6.0f + 6.0f;
 
 				strafeRight = (gameLocal.random.RandomFloat()>0.5f);
-				StopSound( SND_CHANNEL_HEART, false ); 
+				StopSound( SND_CHANNEL_HEART, false );
 				StartSound ( "snd_crash", SND_CHANNEL_HEART, 0, false, NULL );
 			}
 			return SRESULT_STAGE ( STAGE_SPIRAL );

@@ -741,7 +741,7 @@ ID_INLINE idQuat idBitMsgDelta::ReadDeltaQuat( const idQuat& oldValue ) const {
 
 ID_INLINE idMat3 idBitMsgDelta::ReadMat3() const {
 	idMat3 m;
-	
+
 	for( int ix = 0; ix < m.GetVec3Dimension(); ++ix ) {
 		m[ix] = ReadVec3();
 	}

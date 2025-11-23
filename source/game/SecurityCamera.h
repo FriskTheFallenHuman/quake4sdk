@@ -14,7 +14,7 @@
 class idSecurityCamera : public idEntity {
 public:
 	CLASS_PROTOTYPE( idSecurityCamera );
-	
+
 							~idSecurityCamera( void );
 
 	void					Spawn( void );
@@ -39,7 +39,7 @@ private:
 	bool					flipAxis;
 	float					scanDist;
 	float					scanFov;
-							
+
 	float					sweepStart;
 	float					sweepEnd;
 	bool					negativeSweep;
@@ -49,7 +49,7 @@ private:
 	float					scanFovCos;
 
 	idVec3					viewOffset;
-							
+
 	int						pvsArea;
 	idPhysics_RigidBody		physicsObj;
 	idTraceModel			trm;

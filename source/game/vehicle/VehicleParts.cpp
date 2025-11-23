@@ -30,13 +30,13 @@ rvVehiclePart::Init
 */
 bool rvVehiclePart::Init ( rvVehiclePosition* _position, const idDict& args, s_channelType _soundChannel ) {
 	spawnArgs.Copy ( args );
-	
+
 	soundChannel	 = _soundChannel;
 	position		 = _position;
 	parent			 = position->GetParent();
 	fl.active		 = false;
 	fl.useCenterMass = false;
-	
+
 	return true;
 }
 
@@ -54,17 +54,17 @@ void rvVehiclePart::Spawn ( void ) {
 	spawnArgs.GetVector ( "offset", "0 0 0", localOffset );
 
 	fl.active = false;
-	
+
 	fl.useViewAxis	= spawnArgs.GetBool( "useViewAxis", "0" );
 
 	// Initialize the origin so we can determine which side of the vehicle we are on
 	UpdateOrigin ( );
-	
+
 	// Determine if this part is on the left and/or front side of the vehicle
 	idVec3 localOrigin;
 	localOrigin = (worldOrigin - parent->GetPhysics()->GetCenterMass());
-	fl.front = (localOrigin * parent->GetPhysics()->GetAxis()[0] < 0.0f); 
-	fl.left  = (localOrigin * parent->GetPhysics()->GetAxis()[1] < 0.0f); 
+	fl.front = (localOrigin * parent->GetPhysics()->GetAxis()[0] < 0.0f);
+	fl.left  = (localOrigin * parent->GetPhysics()->GetAxis()[1] < 0.0f);
 }
 
 /*
@@ -72,7 +72,7 @@ void rvVehiclePart::Spawn ( void ) {
 rvVehiclePart::UpdateOrigin
 ================
 */
-void rvVehiclePart::UpdateOrigin ( void ) {	
+void rvVehiclePart::UpdateOrigin ( void ) {
 	if ( joint != INVALID_JOINT ) {
 		parent->GetJointWorldTransform ( joint, gameLocal.time, worldOrigin, worldAxis );
 	} else {
@@ -82,11 +82,11 @@ void rvVehiclePart::UpdateOrigin ( void ) {
 			worldAxis   = parent->GetPhysics()->GetAxis();
 		}
 		worldOrigin = fl.useCenterMass ? parent->GetPhysics()->GetCenterMass() : parent->GetPhysics()->GetOrigin();
-	}			
-	
+	}
+
 	worldOrigin += (localOffset * worldAxis);
-	
-	// Include this part in the total bounds 
+
+	// Include this part in the total bounds
 	// FIXME: bounds are local
 	parent->AddToBounds ( worldOrigin );
 }
@@ -104,7 +104,7 @@ void rvVehiclePart::Save ( idSaveGame* savefile ) const {
 	savefile->WriteJoint ( joint );
 	savefile->WriteInt ( soundChannel );
 	savefile->WriteInt ( parent->GetPositionIndex ( position ) );
-	
+
 	savefile->WriteVec3 ( worldOrigin );
 	savefile->WriteMat3 ( worldAxis );
 	savefile->WriteVec3 ( localOffset );
@@ -117,7 +117,7 @@ rvVehiclePart::Restore
 */
 void rvVehiclePart::Restore	( idRestoreGame* savefile ) {
 	int temp;
-	
+
 	savefile->Read( &fl, sizeof( fl ) );
 
 	savefile->ReadDict ( &spawnArgs );
@@ -127,7 +127,7 @@ void rvVehiclePart::Restore	( idRestoreGame* savefile ) {
 
 	savefile->ReadInt ( temp );
 	position = parent->GetPosition ( temp );
-	
+
 	savefile->ReadVec3 ( worldOrigin );
 	savefile->ReadMat3 ( worldAxis );
 	savefile->ReadVec3 ( localOffset );
@@ -172,10 +172,10 @@ rvVehiclePart::Spawn
 */
 void rvVehicleSound::Spawn ( void ) {
 	soundName = spawnArgs.GetString ( "snd_loop" );
-	
+
 	spawnArgs.GetVec2 ( "freqShift", "1 1", freqShift );
 	spawnArgs.GetVec2 ( "volume", "0 0", volume );
-	
+
 	// Temp fix for volume
 	volume[0] = idMath::dBToScale( volume[0] );
 	volume[1] = idMath::dBToScale( volume[1] );
@@ -274,7 +274,7 @@ void rvVehicleSound::Update ( bool force ) {
 	refSound.parms.volume		    = currentVolume.GetCurrentValue ( gameLocal.time );
 	refSound.parms.frequencyShift = currentFreqShift.GetCurrentValue ( gameLocal.time );
 	emitter->ModifySound ( soundChannel, &refSound.parms );
-	
+
 	refSound.origin = worldOrigin;
 	// bdube: please put something sensible here if you want doppler from the sound system
 	refSound.velocity = vec3_origin;
@@ -290,7 +290,7 @@ void rvVehicleSound::Attenuate ( float volumeAttenuate, float freqAttenuate ) {
 	float f;
 
 	fade = false;
-	
+
 	f = volume[0] + (volume[1]-volume[0]) * volumeAttenuate;
 	currentVolume.Init ( gameLocal.time, 100, currentVolume.GetCurrentValue(gameLocal.time), f );
 
@@ -318,13 +318,13 @@ void rvVehicleSound::Save ( idSaveGame* savefile ) const {
 	savefile->WriteVec2 ( freqShift );
 	savefile->WriteString ( soundName );
 	savefile->WriteRefSound ( refSound );
-	
+
 	savefile->WriteInterpolate ( currentVolume );
 	savefile->WriteInterpolate ( currentFreqShift );
-	
+
 	savefile->WriteBool ( fade );
 	savefile->WriteBool ( autoActivate );
-}	
+}
 
 /*
 =====================
@@ -336,7 +336,7 @@ void rvVehicleSound::Restore ( idRestoreGame* savefile ) {
 	savefile->ReadVec2 ( freqShift );
 	savefile->ReadString ( soundName );
 	savefile->ReadRefSound ( refSound );
-	
+
 	savefile->ReadInterpolate ( currentVolume );
 	savefile->ReadInterpolate ( currentFreqShift );
 
@@ -399,7 +399,7 @@ void rvVehicleLight::Spawn ( void ) {
 	renderLight.detailLevel = DEFAULT_LIGHT_DETAIL_LEVEL;
 // RAVEN END
 
-	renderLight.lightRadius[0] = renderLight.lightRadius[1] = 
+	renderLight.lightRadius[0] = renderLight.lightRadius[1] =
 		renderLight.lightRadius[2] = (float)spawnArgs.GetInt( "radius" );
 
 	if ( !renderLight.pointLight ) {
@@ -417,10 +417,10 @@ void rvVehicleLight::Spawn ( void ) {
 
 	// Sounds shader when turning light
 	spawnArgs.GetString ( "snd_on", "", soundOn );
-	
+
 	// Sound shader when turning light off
 	spawnArgs.GetString ( "snd_off", "", soundOff);
-	
+
 	lightOn = spawnArgs.GetBool( "start_on", "1" );
 	lightHandle = -1;
 }
@@ -434,7 +434,7 @@ void rvVehicleLight::RunPostPhysics ( void ) {
 	if ( lightHandle == -1 || !lightOn ) {
 		return;
 	}
-	
+
 	UpdateLightDef ( );
 }
 
@@ -445,14 +445,14 @@ rvVehicleLight::UpdateLightDef
 */
 void rvVehicleLight::UpdateLightDef ( void ) {
 	UpdateOrigin ( );
-	
+
 	renderLight.origin = worldOrigin;
-	renderLight.axis   = worldAxis;	
-	
+	renderLight.axis   = worldAxis;
+
 	if ( lightHandle == -1 ) {
 		return;
 	}
-	gameRenderWorld->UpdateLightDef( lightHandle, &renderLight );	
+	gameRenderWorld->UpdateLightDef( lightHandle, &renderLight );
 }
 
 /*
@@ -462,7 +462,7 @@ rvVehicleLight::Activate
 */
 void rvVehicleLight::Activate ( bool active ) {
 	rvVehiclePart::Activate ( active );
-	
+
 	if ( active && lightOn ) {
 		TurnOn ( );
 	} else {
@@ -487,7 +487,7 @@ void rvVehicleLight::TurnOff ( void ) {
 			parent->StartSoundShader ( declManager->FindSound ( soundOff ), soundChannel, 0, false, NULL );
 		}
 	}
-	
+
 	// Hide flare surface if there is one
 	surface = spawnArgs.GetString ( "flaresurface", "" );
 	if ( surface && *surface ) {
@@ -517,7 +517,7 @@ void rvVehicleLight::TurnOn ( void ) {
 	if ( surface && *surface ) {
 		parent->ProcessEvent ( &EV_ShowSurface, surface );
 	}
-	
+
 	UpdateLightDef ( );
 }
 
@@ -628,13 +628,13 @@ void rvVehicleWeapon::Spawn ( void ) {
 	launchFromJoint = spawnArgs.GetBool ( "launchFromJoint", "0" );
 	lockScanning = spawnArgs.GetBool ( "lockScanning", "0" );
 	lastLockTime = 0;
-	
+
 	if ( spawnArgs.GetString ( "def_hitscan", "", temp ) ) {
 		hitScanDef = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_hitscan" ) );
 	} else {
 		projectileDef = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_projectile" ) );
 	}
-	
+
 	fireDelay		 	= SEC2MS ( spawnArgs.GetFloat ( "firedelay" ) );
 	spread			 	= spawnArgs.GetFloat ( "spread" );
 	jointIndex		 	= 0;
@@ -644,7 +644,7 @@ void rvVehicleWeapon::Spawn ( void ) {
 	chargeTime		 	= SEC2MS ( spawnArgs.GetFloat ( "chargetime" ) );
 	currentAmmo	 		= ammoPerCharge;
 	muzzleFlashHandle	= -1;
-	
+
 	if( spawnArgs.GetString("anim", "", temp) && *temp ) {
 		animNum = parent->GetAnimator()->GetAnim( temp );
 		animChannel = spawnArgs.GetInt( "animChannel" );
@@ -652,7 +652,7 @@ void rvVehicleWeapon::Spawn ( void ) {
 
 	spawnArgs.GetVector ( "force", "0 0 0", force );
 
-	// Vehicle guns can have multiple joints to fire from.  They will be cycled through 
+	// Vehicle guns can have multiple joints to fire from.  They will be cycled through
 	// when firing.
 	joints.Append ( joint );
 	for ( i = 2; ; i ++ ) {
@@ -661,7 +661,7 @@ void rvVehicleWeapon::Spawn ( void ) {
 		if ( joint2 == INVALID_JOINT ) {
 			break;
 		}
-		
+
 		joints.Append ( joint2 );
 	}
 
@@ -690,7 +690,7 @@ void rvVehicleWeapon::Spawn ( void ) {
 		muzzleFlash.right	= spawnArgs.GetVector( "flashRight" );
 		muzzleFlash.end		= spawnArgs.GetVector( "flashTarget" );
 	}
-	
+
 	shaderFire = declManager->FindSound ( spawnArgs.GetString ( "snd_fire" ), false );
 	shaderReload = declManager->FindSound ( spawnArgs.GetString ( "snd_reload" ), false );
 
@@ -730,7 +730,7 @@ rvVehicleWeapon::Activate
 */
 void rvVehicleWeapon::Activate ( bool activate ) {
 	rvVehiclePart::Activate ( activate );
-	
+
 	nextFireTime = gameLocal.time + WEAPON_DELAY_FIRE;
 
 #ifdef _XENON
@@ -756,19 +756,19 @@ rvVehicleWeapon::UpdateLock
 =====================
 */
 void rvVehicleWeapon::UpdateLock ( void ) {
-	
+
 #ifdef _XENON
 
 	bestEnemy = 0;
-	
+
 	// Handle auto-aim if it's enabled
 	if ( cvarSystem->GetCVarBool("pm_AimAssist") ) {
-	
+
 		const float testDist = 2000.0f; // huge because we're outdoors
-		
+
 		idPlayer *player = gameLocal.GetLocalPlayer();
 		if ( player && position->GetDriver() == player ) {
-		
+
 			idVec3 start = position->GetEyeOrigin();
 			idVec3 end = start + (position->GetEyeAxis().ToAngles().ToForward() * testDist);
 
@@ -777,22 +777,22 @@ void rvVehicleWeapon::UpdateLock ( void ) {
 
 			idClipModel *clipModelList[ MAX_GENTITIES ];
 			int numClipModels = gameLocal.ClipModelsTouchingBounds( player, bounds, -1, clipModelList, MAX_GENTITIES );
-			
+
 			float bDist = testDist;
-			
+
  			float fovX, fovY;
  			gameLocal.CalcFov( player->CalcFov( true ), fovX, fovY );
 			float dNear = cvarSystem->GetCVarFloat( "r_znear" );
 			float dFar = testDist;
 			float size = dFar * idMath::Tan( DEG2RAD( fovY * 0.5f ) ) * float(cvarSystem->GetCVarInteger("pm_AimAssistFOV")) / 100.0f;
-			
+
 			idFrustum aimArea;
 			aimArea.SetOrigin( start );
 			aimArea.SetAxis( position->GetEyeAxis() );
 			aimArea.SetSize( dNear, dFar, size, size );
 
 			for ( int i = 0; i < numClipModels; i++ ) {
-				
+
 				idClipModel *clip = clipModelList[ i ];
 				idEntity *ent = clip->GetEntity();
 
@@ -802,7 +802,7 @@ void rvVehicleWeapon::UpdateLock ( void ) {
 
 				bool isAI = ent->IsType( idAI::GetClassType() );
 				bool isFriendly = false;
-				
+
 				if ( isAI ) {
 					if ( static_cast<idAI *>( ent )->team == player->team ) {
 						continue;
@@ -810,12 +810,12 @@ void rvVehicleWeapon::UpdateLock ( void ) {
 				} else {
 					continue;
 				}
-				
+
 				float focusLength = (ent->GetPhysics()->GetOrigin() - start).LengthFast() - ent->GetPhysics()->GetBounds().GetRadius();
-			
+
 				const idBounds &b = ent->GetPhysics()->GetAbsBounds();
 				bool inside = aimArea.IntersectsBounds(b);
-				
+
 				if ( inside ) {
 					float dist = b.ShortestDistance(start);
 					if ( bDist > dist ) {
@@ -827,7 +827,7 @@ void rvVehicleWeapon::UpdateLock ( void ) {
 		}
 	}
 #endif
-	
+
 	if ( !position->GetDriver() || parent->health <= 0 || !lockScanning) {
 		StopTargetEffect( );
 	} else if ( lockScanning && position->GetDriver() && position->GetDriver()->IsType( idPlayer::GetClassType() ) ) {
@@ -853,7 +853,7 @@ void rvVehicleWeapon::UpdateLock ( void ) {
 					eyePos += targetEnt->GetPhysics()->GetAbsBounds().GetCenter ( );
 					eyePos *= 0.5f;
 				}
-				if ( targetEffect ) {			
+				if ( targetEffect ) {
 					targetEffect->SetOrigin ( eyePos );
 					targetEffect->SetAxis ( player->firstPersonViewAxis.Transpose() );
 				} else {
@@ -924,7 +924,7 @@ void rvVehicleWeapon::WeaponFeedback( const idDict* dict ) {
 		return;
 	}
 
-	//abahr: This feels like a hack.  I hate using def files for logic but it just seems the easiest way to do it 
+	//abahr: This feels like a hack.  I hate using def files for logic but it just seems the easiest way to do it
 	idPlayer* player = static_cast<idPlayer*>( actor );
 	if( dict->GetInt("recoilTime") ) {
 		player->playerView.WeaponFireFeedback( dict );
@@ -970,17 +970,17 @@ rvVehicleWeapon::UpdateCursorGUI
 void rvVehicleWeapon::UpdateCursorGUI ( idUserInterface* gui ) const {
 	// cnicholson: I do't see a reason why this if statement is here. Its ALWAYS  false and so this block never executed,
 	// thus if the player was in a vehicle, the crosshair was always the player's last held weapon, not the crosshair defined in the vehicle .def.
-	// So I commented the if part out. 
+	// So I commented the if part out.
 	//if ( spawnArgs.GetBool( "hide_crosshair", "0" ) ) {
 		gui->SetStateString ( "crossImage", spawnArgs.GetString ( "mtr_crosshair" ) );
 		const idMaterial *material = declManager->FindMaterial( spawnArgs.GetString ( "mtr_crosshair" ) );
 		if ( material ) {
 			material->SetSort( SS_GUI );
-		}			
-		
+		}
+
 		gui->SetStateString ( "crossColor", g_crosshairColor.GetString() );
 		gui->SetStateInt ( "crossOffsetX", spawnArgs.GetInt ( "crosshairOffsetX", "0" ) );
-		gui->SetStateInt ( "crossOffsetY", spawnArgs.GetInt ( "crosshairOffsetY", "0" ) ); 			
+		gui->SetStateInt ( "crossOffsetY", spawnArgs.GetInt ( "crosshairOffsetY", "0" ) );
  		gui->StateChanged ( gameLocal.time );
 	//}
 }
@@ -1004,15 +1004,15 @@ void rvVehicleWeapon::Save ( idSaveGame* savefile ) const {
 	savefile->WriteBool ( lockScanning );
 	savefile->WriteInt ( lastLockTime );
 	savefile->WriteFloat ( lockRange );
-	
+
 	savefile->WriteInt ( joints.Num() );
 	for ( i = 0; i < joints.Num(); i ++ ) {
 		savefile->WriteJoint ( joints[i] );
 	}
 	savefile->WriteInt ( jointIndex );
-	
+
 	savefile->WriteVec3 ( force );
-	
+
 	savefile->WriteInt ( ammoPerCharge );
 	savefile->WriteInt ( chargeTime );
 	savefile->WriteInt ( currentAmmo );
@@ -1023,7 +1023,7 @@ void rvVehicleWeapon::Save ( idSaveGame* savefile ) const {
 	savefile->WriteInt ( muzzleFlashEnd );
 	savefile->WriteInt ( muzzleFlashTime );
 	savefile->WriteVec3 ( muzzleFlashOffset );
-	
+
 	savefile->WriteInt ( animNum );
 	savefile->WriteInt ( animChannel );
 
@@ -1060,7 +1060,7 @@ void rvVehicleWeapon::Restore ( idRestoreGame* savefile ) {
 	savefile->ReadBool ( lockScanning );
 	savefile->ReadInt ( lastLockTime );
 	savefile->ReadFloat ( lockRange );
-	
+
 	savefile->ReadInt ( num );
 	joints.Clear ( );
 	joints.SetNum ( num );
@@ -1068,9 +1068,9 @@ void rvVehicleWeapon::Restore ( idRestoreGame* savefile ) {
 		savefile->ReadJoint ( joints[i] );
 	}
 	savefile->ReadInt ( jointIndex );
-	
+
 	savefile->ReadVec3 ( force );
-	
+
 	savefile->ReadInt ( ammoPerCharge );
 	savefile->ReadInt ( chargeTime );
 	savefile->ReadInt ( currentAmmo );
@@ -1087,9 +1087,9 @@ void rvVehicleWeapon::Restore ( idRestoreGame* savefile ) {
 	savefile->ReadInt ( muzzleFlashTime );
 	savefile->ReadVec3 ( muzzleFlashOffset );
 
-	savefile->ReadInt ( animNum );	
+	savefile->ReadInt ( animNum );
 	savefile->ReadInt ( animChannel );
-	
+
 	if ( spawnArgs.GetString ( "def_hitscan", "", temp ) ) {
 		hitScanDef = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_hitscan" ) );
 	} else {
@@ -1145,12 +1145,12 @@ bool rvVehicleWeapon::Fire() {
 			if ( chargeTime ) {
 				parent->StartSoundShader( shaderReload, SND_CHANNEL_ANY, 0, false, NULL );
 				currentCharge.Init ( gameLocal.time, chargeTime, 0.0f, 1.0f );
-			}			
+			}
 		}
 	}
 	return true;
 }
- 
+
 #ifdef _XENON
 /*
 =====================
@@ -1158,26 +1158,26 @@ rvVehicleWeapon::AutoAim
 =====================
 */
 void rvVehicleWeapon::AutoAim( idPlayer* player, const idVec3& origin, idVec3& dir ) {
-	
+
 	if ( player ) {
-	
+
 		// If we have a enemy selected, handle aim correction
 		if ( bestEnemy ) {
-		
+
 			idVec3 dif = bestEnemy->GetRenderEntity()->origin - origin;
 			idVec3 muzzleDest = origin + (dir * dif.Length() );
-			
+
 			// Transform start and end into the enemy's body space
 			idVec3 localStart = bestEnemy->GetRenderEntity()->axis / (origin - bestEnemy->GetRenderEntity()->origin);
 			idVec3 localEnd = bestEnemy->GetRenderEntity()->axis / (muzzleDest - bestEnemy->GetRenderEntity()->origin);
-			
+
 			if ( bestEnemy->GetAnimator() ) {
 				int numJoints = bestEnemy->GetAnimator()->NumJoints();
-				
+
 				if ( numJoints ) {
-				
+
 					jointHandle_t nearJoint = bestEnemy->GetAnimator()->GetNearestJoint( localStart, localEnd, gameLocal.time, 0, numJoints );
-			
+
 					// If we found a valid joint to snap to...
 					if ( nearJoint > 0 ) {
 						idMat3 dummy;
@@ -1193,7 +1193,7 @@ void rvVehicleWeapon::AutoAim( idPlayer* player, const idVec3& origin, idVec3& d
 				dir = bestEnemy->GetRenderEntity()->origin - origin;
 				dir.Normalize();
 			}
-			
+
 		}
 	}
 }
@@ -1206,9 +1206,9 @@ rvVehicleWeapon::LaunchHitScan
 */
 void rvVehicleWeapon::LaunchHitScan( const idVec3& origin, const idVec3& _dir, const idVec3& jointOrigin ) {
 	idPlayer* player = 0;
-	
+
 	idVec3 dir = _dir;
-	
+
 	// Let the AI know about the new attack
 	if ( !gameLocal.isMultiplayer ) {
 		if ( position->GetDriver() && position->GetDriver()->IsType( idPlayer::GetClassType() ) ) {
@@ -1218,13 +1218,13 @@ void rvVehicleWeapon::LaunchHitScan( const idVec3& origin, const idVec3& _dir, c
 			}
 		}
 	}
-	
+
 #ifdef _XENON
 
 	AutoAim( player, origin, dir );
 
 #endif
-	
+
 	gameLocal.HitScan ( *hitScanDef, origin, dir, jointOrigin, position->GetDriver(), false, 1.0f, parent );
 }
 
@@ -1234,18 +1234,18 @@ rvVehicleWeapon::LaunchProjectile
 =====================
 */
 void rvVehicleWeapon::LaunchProjectile( const idVec3& origin, const idVec3& _dir, const idVec3& pushVelocity ) {
-	
+
 	idPlayer *player = 0;
 	idEntity*		ent;
 	idProjectile*	projectile;
 
 	idVec3 dir = _dir;
-	
+
 	gameLocal.SpawnEntityDef ( *projectileDef, &ent );
 	if ( !ent ) {
 		return;
 	}
-										
+
 	if ( !gameLocal.isMultiplayer ) {
 		if ( position->GetDriver() && position->GetDriver()->IsType( idPlayer::GetClassType() ) ) {
 			player = dynamic_cast<idPlayer*>(position->GetDriver());
@@ -1254,7 +1254,7 @@ void rvVehicleWeapon::LaunchProjectile( const idVec3& origin, const idVec3& _dir
 			}
 		}
 	}
-	
+
 #ifdef _XENON
 
 	AutoAim( player, origin, dir );
@@ -1265,10 +1265,10 @@ void rvVehicleWeapon::LaunchProjectile( const idVec3& origin, const idVec3& _dir
 	projectile = ( idProjectile * )ent;
 	projectile->Create( position->GetDriver(), origin, dir, parent );
 	projectile->Launch( origin, dir, pushVelocity, 0.0f, 1.0f );
-	
+
 	if ( projectile->IsType ( idGuidedProjectile::GetClassType() ) ) {
 		if ( spawnArgs.GetBool("guideTowardsDir") && (!targetEnt || targetJoint == INVALID_JOINT) ) {
-#ifndef _XENON			
+#ifndef _XENON
 			static_cast<idGuidedProjectile*>(projectile)->GuideTo ( position->GetEyeOrigin(), position->GetEyeAxis()[0] );
 #else
 			if ( bestEnemy ) {
@@ -1277,7 +1277,7 @@ void rvVehicleWeapon::LaunchProjectile( const idVec3& origin, const idVec3& _dir
 				static_cast<idGuidedProjectile*>(projectile)->GuideTo ( position->GetEyeOrigin(), position->GetEyeAxis()[0] );
 			}
 #endif
-		
+
 		} else if ( targetEnt ) {
 			static_cast<idGuidedProjectile*>(projectile)->GuideTo ( targetEnt, targetJoint, targetPos );
 		} else {
@@ -1305,7 +1305,7 @@ void rvVehicleWeapon::LaunchProjectiles() {
 	parent->GetJointWorldTransform ( joints[jointIndex], gameLocal.time, jointOrigin, jointAxis );
 	MuzzleFlashLight ( jointOrigin + muzzleFlashOffset * jointAxis, jointAxis );
 
-	if( launchFromJoint ) {				
+	if( launchFromJoint ) {
 		origin = jointOrigin;
 		axis = jointAxis;
 	} else {
@@ -1331,7 +1331,7 @@ void rvVehicleWeapon::LaunchProjectiles() {
 		dir.Normalize();
 
 		if ( g_debugWeapon.GetBool() ) {
-			gameRenderWorld->DebugLine ( colorBlue, origin, origin + dir * 10000.0f, 10000 );		
+			gameRenderWorld->DebugLine ( colorBlue, origin, origin + dir * 10000.0f, 10000 );
 		}
 
 		if ( hitScanDef ) {
@@ -1354,13 +1354,13 @@ rvVehicleWeapon::GetLockInfo
 =====================
 */
 void rvVehicleWeapon::GetLockInfo( const idVec3& eyeOrigin, const idMat3& eyeAxis ) {
-	if ( lastLockTime < gameLocal.GetTime() - 2000 
+	if ( lastLockTime < gameLocal.GetTime() - 2000
 		|| (targetEnt && (!targetEnt.IsValid() || targetEnt.GetEntity()->health <= 0)) ) {
 		targetEnt = NULL;
 		targetJoint = INVALID_JOINT;
 		targetPos.Zero ();
 	}
-	
+
 	if ( lockRange > 0.0f ) {
 		idVec3	end;
 		trace_t	tr;
@@ -1368,14 +1368,14 @@ void rvVehicleWeapon::GetLockInfo( const idVec3& eyeOrigin, const idMat3& eyeAxi
 		idEntity* newTargetEnt = NULL;
 		jointHandle_t newTargetJoint = INVALID_JOINT;
 
-		end = eyeOrigin + eyeAxis[0] * lockRange;		
+		end = eyeOrigin + eyeAxis[0] * lockRange;
 //		gameLocal.TracePoint( parent.GetEntity(), tr, eyeOrigin, end, MASK_SHOT_BOUNDINGBOX, NULL );
 		gameLocal.TracePoint( parent.GetEntity(), tr, eyeOrigin, end, MASK_SHOT_RENDERMODEL, NULL );
 
 		if ( tr.fraction < 1.0 ) {
 			newTargetEnt = gameLocal.entities[ tr.c.entityNum ];
 			lockFound = true;
-	
+
 			// Make sure the target is an actor and is alive
 			if ( !(newTargetEnt->IsType ( idActor::GetClassType() ) || newTargetEnt->IsType ( idProjectile::GetClassType() )) || newTargetEnt->health <= 0 ) {
 				newTargetEnt = NULL;
@@ -1431,7 +1431,7 @@ void rvVehicleWeapon::GetLockInfo( const idVec3& eyeOrigin, const idMat3& eyeAxi
 		if ( g_debugVehicle.GetInteger() == 2 ) {
 			gameRenderWorld->DebugArrow ( colorGreen, eyeOrigin, end, 3, 10000 );
 			gameRenderWorld->DebugArrow ( colorWhite, eyeOrigin, tr.endpos, 4, 10000 );
-		}				
+		}
 	}
 }
 
@@ -1469,15 +1469,15 @@ void rvVehicleWeapon::EjectBrass ( void ) {
 	}
 
 	cent->SetOrigin ( origin + axis * brassEjectOffset );
-	cent->SetAxis ( playerViewAxis );	
+	cent->SetAxis ( playerViewAxis );
 	cent->SetOwner ( position->GetDriver() );
-	
+
 	// Depth hack the brass to make sure it clips in front of view weapon properly
 	cent->GetRenderEntity()->weaponDepthHackInViewID = position->GetDriver()->entityNumber + 1;
-	
+
 	// Clear the depth hack soon after it clears the view
 	cent->PostEventMS ( &CL_ClearDepthHack, 200 );
-	
+
 	// Fade the brass out so they dont accumulate
 	brassTime =(int)SEC2MS(g_brassTime.GetFloat() / 6.0f);
 	cent->PostEventMS ( &CL_FadeOut, brassTime, brassTime );
@@ -1530,9 +1530,9 @@ void rvVehicleTurret::Spawn ( void ) {
 	angles[1][YAW]   = spawnArgs.GetFloat ( "maxyaw", "0" );
 	axisMap[YAW]	 = spawnArgs.GetInt ( "yaw", "-1" );
 	invert[YAW]	     = spawnArgs.GetBool ( "yawinvert", "0" ) ? -1.0f : 1.0f;
-	
+
 	turnRate = spawnArgs.GetFloat ( "turnrate", "360" );
-		
+
 	currentAngles.Zero ( );
 
 	//the parent is *not* stuck on spawn.
@@ -1572,7 +1572,7 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 	idMat3		mat[3];
 	idAngles	oldAngles;
 
-	if ( IsActive ( ) ) {	
+	if ( IsActive ( ) ) {
 		for ( i = 0; i < 3; i++ ) {
 			inputAngles[i] = SHORT2ANGLE( position->mInputCmd.angles[i] );
 			lastInputAngles[i] = SHORT2ANGLE( position->mOldInputCmd.angles[i] );
@@ -1590,20 +1590,20 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 	for ( i = 0; i < 3; i ++ ) {
 		if ( axisMap[i] != -1 ) {
 			float diff = (invert[i] * idMath::AngleDelta ( inputAngles[i], lastInputAngles[i] ));
-			
+
 			diff = SignZero( diff ) * idMath::ClampFloat ( 0.0f, turnRate * MS2SEC(gameLocal.GetMSec()), idMath::Fabs ( diff ) );
 			if ( angles[0][i] == angles[1][i] ) {
 				currentAngles[axisMap[i]] = idMath::AngleNormalize360( currentAngles[axisMap[i]] + diff );
 			} else {
 				currentAngles[axisMap[i]] = idMath::ClampFloat ( angles[0][i], angles[1][i], currentAngles[axisMap[i]] + diff );
 			}
-			
+
 			idAngles angles;
 			angles.Zero();
 			angles[axisMap[i]] = currentAngles[axisMap[i]];
 			mat[axisMap[i]] = angles.ToMat3();
 		}
-	}	
+	}
 
 	// Update the turret moving sound
 	if ( soundPart >= 0 ) {
@@ -1611,9 +1611,9 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 		speed = idMath::Fabs( idMath::AngleDelta( oldAngles[YAW], currentAngles[YAW] ) );
 		speed = Max( speed, idMath::Fabs( idMath::AngleDelta( oldAngles[PITCH], currentAngles[PITCH] ) ) );
 		speed = Max( speed, idMath::Fabs( idMath::AngleDelta( oldAngles[ROLL], currentAngles[ROLL] ) ) );
-		
+
 		if ( speed ) {
-			if ( !moveTime ) {			
+			if ( !moveTime ) {
 				static_cast<rvVehicleSound*>(position->GetPart(soundPart))->Play ( );
 			}
 			moveTime = gameLocal.time + TURRET_MOVESOUND_FADE;
@@ -1621,14 +1621,14 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 			static_cast<rvVehicleSound*>(position->GetPart(soundPart))->Fade ( TURRET_MOVESOUND_FADE, 0.0f, 1.0f );
 			moveTime = 0;
 		}
-		
+
 		// Update the volume of the turret move sound using the current speed of the
-		// turret as well as how long it has been since it has last moved.  
+		// turret as well as how long it has been since it has last moved.
 		if ( moveTime ) {
 			float f;
 			f = idMath::ClampFloat ( 0.0f, 1.0f, fabs(speed) / (turnRate * MS2SEC(gameLocal.GetMSec())) );
 			static_cast<rvVehicleSound*>(position->GetPart(soundPart))->Attenuate ( f, f );
-		}		
+		}
 	}
 
 	// Rotate the turret with the mouse
@@ -1668,10 +1668,10 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 			traceBounds.Zero();
 			traceBounds = parent->GetPhysics()->GetAbsBounds();
 			traceBounds.ExpandSelf( reduceVector );
-			
+
 			//zero the tracebounds-- abs bounds is the right size but not the right location :)
 			traceBounds.TranslateSelf( traceBounds.GetCenter() * -1 );
-			
+
 			//raise the bounds up so the hover tank can hover.
 			traceBounds.TranslateSelf( raiseVector );
 
@@ -1682,7 +1682,7 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 				idVec4 vecColor(1.0f - ( tr.fraction) , 0.25f, (0.5f * tr.fraction), 1.0f);
 				gameRenderWorld->DebugBounds( vecColor, traceBounds, parentOrigin, 10, true );
 			}
-			
+
 			//roll it back if it's colliding.
 			if( tr.fraction < 1.0f) {
 				if ( gameDebug.IsHudActive ( DBGHUD_VEHICLE, parent ) ) {
@@ -1691,9 +1691,9 @@ void rvVehicleTurret::RunPostPhysics ( void ) {
 				parent->GetPhysics()->SetAxis( oldAxis );
 				currentAngles = oldAngles;
 
-				//apply a push to the parent based on the direction of the collision? 
+				//apply a push to the parent based on the direction of the collision?
 				parentStuck = true;
-			}			
+			}
 		}
 
 	}
@@ -1704,7 +1704,7 @@ rvVehicleTurret::RunPrePhysics
 =====================
 */
 void rvVehicleTurret::RunPrePhysics ( void ) {
-	
+
 	//in case we're stuck, apply an impulse to the parent based on the direction the turret is facing. This will help us pull out in the right direction.
 	if( parentStuck )	{
 
@@ -1717,9 +1717,9 @@ void rvVehicleTurret::RunPrePhysics ( void ) {
 		//impulseForce += ( position->mInputCmd.forwardmove / 127.0f ) * parent->GetPhysics()->GetAxis()[0] * 25 * MS2SEC(gameLocal.msec) * parent->GetPhysics()->GetMass ();
 
 		// Apply the impulse to the parent entity
-		
+
 		parent->GetPhysics()->ApplyImpulse( 0, parent->GetPhysics()->GetOrigin(), impulseForce);
-		
+
 		parentStuck = false;
 	}
 
@@ -1770,7 +1770,7 @@ void rvVehicleTurret::Restore ( idRestoreGame* savefile ) {
 	savefile->ReadInt ( moveTime );
 	savefile->ReadFloat ( turnRate );
 
-	savefile->ReadInt ( soundPart );	
+	savefile->ReadInt ( soundPart );
 }
 
 /***********************************************************************
@@ -1793,7 +1793,7 @@ rvVehicleHoverpad::~rvVehicleHoverpad ( void ) {
 	if ( effectDust ) {
 		effectDust->Stop ( );
 		effectDust = NULL;
-	}		
+	}
 
 	delete clipModel;
 }
@@ -1805,37 +1805,37 @@ rvVehicleHoverpad::Spawn
 */
 void rvVehicleHoverpad::Spawn ( void ) {
 	float size;
-		
+
 	spawnArgs.GetFloat ( "size", "10", size );
 	spawnArgs.GetFloat ( "height", "70", height );
 	spawnArgs.GetFloat ( "dampen", "10", dampen );
-	spawnArgs.GetFloat ( "forceRandom", "10", forceRandom );		
+	spawnArgs.GetFloat ( "forceRandom", "10", forceRandom );
 	spawnArgs.GetFloat ( "thrustForward", "0", thrustForward );
 	spawnArgs.GetFloat ( "thrustLeft", "0", thrustLeft );
-		
+
 	maxRestAngle = idMath::Cos ( DEG2RAD(spawnArgs.GetFloat ( "maxRestAngle", "20" ) ) );
-		
+
 	fadeTime = SEC2MS(spawnArgs.GetFloat ( "fadetime", ".5" ));
-				
+
 	effectDust = NULL;
 	atRest		= true;
-	
+
 	delete clipModel;
 	clipModel = new idClipModel ( idTraceModel ( idBounds ( spawnArgs.GetVector("mins"),spawnArgs.GetVector("maxs")) ) );
-	
+
 	force = spawnArgs.GetFloat ( "force", "1066" );
 	forceUpTime   = SEC2MS ( spawnArgs.GetFloat ( "forceUpTime", "1" ) );
 	forceDownTime = SEC2MS ( spawnArgs.GetFloat ( "forceDownTime", "1" ) );
 	forceTable = declManager->FindTable( spawnArgs.GetString ( "forceTable", "linear" ), false );
 
-	currentForce.Init ( 0, 0, 0, 0 );				
-	
+	currentForce.Init ( 0, 0, 0, 0 );
+
 	// Is a sound part specified?
 	if ( *spawnArgs.GetString ( "snd_loop", "" ) ) {
 		soundPart = position->AddPart ( rvVehicleSound::GetClassType(), spawnArgs );
 		static_cast<rvVehicleSound*>(position->GetPart(soundPart))->SetAutoActivate ( false );
 	}
-	
+
 	Activate ( false );
 }
 
@@ -1852,7 +1852,7 @@ void rvVehicleHoverpad::Activate ( bool active ) {
 		atRest	= false;
 	} else {
 		currentForce.Init ( gameLocal.time, forceDownTime, currentForce.GetCurrentValue( gameLocal.time ), 0 );
-	}	
+	}
 }
 
 /*
@@ -1860,11 +1860,11 @@ void rvVehicleHoverpad::Activate ( bool active ) {
 rvVehicleHoverpad::RunPrePhysics
 
 Called before RunPhysics.  Since impact velocities are altered by calls to ApplyImpulse
-we need to cache them to ensure other hoverpads are not altering the data.  The start 
+we need to cache them to ensure other hoverpads are not altering the data.  The start
 position of the hoverpad is also cached here for efficiency.
 ================
 */
-void rvVehicleHoverpad::RunPrePhysics ( void ) {	
+void rvVehicleHoverpad::RunPrePhysics ( void ) {
 	impactInfo_t info;
 
 	UpdateOrigin ( );
@@ -1886,7 +1886,7 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 	idVec3  impulseForce;
 	idVec3	dampingForce;
 	float	hoverForce;
-	float   curlength;		
+	float   curlength;
 
 	// Disable pad?
 	if ( !IsActive() && !atRest ) {
@@ -1899,40 +1899,40 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 
 			if ( effectDust ) {
 				effectDust->Stop ( );
-				effectDust = NULL;			
+				effectDust = NULL;
 			}
-			
+
 			atRest = true;
 		}
 	}
 
 	// If the vehicle isnt activate then kill the effect on it and dont think
-	if ( atRest ) {						
+	if ( atRest ) {
 		return;
 	}
 
-	// Prepare for trace			
+	// Prepare for trace
 	axis[0] = -parent->GetPhysics()->GetAxis()[2];
-	axis[1] = parent->GetPhysics()->GetAxis()[0];	
+	axis[1] = parent->GetPhysics()->GetAxis()[0];
 	axis[2] = parent->GetPhysics()->GetAxis()[1];
 
 	// Always point the hover jets towards gravity
-	end  = worldOrigin + (parent->GetPhysics()->GetGravityNormal ( ) * height);	
+	end  = worldOrigin + (parent->GetPhysics()->GetGravityNormal ( ) * height);
 
 	// Determine how far away the hoverpad is from the ground
 	gameLocal.Translation ( parent.GetEntity(), tr, worldOrigin, end, clipModel, axis, MASK_SOLID|CONTENTS_VEHICLECLIP, parent );
-	if ( tr.fraction >= 1.0f && tr.endpos == end ) {	
+	if ( tr.fraction >= 1.0f && tr.endpos == end ) {
 		UpdateDustEffect ( worldOrigin, axis, 0.0f, NULL );
 		return;
 	}
-		
+
 	// Determine spring properties from trace
 	tr.c.point = worldOrigin + (end-worldOrigin) * (tr.fraction + 0.001f);
-	curlength  = height - (worldOrigin - tr.c.point).Length ( );		
+	curlength  = height - (worldOrigin - tr.c.point).Length ( );
 
 	// Dampening
 	dampingForce = tr.c.point - worldOrigin;
-	dampingForce = ( dampen * ( (velocity * dampingForce) / (dampingForce * dampingForce) ) ) * dampingForce;		
+	dampingForce = ( dampen * ( (velocity * dampingForce) / (dampingForce * dampingForce) ) ) * dampingForce;
 
 	// Random swap forces
 	float rnd = 0.0f;
@@ -1947,16 +1947,16 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 		rnd = forceRandom * idMath::Sin( angle );
 	}
 
-	// Determine how much force should be applied at the center of the hover spring		
+	// Determine how much force should be applied at the center of the hover spring
 	hoverForce = (currentForce.GetCurrentValue(gameLocal.time) + rnd) * parent->GetPhysics()->GetMass () * MS2SEC(gameLocal.GetMSec());
 
 	// If the slope under the hoverpad is < 30 degress then use the gravity vector to allow the hovertank to
-	// stop on slopes, otherwise use the vehicles axis which will cause it to slide down steep slopes 
+	// stop on slopes, otherwise use the vehicles axis which will cause it to slide down steep slopes
 	float f = (-parent->GetPhysics()->GetGravityNormal ( ) * tr.c.normal);
 	if ( f < maxRestAngle || (thrustForward && position->mInputCmd.forwardmove != 0 ) ) {
-		impulseForce = (forceTable->TableLookup ( curlength / height ) * hoverForce) * -axis[0] - dampingForce;	
+		impulseForce = (forceTable->TableLookup ( curlength / height ) * hoverForce) * -axis[0] - dampingForce;
 	} else {
-		impulseForce = (forceTable->TableLookup ( curlength / height ) * hoverForce) * -parent->GetPhysics()->GetGravityNormal ( ) - dampingForce;	
+		impulseForce = (forceTable->TableLookup ( curlength / height ) * hoverForce) * -parent->GetPhysics()->GetGravityNormal ( ) - dampingForce;
 	}
 
 	// No thrust if movement is disabled
@@ -1977,7 +1977,7 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 				impulseForce += ( position->mInputCmd.forwardmove / 127.0f ) * parent->GetPhysics()->GetAxis()[0] * thrustForward * MS2SEC(gameLocal.msec) * parent->GetPhysics()->GetMass ();
 			}
 		}
- 
+
 		// Add right/left thrust.  The front pads will add force to the right if the right button is pressed and the rear will do the opposite.  If moving backward the directions are flipped again
 		if ( thrustLeft ) {
 			if ( !parent->IsStrafing() && g_vehicleMode.GetInteger() != 0 ) {
@@ -1987,10 +1987,10 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 			}
 		}
 	}
-	
+
 	// Apply the impulse to the parent entity
 	parent->GetPhysics()->ApplyImpulse( 0, worldOrigin, impulseForce);
-		
+
 	// Update the position and intensity of the dust effect
 	UpdateDustEffect ( tr.c.point, tr.c.normal.ToMat3( ), (curlength / height), tr.c.materialType );
 
@@ -1998,14 +1998,14 @@ void rvVehicleHoverpad::RunPhysics ( void ) {
 	if ( gameDebug.IsHudActive ( DBGHUD_VEHICLE, parent ) ) {
 		idVec3 offset;
 		offset = worldOrigin - parent->GetPhysics()->GetOrigin();
-		offset *= parent->GetPhysics()->GetAxis().Transpose();		
-		gameDebug.AppendList ( "hover", va("%c%c %d\t%0.1f\t%0.1f\t%d\t", (offset[0]>0?'F':'B'),(offset[1]<0?'R':'L'), (int)impulseForce.Length(), curlength, dampingForce.Length(), (int)(velocity*axis[0] ) ) );		
-	}		
-	
+		offset *= parent->GetPhysics()->GetAxis().Transpose();
+		gameDebug.AppendList ( "hover", va("%c%c %d\t%0.1f\t%0.1f\t%d\t", (offset[0]>0?'F':'B'),(offset[1]<0?'R':'L'), (int)impulseForce.Length(), curlength, dampingForce.Length(), (int)(velocity*axis[0] ) ) );
+	}
+
 	// Draw debug information
 	if ( g_debugVehicle.GetInteger() == 2 ) {
-		collisionModelManager->DrawModel ( clipModel->GetCollisionModel(), tr.c.point, axis, vec3_origin, mat3_identity, 0.0f ); 
-		gameRenderWorld->DebugCircle ( colorGreen, tr.c.point, axis[0], 5, 10 );				
+		collisionModelManager->DrawModel ( clipModel->GetCollisionModel(), tr.c.point, axis, vec3_origin, mat3_identity, 0.0f );
+		gameRenderWorld->DebugCircle ( colorGreen, tr.c.point, axis[0], 5, 10 );
 		gameRenderWorld->DebugLine ( colorMagenta, worldOrigin, worldOrigin + idVec3(0,0,-height));
 		gameRenderWorld->DebugLine ( colorWhite, worldOrigin, end );
 		gameRenderWorld->DebugCircle ( colorBlue, worldOrigin, axis[0], 5, 10 );
@@ -2027,23 +2027,23 @@ rvVehicleHoverpad::UpdateDustEffect
 ================
 */
 void rvVehicleHoverpad::UpdateDustEffect ( const idVec3& origin, const idMat3& axis, float attenuation, const rvDeclMatType* mtype ) {
-	if ( !effectDust || (mtype && effectDustMaterialType != mtype) ) {	
+	if ( !effectDust || (mtype && effectDustMaterialType != mtype) ) {
 		if ( effectDust ) {
 			effectDust->Stop ( );
 			effectDust = NULL;
-		}		
+		}
 
 		effectDust = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_dust", mtype ), origin, axis, true );
 		effectDustMaterialType = mtype;
 	}
 
-	if ( effectDust ) {	
+	if ( effectDust ) {
 		effectDust->Attenuate ( attenuation );
 		effectDust->SetOrigin ( origin );
 		effectDust->SetAxis ( axis );
 	}
 
-	// If there is a sound playing update it as well	
+	// If there is a sound playing update it as well
 	if ( soundPart >= 0 ) {
 		if ( static_cast<rvVehicleSound*>(position->GetPart(soundPart))->IsPlaying ( ) ) {
 			static_cast<rvVehicleSound*>(position->GetPart(soundPart))->Attenuate ( attenuation, attenuation );
@@ -2069,13 +2069,13 @@ void rvVehicleHoverpad::Save ( idSaveGame* savefile ) const {
 	savefile->WriteFloat ( force );
 	savefile->WriteTable ( forceTable );
 	savefile->WriteFloat ( forceRandom );
-	
+
 	savefile->WriteFloat ( fadeTime );
 	savefile->WriteVec3 ( velocity );
 
 	savefile->WriteFloat ( thrustForward );
 	savefile->WriteFloat ( thrustLeft );
-	
+
 	savefile->WriteFloat ( maxRestAngle );
 
 	savefile->WriteInt ( soundPart );
@@ -2102,7 +2102,7 @@ void rvVehicleHoverpad::Restore ( idRestoreGame* savefile ) {
 	delete clipModel;
 	savefile->ReadBounds ( bounds );
 	clipModel = new idClipModel ( idTraceModel ( bounds ) );
-	
+
 	savefile->ReadInterpolate ( currentForce );
 	savefile->ReadFloat ( force );
 	savefile->ReadTable ( forceTable );
@@ -2113,11 +2113,11 @@ void rvVehicleHoverpad::Restore ( idRestoreGame* savefile ) {
 
 	savefile->ReadFloat ( thrustForward );
 	savefile->ReadFloat ( thrustLeft );
-	
+
 	savefile->ReadFloat ( maxRestAngle );
 
 	savefile->ReadInt ( soundPart );
-	
+
 	savefile->ReadInt ( forceUpTime );
 	savefile->ReadInt ( forceDownTime );
 
@@ -2172,7 +2172,7 @@ void rvVehicleThruster::Spawn ( void ) {
 
 	force		= spawnArgs.GetFloat ( "force", "0" );
 	forceAxis	= spawnArgs.GetInt ( "forceAxis", "0" );
-	
+
 	// Determine which key controls the thruster
 	spawnArgs.GetString ( "key", "", keyName );
 	if ( !keyName.Icmp ( "forward" ) ) 	{
@@ -2181,7 +2181,7 @@ void rvVehicleThruster::Spawn ( void ) {
 		key = KEY_RIGHT;
 	} else if ( !keyName.Icmp ( "up" ) ) {
 		key = KEY_UP;
-	}			
+	}
 }
 
 /*
@@ -2191,11 +2191,11 @@ rvVehicleThruster::RunPhysics
 */
 void rvVehicleThruster::RunPhysics ( void ) {
 	float mult;
-	
+
 	if ( !IsActive ( ) ) {
 		return;
 	}
-	
+
 	// Determine the force multiplier from the key being pressed
 	mult = 0.0f;
 	switch ( key )	{
@@ -2211,21 +2211,21 @@ void rvVehicleThruster::RunPhysics ( void ) {
 			mult = idMath::ClampFloat ( -1.0f, 1.0f, position->mInputCmd.upmove );
 			break;
 	}
-	
+
 	// No multiplier, no move
 	if ( mult == 0.0f ) {
 		return;
-	}			
-	
+	}
+
 	UpdateOrigin ( );
-	
+
 	// Apply the force
 	parent->GetPhysics()->ApplyImpulse ( 0, worldOrigin, worldAxis[forceAxis] * force * mult );
-	
+
 	// Debug Information
 	if ( g_debugVehicle.GetInteger() == 2 ) {
 		gameRenderWorld->DebugBounds ( colorCyan, idBounds(idVec3(-4,-4,-4), idVec3(4,4,4) ), worldOrigin );
-		gameRenderWorld->DebugArrow ( colorCyan, worldOrigin, worldOrigin + worldAxis[forceAxis] * 100.0f * mult * (force < 0 ? -1 : 1), 10 );	
+		gameRenderWorld->DebugArrow ( colorCyan, worldOrigin, worldOrigin + worldAxis[forceAxis] * 100.0f * mult * (force < 0 ? -1 : 1), 10 );
 	}
 }
 

@@ -239,7 +239,7 @@ void idSurface_Patch::GenerateNormals( void ) {
 	//
 	idVec3		extent[3];
 	float		offset;
-	
+
 	extent[0] = verts[width - 1].xyz - verts[0].xyz;
 	extent[1] = verts[(height-1) * width + width - 1].xyz - verts[0].xyz;
 	extent[2] = verts[(height-1) * width].xyz - verts[0].xyz;

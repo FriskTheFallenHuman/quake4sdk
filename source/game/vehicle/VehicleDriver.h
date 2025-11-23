@@ -31,7 +31,7 @@ protected:
 	void					SimulateButtons				( usercmd_t& cmd );
 	void					SimulateMouseMove			( usercmd_t& cmd );
 
-	bool					GetTargetInfo				( const idEntity* target, idVec3* targetOrigin, idVec3* dirToTarget, 
+	bool					GetTargetInfo				( const idEntity* target, idVec3* targetOrigin, idVec3* dirToTarget,
 														  float* dotForward, float* dotRight, float* distance ) const;
 	idEntity*				ChooseNextNode				( idEntity* target );
 

@@ -50,9 +50,9 @@ void rvEffect::Spawn( void ) {
 			common->Warning( "Unknown effect \'%s\' on entity \'%s\'", spawnArgs.GetString ( "fx" ), GetName() );
 		}
 	}
-	
+
 	spawnArgs.GetVector ( "endOrigin", "0 0 0", endOrigin );
-	
+
 	spawnArgs.GetBool ( "loop", "0", loop );
 
 	// If look at target is set the effect will continually update itself to look at its target
@@ -63,7 +63,7 @@ void rvEffect::Spawn( void ) {
 
     if( spawnArgs.GetBool( "start_on", loop ? "1" : "0" ) ) {
 		ProcessEvent( &EV_Activate, this );
-	}		
+	}
 #if 0
 	// If anyone ever gets around to a flood fill from the origin rather than the over generous PushVolumeIntoTree bounds,
 	// this warning will become useful. Until then, it's a bogus warning.
@@ -79,21 +79,21 @@ rvEffect::Think
 ================
 */
 void rvEffect::Think( void ) {
-	
+
 	if( clientEntities.IsListEmpty ( ) ) {
 		BecomeInactive( TH_THINK );
 
 		// Should the func_fx be removed now?
-		if( !(gameLocal.editors & EDITOR_FX) && spawnArgs.GetBool( "remove" ) ) {		
+		if( !(gameLocal.editors & EDITOR_FX) && spawnArgs.GetBool( "remove" ) ) {
 			PostEventMS( &EV_Remove, 0 );
-		} 
-		
+		}
+
 		return;
-	}	
+	}
 	else if( lookAtTarget ) {
 		// If activated and looking at its target then update the target information
 		ProcessEvent( &EV_LookAtTarget );
-	}	
+	}
 
 	UpdateVisuals();
 	Present ( );
@@ -158,7 +158,7 @@ bool rvEffect::Play( void ) {
 		BecomeActive ( TH_THINK );
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -171,12 +171,12 @@ void rvEffect::Attenuate ( float attenuation ) {
 	rvClientEntity* cent;
 	for( cent = clientEntities.Next(); cent != NULL; cent = cent->spawnNode.Next() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( cent->IsType ( rvClientEffect::GetClassType() ) ) {
 // RAVEN END
 			static_cast<rvClientEffect*>(cent)->Attenuate ( attenuation );
 		}
-	}			
+	}
 }
 
 /*
@@ -185,8 +185,8 @@ rvEffect::Restart
 ================
 */
 void rvEffect::Restart( void ) {
-	Stop( false );	
-	
+	Stop( false );
+
 	if( loop )	{
 		Play();
 	}
@@ -220,7 +220,7 @@ void rvEffect::UpdateChangeableSpawnArgs( const idDict *source ) {
 	renderEntity.shaderParms[ SHADERPARM_BLUE ]	 = color[2];
 	renderEntity.shaderParms[ SHADERPARM_ALPHA ] = source->GetFloat ( "_alpha", "1" );
 	renderEntity.shaderParms[ SHADERPARM_BRIGHTNESS ] = source->GetFloat ( "_brightness", "1" );
-	if ( clientEffect ) {		
+	if ( clientEffect ) {
 		clientEffect->SetColor ( idVec4(color[0],color[1],color[2],renderEntity.shaderParms[ SHADERPARM_ALPHA ]) );
 		clientEffect->SetBrightness ( renderEntity.shaderParms[ SHADERPARM_BRIGHTNESS ] );
 	}
@@ -228,11 +228,11 @@ void rvEffect::UpdateChangeableSpawnArgs( const idDict *source ) {
 	source->GetBool ( "loop", "0", newLoop );
 
 	spawnArgs.Copy( *source );
-	
+
 	// IF the effect handle has changed or the loop status has changed then restart the effect
 	if ( newEffect != effect || loop != newLoop ) {
-		Stop ( false );		
-	
+		Stop ( false );
+
 		loop = newLoop;
 		effect = newEffect;
 
@@ -277,7 +277,7 @@ void rvEffect::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 	const idDecl *old = effect;
 	GetPhysics()->ReadFromSnapshot( msg );
 	ReadBindFromSnapshot( msg );
-	
+
 	effect = idGameLocal::ReadDecl( msg, DECL_EFFECT );
 	loop = ( msg.ReadBits( 1 ) != 0 );
 
@@ -293,7 +293,7 @@ rvEffect::ClientPredictionThink
 =================
 */
 void rvEffect::ClientPredictionThink( void ) {
-	if ( gameLocal.isNewFrame ) {	 
+	if ( gameLocal.isNewFrame ) {
 		Think ( );
 	}
 	RunPhysics();
@@ -360,7 +360,7 @@ Reorients the effect entity towards its target and sets the end origin as well
 */
 void rvEffect::Event_LookAtTarget ( void ) {
 	const idKeyValue	*kv;
-	idVec3				dir;		
+	idVec3				dir;
 
 	if ( !effect || !clientEffect ) {
 		return;
@@ -373,10 +373,10 @@ void rvEffect::Event_LookAtTarget ( void ) {
 			if( !idStr::Icmp( ent->GetEntityDefName(), "target_null" ) ) {
 				dir = ent->GetPhysics()->GetOrigin() - GetPhysics()->GetOrigin();
 				dir.Normalize();
-				
+
 				clientEffect->SetEndOrigin ( ent->GetPhysics()->GetOrigin() );
 				clientEffect->SetAxis ( dir.ToMat3( ) );
-				return;						
+				return;
 			}
 		}
 		kv = spawnArgs.MatchPrefix( "target", kv );
@@ -394,12 +394,12 @@ void rvEffect::Event_EarthQuake ( float requiresLOS ) {
 	if ( !spawnArgs.GetFloat("quakeChance", "0", quakeChance) ) {
 		return;
 	}
-	
+
 	if ( rvRandom::flrand(0, 1.0f) > quakeChance ) {
 		// failed its activation roll
 		return;
 	}
-	
+
 	if ( requiresLOS ) {
 		// if the player doesn't have line of sight to this fx, don't do anything
 		trace_t		trace;
@@ -418,7 +418,7 @@ void rvEffect::Event_EarthQuake ( float requiresLOS ) {
 			return;
 		}
 	}
-	
+
 	// activate this effect now
 	ProcessEvent ( &EV_Activate, gameLocal.entities[ENTITYNUM_WORLD] );
 }
@@ -448,7 +448,7 @@ rvEffect::InstanceLeave
 */
 void rvEffect::InstanceLeave( void ) {
 	idEntity::InstanceLeave();
-	Stop( true );	
+	Stop( true );
 }
 
 /*

@@ -159,19 +159,19 @@ void idForce_Field::Evaluate( int time ) {
 		if ( !entity ) {
 			continue;
 		}
-		
+
 		idPhysics *physics = entity->GetPhysics();
 
 		if ( playerOnly ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( !physics->IsType( idPhysics_Player::GetClassType() ) ) {
 // RAVEN END
 				continue;
 			}
 		} else if ( monsterOnly ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( !physics->IsType( idPhysics_Monster::GetClassType() ) ) {
 
 				continue;
@@ -190,8 +190,8 @@ void idForce_Field::Evaluate( int time ) {
 				if ( ((idPlayer*)entity)->health <= 0 ) {
 					continue;
 				}
-			}			
-		
+			}
+
 		}
 
 // ddynerman: multiple clip worlds
@@ -265,7 +265,7 @@ void idForce_Field::Evaluate( int time ) {
 		}
 
 // RAVEN BEGIN
-// bdube: added last apply time			
+// bdube: added last apply time
 		lastApplyTime = time;
 // RAVEN END
 	}

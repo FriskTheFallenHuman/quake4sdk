@@ -21,36 +21,36 @@
 
 #define DBGHUD_MAX			32
 
-typedef struct debugJumpPoint_s 
+typedef struct debugJumpPoint_s
 {
 	idStr					name;
 	idVec3					origin;
 	idAngles				angles;
-	
+
 } debugJumpPoint_t;
 
 class rvGameDebug {
 public:
-	
+
 	rvGameDebug( );
-	
+
 	void		Init				( void );
 	void		Shutdown			( void );
 	void		BeginFrame			( void );
 	void		EndFrame			( void );
-	
+
 	void		SetFocusEntity		( idEntity* focusEnt );
-	
+
 	bool		IsHudActive			( int hudMask, const idEntity* focusEnt = NULL );
-	
+
 	void		DrawHud				( void );
-	
+
 	void		AppendList			( const char* listname, const char* value );
-	
+
 	void		SetInt				( const char* key, int value );
 	void		SetFloat			( const char* key, float value );
 	void		SetString			( const char* key, const char* value );
-	
+
 	int			GetInt				( const char* key );
 	float		GetFloat			( const char* key );
 	const char*	GetString			( const char* key );
@@ -58,7 +58,7 @@ public:
 	void		SetStatInt			( const char* key, int value );
 	void		SetStatFloat		( const char* key, float value );
 	void		SetStatString		( const char* key, const char* value );
-	
+
 	int			GetStatInt			( const char* key );
 	float		GetStatFloat		( const char* key );
 	const char*	GetStatString		( const char* key );
@@ -67,15 +67,15 @@ public:
 	void		JumpTo				( const char* name );
 	void		JumpTo				( int jumpIndex );
 	void		JumpNext			( void );
-	void		JumpPrev			( void );	
-	
-private:		
+	void		JumpPrev			( void );
+
+private:
 
 	idList<debugJumpPoint_t>	jumpPoints;
 	int							jumpIndex;
-	
+
 	idEntityPtr<idEntity>		focusEntity;
-	idEntityPtr<idEntity>		overrideEntity;		
+	idEntityPtr<idEntity>		overrideEntity;
 	idUserInterface *			hud[DBGHUD_MAX+1];
 	idUserInterface *			currentHud;
 	idDict						nonGameState, gameStats;

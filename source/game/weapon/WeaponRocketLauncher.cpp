@@ -55,12 +55,12 @@ private:
 	stateResult_t		State_Fire				( const stateParms_t& parms );
 	stateResult_t		State_Raise				( const stateParms_t& parms );
 	stateResult_t		State_Lower				( const stateParms_t& parms );
-	
+
 	stateResult_t		State_Rocket_Idle		( const stateParms_t& parms );
 	stateResult_t		State_Rocket_Reload		( const stateParms_t& parms );
-	
+
 	stateResult_t		Frame_AddToClip			( const stateParms_t& parms );
-	
+
 	CLASS_STATES_PROTOTYPE ( rvWeaponRocketLauncher );
 };
 
@@ -95,17 +95,17 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 	float f;
 
 	idleEmpty = false;
-	
+
 	spawnArgs.GetFloat ( "lockRange", "0", guideRange );
 
 	spawnArgs.GetFloat ( "lockSlowdown", ".25", f );
 	attackDict.GetFloat ( "speed", "0", guideSpeedFast );
 	guideSpeedSlow = guideSpeedFast * f;
-	
+
 	reloadRate = SEC2MS ( spawnArgs.GetFloat ( "reloadRate", ".8" ) );
-	
+
 	guideAccelTime = SEC2MS ( spawnArgs.GetFloat ( "lockAccelTime", ".25" ) );
-	
+
 	// Start rocket thread
 	rocketThread.SetName ( viewModel->GetName ( ) );
 	rocketThread.SetOwner ( this );
@@ -128,7 +128,7 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 		anim->SetPlaybackRate ( rate );
 	}
 
-	SetState ( "Raise", 0 );	
+	SetState ( "Raise", 0 );
 	SetRocketState ( "Rocket_Idle", 0 );
 }
 
@@ -137,7 +137,7 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 rvWeaponRocketLauncher::Think
 ================
 */
-void rvWeaponRocketLauncher::Think ( void ) {	
+void rvWeaponRocketLauncher::Think ( void ) {
 	trace_t	tr;
 	int		i;
 
@@ -146,11 +146,11 @@ void rvWeaponRocketLauncher::Think ( void ) {
 	// Let the real weapon think first
 	rvWeapon::Think ( );
 
-	// IF no guide range is set then we dont have the mod yet	
+	// IF no guide range is set then we dont have the mod yet
 	if ( !guideRange ) {
 		return;
 	}
-	
+
 	if ( !wsfl.zoom ) {
 		if ( guideEffect ) {
 			guideEffect->Stop();
@@ -163,40 +163,40 @@ void rvWeaponRocketLauncher::Think ( void ) {
 				guideEnts.RemoveIndex ( i );
 				continue;
 			}
-			
+
 			// If the rocket is still guiding then stop the guide and slow it down
 			if ( proj->GetGuideType ( ) != idGuidedProjectile::GUIDE_NONE ) {
-				proj->CancelGuide ( );				
+				proj->CancelGuide ( );
 				proj->SetSpeed ( guideSpeedFast, (1.0f - (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime );
 			}
 		}
 
 		return;
 	}
-						
+
 	// Cast a ray out to the lock range
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
-	gameLocal.TracePoint(	owner, tr, 
-							playerViewOrigin, 
-							playerViewOrigin + playerViewAxis[0] * guideRange, 
+	gameLocal.TracePoint(	owner, tr,
+							playerViewOrigin,
+							playerViewOrigin + playerViewAxis[0] * guideRange,
 							MASK_SHOT_RENDERMODEL, owner );
 // RAVEN END
-	
+
 	for ( i = guideEnts.Num() - 1; i >= 0; i -- ) {
 		idGuidedProjectile* proj = static_cast<idGuidedProjectile*>(guideEnts[i].GetEntity());
 		if ( !proj || proj->IsHidden() ) {
 			guideEnts.RemoveIndex ( i );
 			continue;
 		}
-		
+
 		// If the rocket isnt guiding yet then adjust its speed back to normal
 		if ( proj->GetGuideType ( ) == idGuidedProjectile::GUIDE_NONE ) {
 			proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow) * guideAccelTime );
 		}
-		proj->GuideTo ( tr.endpos );				
+		proj->GuideTo ( tr.endpos );
 	}
-	
+
 	if ( !guideEffect ) {
 		guideEffect = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_guide" ), tr.endpos, tr.c.normal.ToMat3(), true, vec3_origin, true );
 	} else {
@@ -221,7 +221,7 @@ void rvWeaponRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
 	// Launch the projectile
 	idEntityPtr<idEntity> ptr;
 	ptr = proj;
-	guideEnts.Append ( ptr );	
+	guideEnts.Append ( ptr );
 }
 
 /*
@@ -242,21 +242,21 @@ void rvWeaponRocketLauncher::Save( idSaveGame *saveFile ) const {
 	saveFile->WriteObject( guideEffect );
 
 	idEntity* ent = NULL;
-	saveFile->WriteInt( guideEnts.Num() ); 
+	saveFile->WriteInt( guideEnts.Num() );
 	for( int ix = 0; ix < guideEnts.Num(); ++ix ) {
 		ent = guideEnts[ ix ].GetEntity();
 		if( ent ) {
 			saveFile->WriteObject( ent );
 		}
 	}
-	
+
 	saveFile->WriteFloat( guideSpeedSlow );
 	saveFile->WriteFloat( guideSpeedFast );
 	saveFile->WriteFloat( guideRange );
 	saveFile->WriteFloat( guideAccelTime );
-	
+
 	saveFile->WriteFloat ( reloadRate );
-	
+
 	rocketThread.Save( saveFile );
 }
 
@@ -272,7 +272,7 @@ void rvWeaponRocketLauncher::Restore( idRestoreGame *saveFile ) {
 
 	saveFile->ReadObject( reinterpret_cast<idClass *&>(clientEffect) );
 	guideEffect = clientEffect;
-	
+
 	saveFile->ReadInt( numEnts );
 	guideEnts.Clear();
 	guideEnts.SetNum( numEnts );
@@ -280,15 +280,15 @@ void rvWeaponRocketLauncher::Restore( idRestoreGame *saveFile ) {
 		saveFile->ReadObject( reinterpret_cast<idClass *&>(ent) );
 		guideEnts[ ix ] = ent;
 	}
-	
+
 	saveFile->ReadFloat( guideSpeedSlow );
 	saveFile->ReadFloat( guideSpeedFast );
 	saveFile->ReadFloat( guideRange );
 	saveFile->ReadFloat( guideAccelTime );
-	
+
 	saveFile->ReadFloat ( reloadRate );
-	
-	rocketThread.Restore( saveFile, this );	
+
+	rocketThread.Restore( saveFile, this );
 }
 
 /*
@@ -311,7 +311,7 @@ void rvWeaponRocketLauncher::PostSave ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -324,7 +324,7 @@ CLASS_STATES_DECLARATION ( rvWeaponRocketLauncher )
 
 	STATE ( "Rocket_Idle",		rvWeaponRocketLauncher::State_Rocket_Idle )
 	STATE ( "Rocket_Reload",	rvWeaponRocketLauncher::State_Rocket_Reload )
-	
+
 	STATE ( "AddToClip",		rvWeaponRocketLauncher::Frame_AddToClip )
 END_CLASS_STATES
 
@@ -340,14 +340,14 @@ stateResult_t rvWeaponRocketLauncher::State_Raise ( const stateParms_t& parms ) 
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		// Start the weapon raising
 		case STAGE_INIT:
 			SetStatus ( WP_RISING );
 			PlayAnim( ANIMCHANNEL_LEGS, "raise", 0 );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
 				SetState ( "Idle", 4 );
@@ -369,25 +369,25 @@ rvWeaponRocketLauncher::State_Lower
 Lower the weapon
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Lower ( const stateParms_t& parms ) {	
+stateResult_t rvWeaponRocketLauncher::State_Lower ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 		STAGE_WAITRAISE
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			SetStatus ( WP_LOWERING );
 			PlayAnim ( ANIMCHANNEL_LEGS, "putaway", parms.blendFrames );
 			return SRESULT_STAGE(STAGE_WAIT);
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 0 ) ) {
 				SetStatus ( WP_HOLSTERED );
 				return SRESULT_STAGE(STAGE_WAITRAISE);
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITRAISE:
 			if ( wsfl.raiseWeapon ) {
 				SetState ( "Raise", 0 );
@@ -407,7 +407,7 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( !AmmoAvailable ( ) ) {
@@ -415,15 +415,15 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 			} else {
 				SetStatus ( WP_READY );
 			}
-		
+
 			PlayCycle( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( wsfl.lowerWeapon ) {
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
-			}		
+			}
 			if ( gameLocal.time > nextAttackTime && wsfl.attack && ( gameLocal.isClient || AmmoInClip ( ) ) ) {
 				SetState ( "Fire", 2 );
 				return SRESULT_DONE;
@@ -442,15 +442,15 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:			
+
+		case STAGE_WAIT:
 			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
@@ -474,18 +474,18 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& pa
 		STAGE_INIT,
 		STAGE_WAIT,
 		STAGE_WAITEMPTY,
-	};	
-	
+	};
+
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( AmmoAvailable ( ) <= AmmoInClip() ) {
 				PlayAnim( ANIMCHANNEL_TORSO, "idle_empty", parms.blendFrames );
 				idleEmpty = true;
-			} else { 
+			} else {
 				PlayAnim( ANIMCHANNEL_TORSO, "idle", parms.blendFrames );
 			}
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AmmoAvailable ( ) > AmmoInClip() ) {
 				if ( idleEmpty ) {
@@ -502,7 +502,7 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& pa
 					if ( AmmoInClip ( ) == 0 ) {
 						SetRocketState ( "Rocket_Reload", 0 );
 						return SRESULT_DONE;
-					}				
+					}
 				}
 			}
 			return SRESULT_WAIT;
@@ -519,8 +519,8 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Reload ( const stateParms_t& 
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
-	
+	};
+
 	switch ( parms.stage ) {
 		case STAGE_INIT: {
 			const char* animName;
@@ -534,21 +534,21 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Reload ( const stateParms_t& 
 			} else {
 				animName = "reload";
 			}
-			
+
 			animNum = viewModel->GetAnimator()->GetAnim ( animName );
 			if ( animNum ) {
 				idAnim* anim;
-				anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );				
+				anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );
 				anim->SetPlaybackRate ( (float)anim->Length() / (reloadRate * owner->PowerUpModifier ( PMOD_FIRERATE )) );
 			}
 
-			PlayAnim( ANIMCHANNEL_TORSO, animName, parms.blendFrames );				
+			PlayAnim( ANIMCHANNEL_TORSO, animName, parms.blendFrames );
 
 			return SRESULT_STAGE ( STAGE_WAIT );
 		}
-		
+
 		case STAGE_WAIT:
-			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {				
+			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( !wsfl.attack && gameLocal.time > nextAttackTime && AmmoInClip ( ) < ClipSize( ) && AmmoAvailable() > AmmoInClip() ) {
 					SetRocketState ( "Rocket_Reload", 0 );
 				} else {

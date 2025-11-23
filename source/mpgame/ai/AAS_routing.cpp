@@ -1221,7 +1221,7 @@ bool idAASLocal::FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 ori
 	idReachability *reach;
 	const aasArea_t *nextArea;
 	idVec3 v1, v2, p;
-	float targetDist, dist;	
+	float targetDist, dist;
 
 	if ( file == NULL || areaNum <= 0 ) {
 		goal.areaNum = areaNum;
@@ -1234,7 +1234,7 @@ bool idAASLocal::FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 ori
 		obstacles[k].expAbsBounds[0] = obstacles[k].absBounds[0] - file->GetSettings().boundingBoxes[0][1];
 		obstacles[k].expAbsBounds[1] = obstacles[k].absBounds[1] - file->GetSettings().boundingBoxes[0][0];
 	}
-	
+
 	badTravelFlags = ~travelFlags;
 	SIMDProcessor->Memset( goalAreaTravelTimes, 0, file->GetNumAreas() * sizeof( unsigned short ) );
 
@@ -1260,7 +1260,7 @@ bool idAASLocal::FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 ori
 	updateListStart = curUpdate;
 	updateListEnd = curUpdate;
 
-	bestTravelTime = 0;	
+	bestTravelTime = 0;
 	bestGoal.areaNum = 0;
 
 	// while there are updates in the list
@@ -1375,14 +1375,14 @@ bool idAASLocal::FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 ori
 			if ( maxDistance > 0.0f && areaDist > maxDistance ) {
 				curUpdate->cluster = idAASCallback::TEST_BADAREA;
 				continue;
-			}				
+			}
 
 			// don't put goal near a ledge
 			if ( !( nextArea->flags & AREA_LEDGE ) ) {
 
 				// add travel time through the area
 				t += AreaTravelTime( reach->toAreaNum, reach->end, nextArea->center );
-	
+
 				if ( !bestTravelTime || t < bestTravelTime ) {
 					// if the area is not visible to the target
 					nextUpdate->cluster = (int)callback.Test ( (idAASLocal*)this, reach->toAreaNum, origin, minDistance, maxDistance, NULL, bestGoal );

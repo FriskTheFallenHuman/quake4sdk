@@ -30,7 +30,7 @@ public:
 	bool					SkipImpulse			( idEntity* ent, int id );
 
 protected:
-	
+
 	void					SetClipModel		( idPhysics & physicsObj );
 
 	const idVec3 &			GetTargetOrigin		( void );

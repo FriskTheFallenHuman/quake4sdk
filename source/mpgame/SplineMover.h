@@ -18,7 +18,7 @@ struct splinePState_t {
 
 	bool					ShouldAccelerate() const;
 	bool					ShouldDecelerate() const;
-	
+
 	void					ApplyAccelerationDelta( float timeStepSec );
 
 	void					ApplyDecelerationDelta( float timeStepSec );
@@ -434,7 +434,7 @@ protected:
 	void				UseMountedGun( idPlayer* player );
 
 	void				Event_UseMountedGun( idEntity* ent );
-	void				Event_SetPlayerDamageEntity(float f);	
+	void				Event_SetPlayerDamageEntity(float f);
 
 protected:
 	idList< idEntityPtr<rvSplineMover> > visibleEnemies;
@@ -474,7 +474,7 @@ public:
 	stateResult_t		State_LookingForTarget( const stateParms_t& parms );
 	stateResult_t		State_TargetInSight( const stateParms_t& parms );
 
-protected:	
+protected:
 	bool				TargetIsToLeft();
 	bool				TargetIsToRight();
 

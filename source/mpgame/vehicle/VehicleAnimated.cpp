@@ -50,10 +50,10 @@ void rvVehicleAnimated::Spawn( void ) {
 	SetPhysics( &physicsObj );
 
 	animator.RemoveOriginOffset( true );
-		
+
 	additionalDelta.Zero();
 
-	BecomeActive( TH_THINK );		
+	BecomeActive( TH_THINK );
 }
 
 /*
@@ -72,20 +72,20 @@ rvVehicleAnimated::Think
 */
 void rvVehicleAnimated::Think ( void ) {
 
-	rvVehicle::Think();	
+	rvVehicle::Think();
 
 	float rate = 0.0f;
 	usercmd_t& cmd = positions[0].mInputCmd;
 	idVec3 delta;
 
 	if( positions[0].IsOccupied() && !IsFrozen() && IsMovementEnabled() )	{
-		
+
 		if (( g_vehicleMode.GetInteger() == 0 && !( cmd.buttons & BUTTON_STRAFE )) || 	// If we're in the old driving mode and we aren't strafing or...
 			( g_vehicleMode.GetInteger() != 0 && ( cmd.buttons & BUTTON_STRAFE )))		// If we're in the new driving mode and we are strafing
 		{
 			rate = SignZero(cmd.forwardmove) * turnRate;
 			rate *= idMath::MidPointLerp( 0.0f, 0.9f, 1.0f, idMath::Fabs(cmd.rightmove) / 127.0f );
-			viewAngles.yaw += Sign(cmd.rightmove) * rate * MS2SEC(gameLocal.GetMSec());	
+			viewAngles.yaw += Sign(cmd.rightmove) * rate * MS2SEC(gameLocal.GetMSec());
 		}
 	}
 
@@ -103,7 +103,7 @@ void rvVehicleAnimated::Think ( void ) {
 		viewAxis = viewAngles.ToMat3() * physicsObj.GetGravityAxis();
 		delta *= viewAxis;
 	}
-			
+
 	physicsObj.SetDelta( delta );
 	additionalDelta.Zero();
 }
@@ -124,7 +124,7 @@ rvVehicleAnimated::WriteToSnapshot
 */
 void rvVehicleAnimated::WriteToSnapshot( idBitMsgDelta &msg ) const {
 	rvVehicle::WriteToSnapshot ( msg );
-	
+
  	physicsObj.WriteToSnapshot( msg );
 	msg.WriteFloat( viewAngles[0] );
 	msg.WriteFloat( viewAngles[1] );

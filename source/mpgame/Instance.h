@@ -17,10 +17,10 @@ public:
 	void Populate( int serverChecksum = 0 );
 	void PopulateFromMessage( const idBitMsg& msg );
 	void Restart( void );
-	
+
 	void JoinInstance( idPlayer* player );
 	int GetInstanceID( void );
-	
+
 	void SetSpawnInstanceID( int newInstance );
 
 	void PrintMapNumbers( void );
@@ -35,7 +35,7 @@ private:
 	unsigned short*			mapEntityNumbers;
 	int						numMapEntities;
 	int						initialSpawnCount;
-	
+
 	idBitMsg				mapEntityMsg;
 	byte					mapEntityMsgBuf[ MAX_GAME_MESSAGE_SIZE ];
 };

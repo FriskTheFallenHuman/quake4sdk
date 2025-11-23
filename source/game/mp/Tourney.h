@@ -40,7 +40,7 @@ const int MAX_ROUNDS = 4;
 class rvTourneyArena {
 public:
 	rvTourneyArena();
-	
+
 	void			AddPlayers( idPlayer* playerOne, idPlayer* playerTwo );
 	void			ClearPlayers( idPlayer* clearPlayer = NULL );
 	void			Clear( bool respawnPlayers = true );
@@ -51,7 +51,7 @@ public:
 	idPlayer*		GetWinner( void ) { return winner; }
 	void			UpdateState( void );
 	void			NewState( arenaState_t newState );
-	
+
 	idPlayer**		GetPlayers( void );
 
 	void			SetArenaID( int id );
@@ -81,7 +81,7 @@ public:
 
 private:
 	// players			- players in arena
-	idPlayer*			players[ 2 ];	
+	idPlayer*			players[ 2 ];
 	// arenaID			- this arena's ID
 	int					arenaID;
 	// arenaState		- state of the arena

@@ -99,13 +99,13 @@ Clears player list and state, but not round # or arena ID
 void rvTourneyArena::Clear( bool respawnPlayers ) {
 	if( gameLocal.isServer && respawnPlayers ) {
 		if( players[ 0 ] ) {
-			gameLocal.mpGame.SetPlayerTeamScore( players[ 0 ], 0 );		
+			gameLocal.mpGame.SetPlayerTeamScore( players[ 0 ], 0 );
 			players[ 0 ]->JoinInstance( ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetNextActiveArena( arenaID ) );
 			players[ 0 ]->ServerSpectate( true );
 		}
 
 		if( players[ 1 ] ) {
-			gameLocal.mpGame.SetPlayerTeamScore( players[ 1 ], 0 );		
+			gameLocal.mpGame.SetPlayerTeamScore( players[ 1 ], 0 );
 			players[ 1 ]->JoinInstance( ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetNextActiveArena( arenaID ) );
 			players[ 1 ]->ServerSpectate( true );
 		}
@@ -196,7 +196,7 @@ void rvTourneyArena::UpdateState( void ) {
 		case AS_WARMUP: {
 			if( gameLocal.time > nextStateTime ) {
 				SetState( AS_ROUND );
-				
+
 				// allow damage in warmup
 				//players[ 0 ]->fl.takedamage = true;
 				//players[ 1 ]->fl.takedamage = true;
@@ -230,7 +230,7 @@ void rvTourneyArena::UpdateState( void ) {
 					// player hit fraglimit, but then killed himself and dropped below fraglimit, return to normal play
 					fragLimitTimeout = 0;
 				}
-				
+
 				//back to normal play?
 			} else if ( TimeLimitHit() ) {
 				// only send to clients in this arena, the times may be getting out of sync between the arenas during a round ( #13196 )
@@ -283,7 +283,7 @@ void rvTourneyArena::NewState( arenaState_t newState ) {
 		case AS_DONE: {
 			winner = GetLeader();
 			assert( winner );
-			gameLocal.Printf( "rvTourneyArena::UpdateState() - %s has won this arena\n", GetLeader()->GetUserInfo()->GetString( "ui_name" ) );	
+			gameLocal.Printf( "rvTourneyArena::UpdateState() - %s has won this arena\n", GetLeader()->GetUserInfo()->GetString( "ui_name" ) );
 
 			winner->SetTourneyStatus( PTS_ADVANCED );
 
@@ -332,7 +332,7 @@ void rvTourneyArena::NewState( arenaState_t newState ) {
 			return;
 		}
 	}
-	SetState( newState );	
+	SetState( newState );
 }
 
 /*
@@ -346,13 +346,13 @@ void rvTourneyArena::RemovePlayer( idPlayer* player ) {
 	// we don't want it to do this for the disconnecting player, since he may not be entirely valid
 	// anymore.  If we NULL out the disconnecting player, Clear() will properly reset the remaining player
 	// but will leave the volatile disconnecting player's data lone.
-		
+
 	bool playerInArena = false;
 	if( player == players[ 0 ] ) {
 		players[ 0 ] = NULL;
 		playerInArena = true;
-	} 
-	
+	}
+
 	if( player == players[ 1 ] ) {
 		players[ 1 ] = NULL;
 		playerInArena = true;
@@ -379,7 +379,7 @@ void rvTourneyArena::PackState( idBitMsg& outMsg ) {
 	} else {
 		outMsg.WriteChar( -1 );
 	}
-	
+
 	if ( players[ 1 ] ) {
 		outMsg.WriteChar( players[ 1 ]->entityNumber );
 	} else {
@@ -391,7 +391,7 @@ void rvTourneyArena::PackState( idBitMsg& outMsg ) {
 	} else {
 		outMsg.WriteChar( -1 );
 	}
-	
+
 	outMsg.WriteByte( arenaState );
 	outMsg.WriteLong( nextStateTime );
 	outMsg.WriteLong( fragLimitTimeout );
@@ -506,7 +506,7 @@ int rvTourneyArena::GetPlayerScore( int player ) {
 rvTourneyArena::TimeLimitHit
 ================
 */
-bool rvTourneyArena::TimeLimitHit( void ) {	
+bool rvTourneyArena::TimeLimitHit( void ) {
 	int timeLimit = gameLocal.serverInfo.GetInt( "si_timeLimit" );
 	if ( timeLimit ) {
 		if ( gameLocal.time >= matchStartTime + timeLimit * 60000 ) {
@@ -572,7 +572,7 @@ void rvTourneyGUI::ArenaStart( int arena ) {
 	if( players[ 0 ] == NULL && players[ 1 ] == NULL ) {
 		tourneyGUI->SetStateBool( "empty", true );
 	} else {
-		tourneyGUI->SetStateBool( "empty", false );	
+		tourneyGUI->SetStateBool( "empty", false );
 		tourneyGUI->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), players[ 0 ] ? players[ 0 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
 		tourneyGUI->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), players[ 0 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 0 ] ) ) : "" );
 
@@ -594,7 +594,7 @@ void rvTourneyGUI::ArenaStart( int arena ) {
 	if( players[ 0 ] == NULL && players[ 1 ] == NULL ) {
 		tourneyScoreboard->SetStateBool( "empty", true );
 	} else {
-		tourneyScoreboard->SetStateBool( "empty", false );	
+		tourneyScoreboard->SetStateBool( "empty", false );
 		tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), players[ 0 ] ? players[ 0 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
 		tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), players[ 0 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 0 ] ) ) : "" );
 
@@ -622,7 +622,7 @@ void rvTourneyGUI::ArenaDone( int arena ) {
 	// arenaDone transitions the blue flash/fade and names of winner/loser. needs values "gui::round" , "gui::bracket" and "gui::winner" (winner is a 1 or 2 value, 1 top 2 bottom)
 	tourneyGUI->SetStateInt( "round", ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetRound() );
 	tourneyGUI->SetStateInt( "bracket", arena + 1 );
-	
+
 	idPlayer* winner = tourneyArena.GetWinner();
 	idPlayer** players = tourneyArena.GetPlayers();
 
@@ -669,7 +669,7 @@ void rvTourneyGUI::ArenaSelect( int arena, tourneyGUIHighlight_t highlightType )
 
 	//arenaFocus sets the green background on bracket, player 1 or player2 using value "gui::sel". ( 0 = bracket, 1 = player1, 2 = player2) arenaFocus also needs "gui::round" and "gui::bracket" values.
 	tourneyGUI->SetStateInt( "round", ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetRound() );
-	tourneyGUI->SetStateInt( "bracket", arena + 1 );	
+	tourneyGUI->SetStateInt( "bracket", arena + 1 );
 	tourneyGUI->SetStateInt( "sel", (int)highlightType );
 	tourneyGUI->StateChanged( gameLocal.time );
 	tourneyGUI->HandleNamedEvent( "arenaFocus" );
@@ -681,7 +681,7 @@ void rvTourneyGUI::ArenaSelect( int arena, tourneyGUIHighlight_t highlightType )
 
 	//arenaFocus sets the green background on bracket, player 1 or player2 using value "gui::sel". ( 0 = bracket, 1 = player1, 2 = player2) arenaFocus also needs "gui::round" and "gui::bracket" values.
 	tourneyScoreboard->SetStateInt( "round", ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetRound() );
-	tourneyScoreboard->SetStateInt( "bracket", arena + 1 );	
+	tourneyScoreboard->SetStateInt( "bracket", arena + 1 );
 	tourneyScoreboard->SetStateInt( "sel", (int)highlightType );
 	tourneyScoreboard->StateChanged( gameLocal.time );
 	tourneyScoreboard->HandleNamedEvent( "arenaFocus" );
@@ -710,13 +710,13 @@ void rvTourneyGUI::UpdateScores( void ) {
 			tourneyGUI->SetStateString( va( "score1_round%d_bracket%d", round, i + 1 ), players[ 0 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 0 ] ) ) : "" );
 
 			tourneyGUI->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? players[ 1 ]->GetUserInfo()->GetString( "ui_name" ) : "" );
-			tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );		
+			tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );
 
 			tourneyGUI->SetStateBool( "empty", false );
 		} else if( arenaOutcome ) {
-			bool isBye = ( (*(arenaOutcome->playerOne)) == '\0' && arenaOutcome->playerOneNum == -1) || 
+			bool isBye = ( (*(arenaOutcome->playerOne)) == '\0' && arenaOutcome->playerOneNum == -1) ||
 							( (*(arenaOutcome->playerTwo)) == '\0' && arenaOutcome->playerTwoNum == -1);
-			
+
 			if( *(arenaOutcome->playerOne) ) {
 				tourneyGUI->SetStateString( va( "name1_round%d_bracket%d", round, i + 1 ), arenaOutcome->playerOne );
 				tourneyGUI->SetStateString( va( "score1_round%d_bracket%d", round, i + 1 ), isBye ? "" : va( "%d", arenaOutcome->playerOneScore ) );
@@ -727,10 +727,10 @@ void rvTourneyGUI::UpdateScores( void ) {
 
 			if( *(arenaOutcome->playerTwo) ) {
 				tourneyGUI->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), arenaOutcome->playerTwo );
-				tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), isBye ? "" : va( "%d", arenaOutcome->playerTwoScore ) );			
+				tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), isBye ? "" : va( "%d", arenaOutcome->playerTwoScore ) );
 			} else {
 				tourneyGUI->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? players[ 1 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
-				tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), (players[ 1 ] && !isBye) ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );		
+				tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), (players[ 1 ] && !isBye) ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );
 			}
 
 			tourneyGUI->SetStateBool( "empty", false );
@@ -754,11 +754,11 @@ void rvTourneyGUI::UpdateScores( void ) {
 			tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", round, i + 1 ), players[ 0 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 0 ] ) ) : "" );
 
 			tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? players[ 1 ]->GetUserInfo()->GetString( "ui_name" ) : "" );
-			tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );		
+			tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );
 
 			tourneyScoreboard->SetStateBool( "empty", false );
 		} else if( arenaOutcome ) {
-			bool isBye = ( (*(arenaOutcome->playerOne)) == '\0' && arenaOutcome->playerOneNum == -1) || 
+			bool isBye = ( (*(arenaOutcome->playerOne)) == '\0' && arenaOutcome->playerOneNum == -1) ||
 				( (*(arenaOutcome->playerTwo)) == '\0' && arenaOutcome->playerTwoNum == -1);
 
 			if( *(arenaOutcome->playerOne) ) {
@@ -771,10 +771,10 @@ void rvTourneyGUI::UpdateScores( void ) {
 
 			if( *(arenaOutcome->playerTwo) ) {
 				tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), arenaOutcome->playerTwo );
-				tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), isBye ? "" : va( "%d", arenaOutcome->playerTwoScore ) );			
+				tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), isBye ? "" : va( "%d", arenaOutcome->playerTwoScore ) );
 			} else {
 				tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", round, i + 1 ), players[ 1 ] ? players[ 1 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
-				tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), (players[ 1 ] && !isBye) ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );		
+				tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, i + 1 ), (players[ 1 ] && !isBye) ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );
 			}
 
 			tourneyScoreboard->SetStateBool( "empty", false );
@@ -832,21 +832,21 @@ void rvTourneyGUI::TourneyStart( void ) {
 				if( players[ 0 ] == NULL && players[ 1 ] == NULL ) {
 					tourneyScoreboard->SetStateBool( "empty", true );
 				} else {
-					tourneyScoreboard->SetStateBool( "empty", false );	
+					tourneyScoreboard->SetStateBool( "empty", false );
 					tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", i, j + 1 ), players[ 0 ] ? players[ 0 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
 					tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", i, j + 1 ), players[ 0 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 0 ] ) ) : "" );
 
 					tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", i, j + 1 ), players[ 1 ] ? players[ 1 ]->GetUserInfo()->GetString( "ui_name" ) : common->GetLocalizedString( "#str_107705" ) );
 					tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", i, j + 1 ), players[ 1 ] ? va( "%d", gameLocal.mpGame.GetTeamScore( players[ 1 ] ) ) : "" );
 				}
-			} else {	
+			} else {
 				// this is our future bracket
 				tourneyScoreboard->SetStateBool( "empty", false );
 				tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", i, j + 1 ), "" );
 				tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", i, j + 1 ), "" );
 				tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", i, j + 1 ), "" );
 				tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", i, j + 1 ), "" );
-			}	
+			}
 			tourneyScoreboard->StateChanged( gameLocal.time );
 			tourneyScoreboard->HandleNamedEvent( "arenaInit" );
 		}
@@ -881,14 +881,14 @@ void rvTourneyGUI::TourneyStart( void ) {
 	tourneyGUI->SetStateInt( "bracket", arena + 1 );
 
 	if( byePlayer ) {
-		tourneyGUI->SetStateBool( "empty", false );	
+		tourneyGUI->SetStateBool( "empty", false );
 		tourneyGUI->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), byePlayer->GetUserInfo()->GetString( "ui_name" ) );
 		tourneyGUI->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), "" );
 
 		tourneyGUI->SetStateString( va( "name2_round%d_bracket%d", round, arena + 1 ), common->GetLocalizedString( "#str_107705" ) );
 		tourneyGUI->SetStateString( va( "score2_round%d_bracket%d", round, arena + 1 ), "" );
 	} else {
-		tourneyGUI->SetStateBool( "empty", true );	
+		tourneyGUI->SetStateBool( "empty", true );
 		tourneyGUI->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), "" );
 		tourneyGUI->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), "" );
 
@@ -910,14 +910,14 @@ void rvTourneyGUI::TourneyStart( void ) {
 	tourneyScoreboard->SetStateInt( "bracket", arena + 1 );
 
 	if( byePlayer ) {
-		tourneyScoreboard->SetStateBool( "empty", false );	
+		tourneyScoreboard->SetStateBool( "empty", false );
 		tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), byePlayer->GetUserInfo()->GetString( "ui_name" ) );
 		tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), "" );
 
 		tourneyScoreboard->SetStateString( va( "name2_round%d_bracket%d", round, arena + 1 ), common->GetLocalizedString( "#str_107705" ) );
 		tourneyScoreboard->SetStateString( va( "score2_round%d_bracket%d", round, arena + 1 ), "" );
 	} else {
-		tourneyScoreboard->SetStateBool( "empty", true );	
+		tourneyScoreboard->SetStateBool( "empty", true );
 		tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), "" );
 		tourneyScoreboard->SetStateString( va( "score1_round%d_bracket%d", round, arena + 1 ), "" );
 
@@ -995,7 +995,7 @@ void rvTourneyGUI::SetupTourneyHistory( int startHistory, int endHistory, arenaO
 					} else {
 						tourneyScoreboard->SetStateString( va( "name1_round%d_bracket%d", round, arena + 1 ), gameLocal.GetUserInfo( tourneyHistory[ round - 1 ][ arena ].playerOneNum )->GetString( "ui_name" ) );
 					}
-					
+
 					tourneyScoreboard->SetStateInt( va( "score1_round%d_bracket%d", round, arena + 1 ), tourneyHistory[ round - 1 ][ arena ].playerOneScore );
 
 					if( tourneyHistory[ round - 1 ][ arena ].playerTwoNum == -1 || !gameLocal.GetUserInfo( tourneyHistory[ round - 1 ][ arena ].playerTwoNum ) ) {

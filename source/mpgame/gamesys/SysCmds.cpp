@@ -122,7 +122,7 @@ void Cmd_ClientEntityList_f( const idCmdArgs &args ) {
 		if ( !name.Filter( match ) ) {
 			continue;
 		}
-				
+
 		gameLocal.Printf( "%4i: %-20s\n", e, name.c_str() );
 
 		count++;
@@ -314,7 +314,7 @@ Kills all the monsters in a level.
 */
 void Cmd_KillMonsters_f( const idCmdArgs &args ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	KillEntities( args, idAI::GetClassType() );
 // nmckenzie: rvSpawners
 	KillEntities( args, rvSpawner::GetClassType() );
@@ -336,7 +336,7 @@ void Cmd_KillMovables_f( const idCmdArgs &args ) {
 		return;
 	}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	KillEntities( args, idMoveable::GetClassType() );
 // RAVEN END
 }
@@ -352,7 +352,7 @@ void Cmd_KillVehicles_f( const idCmdArgs &args ) {
 	if ( !gameLocal.GetLocalPlayer() || !gameLocal.CheatsOk( false ) ) {
 		return;
 	}
-	
+
 	rvVehicleController::KillVehicles ( );
 }
 
@@ -360,7 +360,7 @@ void Cmd_KillMessage_f( const idCmdArgs &args ) {
 	if ( !gameLocal.GetLocalPlayer() || !gameLocal.CheatsOk( false ) ) {
 		return;
 	}
-	
+
 	gameLocal.mpGame.SendDeathMessage( gameLocal.GetLocalPlayer(), gameLocal.GetLocalPlayer(), 2, false );
 }
 
@@ -368,7 +368,7 @@ void Cmd_APState_f( const idCmdArgs &args ) {
 	if ( !gameLocal.GetLocalPlayer() || !gameLocal.CheatsOk( false ) ) {
 		return;
 	}
-	
+
 	for ( int i = 0; i < gameLocal.mpGame.assaultPoints.Num(); i++ ) {
 		gameLocal.Printf ( "Assault point #%d: owner: %d\n", gameLocal.mpGame.assaultPoints[i]->GetIndex(), gameLocal.mpGame.assaultPoints[i]->GetOwner() );
 	}
@@ -387,7 +387,7 @@ void Cmd_KillRagdolls_f( const idCmdArgs &args ) {
 		return;
 	}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	KillEntities( args, idAFEntity_Generic::GetClassType() );
 	KillEntities( args, idAFEntity_WithAttachedHead::GetClassType() );
 // RAVEN END
@@ -463,7 +463,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 // bdube: define changed
 		for ( i = 0 ; i < MAX_AMMOTYPES; i++ ) {
 			player->inventory.ammo[ i ] = player->inventory.MaxAmmoForAmmoClass( player, rvWeapon::GetAmmoNameForIndex( i ) );
-// RAVEN END		
+// RAVEN END
 		}
 		if ( !give_all ) {
 			return;
@@ -501,7 +501,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		player->GivePowerUp( POWERUP_AMMOREGEN, -1 );
 		return;
 	}
-	
+
 	if (idStr::Icmp(name, "scout") == 0) {
 		player->GivePowerUp( POWERUP_SCOUT, -1 );
 		return;
@@ -747,7 +747,7 @@ void Cmd_DebugJump_f( const idCmdArgs &args ) {
 Cmd_DebugNextJumpPoint_f
 =================
 */
-void Cmd_DebugNextJumpPoint_f( const idCmdArgs &args ) { 	
+void Cmd_DebugNextJumpPoint_f( const idCmdArgs &args ) {
 	// just go to next jump point as specified
 	gameDebug.JumpNext ( );
 }
@@ -872,7 +872,7 @@ static void Cmd_Say( bool team, const idCmdArgs &args ) {
 		gameLocal.Printf( "usage: %s <text>\n", cmd );
 		return;
 	}
-	
+
 	text.Replace( "&bsl;", "\\" );
 	text.Replace( "&amp;", "&" );
 
@@ -1195,7 +1195,7 @@ void Cmd_EvaluateMPPerformance_f( const idCmdArgs &args ) {
 	float angleStep = 360.0f / num;
 
 	const char* className = "char_marine";
-	
+
 	yaw = player->viewAngles.yaw;
 
 	for( int i = 0; i < num; i++ ) {
@@ -1304,7 +1304,7 @@ void Cmd_AI_DebugFilter_f( const idCmdArgs &args ) {
 		return;
 	}
 	idEntity *ent = NULL;
-	if ( args.Argc() != 2 ) 
+	if ( args.Argc() != 2 )
 	{
 		//trace ahead
 		trace_t	trace;
@@ -1314,7 +1314,7 @@ void Cmd_AI_DebugFilter_f( const idCmdArgs &args ) {
 		ent = gameLocal.GetTraceEntity( trace );
 	}
 	else
-	{	
+	{
 		idEntity *ent = gameLocal.FindEntity( args.Argv( 1 ) );
 		if ( !ent ) {
 			gameLocal.Printf( "entity not found\n" );
@@ -1456,7 +1456,7 @@ void Cmd_PopLight_f( const idCmdArgs &args ) {
 	last = -1;
 	for( ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !ent->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -1501,7 +1501,7 @@ void Cmd_ClearLights_f( const idCmdArgs &args ) {
 	for( ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = next ) {
 		next = ent->spawnNode.Next();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !ent->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -2169,7 +2169,7 @@ static void Cmd_SaveSelected_f( const idCmdArgs &args ) {
 	}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( s->IsType( idMoveable::GetClassType() ) ) {
 // RAVEN END
 		// save the moveable state
@@ -2177,7 +2177,7 @@ static void Cmd_SaveSelected_f( const idCmdArgs &args ) {
 		mapEnt->epairs.Set( "rotation", s->GetPhysics()->GetAxis().ToString( 8 ) );
 	}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	else if ( s->IsType( idAFEntity_Generic::GetClassType() ) || s->IsType( idAFEntity_WithAttachedHead::GetClassType() ) ) {
 // RAVEN END
 		// save the articulated figure state
@@ -2229,7 +2229,7 @@ static void Cmd_SaveMoveables_f( const idCmdArgs &args ) {
 		m = static_cast<idMoveable *>(gameLocal.entities[ e ]);
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !m || !m->IsType( idMoveable::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -2261,7 +2261,7 @@ static void Cmd_SaveMoveables_f( const idCmdArgs &args ) {
 		m = static_cast<idMoveable *>(gameLocal.entities[ e ]);
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !m )
 		{
 			continue;
@@ -2336,7 +2336,7 @@ static void Cmd_SaveRagdolls_f( const idCmdArgs &args ) {
 		}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !af->IsType( idAFEntity_WithAttachedHead::GetClassType() ) && !af->IsType( idAFEntity_Generic::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -2464,7 +2464,7 @@ static void Cmd_SaveLights_f( const idCmdArgs &args ) {
 		light = static_cast<idLight*>(gameLocal.entities[ e ]);
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( !light || !light->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -2632,7 +2632,7 @@ static void Cmd_CloseViewNotes_f( const idCmdArgs &args ) {
 	if ( !player ) {
 		return;
 	}
-	
+
 	player->hud->SetStateString( "viewcomments", "" );
 	player->hud->HandleNamedEvent( "hideViewComments" );
 }
@@ -2672,7 +2672,7 @@ static void Cmd_ShowViewNotes_f( const idCmdArgs &args ) {
 		}
 	}
 
-	if ( parser.ExpectTokenString( "view" ) && parser.Parse1DMatrix( 3, origin.ToFloatPtr() ) && 
+	if ( parser.ExpectTokenString( "view" ) && parser.Parse1DMatrix( 3, origin.ToFloatPtr() ) &&
 		parser.Parse1DMatrix( 9, axis.ToFloatPtr() ) && parser.ExpectTokenString( "comments" ) && parser.ReadToken( &token ) ) {
 		player->hud->SetStateString( "viewcomments", token );
 		player->hud->HandleNamedEvent( "showViewComments" );
@@ -2789,7 +2789,7 @@ void Cmd_NextGUI_f( const idCmdArgs &args ) {
 			if ( ent->spawnArgs.GetString( "gui", NULL ) != NULL ) {
 				break;
 			}
-			
+
 			if ( ent->spawnArgs.GetString( "gui2", NULL ) != NULL ) {
 				break;
 			}
@@ -2797,7 +2797,7 @@ void Cmd_NextGUI_f( const idCmdArgs &args ) {
 			if ( ent->spawnArgs.GetString( "gui3", NULL ) != NULL ) {
 				break;
 			}
-			
+
 			// try the next entity
 			gameLocal.lastGUIEnt = ent;
 		}
@@ -2832,7 +2832,7 @@ void Cmd_NextGUI_f( const idCmdArgs &args ) {
 
 	assert( geom->facePlanes != NULL );
 
-	modelMatrix = idMat4( renderEnt->axis, renderEnt->origin );	
+	modelMatrix = idMat4( renderEnt->axis, renderEnt->origin );
 	normal = geom->facePlanes[ 0 ].Normal() * renderEnt->axis;
 	center = geom->bounds.GetCenter() * modelMatrix;
 
@@ -2870,7 +2870,7 @@ void Cmd_TestId_f( const idCmdArgs &args ) {
 	if ( idStr::Cmpn( id, STRTABLE_ID, STRTABLE_ID_LENGTH ) != 0 ) {
 		id = STRTABLE_ID + id;
 	}
-	gameLocal.mpGame.AddChatLine( common->GetLocalizedString( id ), "<nothing>", "<nothing>", "<nothing>" );	
+	gameLocal.mpGame.AddChatLine( common->GetLocalizedString( id ), "<nothing>", "<nothing>", "<nothing>" );
 }
 
 // RAVEN BEGIN
@@ -2923,9 +2923,9 @@ void Cmd_AddIcon_f( const idCmdArgs& args ) {
 		common->Printf( "usage: addIcon <client>\n" );
 		return;
 	}
-	
+
 	int client = atoi( args.Argv( 1 ) );
-	
+
 	iconManager->AddIcon( client, "textures/mp/awards/capture" );
 }
 // RAVEN END
@@ -2977,7 +2977,7 @@ void Cmd_PlayerEmote_f( const idCmdArgs& args ) {
 		gameLocal.Printf( "Invalid emote '%s'\n", args.Argv( 1 ) );
 		gameLocal.Printf( "\ttry 'taunt', 'salute', 'grab'\n" );
 	}
-	
+
 }
 
 // mekberg: added
@@ -3105,7 +3105,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "listLines",				Cmd_ListDebugLines_f,		CMD_FL_GAME|CMD_FL_CHEAT,	"lists all debug lines" );
 	cmdSystem->AddCommand( "playerModel",			Cmd_PlayerModel_f,			CMD_FL_GAME|CMD_FL_CHEAT,	"sets the given model on the player", idCmdSystem::ArgCompletion_Decl<DECL_MODELDEF> );
 	cmdSystem->AddCommand( "flashlight",			Cmd_Flashlight_f,			CMD_FL_GAME|CMD_FL_CHEAT,	"toggle actor's flashlight", idGameLocal::ArgCompletion_AIName );
-	
+
 	cmdSystem->AddCommand( "shuffleTeams",			Cmd_ShuffleTeams_f,			CMD_FL_GAME,				"shuffle teams" );
 // RAVEN BEGIN
 // bdube: not using id effect system

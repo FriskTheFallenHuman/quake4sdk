@@ -19,7 +19,7 @@ public:
 							~rvVehicleAnimated			( void );
 
 	void					Spawn						( void );
-	void					Think						( void );	
+	void					Think						( void );
 	void					Save						( idSaveGame *savefile ) const;
 	void					Restore						( idRestoreGame *savefile );
 
@@ -41,7 +41,7 @@ protected:
 
 	idPhysics_Monster		physicsObj;
 
-	idAngles				viewAngles;	
+	idAngles				viewAngles;
 	float					turnRate;
 	idVec3					additionalDelta;
 };

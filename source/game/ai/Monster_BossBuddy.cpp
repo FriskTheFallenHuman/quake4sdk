@@ -5,7 +5,7 @@
 #include "../Game_local.h"
 
 //------------------------------------------------------------
-class rvMonsterBossBuddy : public idAI 
+class rvMonsterBossBuddy : public idAI
 //------------------------------------------------------------
 {
 public:
@@ -77,7 +77,7 @@ private:
 //------------------------------------------------------------
 // rvMonsterBossBuddy::rvMonsterBossBuddy
 //------------------------------------------------------------
-rvMonsterBossBuddy::rvMonsterBossBuddy( void ) 
+rvMonsterBossBuddy::rvMonsterBossBuddy( void )
 {
 	mMaxShields = BOSS_BUDDY_MAX_SHIELDS;
 	mShields = mMaxShields;
@@ -98,7 +98,7 @@ void rvMonsterBossBuddy::InitSpawnArgsVariables ( void )
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Spawn
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Spawn( void ) 
+void rvMonsterBossBuddy::Spawn( void )
 {
 	mActionRocketAttack.Init( spawnArgs,	"action_rocketAttack",		NULL,	AIACTIONF_ATTACK );
 	mActionLightningAttack.Init( spawnArgs,"action_lightningAttack",	NULL,	AIACTIONF_ATTACK );
@@ -111,11 +111,11 @@ void rvMonsterBossBuddy::Spawn( void )
 	mShields = mMaxShields;
 
 	const char  *func;
-	if ( spawnArgs.GetString( "requestRecharge", "", &func ) ) 
+	if ( spawnArgs.GetString( "requestRecharge", "", &func ) )
 	{
 		mRequestRecharge.Init( func );
 	}
-	if ( spawnArgs.GetString( "requestZoneMove", "", &func ) ) 
+	if ( spawnArgs.GetString( "requestZoneMove", "", &func ) )
 	{
 		mRequestZoneMove.Init( func );
 	}
@@ -126,7 +126,7 @@ void rvMonsterBossBuddy::Spawn( void )
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Save
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Save( idSaveGame *savefile ) const 
+void rvMonsterBossBuddy::Save( idSaveGame *savefile ) const
 {
 	savefile->WriteInt( mShots );
 	savefile->WriteInt( mShields );
@@ -150,7 +150,7 @@ void rvMonsterBossBuddy::Save( idSaveGame *savefile ) const
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Restore
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Restore( idRestoreGame *savefile ) 
+void rvMonsterBossBuddy::Restore( idRestoreGame *savefile )
 {
 	savefile->ReadInt( mShots );
 	savefile->ReadInt( mShields );
@@ -176,11 +176,11 @@ void rvMonsterBossBuddy::Restore( idRestoreGame *savefile )
 //------------------------------------------------------------
 // rvMonsterBerserker::GetDebugInfo
 //------------------------------------------------------------
-void rvMonsterBossBuddy::GetDebugInfo( debugInfoProc_t proc, void* userData ) 
+void rvMonsterBossBuddy::GetDebugInfo( debugInfoProc_t proc, void* userData )
 {
 	// Base class first
 	idAI::GetDebugInfo( proc, userData );
-	
+
 	proc ( "idAI", "action_darkMatterAttack",	aiActionStatusString[mActionDarkMatterAttack.status], userData );
 	proc ( "idAI", "action_rocketAttack",		aiActionStatusString[mActionRocketAttack.status], userData );
 	proc ( "idAI", "action_meleeMoveAttack",	aiActionStatusString[mActionMeleeMoveAttack.status], userData );
@@ -199,11 +199,11 @@ END_CLASS
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Event_RechargeShields
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Event_RechargeShields( float amount ) 
+void rvMonsterBossBuddy::Event_RechargeShields( float amount )
 {
 	mShields += (int)amount;
 
-	if ( mShields >= mMaxShields ) 
+	if ( mShields >= mMaxShields )
 	{
 		// charge is done
 		mShields = mMaxShields;
@@ -216,7 +216,7 @@ void rvMonsterBossBuddy::Event_RechargeShields( float amount )
 		// shield warning no longer neede for now
 		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideBossShieldWarn");
 	}
-	else 
+	else
 	{
 		// still charging
 		idThread::ReturnInt(1);
@@ -239,7 +239,7 @@ void rvMonsterBossBuddy::ReduceShields( int amount )
 
 	if (mShields < 1000)
 	{
-		if  (!mRequestedRecharge ) 
+		if  (!mRequestedRecharge )
 		{
 			// entering a dangerous state!  Get to the recharge station, fast!
 			gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showBossShieldWarn");
@@ -249,9 +249,9 @@ void rvMonsterBossBuddy::ReduceShields( int amount )
 	}
 	else if (mShields < 4000)
 	{
-		if ( !mRequestedZoneMove ) 
+		if ( !mRequestedZoneMove )
 		{
-			// Getting low, so move him close to the next zone so he can be ready to recharge 
+			// Getting low, so move him close to the next zone so he can be ready to recharge
 			ExecScriptFunction( mRequestZoneMove );
 			mRequestedZoneMove = true;
 		}
@@ -284,9 +284,9 @@ void rvMonsterBossBuddy::AdjustShieldState( bool becomeShielded )
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Damage
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Think() 
+void rvMonsterBossBuddy::Think()
 {
-	if ( !fl.hidden && !fl.isDormant && (thinkFlags & TH_THINK ) && !aifl.dead ) 
+	if ( !fl.hidden && !fl.isDormant && (thinkFlags & TH_THINK ) && !aifl.dead )
 	{
 		// run simple shielding logic when we have them active
 		if ( mIsShielded )
@@ -302,7 +302,7 @@ void rvMonsterBossBuddy::Think()
 
 		// update shield bar
 		idUserInterface *hud = gameLocal.GetLocalPlayer()->hud;
-		if ( hud ) 
+		if ( hud )
 		{
 			float percent = ((float)mShields/mMaxShields);
 
@@ -322,7 +322,7 @@ void rvMonsterBossBuddy::Think()
 //------------------------------------------------------------
 // rvMonsterBossBuddy::PerformAction
 //------------------------------------------------------------
-void rvMonsterBossBuddy::PerformAction( const char* stateName, int blendFrames, bool noPain ) 
+void rvMonsterBossBuddy::PerformAction( const char* stateName, int blendFrames, bool noPain )
 {
 	// Allow movement in actions
 	move.fl.allowAnimMove = true;
@@ -340,8 +340,8 @@ void rvMonsterBossBuddy::PerformAction( const char* stateName, int blendFrames, 
 	PostAnimState( ANIMCHANNEL_TORSO, "Torso_FinishAction", 0, 0, SFLAG_ONCLEAR );
 
 	// Go back to idle when done-- sometimes.
-	if ( mCanIdle )	
-	{	
+	if ( mCanIdle )
+	{
 		PostAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", blendFrames );
 	}
 
@@ -366,12 +366,12 @@ bool rvMonsterBossBuddy::PerformAction( rvAIAction* action, bool (idAI::*conditi
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Damage
 //------------------------------------------------------------
-void rvMonsterBossBuddy::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
-								const char *damageDefName, const float damageScale, const int location ) 
+void rvMonsterBossBuddy::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
+								const char *damageDefName, const float damageScale, const int location )
 {
 	// get damage amount so we can decay the shields and check for ignoreShields
 	const idDict *damageDef = gameLocal.FindEntityDefDict( damageDefName, false );
-	if ( !damageDef ) 
+	if ( !damageDef )
 	{
 		gameLocal.Error( "Unknown damageDef '%s'\n", damageDefName );
 	}
@@ -398,7 +398,7 @@ void rvMonsterBossBuddy::Damage( idEntity *inflictor, idEntity *attacker, const 
 	mLastDamageTime = gameLocal.time;
 
 	// if shields are active, we should try to 'eat' them before directing damage to the BB
-	if ( mIsShielded && !directDamage ) 
+	if ( mIsShielded && !directDamage )
 	{
 		// BB is resistant to any kind of splash damage when the shields are up
 		if ( loc <= INVALID_JOINT )
@@ -425,8 +425,8 @@ void rvMonsterBossBuddy::Damage( idEntity *inflictor, idEntity *attacker, const 
 //------------------------------------------------------------
 // rvMonsterBossBuddy::Pain
 //------------------------------------------------------------
-bool rvMonsterBossBuddy::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) 
-{	
+bool rvMonsterBossBuddy::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location )
+{
 	// immune to small damage.  Is this safe to do?
 	if ( damage > 5 )
 	{
@@ -442,17 +442,17 @@ bool rvMonsterBossBuddy::Pain( idEntity *inflictor, idEntity *attacker, int dama
 //------------------------------------------------------------
 // rvMonsterBossBuddy::CheckActions
 //------------------------------------------------------------
-bool rvMonsterBossBuddy::CheckActions( void ) 
+bool rvMonsterBossBuddy::CheckActions( void )
 {
 	// If not moving, try turning in place
-/*	if ( !move.fl.moving && gameLocal.time > combat.investigateTime ) 
+/*	if ( !move.fl.moving && gameLocal.time > combat.investigateTime )
 	{
 		float turnYaw = idMath::AngleNormalize180( move.ideal_yaw - move.current_yaw );
-		if ( turnYaw > lookMax[YAW] * 0.75f ) 
+		if ( turnYaw > lookMax[YAW] * 0.75f )
 		{
 			PerformAction( "Torso_TurnRight90", 4, true );
 			return true;
-		} else if ( turnYaw < -lookMax[YAW] * 0.75f ) 
+		} else if ( turnYaw < -lookMax[YAW] * 0.75f )
 		{
 			PerformAction( "Torso_TurnLeft90", 4, true );
 			return true;
@@ -460,7 +460,7 @@ bool rvMonsterBossBuddy::CheckActions( void )
 	}
 */
 	if ( PerformAction( &mActionMeleeMoveAttack,	(checkAction_t)&idAI::CheckAction_MeleeAttack, NULL ) ||
-		 PerformAction( &mActionSlashMoveAttack,	(checkAction_t)&idAI::CheckAction_MeleeAttack, &actionTimerSpecialAttack )) 
+		 PerformAction( &mActionSlashMoveAttack,	(checkAction_t)&idAI::CheckAction_MeleeAttack, &actionTimerSpecialAttack ))
 	{
 		return true;
 	}
@@ -478,12 +478,12 @@ bool rvMonsterBossBuddy::CheckActions( void )
 //------------------------------------------------------------
 // rvMonsterBossBuddy::CanTurn
 //------------------------------------------------------------
-bool rvMonsterBossBuddy::CanTurn( void ) const 
+bool rvMonsterBossBuddy::CanTurn( void ) const
 {
 /* 	if ( !idAI::CanTurn ( ) ) {
 		return false;
 	}
-	return move.anim_turn_angles != 0.0f || move.fl.moving; 
+	return move.anim_turn_angles != 0.0f || move.fl.moving;
 */
 	return idAI::CanTurn ( );
 }
@@ -491,7 +491,7 @@ bool rvMonsterBossBuddy::CanTurn( void ) const
 //------------------------------------------------------------
 // rvMonsterBossBuddy::OnWakeUp
 //------------------------------------------------------------
-void rvMonsterBossBuddy::OnWakeUp( void ) 
+void rvMonsterBossBuddy::OnWakeUp( void )
 {
 	mActionDarkMatterAttack.timer.Reset( actionTime, mActionDarkMatterAttack.diversity );
 	mActionRocketAttack.timer.Reset( actionTime, mActionDarkMatterAttack.diversity );
@@ -499,7 +499,7 @@ void rvMonsterBossBuddy::OnWakeUp( void )
 }
 
 //------------------------------------------------------------
-//	States 
+//	States
 //------------------------------------------------------------
 
 CLASS_STATES_DECLARATION( rvMonsterBossBuddy )
@@ -512,37 +512,37 @@ END_CLASS_STATES
 //------------------------------------------------------------
 // rvMonsterBossBuddy::State_Torso_RocketAttack
 //------------------------------------------------------------
-stateResult_t rvMonsterBossBuddy::State_Torso_RocketAttack( const stateParms_t& parms ) 
+stateResult_t rvMonsterBossBuddy::State_Torso_RocketAttack( const stateParms_t& parms )
 {
-	enum 
-	{ 
+	enum
+	{
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
 		STAGE_WAITLOOP,
 		STAGE_WAITEND
 	};
-	switch ( parms.stage ) 
+	switch ( parms.stage )
 	{
 		case STAGE_INIT:
 			DisableAnimState( ANIMCHANNEL_LEGS );
 			PlayAnim( ANIMCHANNEL_TORSO, "attack_rocket2start", parms.blendFrames );
 			mShots = (gameLocal.random.RandomInt( 3 ) + 2) * combat.aggressiveScale;
 			return SRESULT_STAGE( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
-			if ( AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				return SRESULT_STAGE( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim( ANIMCHANNEL_TORSO, "attack_rocket2loop2", 0 );
 			return SRESULT_STAGE( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
-			if ( AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				if ( --mShots <= 0 ||										// exhausted mShots? .. or
 						(!IsEnemyVisible() && rvRandom::irand(0,10)>=8 ) ||	// ... player is no longer visible .. or
@@ -554,37 +554,37 @@ stateResult_t rvMonsterBossBuddy::State_Torso_RocketAttack( const stateParms_t& 
 				return SRESULT_STAGE( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
-			if ( AnimDone( ANIMCHANNEL_TORSO, 4 )) 
+			if ( AnimDone( ANIMCHANNEL_TORSO, 4 ))
 			{
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 //------------------------------------------------------------
 // rvMonsterBossBuddy::State_Torso_SlashAttack
 //------------------------------------------------------------
-stateResult_t rvMonsterBossBuddy::State_Torso_SlashAttack( const stateParms_t& parms ) 
+stateResult_t rvMonsterBossBuddy::State_Torso_SlashAttack( const stateParms_t& parms )
 {
-	enum 
-	{ 
+	enum
+	{
 		STAGE_INIT,
 		STAGE_WAIT_FIRST_SWIPE,
 		STAGE_WAIT_FINISH
 	};
-	switch ( parms.stage ) 
+	switch ( parms.stage )
 	{
 		case STAGE_INIT:
 			DisableAnimState( ANIMCHANNEL_LEGS );
 			PlayAnim( ANIMCHANNEL_TORSO, "melee_move_attack", parms.blendFrames );
 			return SRESULT_STAGE( STAGE_WAIT_FIRST_SWIPE );
-			
+
 		case STAGE_WAIT_FIRST_SWIPE:
-			if ( AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				PlayAnim( ANIMCHANNEL_TORSO, "melee_move_attack", parms.blendFrames );
 				return SRESULT_STAGE( STAGE_WAIT_FINISH );
@@ -592,35 +592,35 @@ stateResult_t rvMonsterBossBuddy::State_Torso_SlashAttack( const stateParms_t& p
 			return SRESULT_WAIT;
 
 		case STAGE_WAIT_FINISH:
-			if ( AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 //------------------------------------------------------------
 // rvMonsterBossBuddy::State_Torso_TurnRight90
 //------------------------------------------------------------
-stateResult_t rvMonsterBossBuddy::State_Torso_TurnRight90( const stateParms_t& parms ) 
+stateResult_t rvMonsterBossBuddy::State_Torso_TurnRight90( const stateParms_t& parms )
 {
-	enum 
-	{ 
+	enum
+	{
 		STAGE_INIT,
 		STAGE_WAIT
 	};
-	switch ( parms.stage ) 
+	switch ( parms.stage )
 	{
 		case STAGE_INIT:
 			DisableAnimState( ANIMCHANNEL_LEGS );
 			PlayAnim( ANIMCHANNEL_TORSO, "turn_right", parms.blendFrames );
 			AnimTurn( 90.0f, true );
 			return SRESULT_STAGE( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
-			if ( move.fl.moving || AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( move.fl.moving || AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				AnimTurn( 0, true );
 				combat.investigateTime = gameLocal.time + 250;
@@ -628,29 +628,29 @@ stateResult_t rvMonsterBossBuddy::State_Torso_TurnRight90( const stateParms_t& p
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 //------------------------------------------------------------
 // rvMonsterBossBuddy::State_Torso_TurnLeft90
 //------------------------------------------------------------
-stateResult_t rvMonsterBossBuddy::State_Torso_TurnLeft90( const stateParms_t& parms ) 
-{	
-	enum 
-	{ 
+stateResult_t rvMonsterBossBuddy::State_Torso_TurnLeft90( const stateParms_t& parms )
+{
+	enum
+	{
 		STAGE_INIT,
 		STAGE_WAIT
 	};
-	switch ( parms.stage ) 
+	switch ( parms.stage )
 	{
 		case STAGE_INIT:
 			DisableAnimState( ANIMCHANNEL_LEGS );
 			PlayAnim( ANIMCHANNEL_TORSO, "turn_left", parms.blendFrames );
 			AnimTurn( 90.0f, true );
 			return SRESULT_STAGE( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
-			if ( move.fl.moving || AnimDone( ANIMCHANNEL_TORSO, 0 )) 
+			if ( move.fl.moving || AnimDone( ANIMCHANNEL_TORSO, 0 ))
 			{
 				AnimTurn( 0, true );
 				combat.investigateTime = gameLocal.time + 250;
@@ -658,5 +658,5 @@ stateResult_t rvMonsterBossBuddy::State_Torso_TurnLeft90( const stateParms_t& pa
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

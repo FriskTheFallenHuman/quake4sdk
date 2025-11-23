@@ -10,7 +10,7 @@
 ===============================================================================
 
   idProjectile
-	
+
 ===============================================================================
 */
 
@@ -64,7 +64,7 @@ public :
 	virtual void			ReadFromSnapshot( const idBitMsgDelta &msg );
 
 	virtual bool			ClientStale( void );
-	
+
 protected:
 	void					SpawnImpactEntities(const trace_t& collision, const idVec3 projectileDirection);
 
@@ -103,13 +103,13 @@ protected:
 
 	int						bounceCount;
 	bool					sticky;
-	
+
 	idStr					impactEntity;
 	int						numImpactEntities;
 	int						ieMinPitch;
 	int						ieMaxPitch;
 	float					ieSlicePercentage;
-	
+
 	bool					predictedProjectiles;
 
 // RAVEN BEGIN
@@ -126,7 +126,7 @@ protected:
 		EXPLODED = 4,
 		IMPACTED = 5,
 	} projectileState_t;
-	
+
 	projectileState_t		state;
 
 	void					PlayPainEffect		( idEntity* ent, int damage, const rvDeclMatType* materialType, const idVec3& origin, const idVec3& direction );
@@ -202,13 +202,13 @@ public :
 
 protected:
 
-	int						guideType;	
+	int						guideType;
 	idEntityPtr<idEntity>	guideEnt;
 	idVec3					guideDir;
 	idVec3					guidePos;
 	jointHandle_t			guideJoint;
 	float					guideMinDist;
-	
+
 	int						driftTime;
 	int						driftRate;
 	float					driftRange;
@@ -217,7 +217,7 @@ protected:
 	float					driftAngle;
 	float					driftAngleStep;
 	float					driftProjectRange;
-	
+
 	virtual bool			GetGuideDir		( idVec3 &outDir, float& outDist );
 
 private:
@@ -259,7 +259,7 @@ ID_INLINE void idGuidedProjectile::CancelGuide ( void ) {
 
 	// twhitaker: TEMP
 	if ( guideEnt.IsValid() ) {
-		guideEnt->GuidedProjectileIncoming( NULL );	
+		guideEnt->GuidedProjectileIncoming( NULL );
 	}
 	// </twhitaker>
 }
@@ -293,7 +293,7 @@ protected:
 	idVec3					startOrigin;
 	idMat3					startAxis;
 	float					startSpeed;
-	
+
 	idInterpolateAccelDecelLinear<float>	driftOffset[2];
 	idInterpolateAccelDecelLinear<float>	driftSpeed;
 	float									driftOffsetMax;
@@ -313,7 +313,7 @@ class rvSpawner;
 class rvSpawnerProjectile : public idProjectile {
 public :
 	CLASS_PROTOTYPE( rvSpawnerProjectile );
-	
+
 							rvSpawnerProjectile ( void );
 							~rvSpawnerProjectile ( void );
 
@@ -329,8 +329,8 @@ protected:
 	enum {
 		STATE_NONE,
 		STATE_ADDED,
-	} spawnState;	
-	
+	} spawnState;
+
 private:
 
 	void					Event_PostSpawn	( void );
@@ -354,7 +354,7 @@ class rvMIRVProjectile : public idProjectile {
 	void				Spawn				( void );
 
 private:
-		
+
 	void				Event_LaunchWarheads ( void );
 };
 

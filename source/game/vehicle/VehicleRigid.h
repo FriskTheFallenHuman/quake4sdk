@@ -30,9 +30,9 @@ public:
 	bool					SkipImpulse			( idEntity* ent, int id );
 
 protected:
-	
+
 	void					SetClipModel	( void );
-	
+
 	// twhitaker:
 	virtual void			RunPrePhysics			( void );
 	virtual void			RunPostPhysics			( void );

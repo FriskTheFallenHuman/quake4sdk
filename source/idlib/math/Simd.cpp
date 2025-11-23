@@ -243,7 +243,7 @@ double TBToDoubleNano( U64 startTime, U64 stopTime, double ticksPerNanosecond ) 
 	nanoTime = (double)(diffTime.hi)*((double)K_2POWER32) + (double)(diffTime.lo);
 	nanoTime = nanoTime/ticksPerNanosecond;
 	return (nanoTime);
-}       
+}
 
 TIME_TYPE time_in_millisec( void ) {
 	#define K_2POWER32 4294967296.0
@@ -268,7 +268,7 @@ TIME_TYPE time_in_millisec( void ) {
 }
 
 #define StartRecordTime( start )			\
-	start = time_in_millisec(); 
+	start = time_in_millisec();
 
 #define StopRecordTime( end )				\
 	end = time_in_millisec();
@@ -276,7 +276,7 @@ TIME_TYPE time_in_millisec( void ) {
 */
 
 #define StartRecordTime( start )			\
-	start = mach_absolute_time(); 
+	start = mach_absolute_time();
 
 #define StopRecordTime( end )				\
 	end = mach_absolute_time();
@@ -3167,8 +3167,8 @@ void TestNormalizeTangents( void ) {
 		if ( !drawVerts1[i].tangents[1].Compare( drawVerts2[i].tangents[1], 1e-2f ) ) {
 			break;
 		}
-		
-		// since we're doing a lot of unaligned work, added this check to 
+
+		// since we're doing a lot of unaligned work, added this check to
 		// make sure xyz wasn't getting overwritten
 		if ( !drawVerts1[i].xyz.Compare( drawVerts2[i].xyz, 1e-2f ) ) {
 			break;
@@ -3408,7 +3408,7 @@ void TestCreateShadowCache( void ) {
 	PrintClocks( va( "   simd->CreateVertexProgramShadowCache() %s", result ), COUNT, bestClocksSIMD, bestClocksGeneric );
 }
 
-#if 0 
+#if 0
 #include "Simd_TestData.h"
 
 /*
@@ -4263,7 +4263,7 @@ void idSIMD::Test_f( const idCmdArgs &args ) {
 				return;
 			}
 			p_simd = new idSIMD_SSE3();
-		} else 
+		} else
 #endif // _WINDOWS
 			if ( idStr::Icmp( argString, "AltiVec" ) == 0 ) {
 			if ( !( cpuid & CPUID_ALTIVEC ) ) {

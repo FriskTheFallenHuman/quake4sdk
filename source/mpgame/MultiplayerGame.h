@@ -58,7 +58,7 @@ typedef enum {
 //             note that we have two mechanisms for dealing with vote data that
 //             should be consolidated:  this one that handles the interface and
 //             multi-field votes and the one that handles console commands and
-//             single line votes.  
+//             single line votes.
 struct voteStruct_t {
 	int				m_fieldFlags;	// flags for which fields are valid
 	int				m_kick;			// id of the player
@@ -296,9 +296,9 @@ public:
 	// Run common code (client & server)
 	void			CommonRun( void );
 
-	// draws mp hud, scoredboard, etc.. 
+	// draws mp hud, scoredboard, etc..
 	bool			Draw( int clientNum );
-	
+
 
 	// updates a player vote
 	void			PlayerVote( int clientNum, playerVote_t vote );
@@ -319,7 +319,7 @@ public:
 	void			UpdateMainGui( void );
 // RAVEN BEGIN
 // bdube: global pickup sounds (powerups, etc)
-	// Global item acquire sounds 
+	// Global item acquire sounds
 	void			PlayGlobalItemAcquireSound ( int entityDefIndex );
 
 	bool			CanTalk( idPlayer *from, idPlayer *to, bool echo );
@@ -371,7 +371,7 @@ public:
 // jshepard: command wrappers
 	static void		ForceTeamChange_f( const idCmdArgs& args );
 	static void		RemoveClientFromBanList_f( const idCmdArgs& args );
-	
+
 // autobalance helper for the guis
 	static void		CheckTeamBalance_f( const idCmdArgs &args );
 
@@ -456,7 +456,7 @@ public:
 	void			JoinTeam( const char* team );
 	// called by idPlayer whenever it detects a team change (init or switch)
 	void			SwitchToTeam( int clientNum, int oldteam, int newteam );
-	
+
 	bool			IsPureReady( void ) const;
 	void			ProcessChatMessage( int clientNum, bool team, const char *name, const char *text, const char *sound );
 	void			ProcessVoiceChat( int clientNum, bool team, int index );
@@ -469,7 +469,7 @@ public:
 //             warning, etc.) don't go away at the end of the round.
 	void			ClearAnnouncerSounds( void );
 // shouchard:  server admin stuff
-	typedef struct 
+	typedef struct
 	{
 		bool		restartMap;
 		idStr		mapName;
@@ -508,7 +508,7 @@ public:
 // RITUAL END
 
 	void			Precache( void );
-	
+
 	// throttle UI switch rates
 	void			ThrottleUserInfo( void );
 	void			ToggleSpectate( void );
@@ -546,7 +546,7 @@ public:
 	idPlayer*		GetRankedPlayer( int i );
 	int				GetRankedPlayerScore( int i );
 	int				GetNumRankedPlayers( void );
-	
+
 	idPlayer*		GetUnrankedPlayer( int i );
 	int				GetNumUnrankedPlayers( void );
 
@@ -618,7 +618,7 @@ public:
 	void			ShowStatSummary( void );
 	bool			CanCapture( int team );
 	void			FlagCaptured( idPlayer *player );
-	
+
 	void			UpdatePlayerRanks( playerRankMode_t rankMode = PRM_AUTO );
 	void			UpdateTeamRanks( void );
 	void			UpdateHud( idUserInterface* _mphud );
@@ -634,7 +634,7 @@ public:
 	void			ReadNetworkInfo( idFile* file, int clientNum );
 
 	void			SetShaderParms( renderView_t *view );
-	
+
 // RITUAL BEGIN
 // squirrel: added DeadZone multiplayer mode
 	int				NumberOfPlayersOnTeam( int team );
@@ -771,15 +771,15 @@ private:
 	// player who's rank info we're displaying
 	idEntityPtr<idPlayer>		rankTextPlayer;
 
-	idEntityPtr<idEntity>		flagEntities[ TEAM_MAX ];	
+	idEntityPtr<idEntity>		flagEntities[ TEAM_MAX ];
 	idEntityPtr<idPlayer>		flagCarriers[ TEAM_MAX ];
 
 	// updates the passed gui with current score information
-	void			UpdateRankColor( idUserInterface *gui, const char *mask, int i, const idVec3 &vec );	
+	void			UpdateRankColor( idUserInterface *gui, const char *mask, int i, const idVec3 &vec );
 
 	// bdube: test scoreboard
 	void			UpdateTestScoreboard( idUserInterface *scoreBoard );
-	
+
 	// ddynerman: gametype specific scoreboard
 	void			UpdateScoreboard( idUserInterface *scoreBoard );
 
@@ -822,7 +822,7 @@ private:
 	void			DrawScoreBoard( idPlayer *player );
 	void			CheckVote( void );
 	bool			AllPlayersReady( idStr* reason = NULL );
-	
+
 	const char *	GameTime( void );
 
 	bool			EnoughClientsToPlay( void );

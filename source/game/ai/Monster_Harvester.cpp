@@ -18,7 +18,7 @@ public:
 	CLASS_PROTOTYPE( rvMonsterHarvester );
 
 	rvMonsterHarvester ( void );
-	
+
 	void				InitSpawnArgsVariables			( void );
 	void				Spawn							( void );
 	void				Save							( idSaveGame *savefile ) const;
@@ -62,7 +62,7 @@ protected:
 	rvAIAction			actionSprayAttack;
 	rvAIAction			actionRocketAttack;
 	rvAIAction			actionGrenadeAttack;
-	
+
 	jointHandle_t			whipJoints[WHIP_MAX];
 	idEntityPtr<idEntity>	whipProjectiles[WHIP_MAX];
 
@@ -77,7 +77,7 @@ protected:
 	const char*			GetRangedAttackAnim		( const idVec3& target );
 	bool				PlayRangedAttackAnim	( const idVec3& target, int blendFrames );
 
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 
@@ -151,12 +151,12 @@ void rvMonsterHarvester::Spawn ( void ) {
 	actionSprayAttack.Init  ( spawnArgs, "action_sprayAttack",	"Torso_SprayAttack", AIACTIONF_ATTACK );
 	actionRocketAttack.Init  ( spawnArgs, "action_rocketAttack",	"Torso_RocketAttack", AIACTIONF_ATTACK );
 	actionGrenadeAttack.Init  ( spawnArgs, "action_grenadeAttack",	NULL, AIACTIONF_ATTACK );
-	
+
 	int i;
-	for ( i = 0; i < WHIP_MAX; i ++ ) {	
+	for ( i = 0; i < WHIP_MAX; i ++ ) {
 		whipProjectiles[i] = NULL;
 	}
-	
+
 	InitSpawnArgsVariables();
 	shots	 = 0;
 
@@ -176,7 +176,7 @@ void rvMonsterHarvester::Save ( idSaveGame *savefile ) const {
 	actionSprayAttack.Save( savefile );
 	actionRocketAttack.Save( savefile );
 	actionGrenadeAttack.Save( savefile );
-	
+
 	int i;
 	for ( i = 0; i < WHIP_MAX; i++ ) {
 		savefile->WriteObject( whipProjectiles[i] );
@@ -202,7 +202,7 @@ void rvMonsterHarvester::Restore ( idRestoreGame *savefile ) {
 	actionSprayAttack.Restore( savefile );
 	actionRocketAttack.Restore( savefile );
 	actionGrenadeAttack.Restore( savefile );
-	
+
 	int i;
 	for ( i = 0; i < WHIP_MAX; i++ ) {
 		savefile->ReadObject( reinterpret_cast<idClass*&>( whipProjectiles[i] ) );
@@ -244,7 +244,7 @@ bool rvMonsterHarvester::UpdateAnimationControllers ( void ) {
 rvMonsterHarvester::SkipImpulse
 =====================
 */
-bool rvMonsterHarvester::SkipImpulse( idEntity* ent, int id ) {	
+bool rvMonsterHarvester::SkipImpulse( idEntity* ent, int id ) {
 	return true;
 }
 
@@ -425,15 +425,15 @@ int rvMonsterHarvester::GetDamageForLocation( int damage, int location ) {
 	{
 		for ( int part = 0; part < PARTS_MAX; part++ )
 		{
-			if ( idStr::Icmp ( dmgGroup, partLocation[part].c_str() ) == 0 ) 
+			if ( idStr::Icmp ( dmgGroup, partLocation[part].c_str() ) == 0 )
 			{
 				if ( partHealth[part] > 0 )
 				{
 					partHealth[part] -= damage;
 					painAnim = "pain";
-					if ( partHealth[part] <= 0 ) 
+					if ( partHealth[part] <= 0 )
 					{
-						if ( animPrefix.Length() 
+						if ( animPrefix.Length()
 							&& (part == PART_LEG_FR
 								|| part == PART_LEG_FL
 								|| part == PART_LEG_BR
@@ -476,7 +476,7 @@ int rvMonsterHarvester::GetDamageForLocation( int damage, int location ) {
 					//if ( move.anim_turn_angles == 0.0f )
 					{//not in the middle of a turn
 						AnimTurn( 0, true );
-						PerformAction ( "Torso_Pain", 2, true );	
+						PerformAction ( "Torso_Pain", 2, true );
 					}
 				}
 				//pain.takenThisFrame = damage;
@@ -490,7 +490,7 @@ int rvMonsterHarvester::GetDamageForLocation( int damage, int location ) {
 	{//doesn't meet the minimum damage requirements to kill us
 		return 0;
 	}
-	 
+
 	return idAI::GetDamageForLocation ( damage, location );
 }
 
@@ -499,7 +499,7 @@ int rvMonsterHarvester::GetDamageForLocation( int damage, int location ) {
 rvMonsterHarvester::Damage
 ================
 */
-void rvMonsterHarvester::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void rvMonsterHarvester::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 								  const char *damageDefName, const float damageScale, const int location ) {
 	if ( attacker == this ) {
 		//don't take damage from ourselves
@@ -657,7 +657,7 @@ int rvMonsterHarvester::FilterTactical ( int availableTactical ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -696,7 +696,7 @@ stateResult_t rvMonsterHarvester::State_Killed ( const stateParms_t& parms ) {
 		PlayAnim( ANIMCHANNEL_TORSO, "death", 0 );
 	}
 	PostState ( "State_Dead" );
-	return SRESULT_DONE;	
+	return SRESULT_DONE;
 }
 
 /*
@@ -730,23 +730,23 @@ stateResult_t rvMonsterHarvester::State_Torso_WhipAttack ( const stateParms_t& p
 	switch ( parms.stage ) {
 		case STAGE_ATTACK: {
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 
 			idEntity* ent;
 			int		  i;
-			
-			for ( i = 0; i < WHIP_MAX; i ++ ) {				
+
+			for ( i = 0; i < WHIP_MAX; i ++ ) {
 				gameLocal.SpawnEntityDef( *gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_attack_whip" ) ), &ent, false );
 				idProjectile* proj = dynamic_cast<idProjectile*>(ent);
 				if ( !proj ) {
 					delete ent;
 					continue;
 				}
-				
+
 				proj->Create ( this, vec3_origin, idVec3(0,0,1) );
 				proj->Launch ( vec3_origin, idVec3(0,0,1), vec3_origin );
-				
+
 				whipProjectiles[i] = proj;
 				ent->BindToJoint ( this, whipJoints[i], false );
 				ent->SetOrigin ( vec3_origin );
@@ -758,11 +758,11 @@ stateResult_t rvMonsterHarvester::State_Torso_WhipAttack ( const stateParms_t& p
 
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
 		}
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				int i;
-				for ( i = 0; i < WHIP_MAX; i ++ ) {	
+				for ( i = 0; i < WHIP_MAX; i ++ ) {
 					delete whipProjectiles[i];
 					whipProjectiles[i] = NULL;
 				}
@@ -801,15 +801,15 @@ const char* rvMonsterHarvester::GetMeleeAttackAnim ( const idVec3& target ) {
 	idVec3 		localDir;
 	float  		yaw;
 	const char* animName;
-	
+
 	// Get the local direction vector
 	dir = target - GetPhysics()->GetOrigin();
 	dir.Normalize ( );
 	viewAxis.ProjectVector( dir, localDir );
-	
+
 	// Get the yaw relative to forward
 	yaw = idMath::AngleNormalize180 ( localDir.ToAngles ( )[YAW] );
-	
+
 	if ( yaw < -10.0f ) {
 		if ( partHealth[PART_LEG_FR] <= 0 )
 		{
@@ -867,15 +867,15 @@ const char* rvMonsterHarvester::GetRangedAttackAnim ( const idVec3& target ) {
 	idVec3 		localDir;
 	float  		yaw;
 	const char* animName = NULL;
-	
+
 	// Get the local direction vector
 	dir = target - GetPhysics()->GetOrigin();
 	dir.Normalize ( );
 	viewAxis.ProjectVector( dir, localDir );
-	
+
 	// Get the yaw relative to forward
 	yaw = idMath::AngleNormalize180 ( localDir.ToAngles ( )[YAW] );
-	
+
 	if ( yaw < -20.0f ) {
 		if ( partHealth[PART_ARM_R] <= 0 )
 		{
@@ -891,7 +891,7 @@ const char* rvMonsterHarvester::GetRangedAttackAnim ( const idVec3& target ) {
 	} else{
 		animName = "fire_forward";
 	}
-	
+
 	return animName;
 }
 
@@ -927,9 +927,9 @@ stateResult_t rvMonsterHarvester::State_Torso_ClawAttack ( const stateParms_t& p
 	switch ( parms.stage ) {
 		case STAGE_ATTACK: {
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
-		
+
 			// Predict a bit
 			if ( !PlayMeleeAttackAnim ( enemy.ent->GetEyePosition(), parms.blendFrames ) )
 			{
@@ -938,7 +938,7 @@ stateResult_t rvMonsterHarvester::State_Torso_ClawAttack ( const stateParms_t& p
 
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
 		}
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 //				animator.ClearAllJoints ( );
@@ -963,20 +963,20 @@ stateResult_t rvMonsterHarvester::State_Torso_RangedAttack ( const stateParms_t&
 		STAGE_ATTACK_WAIT,
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT: 
+		case STAGE_INIT:
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_ATTACK );
-		
-		case STAGE_ATTACK: 
+
+		case STAGE_ATTACK:
 			if ( !enemy.ent || !PlayRangedAttackAnim ( enemy.ent->GetEyePosition(), 0 ) )
 			{
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				shots--;
@@ -1002,8 +1002,8 @@ stateResult_t rvMonsterHarvester::State_Torso_RangedAttack ( const stateParms_t&
 rvMonsterHarvester::State_Torso_TurnRight90
 ================
 */
-stateResult_t rvMonsterHarvester::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterHarvester::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -1013,7 +1013,7 @@ stateResult_t rvMonsterHarvester::State_Torso_TurnRight90 ( const stateParms_t& 
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_90_rt", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 ) || !strstr( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_90_rt" ) ) {
 				AnimTurn ( 0, true );
@@ -1037,7 +1037,7 @@ stateResult_t rvMonsterHarvester::State_Torso_TurnRight90 ( const stateParms_t& 
 
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1045,8 +1045,8 @@ stateResult_t rvMonsterHarvester::State_Torso_TurnRight90 ( const stateParms_t& 
 rvMonsterHarvester::State_Torso_TurnLeft90
 ================
 */
-stateResult_t rvMonsterHarvester::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterHarvester::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -1056,7 +1056,7 @@ stateResult_t rvMonsterHarvester::State_Torso_TurnLeft90 ( const stateParms_t& p
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_90_lt", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 ) || !strstr( animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName(), "turn_90_lt" ) ) {
 				AnimTurn ( 0, true );
@@ -1080,7 +1080,7 @@ stateResult_t rvMonsterHarvester::State_Torso_TurnLeft90 ( const stateParms_t& p
 
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1089,7 +1089,7 @@ rvMonsterHarvester::State_Torso_SprayAttack
 ================
 */
 stateResult_t rvMonsterHarvester::State_Torso_SprayAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_SWEEP,
 		STAGE_END,
@@ -1101,14 +1101,14 @@ stateResult_t rvMonsterHarvester::State_Torso_SprayAttack ( const stateParms_t& 
 			sweepCount = 0;
 			PlayAnim ( ANIMCHANNEL_TORSO, "fire_forward_spray_start", 0 );
 			return SRESULT_STAGE ( STAGE_SWEEP );
-		
+
 		case STAGE_SWEEP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				sweepCount++;
 				PlayAnim ( ANIMCHANNEL_TORSO, "fire_forward_spray_loop", 0 );
 				return SRESULT_STAGE ( STAGE_END );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_END:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
@@ -1122,15 +1122,15 @@ stateResult_t rvMonsterHarvester::State_Torso_SprayAttack ( const stateParms_t& 
 					return SRESULT_STAGE ( STAGE_FINISH );
 				}
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_FINISH:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1138,8 +1138,8 @@ stateResult_t rvMonsterHarvester::State_Torso_SprayAttack ( const stateParms_t& 
 rvMonsterHarvester::State_Torso_RocketAttack
 ================
 */
-stateResult_t rvMonsterHarvester::State_Torso_RocketAttack ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterHarvester::State_Torso_RocketAttack ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_START_WAIT,
 		STAGE_FIRE,
@@ -1153,7 +1153,7 @@ stateResult_t rvMonsterHarvester::State_Torso_RocketAttack ( const stateParms_t&
 			}
 			PlayAnim ( ANIMCHANNEL_TORSO, "missile_fire_start", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_START_WAIT );
-			
+
 		case STAGE_START_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) || idStr::Icmp( "missile_fire_start", animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName() ) ) {
 				return SRESULT_STAGE ( STAGE_FIRE );
@@ -1179,12 +1179,12 @@ stateResult_t rvMonsterHarvester::State_Torso_RocketAttack ( const stateParms_t&
 
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_rocket", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) || idStr::Icmp( "attack_rocket", animator.CurrentAnim( ANIMCHANNEL_TORSO )->AnimName() ) ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

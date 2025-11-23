@@ -67,7 +67,7 @@ public:	// common physics interface
 // RAVEN BEGIN
 // bdube: water interraction
 	bool					IsInWater ( void ) const;
-// RAVEN END	
+// RAVEN END
 
 	void					SaveState( void );
 	void					RestoreState( void );

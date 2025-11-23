@@ -36,7 +36,7 @@ class idCameraView : public idCamera {
 public:
 	CLASS_PROTOTYPE( idCameraView );
  							idCameraView();
- 							
+
 	// save games
 	void					Save( idSaveGame *savefile ) const;				// archives object for save game file
 	void					Restore( idRestoreGame *savefile );				// unarchives object from save game file
@@ -146,7 +146,7 @@ ID_INLINE const int rvCameraAnimation::GetFrameRate( void ) const {
 class idDeclCameraDef : public idDecl, public Serializable<'IDCD'> {
 public:
 								idDeclCameraDef( SerialInputStream &stream );
-								
+
 	virtual void				Write( SerialOutputStream &stream ) const;
 	virtual void				AddReferences() const;
 #else
@@ -176,7 +176,7 @@ public:
 	int							GetSpecificAnim( const char *name ) const;
 	int							GetAnim( const char *name ) const;
 	bool						HasAnim( const char *name ) const;
-	
+
 private:
 	void						CopyDecl( const idDeclCameraDef *decl );
 	bool						ParseAnim( idLexer &src, int numDefaultAnims );

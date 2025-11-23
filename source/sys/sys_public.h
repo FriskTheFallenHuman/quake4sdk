@@ -13,7 +13,7 @@
 
 
 // Win32
-#ifdef _WINDOWS 
+#ifdef _WINDOWS
 
 #define	BUILD_STRING					"win-x86"
 #define BUILD_OS_ID						0
@@ -35,7 +35,7 @@
 #ifdef __GNUC__
 #define id_attribute(x) __attribute__(x)
 #else
-#define id_attribute(x)  
+#define id_attribute(x)
 #endif
 
 // Mac OSX
@@ -57,7 +57,7 @@
 	#define CPU_EASYARGS				1
 #endif
 
-#define ALIGN16( x )					x __attribute__ ((aligned (16))) 
+#define ALIGN16( x )					x __attribute__ ((aligned (16)))
 #ifdef __MWERKS__
 #define PACKED
 #else
@@ -218,7 +218,7 @@ typedef enum {
 	J_DELTA_LEFT_VERTICAL,
 	J_DELTA_RIGHT_HORIZONTAL,
 	J_DELTA_RIGHT_VERTICAL,
-	
+
 	J_ACTION_BUTTON_GARBAGE,
 } sys_jEvents;
 // RAVEN END
@@ -362,7 +362,7 @@ void			Sys_GenerateEvents( void );
 sysEvent_t		Sys_GetEvent( void );
 void			Sys_ClearEvents( void );
 
-// input is tied to windows, so it needs to be started up and shut down whenever 
+// input is tied to windows, so it needs to be started up and shut down whenever
 // the main window is recreated
 void			Sys_InitInput( void );
 void			Sys_ShutdownInput( void );
@@ -693,7 +693,7 @@ void				Sys_DestroyThread( xthreadInfo& info ); // sets threadHandle back to 0
 // find the name of the calling thread
 // if index != NULL, set the index in g_threads array (use -1 for "main" thread)
 const char *		Sys_GetThreadName( int *index = 0 );
- 
+
 const int MAX_CRITICAL_SECTIONS		= 4;
 
 enum {
@@ -815,7 +815,7 @@ class ScopeAutoMeasure {
 public:
 	ID_INLINE ScopeAutoMeasure(const char *name) {
 		mName = name;
-		QueryPerformanceCounter( &mStartTime ); 
+		QueryPerformanceCounter( &mStartTime );
 	}
 	ID_INLINE ~ScopeAutoMeasure() {
 		LARGE_INTEGER endTime;

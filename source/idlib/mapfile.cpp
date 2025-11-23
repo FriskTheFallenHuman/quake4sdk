@@ -69,9 +69,9 @@ static void ComputeAxisBase( const idVec3 &normal, idVec3 &texS, idVec3 &texT ) 
 
 // RAVEN BEGIN
 // rhummer: Trying to debug why func_groups disappear when editing a map when they shouldn't.
-idMapFile::~idMapFile( void ) 
-{ 
-	entities.DeleteContents( true ); 
+idMapFile::~idMapFile( void )
+{
+	entities.DeleteContents( true );
 	if ( cvarSystem->GetCVarBool( "developer" ) ) {
 		common->Printf( "^2done with .map file ^0%s\n", name.c_str() );
 	}
@@ -105,9 +105,9 @@ idMapPatch::Parse
 // jsinger: changed to be Lexer instead of idLexer so that we have the ability to read binary files
 idMapPatch *idMapPatch::Parse( Lexer &src, const idVec3 &origin, bool patchDef3, int version ) {
 // RAVEN END
-	
-	TIME_THIS_SCOPE( __FUNCLINE__);	
-	
+
+	TIME_THIS_SCOPE( __FUNCLINE__);
+
 	float		info[7];
 	idDrawVert *vert;
 	idToken		token;
@@ -277,9 +277,9 @@ idMapBrush::Parse
 // jsinger: changed to be Lexer instead of idLexer so that we have the ability to read binary files
 idMapBrush *idMapBrush::Parse( Lexer &src, const idVec3 &origin, bool newFormat, int version ) {
 // RAVEN END
-	
-	TIME_THIS_SCOPE( __FUNCLINE__);	
-	
+
+	TIME_THIS_SCOPE( __FUNCLINE__);
+
 	int i;
 	idVec3 planepts[3];
 	idToken token;
@@ -368,7 +368,7 @@ idMapBrush *idMapBrush::Parse( Lexer &src, const idVec3 &origin, bool newFormat,
 			return NULL;
 		}
 		side->origin = origin;
-		
+
 		// read the material
 		if ( !src.ReadTokenOnLine( &token ) ) {
 			src.Error( "idMapBrush::Parse: unable to read brush side material" );
@@ -476,7 +476,7 @@ idMapBrush *idMapBrush::ParseQ3( Lexer &src, const idVec3 &origin ) {
 		side->texMat[0] = idVec3( 0.03125f, 0.0f, 0.0f );
 		side->texMat[1] = idVec3( 0.0f, 0.03125f, 0.0f );
 		side->origin = origin;
-		
+
 		// Q2 allowed override of default flags and values, but we don't any more
 		if ( src.ReadTokenOnLine( &token ) ) {
 			if ( src.ReadTokenOnLine( &token ) ) {
@@ -632,9 +632,9 @@ idMapEntity::Parse
 // jsinger: changed to be Lexer instead of idLexer so that we have the ability to read binary files
 idMapEntity *idMapEntity::Parse( Lexer &src, bool worldSpawn, int version ) {
 // RAVEN END
-	
-	TIME_THIS_SCOPE( __FUNCLINE__);	
-	
+
+	TIME_THIS_SCOPE( __FUNCLINE__);
+
 	idToken	token;
 	idMapEntity *mapEnt;
 	idMapPatch *mapPatch;
@@ -833,8 +833,8 @@ bool idMapFile::Parse( const char *filename, bool ignoreRegion, bool osPath ) {
 	idToken token;
 	idStr fullName;
 	idMapEntity *mapEnt;
-	
-	TIME_THIS_SCOPE( __FUNCLINE__);	
+
+	TIME_THIS_SCOPE( __FUNCLINE__);
 
 	name = filename;
 	name.StripFileExtension();
@@ -850,7 +850,7 @@ bool idMapFile::Parse( const char *filename, bool ignoreRegion, bool osPath ) {
 	if ( !src.IsLoaded() ) {
 
 		PACIFIER_UPDATE;
-		
+
 		// now try a .map file
 		fullName.SetFileExtension( "map" );
 		src.LoadFile( fullName, osPath );
@@ -961,7 +961,7 @@ void idMapFile::Resolve( void )
 			mapEnt = entities[i];
 			if ( idStr::Icmp( mapEnt->epairs.GetString( "classname" ), "func_group" ) == 0 ) {
 				idVec3	delta;
-				
+
 				mapEnt->epairs.GetVector( "origin", "0 0 0", delta );
 
 				for( j = 0; j < mapEnt->primitives.Num(); j++ ) {
@@ -1018,7 +1018,7 @@ bool idMapFile::Write( const char *fileName, const char *ext, bool fromBasePath,
 
 	if (exportOnly)
 	{
-		for ( i = 0; i < entities.Num(); i++ ) 
+		for ( i = 0; i < entities.Num(); i++ )
 		{
 			if (entities[i]->epairs.GetInt("export"))
 			{
@@ -1166,13 +1166,13 @@ bool idMapFile::WriteExport( const char *fileName, bool fromBasePath )
 	int			i, j;
 	idDict		newPairs;
 
-	for ( i = 0; i < entities.Num(); i++ ) 
+	for ( i = 0; i < entities.Num(); i++ )
 	{
 		idMapEntity *ent = entities[i];
 
 		if ( ent->epairs.GetInt("export") == 1 )
 		{
-/*			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++) 
+/*			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++)
 			{
 				const idKeyValue	*kv = ent->epairs.GetKeyVal(j);
 
@@ -1186,7 +1186,7 @@ bool idMapFile::WriteExport( const char *fileName, bool fromBasePath )
 */
 			newPairs.Clear();
 
-			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++) 
+			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++)
 			{
 				const idKeyValue	*kv = ent->epairs.GetKeyVal(j);
 
@@ -1227,7 +1227,7 @@ bool idMapFile::ParseExport( const char *filename, bool osPath )
 
 	numMerged = numNotMerged = numAdded = numRemoved = 0;
 	mHasExportEntities = false;
-	
+
 	fullName = filename;
 	fullName.StripFileExtension();
 	fullName.SetFileExtension( "export" );
@@ -1296,7 +1296,7 @@ bool idMapFile::ParseExport( const char *filename, bool osPath )
 		{	// exists in both, do a merge!
 			mapEnt->epairs.SetInt("export", 2);			// 2 = when re-exporting, don't duplicated the export_ fields
 			mapEnt->epairs.SetInt("merged", 1);
-			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++) 
+			for ( j = 0; j < ent->epairs.GetNumKeyVals(); j++)
 			{
 				char				origName[1024];
 				const idKeyValue	*exportKV = ent->epairs.GetKeyVal(j);

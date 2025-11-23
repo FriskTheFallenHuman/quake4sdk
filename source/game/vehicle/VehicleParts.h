@@ -36,13 +36,13 @@ public:
 
 	bool						IsLeft				( void ) const;
 	bool						IsFront				( void ) const;
-	bool						IsUsingCenterMass	( void ) const;		
+	bool						IsUsingCenterMass	( void ) const;
 	bool						IsActive			( void ) const;
-	
+
 	virtual void				Activate			( bool activate ) { fl.active = activate; }
 
 	virtual void				Impulse				( int impulse ) { }
-	
+
 	virtual rvVehiclePosition*	GetPosition			( void ) const;
 	const idVec3&				GetOrigin			( void ) const;
 	const idMat3&				GetAxis				( void ) const;
@@ -92,14 +92,14 @@ public:
 
 	rvVehicleSound ( void );
 	~rvVehicleSound ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
 
 	virtual void	RunPostPhysics		( void );
 	virtual void	Activate			( bool active );
-	
+
 	bool			IsPlaying			( void ) const;
 
 	void			Play				( void );
@@ -108,9 +108,9 @@ public:
 
 	void			Fade				( int time, float toVolume, float toFreq );
 	void			Attenuate			( float volumeAttenuate, float freqAttenuate );
-	
+
 	void			SetAutoActivate		( bool activate );
-	
+
 protected:
 
 	idVec2					volume;
@@ -146,15 +146,15 @@ public:
 
 	rvVehicleHoverpad ( void );
 	~rvVehicleHoverpad ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
 
 	virtual void	RunPrePhysics		( void );
 	virtual void	RunPhysics			( void );
-	virtual void	Activate			( bool active ); 
-		
+	virtual void	Activate			( bool active );
+
 protected:
 
 	void			UpdateDustEffect	( const idVec3& origin, const idMat3& axis, float attenuation, const rvDeclMatType* mtype );
@@ -162,9 +162,9 @@ protected:
 	float					height;
 	float					dampen;
 	bool					atRest;
-		
+
 	idClipModel*			clipModel;
-	
+
 	idInterpolate<float>	currentForce;
 	float					force;
 	const idDeclTable*		forceTable;
@@ -172,20 +172,20 @@ protected:
 
 	float					fadeTime;
 	idVec3					velocity;
-	
+
 	float					thrustForward;
 	float					thrustLeft;
-	
+
 	float					maxRestAngle;
-	
+
 	int						soundPart;
-	
+
 	int						forceUpTime;
 	int						forceDownTime;
 
 	// Dust effects
 	rvClientEntityPtr<rvClientEffect>	effectDust;
-	const rvDeclMatType*				effectDustMaterialType;	
+	const rvDeclMatType*				effectDustMaterialType;
 };
 
 //----------------------------------------------------------------
@@ -199,13 +199,13 @@ public:
 
 	rvVehicleThruster ( void );
 	~rvVehicleThruster ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
 
 	virtual void	RunPhysics			( void );
-		
+
 protected:
 
 	enum EThrusterKey
@@ -215,9 +215,9 @@ protected:
 		KEY_UP
 	};
 
-	float			force;	
+	float			force;
 	int				forceAxis;
-	EThrusterKey	key;	
+	EThrusterKey	key;
 };
 
 //----------------------------------------------------------------
@@ -231,7 +231,7 @@ public:
 
 	rvVehicleLight ( void );
 	~rvVehicleLight ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
@@ -240,20 +240,20 @@ public:
 	virtual void	Activate			( bool active );
 
 	virtual void	Impulse				( int impulse );
-	
+
 protected:
 
 	void			TurnOff				( void );
 	void			TurnOn				( void );
-	
+
 	void			UpdateLightDef		( void );
-	
+
 	renderLight_t	renderLight;
-	int				lightHandle;	
+	int				lightHandle;
 	bool			lightOn;
 
 	idStr			soundOn;
-	idStr			soundOff;		
+	idStr			soundOff;
 };
 
 //----------------------------------------------------------------
@@ -265,14 +265,14 @@ public:
 
 	rvVehicleWeapon ( void );
 	~rvVehicleWeapon ( void );
-	
+
 	void					Spawn				( void );
 	void					Save				( idSaveGame* saveFile ) const;
 	void					Restore				( idRestoreGame* saveFile );
 
 	virtual void			RunPostPhysics		( void );
 	virtual void			Activate			( bool activate );
-	
+
 	int						GetCurrentAmmo		( void ) const;
 	float					GetCurrentCharge	( void ) const;
 
@@ -319,26 +319,26 @@ protected:
 	jointHandle_t			targetJoint;
 	idVec3					targetPos;
 	rvClientEntityPtr<rvClientEffect>	targetEffect;
-		
+
 	idList<jointHandle_t>	joints;
 	int						jointIndex;
-	
+
 	idVec3					force;
-	
+
 	int						ammoPerCharge;
 	int						chargeTime;
 	int						currentAmmo;
-	idInterpolate<float>	currentCharge;	
-	
+	idInterpolate<float>	currentCharge;
+
 	renderLight_t			muzzleFlash;
 	int						muzzleFlashHandle;
 	int						muzzleFlashEnd;
-	int						muzzleFlashTime; 
+	int						muzzleFlashTime;
 	idVec3					muzzleFlashOffset;
-	
+
 	int						animNum;
 	int						animChannel;
-	
+
 	const idSoundShader*	shaderFire;
 	const idSoundShader*	shaderReload;
 
@@ -371,27 +371,27 @@ public:
 	CLASS_PROTOTYPE( rvVehicleTurret );
 
 	rvVehicleTurret ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
 
-	virtual void	RunPrePhysics		( void );		
-	virtual void	RunPostPhysics		( void );		
+	virtual void	RunPrePhysics		( void );
+	virtual void	RunPostPhysics		( void );
 	virtual void	Activate			( bool active );
 
 protected:
 
 	idBounds		angles;
 	int				axisMap[3];
-	
+
 	float			invert[3];
-		
+
 	idAngles		currentAngles;
-	
-	int				moveTime;	
+
+	int				moveTime;
 	float			turnRate;
-	
+
 	int				soundPart;
 
 	bool			parentStuck;
@@ -407,12 +407,12 @@ public:
 	CLASS_PROTOTYPE( rvVehicleUserAnimated );
 
 	rvVehicleUserAnimated ( void );
-	
+
 	void			Spawn				( void );
 	void			Save				( idSaveGame* saveFile ) const;
 	void			Restore				( idRestoreGame* saveFile );
 
-	virtual void	RunPrePhysics		( void );		
+	virtual void	RunPrePhysics		( void );
 
 	void			Event_PostSpawn		( void );
 

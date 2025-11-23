@@ -26,9 +26,9 @@ public:
 	rvCTF_AssaultPoint();
 	~rvCTF_AssaultPoint();
 
-	int GetOwner( void ); 
-	int GetIndex( void ); 
-	
+	int GetOwner( void );
+	int GetIndex( void );
+
 	void SetOwnerColor ( void );
 	void SetOwner ( int newOwner );
 	void Reset ( void );
@@ -36,10 +36,10 @@ public:
 private:
 	void	Event_Touch( idEntity *activator, trace_t *trace );
 	void    Event_InitializeLinks( void );
-	void	ResetSpawns( int team );	
-	
+	void	ResetSpawns( int team );
+
 	void	ResetIndices( void );
-    
+
 	// these could be maintained as lists to allow multiple AP paths
 	// the assault point one step closer to the Strogg base
 	idEntityPtr<idEntity>	toStrogg;

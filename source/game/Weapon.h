@@ -10,7 +10,7 @@
 ===============================================================================
 
 	Player Weapon
-	
+
 ===============================================================================
 */
 
@@ -97,9 +97,9 @@ private:
 	const idDeclSkin *		worldInvisSkin;
 	const idDeclSkin *		saveHandsSkin;
 	const idDeclSkin *		handsSkin;
-		
+
 	void					Event_CallFunction			( const char* function );
-	
+
 	friend		class rvWeapon;
 	rvWeapon*	weapon;
 };
@@ -111,7 +111,7 @@ public:
 
 	rvWeapon( void );
 	virtual ~rvWeapon( void );
-	
+
 	enum {
 		WPLIGHT_MUZZLEFLASH,
 		WPLIGHT_MUZZLEFLASH_WORLD,
@@ -127,7 +127,7 @@ public:
 		EVENT_CHANGESKIN,
 		EVENT_MAXEVENTS
 	};
-	
+
 	void				Init						( idPlayer* _owner, const idDeclEntityDef* def, int weaponIndex, bool isStrogg = false );
 
 	// Virtual overrides
@@ -264,7 +264,7 @@ public:
 	void				UpdateLight					( int lightID );
 
 	void				UpdateMuzzleFlash			( void );
-	void				UpdateFlashlight			( void );	
+	void				UpdateFlashlight			( void );
 
 	void				UpdateGUI					( void );
 	void				UpdateCrosshairGUI			( idUserInterface* gui ) const;
@@ -281,8 +281,8 @@ public:
 		bool		lowerWeapon			:1;
 		bool		flashlight			:1;
 		bool		zoom				:1;
-	} wsfl;		
-	
+	} wsfl;
+
 	// Generic flags
 	struct weaponFlags_s {
 		bool		attackAltHitscan	:1;
@@ -295,7 +295,7 @@ public:
 		bool		flashlightOn		:1;
 		bool		hasWindupAnim		:1;
 	} wfl;
-	
+
 	// joints from models
 	jointHandle_t					barrelJointView;
 	jointHandle_t					flashJointView;
@@ -306,7 +306,7 @@ public:
 	jointHandle_t					flashJointWorld;
 	jointHandle_t					ejectJointWorld;
 	jointHandle_t					flashlightJointWorld;
-	
+
 	weaponStatus_t					status;
 	int								lastAttack;
 
@@ -354,12 +354,12 @@ public:
 	// lights
 	renderLight_t					lights[WPLIGHT_MAX];
 	int								lightHandles[WPLIGHT_MAX];
-	idVec3							guiLightOffset;	
+	idVec3							guiLightOffset;
 	int								muzzleFlashEnd;
 	int								muzzleFlashTime;
 	idVec3							muzzleFlashViewOffset;
 	bool							flashlightOn;
-	idVec3							flashlightViewOffset;	
+	idVec3							flashlightViewOffset;
 
 	// ammo management
 	int								ammoType;
@@ -367,7 +367,7 @@ public:
 	int								clipSize;			// 0 means no reload
 	int								ammoClip;
 	int								lowAmmo;			// if ammo in clip hits this threshold, snd_
-	int								maxAmmo;		
+	int								maxAmmo;
 
  	// multiplayer
  	int								clipPredictTime;
@@ -383,7 +383,7 @@ public:
 	idAngles						viewModelAngles;
 	idVec3							viewModelOffset;
 
-	// weighting for viewmodel offsets 
+	// weighting for viewmodel offsets
 	int								weaponAngleOffsetAverages;
 	float							weaponAngleOffsetScale;
 	float							weaponAngleOffsetMax;
@@ -393,7 +393,7 @@ public:
 	// General
 	idStr							icon;
 	bool							isStrogg;
-	
+
 	bool							forceGUIReload;
 
 public:
@@ -424,7 +424,7 @@ private:
 	stateResult_t			State_ExitCinematic		( const stateParms_t& parms );
 	stateResult_t			State_NetCatchup		( const stateParms_t& parms );
 
-	stateResult_t			Frame_EjectBrass		( const stateParms_t& parms );	
+	stateResult_t			Frame_EjectBrass		( const stateParms_t& parms );
 
 	// store weapon index information for death messages
 	int						methodOfDeath;
@@ -453,7 +453,7 @@ ID_INLINE const char* rvWeapon::GetIcon ( void ) const {
 
 ID_INLINE renderLight_t& rvWeapon::GetLight ( int light ) {
 	assert ( light < WPLIGHT_MAX );
-	return lights[light];	
+	return lights[light];
 }
 
 ID_INLINE const idAngles& rvWeapon::GetViewModelAngles( void ) const {

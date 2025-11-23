@@ -28,7 +28,7 @@ rvVehicleStatic::Spawn
 ================
 */
 void rvVehicleStatic::Spawn( void ) {
-	BecomeActive( TH_THINK );		
+	BecomeActive( TH_THINK );
 }
 
 /*
@@ -38,7 +38,7 @@ rvVehicleStatic::AddDriver
 */
 int rvVehicleStatic::AddDriver ( int position, idActor* driver ) {
 	int pos = rvVehicle::AddDriver( position, driver );
-	
+
 	if( pos < 0 ) {
 		return pos;
 	}

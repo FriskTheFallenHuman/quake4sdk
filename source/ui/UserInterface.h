@@ -190,12 +190,12 @@ public:
 
 								// De-allocates a list gui
 	virtual void				FreeListGUI( idListGUI *listgui ) = 0;
-	
+
 // RAVEN BEGIN
 // rjohnson: added option for guis to always think
 	virtual void				RunAlwaysThinkGUIs ( int time ) = 0;
 // bdube: embedded icons
-	virtual void				RegisterIcon ( const char* code, const char* shader, int x = -1, int y = -1, int w = -1, int h = -1 ) = 0;	
+	virtual void				RegisterIcon ( const char* code, const char* shader, int x = -1, int y = -1, int w = -1, int h = -1 ) = 0;
 // RAVEN END
 };
 

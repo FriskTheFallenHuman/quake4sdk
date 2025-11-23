@@ -32,7 +32,7 @@ public:
 protected:
 
 	void					UpdateCylinders(void);
-	
+
 	typedef enum {CYLINDER_RESET_POSITION,CYLINDER_MOVE_POSITION, CYLINDER_UPDATE_POSITION } CylinderState;
 	CylinderState								cylinderState;
 
@@ -42,7 +42,7 @@ private:
 	stateResult_t		State_Fire				( const stateParms_t& parms );
 	stateResult_t		State_Reload			( const stateParms_t& parms );
 	stateResult_t		State_EmptyReload		( const stateParms_t& parms );
-	
+
 	stateResult_t		Frame_MoveCylinder		( const stateParms_t& parms );
 	stateResult_t		Frame_ResetCylinder		( const stateParms_t& parms );
 
@@ -55,7 +55,7 @@ private:
 	int									cylinderMoveTime;
 	int									previousAmmo;
 	bool								zoomed;
-	
+
 	CLASS_STATES_PROTOTYPE ( WeaponNapalmGun );
 };
 
@@ -86,7 +86,7 @@ void WeaponNapalmGun::Spawn( void ) {
 	idAnimator* animator = viewModel->GetAnimator();
 	assert(animator);
 
-	SetState( "Raise", 0 );	
+	SetState( "Raise", 0 );
 
     for(int i = 0; i < NAPALM_GUN_NUM_CYLINDERS; ++i)
 	{
@@ -196,7 +196,7 @@ void WeaponNapalmGun::UpdateCylinders(void)
 WeaponNapalmGun::Save
 =====================
 */
-void WeaponNapalmGun::Save( idSaveGame *saveFile ) const 
+void WeaponNapalmGun::Save( idSaveGame *saveFile ) const
 {
 	for(int i = 0; i < NAPALM_GUN_NUM_CYLINDERS; i++)
 	{
@@ -215,7 +215,7 @@ WeaponNapalmGun::Restore
 =====================
 */
 void WeaponNapalmGun::Restore( idRestoreGame *saveFile ) {
-	
+
 	for(int i = 0; i < NAPALM_GUN_NUM_CYLINDERS; i++)
 	{
 		saveFile->ReadFloat(cylinderMaxOffsets[i]);
@@ -230,7 +230,7 @@ void WeaponNapalmGun::Restore( idRestoreGame *saveFile ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -250,7 +250,7 @@ stateResult_t WeaponNapalmGun::State_Reload( const stateParms_t& parms) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
@@ -279,7 +279,7 @@ stateResult_t WeaponNapalmGun::State_EmptyReload( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.netReload ) {
@@ -287,11 +287,11 @@ stateResult_t WeaponNapalmGun::State_EmptyReload( const stateParms_t& parms ) {
 			} else {
 				NetReload ( );
 			}
-			
+
 			SetStatus ( WP_RELOAD );
 			PlayAnim ( ANIMCHANNEL_ALL, "reload_empty", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
 				AddToClip ( ClipSize() );
@@ -319,7 +319,7 @@ stateResult_t WeaponNapalmGun::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( AmmoAvailable ( ) ) {
@@ -327,25 +327,25 @@ stateResult_t WeaponNapalmGun::State_Idle( const stateParms_t& parms ) {
 			} else {
 				SetStatus ( WP_READY );
 			}
-		
+
 			if ( wsfl.zoom )
 				PlayCycle( ANIMCHANNEL_LEGS, "altidle", parms.blendFrames );
 			else
 				PlayCycle( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( wsfl.lowerWeapon ) {
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
-			}		
+			}
 
 			if ( wsfl.zoom && !zoomed ) {
 				SetState ( "Idle", 4 );
 				zoomed = true;
 				return SRESULT_DONE;
 			}
-			
+
 			if ( !wsfl.zoom && zoomed ) {
 				SetState ( "Idle", 4 );
 				zoomed = false;
@@ -363,12 +363,12 @@ stateResult_t WeaponNapalmGun::State_Idle( const stateParms_t& parms ) {
 			{
 				if ( wsfl.attack && AutoReload() && !AmmoInClip ( ) && AmmoAvailable () ) {
 					SetState ( "EmptyReload", 4 );
-					return SRESULT_DONE;			
+					return SRESULT_DONE;
 				}
 
 				if ( wsfl.netReload || (wsfl.reload && AmmoInClip() < ClipSize() && AmmoAvailable()>AmmoInClip()) ) {
 					SetState ( "EmptyReload", 4 );
-					return SRESULT_DONE;			
+					return SRESULT_DONE;
 				}
 
 				if ( gameLocal.time > nextAttackTime && wsfl.attack && AmmoInClip ( ) ) {
@@ -390,7 +390,7 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
@@ -405,7 +405,7 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 				int animNum = viewModel->GetAnimator()->GetAnim ( "fire" );
 				if ( animNum ) {
 					idAnim* anim;
-					anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );				
+					anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );
 					anim->SetPlaybackRate ( (float)anim->Length() / (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE )) );
 				}
 
@@ -414,10 +414,10 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 
 			previousAmmo = AmmoInClip();
 			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:			
+
+		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
-				if ( !wsfl.zoom ) 
+				if ( !wsfl.zoom )
 					SetState ( "Reload", 4 );
 				else
 					SetState ( "Idle", 4 );

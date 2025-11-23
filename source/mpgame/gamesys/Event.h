@@ -40,7 +40,7 @@ private:
 
 public:
 								idEventDef( const char *command, const char *formatspec = NULL, char returnType = 0 );
-								
+
 	const char					*GetName( void ) const;
 	const char					*GetArgFormat( void ) const;
 	unsigned int				GetFormatspecIndex( void ) const;
@@ -75,11 +75,11 @@ public:
 	static bool					initialized;
 
 								~idEvent();
-	
+
 	static void					WriteDebugInfo( void );
 	static idEvent				*Alloc( const idEventDef *evdef, int numargs, va_list args );
 	static void					CopyArgs( const idEventDef *evdef, int numargs, va_list args, int data[ D_EVENT_MAXARGS ]  );
-	
+
 	void						Free( void );
 	void						Schedule( idClass *object, const idTypeInfo *cls, int time );
 	byte						*GetData( void );

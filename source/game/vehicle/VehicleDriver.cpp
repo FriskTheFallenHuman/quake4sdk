@@ -32,11 +32,11 @@ CLASS_DECLARATION( idActor, rvVehicleDriver )
 //twhitaker: remove - begin
 	EVENT( EV_FollowOffset		, rvVehicleDriver::Event_SetFollowOffset )
 //twhitaker: remove - end
-END_CLASS								 
+END_CLASS
 
 /*
 ================
-rvVehicleDriver::rvVehicleDriver 
+rvVehicleDriver::rvVehicleDriver
 ================
 */
 rvVehicleDriver::rvVehicleDriver ( void ) {
@@ -170,7 +170,7 @@ void rvVehicleDriver::Think ( void ) {
 		SimulateButtons( cmd );
 
 		vehicleController.SetInput( cmd, ang );
-		
+
 		// Node Transition
 		if( (!vehicle->IsAutoCorrecting() || !IsValidPathNode( currentPathTarget )) && isMoving ) {
 			idVec3 point = targetOrigin - dirToTarget * pathTargetInfo.minDistance;
@@ -186,7 +186,7 @@ void rvVehicleDriver::Think ( void ) {
 
 				if( lastPathTargetInfo.exitVehicle ) {
 					Event_ExitVehicle( true );
-				} else if( lastPathTargetInfo.throttle == 0 || !numTargets ) { 
+				} else if( lastPathTargetInfo.throttle == 0 || !numTargets ) {
 					Event_ScriptedStop();
 
 					if( !numTargets ) {
@@ -249,7 +249,7 @@ bool rvVehicleDriver::GetTargetInfo( const idEntity* target, idVec3* targetOrigi
 	if( dirToTarget ) {
 		*dirToTarget = localDirToTarget;
 	}
-		
+
 	if( distance ) {
 		*distance	= distToTarget;
 	}
@@ -337,7 +337,7 @@ idEntity* rvVehicleDriver::ChooseNextNode( idEntity* target ) {
 
 		case VDPM_MoveAway:
 			bestDist = FLT_MIN;
-		
+
 			for ( int i = target->targets.Num() - 1; i; i -- ) {
 				float distance = ( target->targets[ i ]->GetPhysics()->GetOrigin() - pathingOrigin ).LengthSqr();
 
@@ -386,7 +386,7 @@ void rvVehicleDriver::SimulateMouseMove( usercmd_t& cmd ) {
 	idVec3 vectorToTarget;
 	idAngles anglesToTarget;
 	idAngles turretAngles;
-	idAngles deltaAngles; 
+	idAngles deltaAngles;
 
 	if( !lookTarget ) {
 		for( int ix = 0; ix < 3; ++ix ) {
@@ -425,7 +425,7 @@ void rvVehicleDriver::SimulateKeys( usercmd_t& cmd, float dotForward, float dotR
 		cmd.rightmove	= 0;
 		return;
 	}
-	
+
 	cmd.forwardmove	= static_cast< signed char >( (!vehicle->IsAutoCorrecting() ? 127.0f : forwardThrustScale) * dotForward * speed );
 	cmd.rightmove	= static_cast< signed char >( ( ( dotForward < 0.0f ) ? rightThrustScale : -rightThrustScale ) * dotRight );
 }
@@ -549,7 +549,7 @@ bool rvVehicleDriver::SetLeader( idEntity* ent ) {
 
 /*
 ================
-rvVehicleDriver::Event_PostSpawn 
+rvVehicleDriver::Event_PostSpawn
 ================
 */
 void rvVehicleDriver::Event_PostSpawn ( void ) {
@@ -573,7 +573,7 @@ void rvVehicleDriver::Event_PostSpawn ( void ) {
 
 /*
 ================
-rvVehicleDriver::Event_EnterVehicle 
+rvVehicleDriver::Event_EnterVehicle
 ================
 */
 void rvVehicleDriver::Event_EnterVehicle ( idEntity * vehicle ) {
@@ -755,7 +755,7 @@ void rvVehicleDriver::Event_SetLeader( idEntity* newLeader ) {
 rvVehicleDriver::UpdateAutoCorrection
 ================
 */
-void rvVehicleDriver::UpdateAutoCorrection ( void ) { 
+void rvVehicleDriver::UpdateAutoCorrection ( void ) {
 	if ( IsDriving() ) {
 		rvVehicle * vehicle = vehicleController.GetVehicle();
 

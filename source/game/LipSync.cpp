@@ -122,12 +122,12 @@ bool FAS_LoadPhonemes( const char *visemes )
 rvLipSyncData
 ================
 */
-rvLipSyncData::rvLipSyncData( const rvDeclLipSync *ls, int time ) 
+rvLipSyncData::rvLipSyncData( const rvDeclLipSync *ls, int time )
 {
 	const char *lsd = ls->GetLipSyncData();
 
 	mLexer.SetFlags( LEXFL_ALLOWPATHNAMES | LEXFL_ALLOWNUMBERNAMES );
-	mLexer.LoadMemory( lsd, idStr::Length( lsd ), ls->GetName() ); 
+	mLexer.LoadMemory( lsd, idStr::Length( lsd ), ls->GetName() );
 	mFlags = 0;
 	mFrame = 0;
 	mBlendTime = 0;
@@ -161,7 +161,7 @@ rvLipSyncData *FAS_StartVisemeExtraction( const rvDeclLipSync *ls, int time )
 	rvLipSyncData	*lsd;
 
 	lsd = new rvLipSyncData( ls, time );
-		
+
 	return( lsd );
 }
 
@@ -216,7 +216,7 @@ void FAS_ExtractViseme( rvLipSyncData *lsd, int time )
 			lsd->SetLastPhrase( token );
 			lsd->ExpectTokenString( ">" );
 
-			lsd->SetFlags( FAS_NEW_PHRASE ); 
+			lsd->SetFlags( FAS_NEW_PHRASE );
 		}
 		else if( token == "{" )
 		{
@@ -243,7 +243,7 @@ void FAS_ExtractViseme( rvLipSyncData *lsd, int time )
 				index++;
 				phoneme += token[index];
 			}
-	
+
 			// Extract duration
 			index++;
 
@@ -358,7 +358,7 @@ void idAFAttachment::EndLipSyncing( void )
 idAFAttachment::StartLipSyncing
 ================
 */
-int idAFAttachment::StartLipSyncing( const char *speechDecl ) 
+int idAFAttachment::StartLipSyncing( const char *speechDecl )
 {
 	int		length;
 
@@ -368,7 +368,7 @@ int idAFAttachment::StartLipSyncing( const char *speechDecl )
 	EndLipSyncing();
 
 	// Start a new lipsync if there is one
-	if( speechDecl[0] ) 
+	if( speechDecl[0] )
 	{
 		const rvDeclLipSync	*lipSync;
 		int					emotion;
@@ -378,7 +378,7 @@ int idAFAttachment::StartLipSyncing( const char *speechDecl )
 		lipSyncData = FAS_StartVisemeExtraction( lipSync, gameLocal.GetTime() );
 
 		// Output debug info
-		if( lipSync->GetDescription() && fas_debug.GetInteger() ) 
+		if( lipSync->GetDescription() && fas_debug.GetInteger() )
 		{
 			gameLocal.Printf( "Name: %s\n", speechDecl );
 			gameLocal.Printf( "Sub: %s\n", lipSync->GetDescription().c_str() );
@@ -386,7 +386,7 @@ int idAFAttachment::StartLipSyncing( const char *speechDecl )
 		}
 
 		// Start the associated sound
-		refSound.diversity = 0.0f; 
+		refSound.diversity = 0.0f;
 		renderEntity.referenceSoundHandle = refSound.referenceSoundHandle;
 		StartSoundShader( declManager->FindSound( lipSync->GetName() ), SND_CHANNEL_VOICE, refSound.parms.soundShaderFlags | SSF_IS_VO, false, &length );
 
@@ -417,7 +417,7 @@ void idAFAttachment::HandleLipSync( void )
 	}
 
 	FAS_ExtractViseme( lipSyncData, gameLocal.GetTime() + fas_timeOffset.GetInteger() );
-	if( lipSyncData->HasEnded() ) 
+	if( lipSyncData->HasEnded() )
 	{
 		EndLipSyncing();
 		return;

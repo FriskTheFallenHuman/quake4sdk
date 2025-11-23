@@ -2327,7 +2327,7 @@ idCurve_NonUniformBSpline::Weld
 template< class type >
 ID_INLINE bool idCurve_NonUniformBSpline<type>::Weld( idCurve<type>* c ) const {
 	idCurve_NonUniformBSpline<type>* spline = dynamic_cast<idCurve_NonUniformBSpline<type>*>(c);
-	
+
 	if( spline == NULL ) {
 		return false;
 	}
@@ -2340,7 +2340,7 @@ ID_INLINE bool idCurve_NonUniformBSpline<type>::Weld( idCurve<type>* c ) const {
 
 	type deltaPos = ~refLine * length;
 	type newValue = spline->values[ 0 ] + deltaPos;
-	
+
 	valuesChanged = (spline->values[ 1 ] != newValue) || valuesChanged;
 
 	spline->values[ 1 ] = newValue;

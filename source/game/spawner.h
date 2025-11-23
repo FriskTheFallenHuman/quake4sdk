@@ -68,12 +68,12 @@ protected:
 	idStrList						spawnTypes;
 
 	idList< idEntityPtr<idEntity> >	spawnPoints;
-	
+
 	idList< spawnerCallback_t >		callbacks;
 
 	// Check to see if its time to spawn
 	void				CheckSpawn				( void );
-	
+
 	// Spawn a new entity
 	bool				SpawnEnt				( void );
 
@@ -82,10 +82,10 @@ protected:
 
 	// Get a random spawnpoint to spawn at
 	idEntity*			GetSpawnPoint			( void );
-	
+
 	// Get a random spawn type
 	const char*			GetSpawnType			( idEntity* spawnPoint );
-	
+
 	// Validate the given spawn point for spawning
 	bool				ValidateSpawnPoint		( const idVec3 origin, const idBounds &bounds );
 

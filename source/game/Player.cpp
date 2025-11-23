@@ -148,7 +148,7 @@ CLASS_DECLARATION( idActor, idPlayer )
 // mekberg: don't suppress showing of new objectives anymore
 	EVENT ( EV_Player_AllowNewObjectives,	idPlayer::Event_AllowNewObjectives )
 // RAVEN END
-	
+
 	EVENT( AI_EnableTarget,					idPlayer::Event_EnableTarget )
 	EVENT( AI_DisableTarget,				idPlayer::Event_DisableTarget )
 
@@ -181,7 +181,7 @@ nextWeaponCombo_t weaponComboChart[12] = {
 	{8,8,9,8},
 	{9,9,4,8},
 	{10,1,10,10},
-	{0,0,0,0} 
+	{0,0,0,0}
 };
 #endif
 // RAVEN END
@@ -212,7 +212,7 @@ void idInventory::Clear( void ) {
 
 	// set to -1 so that the gun knows to have a full clip the first time we get it and at the start of the level
 	memset( clip, -1, sizeof( clip ) );
-	
+
 	items.DeleteContents( true );
 	pdas.Clear();
 	videos.Clear();
@@ -523,7 +523,7 @@ void idInventory::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( nextItemPickup );
 	savefile->ReadInt( nextItemNum );
 	savefile->ReadInt( onePickupTime );
-	
+
 	// Load pickup items
 	savefile->ReadInt( num );
 	for ( i = 0; i < num; i++ ) {
@@ -620,8 +620,8 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 	const char*		mod			= NULL;
 	const idDict*	modDict		= NULL;
 	int				weaponIndex	= -1;
-	int				clipSize	= 0;	
-	int				modClipSize	= 0;	
+	int				clipSize	= 0;
+	int				modClipSize	= 0;
 	int				difference	= 0;
 	idStr			realAmmoName( ammoName );
 
@@ -638,7 +638,7 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 	 if ( !idStr::Icmpn( ammoName, "start_ammo_", 11 ) ) {
 		realAmmoName.StripLeading( "start_" );
 	}
-	
+
 	// Find the entityDef for the weapon that uses this ammo.
 	for ( int i = 0; i < MAX_WEAPONS; i++ ) {
 
@@ -668,14 +668,14 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 				ammo[ ammoIndex ] = ammoMax;
 			}
 			return true;
-		}		
+		}
 		return false;
 	}
 
 	clipSize = weaponDict->GetInt( "clipSize", "0" );
 
 	// Find the weaponmods for this weapon and see if we have any clipsize mods.
-	for ( int m = 0; m < MAX_WEAPONMODS; m ++ ) {		
+	for ( int m = 0; m < MAX_WEAPONMODS; m ++ ) {
 		if ( ! ( weaponMods[ weaponIndex ] & ( 1 << m ) ) ) {
 			continue;
 		}
@@ -690,15 +690,15 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 
 		if ( modClipSize > clipSize ) {
 			clipSize = modClipSize;
-		}					
+		}
 	}
-	
+
 	// Don't bother with these checks if we don't have a clipsize
 	if ( clipSize ) {
 		difference = ( ammoMax - clipSize ) - ( ammo[ ammoIndex ] - clip[ weaponIndex ] );
 
 		if (  difference  ) {
-			if ( ammoAmount  > difference ) {			
+			if ( ammoAmount  > difference ) {
 				ammo[ ammoIndex ] += difference;
 			} else {
 				ammo[ ammoIndex ] += ammoAmount;
@@ -711,7 +711,7 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 		ammo[ ammoIndex ] = ammoMax;
 	} else {
 		ammo[ ammoIndex ] += ammoAmount;
-	}	
+	}
 	return true;
 }
 // RAVEN END
@@ -845,12 +845,12 @@ bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *st
 // RAVEN BEGIN
 // mekberg: check max ammo vs clipsize when picking up ammo
 		if ( !gameLocal.IsMultiplayer ( ) ) {
-			return DetermineAmmoAvailability ( owner, statname, i, amount, max );	
+			return DetermineAmmoAvailability ( owner, statname, i, amount, max );
 		} else if ( ammo[ i ] >= max ) {
 			return false;
 		}
 
-		if ( amount && !checkOnly ) {			
+		if ( amount && !checkOnly ) {
 			ammo[ i ] += amount;
 			if ( ( max > 0 ) && ( ammo[ i ] > max ) ) {
 				ammo[ i ] = max;
@@ -869,7 +869,7 @@ bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *st
 // mekberg: check max ammo vs clipsize when picking up ammo
 		if ( !gameLocal.IsMultiplayer ( ) ) {
 			return DetermineAmmoAvailability ( owner, statname, i, amount, max );
-		} else if ( amount ) {	
+		} else if ( amount ) {
 			if ( ammo[ i ] >= amount ) {
 				amount = 1;
 			} else {
@@ -877,7 +877,7 @@ bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *st
 			}
 		}
 
-		if ( amount && !checkOnly ) {			
+		if ( amount && !checkOnly ) {
 			ammo[ i ] += amount;
 			if ( ( max > 0 ) && ( ammo[ i ] > max ) ) {
 				ammo[ i ] = max;
@@ -929,7 +929,7 @@ bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *st
 			}
 // RAVEN END
 
- 			if ( gameLocal.isMultiplayer 
+ 			if ( gameLocal.isMultiplayer
 				&& ( weapons & ( 1 << i ) ) ) {
 				//already have this weapon
 				if ( !dropped ) {
@@ -952,14 +952,14 @@ bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *st
 
  			if ( !gameLocal.world->spawnArgs.GetBool( "no_Weapons" ) || ( weaponName == "weapon_fists" ) ) {
  				if ( ( weapons & ( 1 << i ) ) == 0 || gameLocal.isMultiplayer ) {
-					if ( ( owner->GetUserInfo()->GetBool( "ui_autoSwitch" ) 
+					if ( ( owner->GetUserInfo()->GetBool( "ui_autoSwitch" )
 						|| ( gameLocal.isMultiplayer && gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() ) )
 						&& idealWeapon && !checkOnly )
 					{
 						// client prediction should not get here
 						assert( !gameLocal.isClient );
  						*idealWeapon = i;
- 					} 
+ 					}
  					if ( owner->hud && updateHud && lastGiveTime + 1000 < gameLocal.time && !checkOnly ) {
  						owner->hud->SetStateInt( "newWeapon", i );
  						owner->hud->HandleNamedEvent( "newWeapon" );
@@ -1224,7 +1224,7 @@ idPlayer::idPlayer() {
 
 	cursor					= NULL;
  	talkCursor				= 0;
-	
+
 	oldMouseX				= 0;
 	oldMouseY				= 0;
 
@@ -1264,11 +1264,11 @@ idPlayer::idPlayer() {
 
  	weaponCatchup			= false;
  	lastSnapshotSequence	= 0;
- 
+
  	aimClientNum			= -1;
- 
+
  	spawnedTime				= 0;
- 
+
  	isTelefragged			= false;
 	isLagged				= false;
  	isChatting				= false;
@@ -1283,7 +1283,7 @@ idPlayer::idPlayer() {
 
 	zoomFov.Init ( 0, 0, DefaultFov(), DefaultFov() );
 	zoomed					= false;
-	
+
 	memset ( cachedWeaponDefs, 0, sizeof(cachedWeaponDefs) );
 	memset ( cachedPowerupDefs, 0, sizeof(cachedPowerupDefs) );
 
@@ -1314,7 +1314,7 @@ idPlayer::idPlayer() {
 	powerUpOverlay = NULL;
 
 	tourneyStatus = PTS_UNKNOWN;
-	
+
 	vsMsgState = false;
 
 	deathSkinTime = 0;
@@ -1337,7 +1337,7 @@ idPlayer::idPlayer() {
 	teamHealthRegenPending	= false;
 	teamAmmoRegen			= NULL;
 	teamAmmoRegenPending	= false;
-	teamDoubler			= NULL;		
+	teamDoubler			= NULL;
 	teamDoublerPending		= false;
 }
 
@@ -1368,20 +1368,20 @@ void idPlayer::SetWeapon( int weaponIndex ) {
 	if ( weapon && weaponIndex == currentWeapon ) {
 		return;
 	}
-	
+
 	// Clear the weapon entity
 	delete weapon;
 	weapon = NULL;
 
 	previousWeapon	= currentWeapon;
 	currentWeapon	= weaponIndex;
-	weaponGone		= false;		
+	weaponGone		= false;
 
 	if ( weaponIndex < 0 ) {
 		weaponGone = true;
 		return;
 	}
-	
+
 	animPrefix = spawnArgs.GetString( va( "def_weapon%d", currentWeapon ) );
 
 	idTypeInfo*	typeInfo;
@@ -1401,19 +1401,19 @@ void idPlayer::SetWeapon( int weaponIndex ) {
 	if ( zoomed ) {
 		zoomFov.Init ( gameLocal.time, 100, CalcFov(true), DefaultFov() );
 		zoomed = false;
-	}				
+	}
 
 	UpdateHudWeapon();
 
 	// Remove the "weapon_" from the anim prefect for the player world anims
 	animPrefix.Strip( "weapon_" );
-	
+
 	// Make sure weapon is hidden
 	if ( !weaponEnabled ) {
 		Event_DisableWeapon( );
 	}
 }
- 
+
 /*
 ==============
 idPlayer::SetupWeaponEntity
@@ -1424,18 +1424,18 @@ void idPlayer::SetupWeaponEntity( void ) {
 	const char				*weap;
 	const idDeclEntityDef	*decl;
 	idEntity				*spawn;
-	
+
 	// don't setup weapons for spectators
 	if ( gameLocal.isClient || (weaponViewModel && weaponWorldModel) || spectating ) {
 		return;
 	}
 
 	idDict					args;
-	
+
 	if ( !weaponViewModel ) {
 		// setup the view model
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		decl = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "player_viewweapon", false, false ) );
 		if ( !decl ) {
 			gameLocal.Error( "entityDef not found: player_viewweapon" );
@@ -1452,8 +1452,8 @@ void idPlayer::SetupWeaponEntity( void ) {
 		weaponViewModel->SetName( va("%s_weapon", name.c_str() ) );
 		weaponViewModel->SetInstance( instance );
 	}
-	
-			
+
+
 	if ( !weaponWorldModel ) {
 		// setup the world model
 		decl = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "player_animatedentity", false, false ) );
@@ -1473,7 +1473,7 @@ void idPlayer::SetupWeaponEntity( void ) {
 		weaponWorldModel->SetName ( va("%s_weapon_world", name.c_str() ) );
 		weaponWorldModel->SetInstance( instance );
 	}
-	
+
 	currentWeapon = -1;
 
 	weaponWorldModel->fl.persistAcrossInstances = true;
@@ -1494,7 +1494,7 @@ idPlayer::Init
 */
 void idPlayer::Init( void ) {
 	const char			*value;
-	
+
 	noclip					= false;
 	godmode					= false;
 	godmodeDamage			= 0;
@@ -1512,7 +1512,7 @@ void idPlayer::Init( void ) {
 	oldInventoryWeapons		= 0;
 
 	lastDmgTime				= 0;
-	
+
 	bobCycle				= 0;
 	bobFrac					= 0.0f;
 	landChange				= 0;
@@ -1536,7 +1536,7 @@ void idPlayer::Init( void ) {
 	focusType				= FOCUS_NONE;
 	focusBrackets			= NULL;
 	focusBracketsTime		= 0;
-	
+
 	talkingNPC				= NULL;
  	talkCursor				= 0;
 
@@ -1547,7 +1547,7 @@ void idPlayer::Init( void ) {
 
 	// Remove any hearing loss that may be set up from the last map
 	soundSystem->FadeSoundClasses( SOUNDWORLD_GAME, 0, 0.0f, 0 );
-	
+
 	// remove any damage effects
 	playerView.ClearEffects();
 
@@ -1563,7 +1563,7 @@ void idPlayer::Init( void ) {
 	SetupWeaponEntity( );
 	currentWeapon = -1;
 	previousWeapon = -1;
-	
+
 	flashlightOn	  = false;
 
 	idealLegsYaw = 0.0f;
@@ -1576,7 +1576,7 @@ void idPlayer::Init( void ) {
 	vehicleCameraDist = 0.0f;
 
 // mekberg: moved into function.
-	SetPMCVars( );	
+	SetPMCVars( );
 // RAVEN END
 
 	// air always initialized to maximum too
@@ -1653,13 +1653,13 @@ void idPlayer::Init( void ) {
  	if ( hipJoint == INVALID_JOINT ) {
  		gameLocal.Error( "Joint '%s' not found for 'joint_hips' on '%s'", value, name.c_str() );
  	}
- 
+
  	value = spawnArgs.GetString( "joint_chest", "" );
  	chestJoint = animator.GetJointHandle( value );
  	if ( chestJoint == INVALID_JOINT ) {
  		gameLocal.Error( "Joint '%s' not found for 'joint_chest' on '%s'", value, name.c_str() );
  	}
- 
+
  	value = spawnArgs.GetString( "joint_head", "" );
  	headJoint = animator.GetJointHandle( value );
  	if ( headJoint == INVALID_JOINT ) {
@@ -1674,7 +1674,7 @@ void idPlayer::Init( void ) {
 	// Start in idle
 	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
-	
+
 	forceScoreBoard		= false;
 	forceScoreBoardTime = 0;
 	forcedReady			= false;
@@ -1694,15 +1694,15 @@ void idPlayer::Init( void ) {
  	leader				= false;
 
  	SetPrivateCameraView( NULL );
- 
+
  	lastSnapshotSequence	= 0;
- 
+
 	if ( !gameLocal.isMultiplayer ) {
 		// in MP we set isStrogg in UpdateModelSetup()
 		isStrogg = spawnArgs.GetBool ( "strogg", "0" );
 	}
 
- 
+
  	aimClientNum		= -1;
 	if ( mphud ) {
 		mphud->HandleNamedEvent( "aim_fade" );
@@ -1741,7 +1741,7 @@ void idPlayer::Init( void ) {
 			GUIFragNotice( "" );
 		}
 	}
-	
+
 	deathSkinTime		= 0;
 	deathStateHitch		= false;
 	jumpDuringHitch = false;
@@ -1827,20 +1827,20 @@ void idPlayer::Spawn( void ) {
 	physicsObj.SetClipMask( MASK_PLAYERSOLID );
 	SetPhysics( &physicsObj );
 	InitAASLocation();
-	
+
 	skin = renderEntity.customSkin;
 
 	// only the local player needs guis
 	// for server netdemos that have no local player, we use demo_* guis in idGameLocal
 	if ( !gameLocal.isMultiplayer || entityNumber == gameLocal.localClientNum ) {
-		
+
 		// load HUD
 		hud = NULL;
 		mphud = NULL;
- 		
+
 		overlayHud = NULL;
 		overlayHudTime = 0;
-		
+
 		objectiveSystem = NULL;
 
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
@@ -1870,8 +1870,8 @@ void idPlayer::Spawn( void ) {
 		if ( cursor ) {
 			cursor->Activate( true, gameLocal.time );
 		}
-		
-		// Load 
+
+		// Load
 
 		if ( spawnArgs.GetString ( "cinematicHud", "", temp ) ) {
 			cinematicHud = uiManager->FindGui( temp, true, false, true );
@@ -1966,7 +1966,7 @@ void idPlayer::Spawn( void ) {
 			ent->ActivateTargets( this );
 		}
 	}
-	
+
 	if ( gameLocal.world->spawnArgs.GetBool( "no_Weapons" ) ) {
 		hiddenWeapon = true;
 		if ( weapon ) {
@@ -1974,13 +1974,13 @@ void idPlayer::Spawn( void ) {
 		}
 // RAVEN BEGIN
 // mekberg: set to blaster now and disable the weapon.
-		idealWeapon = SlotForWeapon ( "weapon_blaster" ); 
+		idealWeapon = SlotForWeapon ( "weapon_blaster" );
 		Event_DisableWeapon( );
 // RAVEN END
 	} else {
 		hiddenWeapon = false;
 	}
-	
+
 	if ( hud ) {
 		UpdateHudWeapon( );
 		hud->StateChanged( gameLocal.time );
@@ -2024,7 +2024,7 @@ void idPlayer::Spawn( void ) {
 			//g_armorProtection.SetFloat( ( g_skill.GetInteger() < 2 ) ? 0.4f : 0.2f );
 		}
 	}
-	
+
 	// Powerup joints?
 	if ( spawnArgs.GetString ( "powerup_effect_joints", "", temp ) ) {
 		animator.GetJointList ( temp, powerupEffectJoints );
@@ -2070,7 +2070,7 @@ idPlayer::~idPlayer() {
 	delete weaponWorldModel;
 	delete weapon;
 	delete aasSensor;
-	
+
 	SetPhysics( NULL );
 }
 
@@ -2088,7 +2088,7 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 
 	savefile->WriteBool( noclip );
 	savefile->WriteBool( godmode );
-	savefile->WriteInt ( godmodeDamage );	
+	savefile->WriteInt ( godmodeDamage );
 	savefile->WriteBool( undying );
 
 	// don't save spawnAnglesSet, since we'll have to reset them after loading the savegame
@@ -2108,7 +2108,7 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	savefile->Write( &pfl, sizeof( pfl ) );
 
 	inventory.Save( savefile );
-	
+
 	//weapon->Save( savefile );								// Don't save this
 
 	weaponViewModel.Save( savefile );
@@ -2178,7 +2178,7 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 
 	savefile->WriteString( modelName );	// cnicholson: Added unsaved var
 	// TOSAVE: const idDict*			modelDict
-    
+
 	savefile->WriteInt( bobFoot );
 	savefile->WriteFloat( bobFrac );
 	savefile->WriteFloat( bobfracsin );
@@ -2323,7 +2323,7 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool( objectivesEnabled );
 
 	savefile->WriteBool( flagCanFire );
-	
+
 	// TOSAVE: const idDeclEntityDef*	cachedWeaponDefs [ MAX_WEAPONS ];	// cnicholson: Save these?
 	// TOSAVE: const idDeclEntityDef*	cachedPowerupDefs [ POWERUP_MAX ];
 
@@ -2350,7 +2350,7 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 
 	savefile->ReadBool( noclip );
 	savefile->ReadBool( godmode );
-	savefile->ReadInt ( godmodeDamage );	
+	savefile->ReadInt ( godmodeDamage );
 	savefile->ReadBool( undying );
 
 	savefile->ReadAngles( spawnAngles );
@@ -2379,10 +2379,10 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 
 	assert( !weapon );
 
-	weaponViewModel.Restore( savefile );	
-	weaponWorldModel.Restore( savefile );	
+	weaponViewModel.Restore( savefile );
+	weaponWorldModel.Restore( savefile );
 
- 	savefile->ReadUserInterface( hud, &spawnArgs );	
+ 	savefile->ReadUserInterface( hud, &spawnArgs );
 	assert( !mphud );									// Don't save MP stuff
 	savefile->ReadUserInterface( objectiveSystem, &spawnArgs );
 	savefile->ReadUserInterface( cinematicHud, &spawnArgs );
@@ -2532,7 +2532,7 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 	focusEnt.Restore ( savefile );
 	savefile->ReadUserInterface( focusBrackets, &spawnArgs );
 	savefile->ReadInt( focusBracketsTime );
-	
+
 	talkingNPC.Restore( savefile );
 
 	extraProjPassEntity.Restore( savefile );
@@ -2621,7 +2621,7 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 		Event_FinishHearingLoss( 0.05f );
 	}
 	// create combat collision hull for exact collision detection
-	SetCombatModel();	
+	SetCombatModel();
 
 // RAVEN BEGIN
 // mekberg: Grab from user info.
@@ -2653,7 +2653,7 @@ void idPlayer::PrepareForRestart( void ) {
 // squirrel: added DeadZone multiplayer mode
 	allowedToRespawn = true;
 // RITUAL END
-	
+
 	// we will be restarting program, clear the client entities from program-related things first
 	ShutdownThreads();
 
@@ -2692,7 +2692,7 @@ void idPlayer::ServerSpectate( bool spectate ) {
 	assert( !gameLocal.isClient );
 
 	if ( spectating != spectate ) {
-		// if we select spectating on the client 
+		// if we select spectating on the client
 		// mekberg: drop and clear powerups from the player.
 		DropPowerups();
 		ClearPowerUps();
@@ -2700,7 +2700,7 @@ void idPlayer::ServerSpectate( bool spectate ) {
 		gameLocal.mpGame.GetGameState()->Spectate( this );
    		if ( spectate ) {
   			SetSpectateOrigin( );
- 		} 
+ 		}
 	}
 	if ( !spectate ) {
 		SpawnFromSpawnSpot( );
@@ -2759,7 +2759,7 @@ Chooses a spawn location and spawns the player
 void idPlayer::SpawnFromSpawnSpot( void ) {
 	idVec3		spawn_origin;
 	idAngles	spawn_angles;
-	
+
 	if( !SelectSpawnPoint( spawn_origin, spawn_angles ) ) {
 		forceRespawn = true;
 		return;
@@ -2810,10 +2810,10 @@ void idPlayer::SpawnToPoint( const idVec3 &spawn_origin, const idAngles &spawn_a
 	if ( health > inventory.maxHealth ) {
 		nextHealthPulse = gameLocal.time + HEALTH_PULSE;
 	}
-	
+
 	if ( inventory.armor > inventory.maxarmor ) {
 		nextArmorPulse = gameLocal.time + ARMOR_PULSE;
-	}		
+	}
 
 	fl.noknockback = false;
 	// stop any ragdolls being used
@@ -2989,7 +2989,7 @@ void idPlayer::RestorePersistantInfo( void ) {
  	if ( gameLocal.isMultiplayer ) {
  		gameLocal.persistentPlayerInfo[entityNumber].Clear();
  	}
- 
+
 	spawnArgs.Copy( gameLocal.persistentPlayerInfo[entityNumber] );
 
 	inventory.RestoreInventory( this, spawnArgs );
@@ -3045,7 +3045,7 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 		} else {
 			uiKeyName = "ui_model";
 			newModelName = GetUserInfo()->GetString( uiKeyName );
-		}	
+		}
 	}
 
 	if( !idStr::Icmp( newModelName, "" ) ) {
@@ -3069,7 +3069,7 @@ void idPlayer::UpdateModelSetup( bool forceReload ) {
 
 			dict = NULL;
 		}
-	} 
+	}
 
 	// check to see if the user-specified ui_model/ui_model_strogg/ui_model_marine is valid
 	if( !model ) {
@@ -3126,14 +3126,14 @@ bool idPlayer::BalanceTeam( void ) {
 			}
 		}
 	}
-	
+
 	balanceTeam = -1;
 	if ( teamCount[ 0 ] < teamCount[ 1 ] ) {
 		balanceTeam = 0;
 	} else if ( teamCount[ 0 ] > teamCount[ 1 ] ) {
 		balanceTeam = 1;
 	}
-	
+
 	if ( balanceTeam != -1 && team != balanceTeam && teamCount[ balanceTeam ]+1 != teamCount[ !balanceTeam ] ) {
 		common->DPrintf( "team balance: forcing player %d to %s team\n", entityNumber, balanceTeam ? "strogg" : "marine" );
 		team = balanceTeam;
@@ -3182,7 +3182,7 @@ void HSVtoRGB( float &r, float &g, float &b, float h, float s, float v ) {
 			g = v;
 			b = t;
 			break;
-			
+
 		case 3:
 			r = p;
 			g = q;
@@ -3213,7 +3213,7 @@ bool idPlayer::UserInfoChanged( void ) {
  	bool	modifiedInfo;
  	bool	spec;
  	bool	newready;
- 
+
  	userInfo = GetUserInfo();
  	showWeaponViewModel = userInfo->GetBool( "ui_showGun" );
 
@@ -3222,7 +3222,7 @@ bool idPlayer::UserInfoChanged( void ) {
 	}
 
  	modifiedInfo = false;
- 
+
  	spec = ( idStr::Icmp( userInfo->GetString( "ui_spectate" ), "Spectate" ) == 0 );
 	if ( gameLocal.serverInfo.GetBool( "si_spectators" ) ) {
  		// never let spectators go back to game while sudden death is on
@@ -3240,7 +3240,7 @@ bool idPlayer::UserInfoChanged( void ) {
  		if ( spec ) {
  			userInfo->Set( "ui_spectate", "Play" );
  			modifiedInfo |= true;
- 		} else if ( spectating ) {  
+ 		} else if ( spectating ) {
  			// allow player to leaving spectator mode if they were in it when it was disallowed
  			forceRespawn = true;
  		}
@@ -3283,7 +3283,7 @@ bool idPlayer::UserInfoChanged( void ) {
 		// if still OK to change
 		if( team != latchedTeam ) {
 			if( gameLocal.isServer ) {
-				gameLocal.mpGame.SwitchToTeam( entityNumber, latchedTeam, team );						
+				gameLocal.mpGame.SwitchToTeam( entityNumber, latchedTeam, team );
 			}
 
 			SetInitialHud();
@@ -3297,8 +3297,8 @@ bool idPlayer::UserInfoChanged( void ) {
 				// the client might set its team to a value before the server corrects for team balance
 				gameLocal.mpGame.RemoveAnnouncerSound( AS_TEAM_JOIN_MARINE );
 				gameLocal.mpGame.RemoveAnnouncerSound( AS_TEAM_JOIN_STROGG );
-				
-				if ( !wantSpectate ) {				
+
+				if ( !wantSpectate ) {
 					if( team == TEAM_STROGG ) {
 						gameLocal.mpGame.ScheduleAnnouncerSound( AS_TEAM_JOIN_STROGG, gameLocal.time + 500 );
 					} else if( team == TEAM_MARINE ) {
@@ -3339,7 +3339,7 @@ bool idPlayer::UserInfoChanged( void ) {
 
 	return modifiedInfo;
 }
-   
+
 /*
 ===============
 idPlayer::UpdateHudAmmo
@@ -3374,7 +3374,7 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 		_hud->SetStateFloat ( "player_ammopct", (float)ammoamount / (float)weapon->maxAmmo );
 		_hud->SetStateInt ( "player_totalammo", ammoamount );
 		_hud->SetStateInt ( "player_ammo", -1 );
-	} 
+	}
 
 	_hud->SetStateBool( "player_ammo_empty", ( ammoamount == 0 ) );
 }
@@ -3386,17 +3386,17 @@ idPlayer::UpdateHudStats
 */
 void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
-	
+
 	assert ( _hud );
 
 	temp = _hud->State().GetInt ( "player_health", "-1" );
-	if ( temp != health ) {		
+	if ( temp != health ) {
 		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - health) );
 		_hud->SetStateInt	( "player_health", health < -100 ? -100 : health );
 		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
 		_hud->HandleNamedEvent ( "updateHealth" );
 	}
-		
+
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
 	if ( temp != inventory.armor ) {
 		_hud->SetStateInt ( "player_armorDelta", temp == -1 ? 0 : (temp - inventory.armor) );
@@ -3404,20 +3404,20 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		_hud->SetStateFloat	( "player_armorpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)inventory.armor / (float)inventory.maxarmor ) );
 		_hud->HandleNamedEvent ( "updateArmor" );
 	}
-	
+
 	// Boss bar
 	if ( _hud->State().GetInt ( "boss_health", "-1" ) != (bossEnemy ? bossEnemy->health : -1) ) {
 		if ( !bossEnemy || bossEnemy->health <= 0 ) {
 			bossEnemy = NULL;
 			_hud->SetStateInt ( "boss_health", -1 );
-			_hud->HandleNamedEvent ( "hideBossBar" );			
+			_hud->HandleNamedEvent ( "hideBossBar" );
  			_hud->HandleNamedEvent ( "hideBossShieldBar" ); // grrr, for boss buddy..but maybe other bosses will have shields?
-		} else {			
+		} else {
 			_hud->SetStateInt ( "boss_health", bossEnemy->health );
 			_hud->HandleNamedEvent ( "updateBossBar" );
 		}
 	}
-		
+
 	// god mode information
 	_hud->SetStateString( "player_god", va( "%i", (godmode && g_showGodDamage.GetBool()) ) );
 	_hud->SetStateString( "player_god_damage", va( "%i", godmodeDamage ) );
@@ -3432,7 +3432,7 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	if ( weapon ) {
 		UpdateHudAmmo( _hud );
 	}
-	
+
 	_hud->StateChanged( gameLocal.time );
 }
 
@@ -3442,12 +3442,12 @@ idPlayer::UpdateHudWeapon
 ===============
 */
 void idPlayer::UpdateHudWeapon( int displayWeapon ) {
-	
+
 	if ( (displayWeapon < -1) || (displayWeapon >= MAX_WEAPONS) ) {
 		common->DPrintf( "displayweapon was out of range" );
 		return;
 	}
-	
+
 	int index = 0;
 	int idealIndex = 0;
 	idUserInterface * hud = idPlayer::hud;
@@ -3493,15 +3493,15 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 				//const idMaterial *material = declManager->FindMaterial( weaponIcon );
 				//if ( material ) {
 				//	material->SetSort( SS_GUI );
-				//}			
-				
+				//}
+
 				hud->SetStateInt	( va("weapon%d_index", i ), index++ );
 				hud->SetStateString ( va("weapon%d_icon", i ), weaponIcon );
-				hud->SetStateInt	( va("weapon%d_ammo", i ), inventory.ammo[inventory.AmmoIndexForWeaponClass ( weap ) ] );				
+				hud->SetStateInt	( va("weapon%d_ammo", i ), inventory.ammo[inventory.AmmoIndexForWeaponClass ( weap ) ] );
 			}
 		} else {
 			hud->SetStateBool( weapnum, false );
-		}				
+		}
 	}
 
 	hud->SetStateInt( "weaponcount", index );
@@ -3509,14 +3509,14 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 	const idMaterial *material = declManager->FindMaterial( weapon->GetIcon() );
 	if ( material ) {
 		material->SetSort( SS_GUI );
-	}			
+	}
 
 	material = declManager->FindMaterial( weapon->spawnArgs.GetString ( "inv_icon" ) );
 	//if ( material ) {
 	//	material->SetSort( SS_GUI );
-	//}			
+	//}
 
-	hud->SetStateString( "weapicon", weapon->GetIcon() );	
+	hud->SetStateString( "weapicon", weapon->GetIcon() );
 	hud->SetStateString( "ammoIcon", weapon->spawnArgs.GetString ( "inv_icon" ) );
  	hud->SetStateInt( "player_weapon", currentWeapon );
 	hud->SetStateInt( "player_lastweapon", previousWeapon );
@@ -3531,7 +3531,7 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 	}
 
 	UpdateHudAmmo( hud );
- 			
+
  	if ( cursor ) {
  		weapon->UpdateCrosshairGUI( cursor );
 
@@ -3542,7 +3542,7 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 	}
 
 	hud->HandleNamedEvent( "weaponChange" );
-	hud->StateChanged( gameLocal.time ); 			
+	hud->StateChanged( gameLocal.time );
 	weaponChangeIconsUp = true;
 
 	// if previousWeapon is -1, the weaponChange state won't update it, so manually reset it
@@ -3615,7 +3615,7 @@ idPlayer::DrawHUD
 */
 void idPlayer::DrawHUD( idUserInterface *_hud ) {
 	idUserInterface * cursor = idPlayer::cursor;
- 
+
 	if ( !gameLocal.GetLocalPlayer() ) {
 		// server netdemo
 		if ( gameLocal.GetDemoState() == DEMO_PLAYING && gameLocal.IsServerDemo() && gameLocal.GetDemoFollowClient() == entityNumber ) {
@@ -3623,14 +3623,14 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 			if ( cursor ) {
 				cursor->HandleNamedEvent( "showCrossCombat" );
 			}
-		}		
+		}
 	} else {
 
 		if ( team != gameLocal.GetLocalPlayer()->hudTeam && _hud ) {
-			_hud->HandleNamedEvent( (team ? "setTeam_strogg" : "setTeam_marine") );	
+			_hud->HandleNamedEvent( (team ? "setTeam_strogg" : "setTeam_marine") );
 			gameLocal.GetLocalPlayer()->hudTeam = team;
 		}
-	
+
 		// if updating the hud of a followed client
 		idPlayer *p = gameLocal.GetLocalPlayer();
 		if ( p->spectating && p->spectator == entityNumber ) {
@@ -3638,7 +3638,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 			if ( cursor ) {
 				cursor->HandleNamedEvent( "showCrossCombat" );
 			}
-		}		
+		}
 	}
 
 	if ( disableHud || influenceActive != INFLUENCE_NONE || privateCameraView || !_hud || !g_showHud.GetBool() ) {
@@ -3668,12 +3668,12 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 		}
 		return;
 	}
-	
+
 	// Let the vehicle draw the hud instead
 	if ( vehicleController.IsDriving( ) ) {
 		if ( !gameDebug.IsHudActive( DBGHUD_ANY ) ) {
 			vehicleController.DrawHUD( );
-			if ( cursor && health > 0 ) {			
+			if ( cursor && health > 0 ) {
 				// mekberg: adjustable crosshair size.
 				int crossSize = cvarSystem->GetCVarInteger( "g_crosshairSize" );
 				crossSize = crossSize - crossSize % 8;
@@ -3691,20 +3691,20 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 			if ( !bossEnemy || bossEnemy->health <= 0 ) {
 				bossEnemy = NULL;
 				_hud->SetStateInt( "boss_health", -1 );
-				_hud->HandleNamedEvent( "hideBossBar" );			
+				_hud->HandleNamedEvent( "hideBossBar" );
  				_hud->HandleNamedEvent( "hideBossShieldBar" ); // grrr, for boss buddy..but maybe other bosses will have shields?
-			} else {			
+			} else {
 				_hud->SetStateInt( "boss_health", bossEnemy->health );
 				_hud->HandleNamedEvent( "updateBossBar" );
 			}
 		}
 		return;
 	}
-	
+
 	if ( cursor ) {
 		cursor->SetStateBool( "vehiclecursor", false );
 	}
-	
+
 	// FIXME: this is temp to allow the sound meter to show up in the hud
 	// it should be commented out before shipping but the code can remain
 	// for mod developers to enable for the same functionality
@@ -3720,7 +3720,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 // RAVEN BEGIN
 // mekberg: removed check for weapon->ShowCrosshair.
 //			we want to show the crosshair regardless for NPC tags
-			if ( cursor && health > 0 ) {		
+			if ( cursor && health > 0 ) {
 				// Pass the current weapon to the cursor gui for custom crosshairs
 // mekberg: adjustable crosshair size.
 				int crossSize = cvarSystem->GetCVarInteger( "g_crosshairSize" );
@@ -3730,7 +3730,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 // RAVEN END
 				cursor->Redraw( gameLocal.time );
 			}
-		}	
+		}
 
 		UpdateHudStats( _hud );
 
@@ -3748,7 +3748,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 				_hud->SetStateFloat( "bracket_height", focusBrackets->State().GetFloat( "2d_max_y" ) - focusBrackets->State().GetFloat( "2d_min_y" ) );
 				// TODO: Find a way to get bracket text from gui to hud
 			}
-		}		
+		}
 	 	_hud->Redraw( gameLocal.realClientTime );
 	}
 
@@ -3768,7 +3768,7 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 			gameLocal.mpGame.UpdateHud( _mphud );
 			_mphud->Redraw( gameLocal.time );
 		}
-		
+
 		if ( overlayHud && overlayHudTime > gameLocal.time && overlayHudTime != 0 ) {
 			overlayHud->Redraw( gameLocal.time );
 		} else {
@@ -3794,28 +3794,28 @@ void idPlayer::EnterCinematic( void ) {
    	if ( hud ) {
    		hud->HandleNamedEvent( "radioChatterDown" );
    	}
-   	
+
    	cinematicHud = NULL;
-   	
+
 	// See if camera has custom cinematic gui
    	if ( gameLocal.GetCamera ( ) ) {
    		const char* guiCinematic;
    		guiCinematic = gameLocal.GetCamera()->spawnArgs.GetString ( "guiCinematic", "" );
    		if ( *guiCinematic ) {
-			cinematicHud = uiManager->FindGui( guiCinematic, true, false, true );   		
+			cinematicHud = uiManager->FindGui( guiCinematic, true, false, true );
 		}
 	}
 
 	// Load default cinematic gui?
-	if ( !cinematicHud ) {	
+	if ( !cinematicHud ) {
 		const char* temp;
 		if ( spawnArgs.GetString ( "cinematicHud", "", &temp ) ) {
 			cinematicHud = uiManager->FindGui( temp, true, false, true );
 		}
 	}
-	
+
    	// Have the cinematic hud start
-   	if ( cinematicHud ) {	
+   	if ( cinematicHud ) {
    		cinematicHud->Activate ( true, gameLocal.time );
    		cinematicHud->HandleNamedEvent ( "cinematicStart" );
 // RAVEN BEGIN
@@ -3825,21 +3825,21 @@ void idPlayer::EnterCinematic( void ) {
 		}
 // RAVEN END
    	}
-   	
+
    	physicsObj.SetLinearVelocity( vec3_origin );
-   	
+
  	if ( weaponEnabled && weapon ) {
 		//this preSave kills all effects and sounds that we don't need lingering around.
    		weapon->PreSave();
 		weapon->EnterCinematic();
    	}
 
-	// Reset state flags   
+	// Reset state flags
 	memset ( &pfl, 0, sizeof(pfl) );
 	pfl.onGround = true;
 	pfl.dead	 = (health <= 0);
 }
-   
+
 /*
 ===============
 idPlayer::ExitCinematic
@@ -3847,7 +3847,7 @@ idPlayer::ExitCinematic
 */
 void idPlayer::ExitCinematic( void ) {
   	Show();
-   
+
 // RAVEN BEGIN
 // jnewquist: Cinematics are letterboxed, this auto-fixes on widescreens
 	g_fixedHorizFOV.SetBool(false);
@@ -3858,7 +3858,7 @@ void idPlayer::ExitCinematic( void ) {
 		weapon->PostSave();
    		weapon->ExitCinematic();
    	}
-   
+
    	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
 
@@ -3874,7 +3874,7 @@ bool idPlayer::SkipCinematic( void ) {
 	StartSound( "snd_skipcinematic", SND_CHANNEL_ANY, 0, false, NULL );
 	return gameLocal.SkipCinematic();
 }
-   
+
 /*
 =====================
 idPlayer::UpdateConditions
@@ -3974,7 +3974,7 @@ void idPlayer::FireWeapon( void ) {
 
 	if ( g_editEntityMode.GetInteger() ) {
 		GetViewPos( muzzle, axis );
-		gameLocal.editEntities->SelectEntity( muzzle, axis[0], this );	
+		gameLocal.editEntities->SelectEntity( muzzle, axis[0], this );
 		return;
 	}
 
@@ -4036,14 +4036,14 @@ void idPlayer::CacheWeapons( void ) {
 	if ( !inventory.weapons ) {
 		return;
 	}
-	
+
 	for( w = 0; w < MAX_WEAPONS; w++ ) {
 		if ( inventory.weapons & ( 1 << w ) ) {
 			if ( !GetWeaponDef ( w ) ) {
 				inventory.weapons &= ~( 1 << w );
 			} else {
 				rvWeapon::CacheWeapon( spawnArgs.GetString( va( "def_weapon%d", w ) ) );
-			}		
+			}
 		}
 	}
 }
@@ -4165,7 +4165,7 @@ bool idPlayer::GiveItem( idItem *item ) {
 	const idKeyValue	*arg;
 	idDict				attr;
 	bool				gave;
-	
+
 	bool dropped = item->spawnArgs.GetBool( "dropped" );
 
 	if ( gameLocal.isMultiplayer && spectating ) {
@@ -4252,9 +4252,9 @@ bool idPlayer::GiveItem( idItem *item ) {
 	if ( arg && hud ) {
 		hud->HandleNamedEvent( "armorPulse" );
 	}
-	
+
 //	GiveDatabaseEntry ( &item->spawnArgs );
-	
+
 	// Show the item pickup on the hud
 	if ( hud ) {
 		idStr langToken = item->spawnArgs.GetString( "inv_name" );
@@ -4297,7 +4297,7 @@ float idPlayer::PowerUpModifier( int type ) {
 
 	if ( PowerUpActive( POWERUP_HASTE ) ) {
 		switch ( type ) {
-			case PMOD_SPEED:	
+			case PMOD_SPEED:
 				mod *= 1.3f;
 				break;
 
@@ -4347,14 +4347,14 @@ float idPlayer::PowerUpModifier( int type ) {
 			}
 		}
 	}
-//RITUAL END	
+//RITUAL END
 	if( PowerUpActive( POWERUP_SCOUT ) ) {
 		switch( type ) {
 			case PMOD_FIRERATE: {
 				mod *= (2.0f / 3.0f);
 				break;
 			}
-			case PMOD_SPEED: {	
+			case PMOD_SPEED: {
 				mod *= 1.5f;
 				break;
 			}
@@ -4400,14 +4400,14 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			break;
 		}
 		case POWERUP_DEADZONE: {
-			PlayEffect( "fx_deadzone", animator.GetJointHandle( "origin" ), true );		
+			PlayEffect( "fx_deadzone", animator.GetJointHandle( "origin" ), true );
 			break;
 		}
 		case POWERUP_QUADDAMAGE: {
 			powerUpOverlay = quadOverlay;
 
 			StopEffect( "fx_regeneration" );
-			PlayEffect( "fx_quaddamage", animator.GetJointHandle( "chest" ), true );			
+			PlayEffect( "fx_quaddamage", animator.GetJointHandle( "chest" ), true );
 			StartSound( "snd_quaddamage_idle", SND_CHANNEL_POWERUP_IDLE, 0, false, NULL );
 
 			// Spawn quad effect
@@ -4438,7 +4438,7 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 				PlayEffect( "fx_regeneration", animator.GetJointHandle( "chest" ), true );
 
 				// Spawn regen effect
-				powerupEffect = gameLocal.GetEffect( spawnArgs, "fx_regeneration" );			
+				powerupEffect = gameLocal.GetEffect( spawnArgs, "fx_regeneration" );
 				powerupEffectTime = gameLocal.time;
 				powerupEffectType = POWERUP_REGENERATION;
 			}
@@ -4452,7 +4452,7 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			hasteEffect = PlayEffect( "fx_haste", GetPhysics()->GetOrigin(), GetPhysics()->GetAxis(), true );
 			break;
 		}
-		
+
 		case POWERUP_INVISIBILITY: {
 			powerUpOverlay = invisibilityOverlay;
 
@@ -4468,7 +4468,7 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			arenaEffect = PlayEffect( "fx_guard", physicsObj.GetOrigin(), physicsObj.GetAxis(), true );
 			break;
 		}
-		
+
 		case POWERUP_SCOUT: {
 			if ( arenaEffect != NULL ) {
 				// don't accumulate. clear whatever was there
@@ -4477,7 +4477,7 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			arenaEffect = PlayEffect( "fx_scout", physicsObj.GetOrigin(), physicsObj.GetAxis(), true );
 			break;
 		}
-		
+
 		case POWERUP_AMMOREGEN: {
 			if ( gameLocal.IsTeamPowerups() ) {
 				if ( teamAmmoRegen == NULL ) {
@@ -4497,14 +4497,14 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			}
 			break;
 		}
-		
+
 		case POWERUP_TEAM_DAMAGE_MOD: {
 			assert( gameLocal.IsTeamPowerups() );
 			if ( teamDoubler == NULL ) {
 				if ( health <= 0 ) {
 					teamDoublerPending = true;
 				} else {
-					teamDoubler = PlayEffect( "fx_doubler", renderEntity.origin, renderEntity.axis, true );				
+					teamDoubler = PlayEffect( "fx_doubler", renderEntity.origin, renderEntity.axis, true );
 				}
 			}
 			break;
@@ -4529,11 +4529,11 @@ idPlayer::StopPowerUpEffect
 */
 void idPlayer::StopPowerUpEffect( int powerup ) {
 	//if the player doesn't have quad, regen, haste or invisibility remaining on him, remove the power up overlay.
-	if( !( 
-		(inventory.powerups & ( 1 << POWERUP_QUADDAMAGE ) ) || 
-		(inventory.powerups & ( 1 << POWERUP_REGENERATION ) ) || 
-		(inventory.powerups & ( 1 << POWERUP_HASTE ) ) || 
-		(inventory.powerups & ( 1 << POWERUP_INVISIBILITY ) ) 
+	if( !(
+		(inventory.powerups & ( 1 << POWERUP_QUADDAMAGE ) ) ||
+		(inventory.powerups & ( 1 << POWERUP_REGENERATION ) ) ||
+		(inventory.powerups & ( 1 << POWERUP_HASTE ) ) ||
+		(inventory.powerups & ( 1 << POWERUP_INVISIBILITY ) )
 		) )	{
 
 			powerUpOverlay = NULL;
@@ -4617,7 +4617,7 @@ void idPlayer::StopPowerUpEffect( int powerup ) {
 ===============
 idPlayer::GivePowerUp
 passiveEffectsOnly - GivePowerup() is used to restore effects on stale players coming
-back into snapshot.  We don't want to announce powerups in this case 
+back into snapshot.  We don't want to announce powerups in this case
 (just re-start effects)
 ===============
 */
@@ -4682,8 +4682,8 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 			UpdateTeamPowerups();
 			break;
 		}
-		
-		case POWERUP_QUADDAMAGE: {		
+
+		case POWERUP_QUADDAMAGE: {
 			gameLocal.mpGame.ScheduleAnnouncerSound( AS_GENERAL_QUAD_DAMAGE, gameLocal.time, gameLocal.gameType == GAME_TOURNEY ? GetInstance() : -1 );
 			break;
 		}
@@ -4771,19 +4771,19 @@ void idPlayer::ClearPowerup( int i ) {
 	inventory.powerupEndTime[ i ] = 0;
 
 	//if the player doesn't have quad, regen, haste or invisibility remaining on him, remove the power up overlay.
-	if( !( 
+	if( !(
 			(inventory.powerups & ( 1 << POWERUP_TEAM_DAMAGE_MOD ) ) ||
-			(inventory.powerups & ( 1 << POWERUP_QUADDAMAGE ) ) || 
-			(inventory.powerups & ( 1 << POWERUP_REGENERATION ) ) || 
-			(inventory.powerups & ( 1 << POWERUP_HASTE ) ) || 
+			(inventory.powerups & ( 1 << POWERUP_QUADDAMAGE ) ) ||
+			(inventory.powerups & ( 1 << POWERUP_REGENERATION ) ) ||
+			(inventory.powerups & ( 1 << POWERUP_HASTE ) ) ||
 			(inventory.powerups & ( 1 << POWERUP_INVISIBILITY ) ) ||
-			(inventory.powerups & ( 1 << POWERUP_DEADZONE ) ) 
+			(inventory.powerups & ( 1 << POWERUP_DEADZONE ) )
 		) )	{
 
 		powerUpOverlay = NULL;
 		StopSound( SND_CHANNEL_POWERUP_IDLE, false );
 	}
-	
+
 	StopPowerUpEffect( i );
 }
 
@@ -4841,9 +4841,9 @@ void idPlayer::UpdatePowerUps( void ) {
 		if ( !(inventory.powerups & ( 1 << i ) ) ) {
 			continue;
 		}
-			
+
 		if ( inventory.powerupEndTime[i] > gameLocal.time || inventory.powerupEndTime[i] == -1 ) {
-			// If there is still time remaining on the powerup then update the hud		
+			// If there is still time remaining on the powerup then update the hud
 			if ( hud ) {
 				// Play the wearoff sound for the powerup that is closest to wearing off
 				if ( ( wearoff == -1 || inventory.powerupEndTime[i] < inventory.powerupEndTime[wearoff] ) && inventory.powerupEndTime[i] != -1 ) {
@@ -4917,9 +4917,9 @@ void idPlayer::UpdatePowerUps( void ) {
 					}
 					StartSound ( "snd_powerup_regen", SND_CHANNEL_POWERUP, 0, false, NULL );
 					nextHealthPulse = gameLocal.time + HEALTH_PULSE;
-				}	
+				}
 			// Health above max technically isnt a powerup but functions as one so handle it here
-			} else if ( health > inventory.maxHealth && gameLocal.isServer ) { 
+			} else if ( health > inventory.maxHealth && gameLocal.isServer ) {
 				nextHealthPulse = gameLocal.time + HEALTH_PULSE;
 				health--;
 			}
@@ -4947,19 +4947,19 @@ void idPlayer::UpdatePowerUps( void ) {
 					}
 
 					nextAmmoRegenPulse[ ammoIndex ] = gameLocal.time + time;
-				}	
+				}
 			}
 		}
 	}
 
 	// Tick armor down if greater than max armor
 	if ( !gameLocal.isClient && gameLocal.time > nextArmorPulse ) {
-		if ( inventory.armor > inventory.maxarmor ) { 
+		if ( inventory.armor > inventory.maxarmor ) {
 			nextArmorPulse += ARMOR_PULSE;
 			inventory.armor--;
-		}		
+		}
 	}
-		
+
 	// Assign the powerup skin as long as we are alive
  	if ( health > 0 ) {
  		if ( powerUpSkin ) {
@@ -5020,11 +5020,11 @@ void idPlayer::UpdatePowerUps( void ) {
 	// Spawn quad effect
 	if( PowerUpActive( powerupEffectType ) && powerupEffect && gameLocal.time >= powerupEffectTime  ) {
 		rvClientCrawlEffect* effect = new rvClientCrawlEffect( powerupEffect, this, 100, &powerupEffectJoints );
-		effect->Play ( gameLocal.time, false );					
+		effect->Play ( gameLocal.time, false );
 		effect->GetRenderEffect()->suppressSurfaceInViewID = entityNumber+1;
 		powerupEffectTime = gameLocal.time + 400;
 	}
-	
+
 	// Attenuate haste effect
 	if ( hasteEffect ) {
 		hasteEffect->Attenuate( idMath::ClampFloat( 0.0f, 1.0f, physicsObj.GetLinearVelocity().LengthSqr() / Square(100.0f) ) );
@@ -5063,7 +5063,7 @@ idPlayer::GiveWeaponMods
 bool idPlayer::GiveWeaponMods( int mods ) {
 	inventory.weaponMods[currentWeapon] |= mods;
 	currentWeapon = -1;
-	
+
 	return true;
 }
 
@@ -5097,7 +5097,7 @@ void idPlayer::GiveWeaponMod ( const char* weaponmod ) {
 		gameLocal.Warning ( "Invalid weapon modification def specified '%s'", weaponmod );
 		return;
 	}
-		
+
 	// Get the weapon it modifies
 	weaponClass = modDict->GetString ( "weapon" );
 	weaponDict  = gameLocal.FindEntityDefDict ( weaponClass, false );
@@ -5105,11 +5105,11 @@ void idPlayer::GiveWeaponMod ( const char* weaponmod ) {
 		gameLocal.Warning ( "Invalid weapon classname '%s' specified on weapon modification '%s'", weaponClass, weaponmod );
 		return;
 	}
-	
+
 	weaponIndex = SlotForWeapon ( weaponClass );
 
 	// Find the index of the weapon mod
-	for ( m = 0; m < MAX_WEAPONMODS; m ++ ) {		
+	for ( m = 0; m < MAX_WEAPONMODS; m ++ ) {
 		const char* mod;
 		mod = weaponDict->GetString ( va("def_mod%d",m+1) );
 		if ( !mod || !*mod ) {
@@ -5156,7 +5156,7 @@ bool idPlayer::GiveInventoryItem( idDict *item ) {
 		hud->SetStateString ( "itemicon", item->GetString( "inv_icon" ) );
 		hud->HandleNamedEvent ( "itemPickup" );
 	}
-	
+
 	return true;
 }
 
@@ -5265,7 +5265,7 @@ void idPlayer::FailObjective ( const char* title ) {
 		objectiveSystem->HandleNamedEvent( "objectiveFailed" );
 	}
 	if( IsInVehicle() )	{
-		 vehicleController.GetVehicle()->EjectAllDrivers(); 
+		 vehicleController.GetVehicle()->EjectAllDrivers();
 	}
 	fl.takedamage = true;
 	pfl.objectiveFailed = true;
@@ -5358,7 +5358,7 @@ void idPlayer::GiveItem( const char *itemname ) {
 				int i;
 				for ( i = 0 ; i < MAX_AMMOTYPES; i++ ) {
 					int a = gameLocal.mpGame.mpBuyingManager.GetIntValueForKey( rvWeapon::GetAmmoNameForIndex( i ), 0 );
-					inventory.ammo[i] += a; 
+					inventory.ammo[i] += a;
 					if ( inventory.ammo[i] > inventory.MaxAmmoForAmmoClass( this, rvWeapon::GetAmmoNameForIndex(i) ) ) {
 						inventory.ammo[i] = inventory.MaxAmmoForAmmoClass( this, rvWeapon::GetAmmoNameForIndex(i) );
 					}
@@ -5417,7 +5417,7 @@ void idPlayer::ScheduleWeaponSwitch(int weapon)
 	CancelEvents(&EV_Player_SelectWeapon);
 	hud->SetStateInt("player_selectedWeapon", weapon-1);
 	hud->HandleNamedEvent( "weaponSelect" );
-	
+
 	// nrausch: support for turning the weapon change ui on and off
 	idWindow *win = FindWindowByName( "p_weapswitch", hud->GetDesktop() );
 	if ( win ) {
@@ -5468,12 +5468,12 @@ void idPlayer::LastWeapon( void ) {
 	if ( spectating || previousWeapon < 0 )	{
 		return;
 	}
-	
+
 	// Do we have the weapon still?
 	if ( !(inventory.weapons & ( 1 << previousWeapon ) ) ) {
 		return;
 	}
-	
+
 	idealWeapon = previousWeapon;
 }
 
@@ -5489,7 +5489,7 @@ void idPlayer::NextBestWeapon( void ) {
  	if ( gameLocal.isClient || !weaponEnabled ) {
  		return;
  	}
- 
+
  	while ( w > 0 ) {
 		w--;
 		weap = spawnArgs.GetString( va( "def_weapon%d", w ) );
@@ -5518,7 +5518,7 @@ void idPlayer::NextWeapon( void ) {
  	if ( !weaponEnabled || spectating || hiddenWeapon || gameLocal.inCinematic || gameLocal.world->spawnArgs.GetBool( "no_Weapons" ) || health < 0 ) {
  		return;
  	}
- 
+
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
 
@@ -5534,7 +5534,7 @@ void idPlayer::NextWeapon( void ) {
 		w++;
 		if ( w >= MAX_WEAPONS ) {
 			w = 0;
-		} 
+		}
  		weap = spawnArgs.GetString( va( "def_weapon%d", w ) );
 		if ( !spawnArgs.GetBool( va( "weapon%d_cycle", w ) ) ) {
 			continue;
@@ -5550,14 +5550,14 @@ void idPlayer::NextWeapon( void ) {
 		}
 	}
 
-	if ( ( w != currentWeapon ) && ( w != idealWeapon ) ) {		
+	if ( ( w != currentWeapon ) && ( w != idealWeapon ) ) {
 		if ( entityNumber == gameLocal.localClientNum ) {
 			idWindow *win = FindWindowByName( "p_weapswitch", hud->GetDesktop() );
 			if ( win ) {
 				win->SetVisible( true );
 			}
 		}
- 		
+
  		if ( gameLocal.isClient ) {
 			return;
 		}
@@ -5572,13 +5572,13 @@ void idPlayer::NextWeapon( void ) {
  	if ( gameLocal.isClient ) {
 		return;
 	}
-	
+
 	w = idealWeapon;
 	while( 1 ) {
 		w++;
 		if ( w >= MAX_WEAPONS ) {
 			w = 0;
-		} 
+		}
  		weap = spawnArgs.GetString( va( "def_weapon%d", w ) );
 		if ( !spawnArgs.GetBool( va( "weapon%d_cycle", w ) ) ) {
 			continue;
@@ -5616,7 +5616,7 @@ void idPlayer::PrevWeapon( void ) {
  	if ( !weaponEnabled || spectating || hiddenWeapon || gameLocal.inCinematic || gameLocal.world->spawnArgs.GetBool( "no_Weapons" ) || health < 0 ) {
  		return;
  	}
- 
+
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
 
@@ -5626,7 +5626,7 @@ void idPlayer::PrevWeapon( void ) {
 	}
 
 #ifdef _XENON
-	
+
 	w = idealWeapon;
 	while( 1 ) {
 		w--;
@@ -5655,7 +5655,7 @@ void idPlayer::PrevWeapon( void ) {
 				win->SetVisible( true );
 			}
 		}
- 		
+
 		if ( gameLocal.isClient ) {
 			return;
 		}
@@ -5737,8 +5737,8 @@ void idPlayer::SelectWeapon( int num, bool force ) {
 	}
 
 	// cycle in-between weapons
-	// if a weapon_def has a "def_weapon_swap" keyvalue pointing to another 
-	// weapon, hitting that impulse twice will cycle to the target swap. 
+	// if a weapon_def has a "def_weapon_swap" keyvalue pointing to another
+	// weapon, hitting that impulse twice will cycle to the target swap.
 	if( num == currentWeapon ) {
 		const idDict* weapDict = gameLocal.FindEntityDefDict( weap, false );
 
@@ -5759,10 +5759,10 @@ void idPlayer::SelectWeapon( int num, bool force ) {
 			} else {
 				num = swapNum;
 			}
-		} 
+		}
 #endif
 // RAVEN END
-	} 
+	}
 
 	if ( force || ( inventory.weapons & ( 1 << num ) ) ) {
  		if ( !inventory.HasAmmo( weap ) && !spawnArgs.GetBool( va( "weapon%d_allowempty", num ) ) ) {
@@ -5803,7 +5803,7 @@ idEntity* idPlayer::DropItem ( const char* itemClass, const idDict& customArgs, 
 	if ( !ent ) {
 		return NULL;
 	}
-	
+
 	// If a velocity was given then just use that, otherwise randomly throw it around
 	if ( velocity != vec3_origin ) {
 		ent->GetPhysics()->SetLinearVelocity ( velocity );
@@ -5833,8 +5833,8 @@ void idPlayer::DropPowerups( void ) {
 	for ( i = 0; i < POWERUP_MAX; i++ ) {
 		if ( !(inventory.powerups & ( 1 << i )) ) {
 			continue;
-		}		
-		
+		}
+
 		// These powerups aren't dropped
 		if ( i >= POWERUP_TEAM_AMMO_REGEN && i <= POWERUP_TEAM_DAMAGE_MOD )
 			continue;
@@ -5846,9 +5846,9 @@ void idPlayer::DropPowerups( void ) {
 		/// Don't drop arena rune powerups in non-Arena modes
 		if( gameLocal.gameType != GAME_ARENA_CTF )
 		{
-			if( i == POWERUP_AMMOREGEN || 
-				i == POWERUP_GUARD || 
-				i == POWERUP_DOUBLER || 
+			if( i == POWERUP_AMMOREGEN ||
+				i == POWERUP_GUARD ||
+				i == POWERUP_DOUBLER ||
 				i == POWERUP_SCOUT )
 			{
 				continue;
@@ -5865,15 +5865,15 @@ void idPlayer::DropPowerups( void ) {
 			continue;
 		}
 
-		idDict args;		
+		idDict args;
 		args.SetFloat ( "time", inventory.powerupEndTime[i] == -1 ? -1 : MS2SEC(inventory.powerupEndTime[i]-gameLocal.time) );
 		args.SetInt( "instance", GetInstance() );
 		item = DropItem ( def->dict.GetString ( "classname" ), args );
 		if ( !item ) {
 			gameLocal.Warning ( "Player %d failed to drop powerup '%s'", entityNumber, def->dict.GetString ( "classname" ) );
 			return;
-		}	
-	}	
+		}
+	}
 }
 
 /*
@@ -5893,7 +5893,7 @@ idEntity* idPlayer::ResetFlag ( const char* itemClass, const idDict& customArgs 
 	if ( !ent ) {
 		return NULL;
 	}
-	
+
 	return ent;
 }
 
@@ -5911,22 +5911,22 @@ void idPlayer::RespawnFlags ( void ) {
 	for ( i = POWERUP_CTF_MARINEFLAG; i < POWERUP_CTF_ONEFLAG; i++ ) {
 		if ( !(inventory.powerups & ( 1 << i )) ) {
 			continue;
-		}		
-		
+		}
+
 		const idDeclEntityDef* def;
 		def = GetPowerupDef ( i );
 		if ( !def ) {
 			continue;
 		}
 
-		idDict args;		
-		args.SetFloat ( "time", inventory.powerupEndTime[i] == -1 ? -1 : MS2SEC(inventory.powerupEndTime[i]-gameLocal.time) );			
+		idDict args;
+		args.SetFloat ( "time", inventory.powerupEndTime[i] == -1 ? -1 : MS2SEC(inventory.powerupEndTime[i]-gameLocal.time) );
 		item = ResetFlag ( def->dict.GetString ( "classname" ), args );
 		if ( !item ) {
 			gameLocal.Warning ( "Player %d failed to drop powerup '%s'", entityNumber, def->dict.GetString ( "classname" ) );
 			return;
-		}	
-	}	
+		}
+	}
 }
 
 /*
@@ -5956,18 +5956,18 @@ void idPlayer::DropWeapon( void ) {
 		return;
 	}
 
-	// Make sure the weapon is droppable	
+	// Make sure the weapon is droppable
 	itemClass = weapon->spawnArgs.GetString ( "def_dropItem" );
 	if ( !itemClass || !*itemClass ) {
 		return;
 	}
-		
+
 	// If still alive then the weapon is being thrown so start it a bit in front of the player
-	
+
 	// copy over the instance
 	args.SetInt( "instance", GetInstance() );
 
-	if ( health > 0 ) {		
+	if ( health > 0 ) {
 		idVec3 forward;
 		idVec3 up;
 		viewAngles.ToVectors( &forward, NULL, &up );
@@ -5976,7 +5976,7 @@ void idPlayer::DropWeapon( void ) {
 	} else {
 		item = DropItem ( itemClass, args );
 	}
-	
+
 	// Drop the weapon
 	if ( !item ) {
 		gameLocal.Warning ( "Player %d failed to drop weapon '%s'", entityNumber, weapon->spawnArgs.GetString ( "def_dropItem" ) );
@@ -6006,8 +6006,8 @@ void idPlayer::DropWeapon( void ) {
 			}
 			out += weapon->spawnArgs.GetString ( va("def_mod%d", i+1) );
 		}
-	} 
-	if ( out.Length() ) {	
+	}
+	if ( out.Length() ) {
 		item->spawnArgs.Set ( "inv_weaponmod", out );
 	}
 
@@ -6015,7 +6015,7 @@ void idPlayer::DropWeapon( void ) {
 	item->PostEventMS ( &EV_Remove, WEAPON_DROP_TIME );
 
 	// Delay aquire since the weapon is being thrown
-	if ( health > 0 ) {		
+	if ( health > 0 ) {
 		item->PostEventMS ( &EV_Activate, 500, item );
 		inventory.Drop( spawnArgs, item->spawnArgs.GetString( "inv_weapon" ), -1 );
 		NextWeapon();
@@ -6042,7 +6042,7 @@ idPlayer::Weapon_Combat
 ===============
 */
 void idPlayer::Weapon_Combat( void ) {
-	
+
  	if ( influenceActive || !weaponEnabled || gameLocal.inCinematic || privateCameraView ) {
 		return;
 	}
@@ -6068,7 +6068,7 @@ void idPlayer::Weapon_Combat( void ) {
    			SetWeapon( idealWeapon );
 
 			weapon->NetCatchup();
-			
+
 			SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 			SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
 			UpdateState();
@@ -6076,7 +6076,7 @@ void idPlayer::Weapon_Combat( void ) {
  			if ( weapon->IsReady() || weapon->IsReloading() ) {
  				weapon->PutAway();
  			}
- 
+
  			if ( weapon->IsHolstered() && weaponViewModel ) {
 				assert( idealWeapon >= 0 );
 				assert( idealWeapon < MAX_WEAPONS );
@@ -6098,7 +6098,7 @@ void idPlayer::Weapon_Combat( void ) {
 				SetAnimState ( ANIMCHANNEL_TORSO, "Torso_RaiseWeapon", 3 );
    			}
    		}
-	} 
+	}
 
 	weaponCatchup = false;
 
@@ -6137,7 +6137,7 @@ void idPlayer::Weapon_Vehicle( void ) {
 
 	if ( ( usercmd.buttons & BUTTON_ATTACK ) && !( oldButtons & BUTTON_ATTACK ) ) {
 		ProcessEvent ( &AI_EnterVehicle, focusEnt.GetEntity() );
-		
+
 		ClearFocus ( );
 	}
 }
@@ -6312,8 +6312,8 @@ void idPlayer::UpdateWeapon( void ) {
 			return;
 		}
 	}
-	
-	
+
+
 	if ( hiddenWeapon && tipUp && usercmd.buttons & BUTTON_ATTACK ) {
 		HideTip();
 	}
@@ -6343,21 +6343,21 @@ void idPlayer::UpdateWeapon( void ) {
 	} else if ( !hiddenWeapon ) { /* no pda yet || ( ( weapon_pda >= 0 ) && ( idealWeapon == weapon_pda ) ) ) { */
 		flagCanFire = true;
 		Weapon_Combat();
-	}	
+	}
 
 	// Range finder for debugging
 	if ( g_showRange.GetBool ( ) ) {
 		idVec3	start;
 		idVec3	end;
 		trace_t	tr;
-		
+
 		start = GetEyePosition();
 		end = start + viewAngles.ToForward() * 50000.0f;
 		gameLocal.TracePoint( this, tr, start, end, MASK_SHOT_BOUNDINGBOX, this );
 
 		idVec3 forward;
 		idVec3 right;
-		idVec3 up;		
+		idVec3 up;
 		viewAngles.ToVectors ( &forward, &right, &up );
 		gameRenderWorld->DrawText( va( "%d qu", ( int )( tr.endpos - start ).Length() ), start + forward * 100.0f + right * 25.0f, .2f, colorCyan, viewAxis );
 		gameRenderWorld->DrawText( va( "%d m", ( int )( tr.endpos - start ).Length() ), start + forward * 100.0f + right * 25.0f - up * 6.0f, .2f, colorCyan, viewAxis );
@@ -6408,7 +6408,7 @@ void idPlayer::SpectateFreeFly( bool force ) {
 			idAngles angle = player->viewAngles;
 			angle[ 2 ] = 0;
 			SetViewAngles( angle );
-		} else {	
+		} else {
 			if( !SelectSpawnPoint( spawn_origin, spawn_angles ) ) {
 				return;
 			}
@@ -6516,7 +6516,7 @@ bool idPlayer::HandleSingleGuiCommand( idEntity *entityGui, idLexer *src ) {
 		UpdateDatabaseInfo();
 		return true;
 	}
-	
+
 	if ( token.Icmp ( "filterDB" ) == 0 ) {
 		if ( !src->ReadToken( &token ) ) {
 			return false;
@@ -6530,7 +6530,7 @@ bool idPlayer::HandleSingleGuiCommand( idEntity *entityGui, idLexer *src ) {
 */
 // RAVEN END
 
-	if ( token.Icmp( "heal" ) == 0 && 
+	if ( token.Icmp( "heal" ) == 0 &&
 		entityGui->IsType( rvHealingStation::GetClassType() ) &&
 		src->ReadToken( &token ) )
 	{
@@ -6584,7 +6584,7 @@ bool idPlayer::Collide( const trace_t &collision, const idVec3 &velocity ) {
 ================
 idPlayer::UpdateLocation
 
-Searches nearby locations 
+Searches nearby locations
 ================
 */
  void idPlayer::UpdateLocation( void ) {
@@ -6611,12 +6611,12 @@ the focus and sending it a mouse move event
 ================
 */
 void idPlayer::UpdateFocus( void ) {
-	
+
 	// These only need to be updated at the last tic
 	if ( !gameLocal.isLastPredictFrame ) {
 		return;
 	}
-	
+
 	idClipModel*		clipModelList[ MAX_GENTITIES ];
 	idClipModel*		clip;
 	int					listedClipModels;
@@ -6665,9 +6665,9 @@ void idPlayer::UpdateFocus( void ) {
 		}
 	}
 #endif
-	
+
 	// Kill the focus brackets when their time has elapsed
-	oldBrackets = focusBrackets;	
+	oldBrackets = focusBrackets;
 	if ( focusBracketsTime && gameLocal.time > focusBracketsTime ) {
 		focusBrackets = NULL;
 	}
@@ -6685,14 +6685,14 @@ void idPlayer::UpdateFocus( void ) {
 		// no aim text if player is invisible
  		if ( ( trace.fraction < 1.0f ) && ( trace.c.entityNum < MAX_CLIENTS ) && ( !((idPlayer*)gameLocal.entities[ trace.c.entityNum ])->PowerUpActive( POWERUP_INVISIBILITY ) ) ) {
 			char* teammateHealth = "";
-			idPlayer* p = static_cast<idPlayer*>(gameLocal.entities[ trace.c.entityNum ]);			
-			
+			idPlayer* p = static_cast<idPlayer*>(gameLocal.entities[ trace.c.entityNum ]);
+
 			if( trace.c.entityNum != aimClientNum ) {
-				if( mphud ) {		
+				if( mphud ) {
 					mphud->SetStateString( "aim_text", va( "%s\n%s", gameLocal.userInfo[ trace.c.entityNum ].GetString( "ui_name" ), gameLocal.userInfo[ trace.c.entityNum ].GetString( "ui_clan" ) ) );
 					if( gameLocal.IsTeamGame() ) {
 						mphud->SetStateInt( "aim_player_team", p->team );
-	
+
 						if( p->team == team ) {
 							teammateHealth = va( "^iteh %d / ^itea %d", p->health, p->inventory.armor );
 						}
@@ -6706,13 +6706,13 @@ void idPlayer::UpdateFocus( void ) {
 							}
 						}
 					}
-					
+
 					mphud->SetStateString( "aim_teammate_health", teammateHealth );
-					
+
 
 					mphud->HandleNamedEvent( "aim_text" );
 					aimClientNum = trace.c.entityNum;
-				}	
+				}
 			} else {
 				// update health
 				if( gameLocal.IsTeamGame() && p->team == team ) {
@@ -6731,14 +6731,14 @@ void idPlayer::UpdateFocus( void ) {
 			}
 		}
  	}
- 
+
 #ifdef _XENON
 
 		bboxTrace.fraction = -1;
-		
+
 		bestEnemy = NULL;
 		if ( gameLocal.isMultiplayer ) {
-			
+
 			if ( !weapon || !weapon->AllowAutoAim() ) {
 				usercmdGen->SetSlowJoystick( zoomed ? pm_zoomedSlow.GetInteger() : 100 );
 				if ( cursor ) {
@@ -6746,7 +6746,7 @@ void idPlayer::UpdateFocus( void ) {
 				}
 				return;
 			}
-			
+
 			idEntity *ent = NULL;
 			idActor *actor = NULL;
 			bool inside;
@@ -6759,24 +6759,24 @@ void idPlayer::UpdateFocus( void ) {
 			float fovY, fovX;
 			// field of view
  			gameLocal.CalcFov( CalcFov( true ), fovX, fovY );
-			
-		
+
+
 			dNear = cvarSystem->GetCVarFloat( "r_znear" );
 			dFar = cvarSystem->GetCVarInteger("pm_AimAssistDistance");
-			
+
 #ifndef _FINAL
 			if ( cvarSystem->GetCVarInteger("pm_AimAssistTest") != 0 ) {
 				size = dFar * idMath::Tan( DEG2RAD( fovY * 0.5f ) ) * pm_AimAssistFOV.GetFloat()/100.0;
-			} else 
+			} else
 #endif
 			{
 				size = dFar * idMath::Tan( DEG2RAD( fovY * 0.5f ) ) * weapon->GetAutoAimFOV()/100.0;
-			}		
-			
+			}
+
 			aimArea.SetOrigin( GetEyePosition() );
 			aimArea.SetAxis( viewAngles.ToMat3() );
 			aimArea.SetSize( dNear, dFar, size, size );
-		
+
 
 			if ( showDebug ) {
 				gameRenderWorld->DebugFrustum(colorRed, aimArea, false, 20);
@@ -6790,7 +6790,7 @@ void idPlayer::UpdateFocus( void ) {
 			while ( ent != NULL ) {
 
 				bool isOk = true;
-									
+
 				if ( !ent->IsType(idPlayer::GetClassType()) ) {
 					isOk = false;
 				} else if ( gameLocal.IsTeamGame() && ((idPlayer*)ent)->team == team ) {
@@ -6813,7 +6813,7 @@ void idPlayer::UpdateFocus( void ) {
 					}
 					continue;
 				}
-				
+
 				const idBounds &bounds = ent->GetPhysics()->GetAbsBounds();
 				if ( showDebug ) {
 					gameRenderWorld->DebugBounds(colorGreen, bounds, vec3_origin, 20);
@@ -6838,7 +6838,7 @@ void idPlayer::UpdateFocus( void ) {
 							bestEnemy = (idActor *)ent;
 						}
 					}
-				}					
+				}
 
 				if ( gameLocal.isServer ) {
 					ent = ent->spawnNode.Next();
@@ -6846,7 +6846,7 @@ void idPlayer::UpdateFocus( void ) {
 					ent = ent->snapshotNode.Next();
 				}
 			}
-			
+
 			if ( !gameLocal.isMultiplayer || (gameLocal.isMultiplayer && entityNumber == gameLocal.localClientNum) ) {
 				if ( bestEnemy ) {
 					if ( cursor ) {
@@ -6854,7 +6854,7 @@ void idPlayer::UpdateFocus( void ) {
 						idVec3 altEnd = bestEnemy->GetPhysics()->GetOrigin();
 						altEnd[2]+=35.0f; // origin is always below the monster's feet for whatever reason, so aim at this
 						trace_t trace;
-					
+
 						gameLocal.TracePoint( this, trace, start, altEnd, MASK_SHOT_BOUNDINGBOX, this );
 						if ( ( trace.fraction < 1.0f ) && ( trace.c.entityNum == bestEnemy->entityNumber ) ) {
 							int slow = pm_AimAssistSlow.GetInteger();
@@ -6882,18 +6882,18 @@ void idPlayer::UpdateFocus( void ) {
 
 	idBounds bounds( start );
 	bounds.AddPoint( end );
-	
+
 	listedClipModels = gameLocal.ClipModelsTouchingBounds( this, bounds, -1, clipModelList, MAX_GENTITIES );
 
 	// Do autoaim
-	
-	
+
+
 //RAVEN BEGIN
 //asalmon: auto-aim for Xenon, finds a best enemy and changes the crosshairs.
 #ifdef _XBOX
-	
+
 		bool doAimAssist = cvarSystem->GetCVarBool("pm_AimAssist") || gameLocal.isMultiplayer;
-		
+
 		bestEnemy = NULL;
 		bool showDebug = cvarSystem->GetCVarBool("pm_showAimAssist");
 		float bDist = cvarSystem->GetCVarInteger("pm_AimAssistDistance");
@@ -6902,18 +6902,18 @@ void idPlayer::UpdateFocus( void ) {
 		float dNear, dFar, size;
 		renderView_t *rv = GetRenderView();
 		float fovY, fovX;
-		
+
 		if ( weapon && doAimAssist ) {
-		
+
 			// field of view
  			gameLocal.CalcFov( CalcFov( true ), fovX, fovY );
-		
+
 			dNear = cvarSystem->GetCVarFloat( "r_znear" );
 			dFar = bDist;
 #ifndef _FINAL
 			if ( cvarSystem->GetCVarInteger("pm_AimAssistTest") != 0 ) {
 				size = dFar * idMath::Tan( DEG2RAD( fovY * 0.5f ) ) * pm_AimAssistFOV.GetFloat()/100.0;
-			} else 
+			} else
 #endif
 			{
 				size = dFar * idMath::Tan( DEG2RAD( fovY * 0.5f ) ) * weapon->GetAutoAimFOV()/100.0;
@@ -6921,7 +6921,7 @@ void idPlayer::UpdateFocus( void ) {
 			aimArea.SetOrigin( GetEyePosition() );
 			aimArea.SetAxis( viewAngles.ToMat3() );
 			aimArea.SetSize( dNear, dFar, size, size );
-	
+
 			if ( showDebug ) {
 				gameRenderWorld->DebugFrustum( colorRed, aimArea, false, 20 );
 			}
@@ -6934,7 +6934,7 @@ void idPlayer::UpdateFocus( void ) {
 	renderTrace.fraction = -1;
 	bboxTrace.fraction = -1;
 	allTrace.fraction = -1;
-	
+
 	// no pretense at sorting here, just assume that there will only be one active
 	// gui within range along the trace
 	bool wasTargetFriendly = targetFriendly;
@@ -6952,7 +6952,7 @@ void idPlayer::UpdateFocus( void ) {
 		float focusLength = (ent->GetPhysics()->GetOrigin() - start).LengthFast() - ent->GetPhysics()->GetBounds().GetRadius();
 		//  SP only
 		//	basically what was happening was that heads, which are an idAFAttachment, were being used for the focusLength
-		//	calculations, but that generates a different focus length than the body would (when you scan the crosshair back 
+		//	calculations, but that generates a different focus length than the body would (when you scan the crosshair back
 		//	and forth between the head and body).  This ends up looking like a bug when you are right at the threshold where
 		//	the body will display the name and rank, but doesn't when you pitch up to aim at the head.  Hence, using the body
 		//	for this special case.
@@ -6962,17 +6962,17 @@ void idPlayer::UpdateFocus( void ) {
 				focusLength = (body->GetPhysics()->GetOrigin() - start).LengthFast() - body->GetPhysics()->GetBounds().GetRadius();
 			}
 		}
-		
+
 		bool isAI = ent->IsType( idAI::GetClassType() );
 		bool isFriendly = false;
-		
+
 		if ( isAI ) {
 			isFriendly = (static_cast<idAI *>( ent )->team == team);
 		}
-		
+
 		//change crosshair color if over a friendly
-		if ( !gameLocal.isMultiplayer 
-			&& focusType == FOCUS_NONE 
+		if ( !gameLocal.isMultiplayer
+			&& focusType == FOCUS_NONE
 			&& !g_crosshairCharInfoFar.GetBool() ) {
 			if ( focusLength < 512 ) {
 				bool newTargetFriendly = false;
@@ -6985,7 +6985,7 @@ void idPlayer::UpdateFocus( void ) {
 					}
 				}
 				if ( newTargetFriendly ) {
-				
+
 					// dluetscher: added optimization to eliminate redundant traces
 					if ( renderTrace.fraction == -1 ) {
 						gameLocal.TracePoint( this, renderTrace, start, end, MASK_SHOT_RENDERMODEL, this );
@@ -7005,15 +7005,15 @@ void idPlayer::UpdateFocus( void ) {
 #ifdef _XENON
 		if ( doAimAssist ) {
 			if ( isAI && !isFriendly && (ent->health > 0) ) {
-				
+
 				if ( idStr::Icmp( name.c_str(),ent->name.c_str() ) != 0 ) {
-				
+
 					const idBounds &bounds = ent->GetPhysics()->GetAbsBounds();
 					//if ( showDebug ) {
 						//gameRenderWorld->DebugBounds(colorGreen, bounds, vec3_origin, 20);
 					//}
 					bool inside = aimArea.IntersectsBounds(bounds);
-					
+
 					if ( inside ) {
 						dist = bounds.ShortestDistance(GetEyePosition());
 						if ( bDist > dist ) {
@@ -7033,7 +7033,7 @@ void idPlayer::UpdateFocus( void ) {
 								bestEnemy = (idActor *)ent;
 							}
 						}
-					}					
+					}
 				}
 			}
 		}
@@ -7096,7 +7096,7 @@ void idPlayer::UpdateFocus( void ) {
 					}
 					break;
 				}
-			} 
+			}
 
 			//jshepard: unusable vehicle
 			if( ent->spawnArgs.GetBool( "unusableVehicle", "0" ) ) {
@@ -7136,9 +7136,9 @@ void idPlayer::UpdateFocus( void ) {
 
 		pt = gameRenderWorld->GuiTrace( ent->GetModelDefHandle(), start, end );
 		if ( pt.x != -1 ) {
-			idUserInterface*	ui = NULL;			
+			idUserInterface*	ui = NULL;
 			renderEntity_t*		focusGUIrenderEntity;
-			
+
 			focusGUIrenderEntity = ent->GetRenderEntity();
 			if ( !focusGUIrenderEntity ) {
 				continue;
@@ -7147,7 +7147,7 @@ void idPlayer::UpdateFocus( void ) {
 			if ( pt.guiId >= 1 && pt.guiId <= MAX_RENDERENTITY_GUI ) {
 				ui = focusGUIrenderEntity->gui[ pt.guiId-1 ];
 			}
-			
+
 			if ( ui == NULL || !ui->IsInteractive ( ) ) {
 				continue;
 			}
@@ -7155,7 +7155,7 @@ void idPlayer::UpdateFocus( void ) {
 			// All focused guis get brackets
 			focusBrackets = ui;
 
-			// Any GUI that is too far away will just get bracket focus so the player can still shoot 
+			// Any GUI that is too far away will just get bracket focus so the player can still shoot
 			// but still see which guis are interractive
 			if ( focusLength > 300.0f ) {
 				ClearFocus ( );
@@ -7174,7 +7174,7 @@ void idPlayer::UpdateFocus( void ) {
 			// If this is the first time this gui was activated then set up some things
 			if ( focusEnt != ent ) {
 				const idKeyValue* kv;
-				
+
 				// new activation
 				// going to see if we have anything in inventory a gui might be interested in
 				// need to enumerate inventory items
@@ -7226,7 +7226,7 @@ void idPlayer::UpdateFocus( void ) {
  			ev = sys->GenerateMouseMoveEvent( pt.x * SCREEN_WIDTH, pt.y * SCREEN_HEIGHT );
 			command = ui->HandleEvent( &ev, gameLocal.time );
  			HandleGuiCommands( ent, command );
-			
+
 #ifdef _XENON
 			int usepad = 0;
 			if ( focusUI ) {
@@ -7249,14 +7249,14 @@ void idPlayer::UpdateFocus( void ) {
 
 #ifdef _XENON
 	if ( !gameLocal.isMultiplayer || (gameLocal.isMultiplayer && entityNumber == gameLocal.localClientNum) ) {
-		
+
 		if ( !weapon || !weapon->AllowAutoAim() ) {
 			if ( cursor ) {
 				cursor->SetStateInt("enemyFocus", 0);
 			}
 			usercmdGen->SetSlowJoystick( zoomed ? pm_zoomedSlow.GetInteger() : 100 );
-		} else {		
-		
+		} else {
+
 			if ( bestEnemy && doAimAssist ) {
 				if ( cursor ) {
 					cursor->SetStateInt("enemyFocus", 1);
@@ -7293,7 +7293,7 @@ void idPlayer::UpdateFocus( void ) {
 	if ( focusBrackets && hud ) {
 		if (focusType == FOCUS_BRACKETS || focusType == FOCUS_GUI ) {
 			if ( !oldBrackets || focusBracketsTime ) {
-				hud->HandleNamedEvent ( "showBrackets" );			
+				hud->HandleNamedEvent ( "showBrackets" );
 			}
 			focusBracketsTime = 0;
 		} else {
@@ -7303,12 +7303,12 @@ void idPlayer::UpdateFocus( void ) {
 			}
 		}
 		focusBrackets->SetStateBool ( "2d_calc", true );
-	}	
+	}
 
  	if ( cursor && ( oldTalkCursor != talkCursor ) ) {
  		cursor->SetStateInt( "talkcursor", talkCursor );
  	}
- 
+
 }
 
 /*
@@ -7347,11 +7347,11 @@ void idPlayer::SetFocus ( playerFocus_t newType, int _focusTime, idEntity* newEn
 
 	// Handle transitions from one user interface to another or to none
 	if ( newUI != focusUI ) {
-		if ( focusUI ) {		
+		if ( focusUI ) {
 			command = focusUI->Activate( false, gameLocal.time );
 			HandleGuiCommands( focusEnt, command );
 			StartSound( "snd_guiexit", SND_CHANNEL_ANY, 0, false, NULL );
-		}			
+		}
 		if ( newUI ) {
 			command = newUI->Activate( true, gameLocal.time );
 			HandleGuiCommands( newEnt, command );
@@ -7360,14 +7360,14 @@ void idPlayer::SetFocus ( playerFocus_t newType, int _focusTime, idEntity* newEn
 			// Hide the weapon when a gui is being used
 			/*
 			if ( weapon ) {
-				weapon->Hide();				
+				weapon->Hide();
 			}
 			*/
 		}/*
 		 else if ( weapon ) {
 			// Show the weapon since it was hidden when a gui first got focus
 			weapon->Show();
-		}		
+		}
 		*/
 	}
 
@@ -7416,7 +7416,7 @@ void idPlayer::SetFocus ( playerFocus_t newType, int _focusTime, idEntity* newEn
 	focusType = newType;
 	focusEnt  = newEnt;
 	focusUI	  = newUI;
-	
+
 	if ( focusType == FOCUS_NONE ) {
 		focusTime = 0;
 	} else {
@@ -7512,12 +7512,12 @@ void idPlayer::CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity ) {
 		return;
 	}
 
-	// Some bug in the player movement code causes double fall damage on the 2nd frame in certain situations, 
+	// Some bug in the player movement code causes double fall damage on the 2nd frame in certain situations,
 	// so hack around this.  Basically, if the next frame's velocity is going to be great enough to cause damage,
-	// don't do the damage this frame. This feels a lot safer than messing with things that could break player 
+	// don't do the damage this frame. This feels a lot safer than messing with things that could break player
 	// movement in worse ways.
 	if ( gameLocal.isMultiplayer ) {
-		
+
 		float vel2 = GetPhysics()->GetLinearVelocity() * -gravityNormal;
 
 		a = acc / 2.0f;
@@ -7532,12 +7532,12 @@ void idPlayer::CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity ) {
 
 		float delta2 = vel2 + t * acc;
 		delta2 = delta2 * delta2 * 0.0001;
-		
+
 		if ( delta2 > softFallDelta ) {
 			return;
 		}
 	}
-	
+
 
 	// ddynerman: moved height delta selection to player def
 	if ( delta > fatalFallDelta && fatalFallDelta > 0.0f ) {
@@ -7573,11 +7573,11 @@ void idPlayer::CrashLand( const idVec3 &oldOrigin, const idVec3 &oldVelocity ) {
 	// ddynerman: sometimes the actual landing animation is pre-empted by another animation (i.e. sliding, moving forward)
 	// so we play the landing sound here instead of relying on the anim
 	if( pfl.hardLanding ) {
-		StartSound ( "snd_land_hard", SND_CHANNEL_ANY, 0, false, NULL );		
-		StartSound ( "snd_land_hard_pain", SND_CHANNEL_ANY, 0, false, NULL );	
+		StartSound ( "snd_land_hard", SND_CHANNEL_ANY, 0, false, NULL );
+		StartSound ( "snd_land_hard_pain", SND_CHANNEL_ANY, 0, false, NULL );
 	} else if ( pfl.softLanding ) {
 		// todo - 2 different landing sounds for variety?
-		StartSound ( "snd_land_soft", SND_CHANNEL_ANY, 0, false, NULL );				 
+		StartSound ( "snd_land_soft", SND_CHANNEL_ANY, 0, false, NULL );
 	}
 }
 
@@ -7606,11 +7606,11 @@ void idPlayer::BobCycle( const idVec3 &pushVelocity ) {
 	if ( noclip ) {
 		velocity.Zero ( );
 	}
-   
+
 	gravityDir = physicsObj.GetGravityNormal();
 	vel = velocity - ( velocity * gravityDir ) * gravityDir;
 	xyspeed = vel.LengthFast();
-	
+
 	if ( !physicsObj.HasGroundContacts() || influenceActive == INFLUENCE_LEVEL2 || ( gameLocal.isMultiplayer && spectating ) ) {
 		// airborne
 		bobCycle = 0;
@@ -7644,7 +7644,7 @@ void idPlayer::BobCycle( const idVec3 &pushVelocity ) {
 	if( gameLocal.isMultiplayer && IsZoomed() ) {
 		bobCycle = 0;
 		bobFoot = 0;
-		bobfracsin = 0;	
+		bobfracsin = 0;
 		return;
 	}
 
@@ -7653,7 +7653,7 @@ void idPlayer::BobCycle( const idVec3 &pushVelocity ) {
 	// add angles based on velocity
 	delta = velocity * viewaxis[0];
 	viewBobAngles.pitch += delta * pm_runpitch.GetFloat();
-	
+
 	delta = velocity * viewaxis[1];
 	viewBobAngles.roll -= delta * pm_runroll.GetFloat();
 
@@ -7720,7 +7720,7 @@ void idPlayer::BobCycle( const idVec3 &pushVelocity ) {
 		delta -= LAND_DEFLECT_TIME;
 		f = 1.0 - ( delta / LAND_RETURN_TIME );
 		viewBob -= gravity * ( landChange * f );
-	}	
+	}
 }
 
 /*
@@ -7830,7 +7830,7 @@ idPlayer::UpdateAir
 ==============
 */
 void idPlayer::UpdateAir( void ) {
-	
+
 	if ( health <= 0 ) {
 		return;
 	}
@@ -7874,7 +7874,7 @@ void idPlayer::UpdateAir( void ) {
 				lastAirDamage = gameLocal.time;
 			}
 		}
-		
+
 	} else {
 		if ( airless ) {
  			StartSound( "snd_recompress", SND_CHANNEL_ANY, SSF_GLOBAL, false, NULL );
@@ -7981,7 +7981,7 @@ idPlayer::Spectate
 void idPlayer::Spectate( bool spectate, bool force ) {
  	idBitMsg	msg;
  	byte		msgBuf[MAX_EVENT_PARAM_SIZE];
- 
+
  	// track invisible player bug
  	// all hiding and showing should be performed through Spectate calls
  	// except for the private camera view, which is used for teleports
@@ -7998,13 +7998,13 @@ void idPlayer::Spectate( bool spectate, bool force ) {
 
 	// don't do any smoothing with this snapshot
 	predictedFrame = gameLocal.framenum;
- 
+
  	if ( gameLocal.isServer ) {
  		msg.Init( msgBuf, sizeof( msgBuf ) );
  		msg.WriteBits( spectating, 1 );
  		ServerSendEvent( EVENT_SPECTATE, &msg, false, -1 );
  	}
- 
+
 	// on the client, we'll get spectate messages about clients in other instances - always assume they are spectating
 	if ( spectating || inOtherInstance ) {
 		// join the spectators
@@ -8092,7 +8092,7 @@ bool idPlayer::EnterVehicle( idEntity* vehicle ) {
 	if ( !idActor::EnterVehicle ( vehicle ) ) {
 		return false;
 	}
-	
+
 // RAVEN BEGIN
 // jshepard: safety first
 	if( weapon)	{
@@ -8102,7 +8102,7 @@ bool idPlayer::EnterVehicle( idEntity* vehicle ) {
 // abahr:
 	//HideCrosshair();
 // RAVEN END
-  	
+
   	return true;
 }
 
@@ -8115,7 +8115,7 @@ bool idPlayer::ExitVehicle ( bool force ) {
 	if ( !idActor::ExitVehicle ( force ) ) {
 		return false;
 	}
-	
+
 	SetViewAngles( viewAxis[0].ToAngles() );
 
 // RAVEN BEGIN
@@ -8126,7 +8126,7 @@ bool idPlayer::ExitVehicle ( bool force ) {
 // abahr: Would like to call something more specific
 	ShowCrosshair();
 // RAVEN END
-	
+
 	return true;
 }
 
@@ -8315,7 +8315,7 @@ void idPlayer::UpdateTeamPowerups( bool isBuying ) {
 				// Not my teammate
 				if ( player->team != team )
 					continue;
-			
+
 				// when a teammate respawns while a powerup is active, we don't want to go through other players which already have the powerup
 				// otherwise they'll get multiple VO announces
 				// ignore this when setting up powerups after a buying impulse, it only means someone is buying before expiration
@@ -8432,11 +8432,11 @@ void idPlayer::PerformImpulse( int impulse ) {
 //RAVEN BEGIN
 // nrausch: Don't send xenon dpad impulses over the network
 #ifdef _XENON
-	
+
 	if ( objectiveSystemOpen ) {
 		return;
 	}
-	
+
 	if ( gameLocal.isClient && (impulse < IMPULSE_70) ) {
 #else
 	if ( gameLocal.isClient ) {
@@ -8479,14 +8479,14 @@ void idPlayer::PerformImpulse( int impulse ) {
 		}
 		case IMPULSE_14: {
 			NextWeapon();
-			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
+			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {
 				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
 			}
 			break;
 		}
 		case IMPULSE_15: {
 			PrevWeapon();
-			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
+			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {
 				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCyclePrev( this );
 			}
 			break;
@@ -8502,7 +8502,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 		case IMPULSE_19: {
-/*		
+/*
 			// when we're not in single player, IMPULSE_19 is used for showScores
 			// otherwise it does IMPULSE_12 (PDA)
 			if ( !gameLocal.isMultiplayer ) {
@@ -8547,7 +8547,7 @@ void idPlayer::PerformImpulse( int impulse ) {
    			}
    			break;
    		}
-				
+
 		case IMPULSE_28: {
  			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
  				gameLocal.mpGame.CastVote( gameLocal.localClientNum, true );
@@ -8606,7 +8606,7 @@ void idPlayer::PerformImpulse( int impulse ) {
  			LastWeapon();
  			break;
  		}
-	} 
+	}
 
 //RAVEN BEGIN
 //asalmon: route d-pad input to the active gui.
@@ -8620,7 +8620,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 		if ( gameLocal.isClient ) {
 			// we predict enough, but don't want to execute commands
 			return;
-		} 
+		}
 		if ( focusEnt ) {
 			HandleGuiCommands( focusEnt, command );
 		} else {
@@ -8630,7 +8630,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 #endif
 //RAVEN END
 }
-   
+
 /*
 ==============
 idPlayer::HandleESC
@@ -8646,7 +8646,7 @@ bool idPlayer::HandleESC( void ) {
 #endif
 	return false;
 }
- 
+
 /*
 ==============
 idPlayer::HandleObjectiveInput
@@ -8870,7 +8870,7 @@ void idPlayer::InitAASLocation( void ) {
 
 	num = gameLocal.NumAAS();
 	aasLocation.SetGranularity( 1 );
-	aasLocation.SetNum( num );	
+	aasLocation.SetNum( num );
 	for( i = 0; i < aasLocation.Num(); i++ ) {
 		aasLocation[ i ].areaNum = 0;
 		aasLocation[ i ].pos = origin;
@@ -8902,7 +8902,7 @@ void idPlayer::SetAASLocation( void ) {
 	if ( !GetFloorPos( 64.0f, origin ) ) {
 		return;
 	}
-	
+
 	for( i = 0; i < aasLocation.Num(); i++ ) {
 		aas = gameLocal.GetAAS( i );
 		if ( !aas ) {
@@ -8994,7 +8994,7 @@ void idPlayer::Move( void ) {
 
 	// FIXME: physics gets disabled somehow
 	BecomeActive( TH_PHYSICS );
-	
+
 	// If the player is dead then only run physics on new
 	// frames since articulated figures are not synchronized over the network
 	if ( health <= 0 ) {
@@ -9002,13 +9002,13 @@ void idPlayer::Move( void ) {
 			DeathPush();
 			RunPhysics();
 		}
-	} else { 
+	} else {
 		RunPhysics();
 	}
 
  	// update our last valid AAS location for the AI
 	if( !gameLocal.isMultiplayer ) {
-		SetAASLocation(); 
+		SetAASLocation();
 	}
 
 	if ( spectating ) {
@@ -9046,7 +9046,7 @@ void idPlayer::Move( void ) {
  		// check if we're standing on top of a monster and give a push if we are
  		idEntity *groundEnt = physicsObj.GetGroundEntity();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
  		if ( groundEnt && groundEnt->IsType( idAI::GetClassType() ) ) {
 // RAVEN END
  			idVec3 vel = physicsObj.GetLinearVelocity();
@@ -9164,7 +9164,7 @@ void idPlayer::UpdateHud( void ) {
 		return;
 	}
 
-	// FIXME: this is here for level ammo balancing to see pct of hits 
+	// FIXME: this is here for level ammo balancing to see pct of hits
 	hud->SetStateInt( "g_showProjectilePct", g_showProjectilePct.GetInteger() );
 	if ( numProjectilesFired ) {
 		hud->SetStateString( "projectilepct", va( "Hit %% %.1f", ( (float) numProjectileHits / numProjectilesFired ) * 100 ) );
@@ -9226,7 +9226,7 @@ void idPlayer::LoadDeferredModel( void ) {
 	if( !modelDecl ) {
 		gameLocal.Warning( "idPlayer::LoadDeferredModel() - reloadModel without vaid modelDict\n" );
 		return;
-	} 
+	}
 
 	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 0 );
 	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
@@ -9281,7 +9281,7 @@ Called every tic for each player
 */
 void idPlayer::Think( void ) {
 	renderEntity_t *headRenderEnt;
- 
+
 	if ( talkingNPC ) {
 		if ( !talkingNPC.IsValid() ) {
 			talkingNPC = NULL;
@@ -9320,7 +9320,7 @@ void idPlayer::Think( void ) {
 		CalculateRenderView();
 
 		FreeModelDef();
-		
+
 		if ( weapon ) {
 			weapon->GetWorldModel()->FreeModelDef();
 		}
@@ -9337,7 +9337,7 @@ void idPlayer::Think( void ) {
 	}
 
 	if( reloadModel ) {
-		LoadDeferredModel(); 
+		LoadDeferredModel();
 		reloadModel = false;
 	}
 
@@ -9378,9 +9378,9 @@ void idPlayer::Think( void ) {
 		oldFlags = usercmd.flags;
 	}
 
-	if ( gameLocal.inCinematic || influenceActive 
+	if ( gameLocal.inCinematic || influenceActive
 #ifdef _XENON
-		|| objectiveSystemOpen 
+		|| objectiveSystemOpen
 #endif
 		) {
 		usercmd.forwardmove = 0;
@@ -9394,7 +9394,7 @@ void idPlayer::Think( void ) {
 		usercmd.rightmove = 0;
 		usercmd.upmove = 0;
 	}
-	
+
 	// zooming
 	bool zoom = (usercmd.buttons & BUTTON_ZOOM) && CanZoom();
 	if ( zoom != zoomed ) {
@@ -9414,9 +9414,9 @@ void idPlayer::Think( void ) {
 
 	}
 
-	if ( IsInVehicle ( ) ) {	
+	if ( IsInVehicle ( ) ) {
 		vehicleController.SetInput ( usercmd, viewAngles );
-				
+
 		// calculate the exact bobbed view position, which is used to
 		// position the view weapon, among other things
 		CalculateFirstPersonView();
@@ -9432,7 +9432,7 @@ void idPlayer::Think( void ) {
 		}
 
 		UpdateLocation();
-		
+
 		if ( !fl.hidden ) {
 			UpdateAnimation();
 			Present();
@@ -9441,11 +9441,11 @@ void idPlayer::Think( void ) {
 			UpdateModel();
 		}
 
-		// I don't want to have to add this but if you are in a locked vehicle and you fail your objective, you won't be 
+		// I don't want to have to add this but if you are in a locked vehicle and you fail your objective, you won't be
 		//	ejected from the vehicle (and I don't think we'd want that even though we do have the option of forcing it..)
 		//	and since you are still in the vehicle, EvaluateControls (which covers the logic below for player usercmds)
 		//	will never get called.
-		if ( pfl.objectiveFailed ) 
+		if ( pfl.objectiveFailed )
 		{
 			if ( (	gameLocal.time > minRespawnTime && (usercmd.buttons & BUTTON_ATTACK)) ||
 				gameLocal.time > maxRespawnTime )
@@ -9522,11 +9522,11 @@ void idPlayer::Think( void ) {
 
  		// update GUIs, Items, and character interactions
 		UpdateFocus();
- 		
+
  		UpdateLocation();
 
 	 	// update player script
- 		UpdateState(); 
+ 		UpdateState();
 
 		// service animations
 		if ( !spectating && !af.IsActive() ) {
@@ -9557,7 +9557,7 @@ void idPlayer::Think( void ) {
 	}
 
 	UpdateAir();
-	
+
 	UpdateHud();
 
 	UpdatePowerUps();
@@ -9579,7 +9579,7 @@ void idPlayer::Think( void ) {
  			headRenderEnt = NULL;
  		}
 	}
- 
+
  	if ( headRenderEnt ) {
 		if ( powerUpSkin ) {
 			headRenderEnt->customSkin = powerUpSkin;
@@ -9607,7 +9607,7 @@ void idPlayer::Think( void ) {
 	DrawShadow( headRenderEnt );
 
 	// never cast shadows from our first-person muzzle flashes
-	// FIXME: get first person flashlight into this 
+	// FIXME: get first person flashlight into this
 	renderEntity.suppressShadowInLightID = rvWeapon::WPLIGHT_MUZZLEFLASH * 100 + entityNumber;
  	if ( headRenderEnt ) {
  		headRenderEnt->suppressShadowInLightID = rvWeapon::WPLIGHT_MUZZLEFLASH * 100 + entityNumber;
@@ -9679,7 +9679,7 @@ idPlayer::LookAtKiller
 */
 void idPlayer::LookAtKiller( idEntity *inflictor, idEntity *attacker ) {
 	idVec3 dir;
-	
+
 	if ( attacker && attacker != this ) {
 		dir = attacker->GetPhysics()->GetOrigin() - GetPhysics()->GetOrigin();
 	} else if ( inflictor && inflictor != this ) {
@@ -9786,8 +9786,8 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 // RITUAL END
 
 	bool noDrop = false;
-	if ( inflictor 
-		&& inflictor->IsType( idTrigger_Hurt::GetClassType() ) 
+	if ( inflictor
+		&& inflictor->IsType( idTrigger_Hurt::GetClassType() )
 		&& inflictor->spawnArgs.GetBool( "nodrop" ) ) {
 		//don't drop weapon or items here, flag auto-returns.
 		noDrop = true;
@@ -9843,7 +9843,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	if (weapon) {					// cnicholson: Fix for crash if player dies while in vehicle
 		weapon->OwnerDied();		// get rid of weapon
 		if ( !noDrop ) {
-			DropWeapon( );				// drop the weapon as an item 
+			DropWeapon( );				// drop the weapon as an item
 		}
 		delete weapon;
 	}
@@ -9858,7 +9858,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	if ( gameLocal.isMultiplayer || g_testDeath.GetBool() ) {
 		idPlayer *killer = NULL;
 		int methodOfDeath = MAX_WEAPONS + isTelefragged;
-		
+
 		if ( attacker->IsType( idPlayer::Type ) ) {
 			killer = static_cast<idPlayer*>(attacker);
 
@@ -9895,7 +9895,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 			}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		} else if ( attacker->IsType( idWorldspawn::GetClassType() ) ) {
 // RAVEN END
 			if( lastImpulseTime > gameLocal.time && lastImpulsePlayer ) {
@@ -9913,7 +9913,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 			RemoveClientModel( "mp_ctf_flag_pole" );
 			RemoveClientModel( "mp_ctf_marine_flag_world" );
 			StopEffect( "fx_ctf_marine_flag_world" );
-		} else if ( PowerUpActive( POWERUP_CTF_STROGGFLAG ) ) { 
+		} else if ( PowerUpActive( POWERUP_CTF_STROGGFLAG ) ) {
 			RemoveClientModel( "mp_ctf_flag_pole" );
 			RemoveClientModel( "mp_ctf_strogg_flag_world" );
 			StopEffect( "fx_ctf_strogg_flag_world" );
@@ -9933,7 +9933,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 		}
 	}
 
-	DropPowerups();	
+	DropPowerups();
 
 	ClearPowerUps();
 
@@ -9942,7 +9942,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 	// AI sometimes needs to respond to having killed someone.
 	// Note: Would it be better to make this a virtual funciton of... something?
 	aiManager.RemoveTeammate( this );
-	
+
 	isChatting = false;
 }
 
@@ -9973,7 +9973,7 @@ void idPlayer::CalcDamagePoints( idEntity *inflictor, idEntity *attacker, const 
 	if ( !gameLocal.isMultiplayer ) {
 		if ( inflictor != gameLocal.world ) {
 			switch ( g_skill.GetInteger() ) {
-				case 0: 
+				case 0:
 					damage = ceil(0.80f*(float)damage);
 					break;
 				case 2:
@@ -9985,7 +9985,7 @@ void idPlayer::CalcDamagePoints( idEntity *inflictor, idEntity *attacker, const 
 				default:
 					//damage *= 1.1f;  reverted to 1.0 for default damage... as per Biessman's request.
 					break;
-			}	
+			}
 		}
 	}
 
@@ -10067,7 +10067,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	// RAVEN BEGIN
 	// twhitaker: difficulty levels
 	float modifiedDamageScale = damageScale;
-	
+
 	if ( !gameLocal.isMultiplayer ) {
 		if ( inflictor != gameLocal.world ) {
 			modifiedDamageScale *= ( 1.0f + gameLocal.GetDifficultyModifier() );
@@ -10084,7 +10084,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	if ( gameLocal.isClient ) {
 		return;
 	}
-	
+
  	if ( !fl.takedamage || noclip || spectating || gameLocal.inCinematic ) {
 		// If in vehicle let it know that something is trying to hurt the invisible player
 		if ( IsInVehicle ( ) ) {
@@ -10093,8 +10093,8 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 				gameLocal.Warning( "Unknown damageDef '%s'", damageDefName );
 				return;
 			}
-			
-			// If the damage def is marked as a hazard then issue a warning to the vehicle 
+
+			// If the damage def is marked as a hazard then issue a warning to the vehicle
 			if ( damageDict->GetBool ( "hazard", "0" ) ) {
 				vehicleController.GetVehicle()->IssueHazardWarning ( );
 			}
@@ -10132,7 +10132,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		lightningNextTime = gameLocal.GetTime();
 	}
 
-	// We pass in damageScale, because this function calculates a modified damageScale 
+	// We pass in damageScale, because this function calculates a modified damageScale
 	// based on g_skill, and we don't want to compensate for skill level twice.
 	CalcDamagePoints( inflictor, attacker, &damageDef->dict, damageScale, location, &damage, &armorSave );
 
@@ -10152,24 +10152,24 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 			knockback = 0;
 		} else {
 			if ( attacker != this ) {
-				attackerPushScale = 1.0f;	
+				attackerPushScale = 1.0f;
 			} else {
 				// since default attackerDamageScale is 0.5, default attackerPushScale should be 2
 				damageDef->dict.GetFloat( "attackerPushScale", "2", attackerPushScale );
 			}
-		
+
 			kick = dir;
 
 			kick.Normalize();
  			kick *= g_knockback.GetFloat() * knockback * attackerPushScale / 200.0f;
-			
+
 			physicsObj.SetLinearVelocity( physicsObj.GetLinearVelocity() + kick );
 
 			// set the timer so that the player can't cancel out the movement immediately
  			physicsObj.SetKnockBack( idMath::ClampInt( 50, 200, knockback * 2 ) );
 		}
 	}
-	
+
 	if ( damageDef->dict.GetBool( "burn" ) ) {
 		StartSound( "snd_burn", SND_CHANNEL_BODY3, 0, false, NULL );
 	} else if ( damageDef->dict.GetBool( "no_air" ) ) {
@@ -10182,7 +10182,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	inventory.armor -= armorSave;
 
 	if ( g_debugDamage.GetInteger() ) {
-		gameLocal.Printf( "client:%i health:%i damage:%i armor:%i\n", 
+		gameLocal.Printf( "client:%i health:%i damage:%i armor:%i\n",
 			entityNumber, health, damage, armorSave );
 	}
 
@@ -10191,18 +10191,18 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 
  	// inform the attacker that they hit someone
  	attacker->DamageFeedback( this, inflictor, damage );
-	
+
 //RAVEN BEGIN
 //asalmon: Xenon needs stats in singleplayer
 #ifndef _XENON
 	if( gameLocal.isMultiplayer )
-#endif 
+#endif
 	{
 //RAVEN END
 		idEntity* attacker = NULL;
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		int methodOfDeath = -1;
 		if ( inflictor->IsType( idProjectile::GetClassType() ) ) {
 // RAVEN END
@@ -10216,7 +10216,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 
 		statManager->Damage( attacker, this, methodOfDeath, damage );
 	}
-		
+
 // RAVEN BEGIN
 // MCG - added damage over time
 	if ( !inDamageEvent ) {
@@ -10281,18 +10281,18 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 			}
 
  			isTelefragged = damageDef->dict.GetBool( "telefrag" );
- 
+
  			lastDmgTime = gameLocal.time;
 
 			Killed( inflictor, attacker, damage, dir, location );
 
-			if ( oldHealth > 0 ) {	
+			if ( oldHealth > 0 ) {
 				float pushScale = 1.0f;
 				if ( inflictor && inflictor->IsType ( idPlayer::Type ) ) {
 					pushScale = static_cast<idPlayer*>(inflictor)->PowerUpModifier ( PMOD_PROJECTILE_DEATHPUSH );
 				}
 				InitDeathPush ( dir, location, &damageDef->dict, pushScale );
-			}			
+			}
 		} else {
 			// force a blink
 			blink_time = 0;
@@ -10322,12 +10322,12 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 
 /*
 =====================
-idPlayer::CanPlayImpactEffect 
+idPlayer::CanPlayImpactEffect
 =====================
 */
-bool idPlayer::CanPlayImpactEffect( idEntity* attacker, idEntity* target ) 
+bool idPlayer::CanPlayImpactEffect( idEntity* attacker, idEntity* target )
 {
-	if ( !gameLocal.isMultiplayer && attacker->IsType( idAI::GetClassType()) && target->IsType( idPlayer::GetClassType())) 
+	if ( !gameLocal.isMultiplayer && attacker->IsType( idAI::GetClassType()) && target->IsType( idPlayer::GetClassType()))
 	{
 		// don't display impact effects when marines on our team shoot us...
 		idPlayer	*player = static_cast<idPlayer *>( target );
@@ -10363,11 +10363,11 @@ idPlayer::Teleport
 */
 void idPlayer::Teleport( const idVec3 &origin, const idAngles &angles, idEntity *destination ) {
  	idVec3 org;
- 
+
  	if ( weapon ) {
  		weapon->LowerWeapon();
  	}
- 
+
 	SetOrigin( origin + idVec3( 0, 0, CM_CLIP_EPSILON ) );
  	if ( !gameLocal.isMultiplayer && GetFloorPos( 16.0f, org ) ) {
  		SetOrigin( org );
@@ -10621,7 +10621,7 @@ void idPlayer::CalculateViewWeaponPos( idVec3 &origin, idMat3 &axis ) {
 	angles.roll		= scale * bobfracsin * 0.005f + g_gun_roll.GetFloat();
 	angles.yaw		= scale * bobfracsin * 0.01f + g_gun_yaw.GetFloat();
 	angles.pitch	= xyspeed * bobfracsin * 0.005f + g_gun_pitch.GetFloat();
-	
+
 	angles += weapon->GetViewModelAngles();
 
 	// gun angles from turning
@@ -10631,7 +10631,7 @@ void idPlayer::CalculateViewWeaponPos( idVec3 &origin, idMat3 &axis ) {
  		angles += offset;
  	} else {
  		angles += GunTurningOffset();
- 	}   
+ 	}
 
 	idVec3 gravity = physicsObj.GetGravityNormal();
 
@@ -10682,12 +10682,12 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 	idEntity*		vehicle;
 
 	assert ( IsInVehicle ( ) );
-	
+
 	vehicle = vehicleController.GetVehicle();
 
 	origin = vehicle->GetRenderEntity()->origin;
 	angles = vehicle->GetRenderEntity()->axis.ToAngles();
-	
+
 	angles.yaw += pm_thirdPersonAngle.GetFloat();
 	angles.pitch += 25.0f;
 
@@ -10703,12 +10703,12 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 
 	renderView->viewaxis = angles.ToMat3() * physicsObj.GetGravityAxis();
 
-	float speed = vehicle->GetPhysics()->GetLinearVelocity() * 
+	float speed = vehicle->GetPhysics()->GetLinearVelocity() *
 				  vehicle->GetPhysics()->GetAxis()[0];
 
 	speed = idMath::Fabs( speed );
 	speed *= pm_vehicleCameraSpeedScale.GetFloat();
-	if( speed > pm_vehicleCameraScaleMax.GetFloat() ) 
+	if( speed > pm_vehicleCameraScaleMax.GetFloat() )
 	{
 		speed = pm_vehicleCameraScaleMax.GetFloat();
 	}
@@ -10727,8 +10727,8 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 		const idBounds clip_bounds( clip_mins, clip_maxs );
 		idClipModel clipBounds( clip_bounds );// We clip when using a tram gun in the tram car
 // ddynerman: multiple clip worlds
-		gameLocal.Translation( this, trace, origin, view, &clipBounds, vehicle->GetPhysics()->GetAxis(), MASK_SOLID, vehicle, vehicle->GetBindMaster() ); 
-		if ( trace.fraction != 1.0 ) 
+		gameLocal.Translation( this, trace, origin, view, &clipBounds, vehicle->GetPhysics()->GetAxis(), MASK_SOLID, vehicle, vehicle->GetBindMaster() );
+		if ( trace.fraction != 1.0 )
 		{
 			view = trace.endpos;
 // abahr: taking into account gravity
@@ -10737,7 +10737,7 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 			// try another trace to this position, because a tunnel may have the ceiling
 			// close enough that this is poking out
 // ddynerman: multiple clip worlds
-			gameLocal.Translation( this, trace, origin, view, &clipBounds, vehicle->GetPhysics()->GetAxis(), MASK_SOLID, vehicle, vehicle->GetBindMaster() ); 
+			gameLocal.Translation( this, trace, origin, view, &clipBounds, vehicle->GetPhysics()->GetAxis(), MASK_SOLID, vehicle, vehicle->GetBindMaster() );
 			view = trace.endpos;
 		}
 	}
@@ -10746,7 +10746,7 @@ void idPlayer::OffsetThirdPersonVehicleView( bool clip ) {
 	// select pitch to look at focus point from vieword
 	focusPoint -= view;
 	focusDist = idMath::Sqrt( focusPoint[0] * focusPoint[0] + focusPoint[1] * focusPoint[1] );
-	if ( focusDist < 1 ) 
+	if ( focusDist < 1 )
 	{
 		focusDist = 1;	// should never happen
 	}
@@ -10815,7 +10815,7 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
 // abahr: taking into account gravity
  			view += physicsObj.GetGravityAxis()[2] * ( 1.0f - trace.fraction ) * 32.0f;
 // RAVEN END
-   
+
  			// try another trace to this position, because a tunnel may have the ceiling
  			// close enough that this is poking out
 // RAVEN BEGIN
@@ -10825,7 +10825,7 @@ void idPlayer::OffsetThirdPersonView( float angle, float range, float height, bo
  			view = trace.endpos;
  		}
    	}
-   
+
 
 	// select pitch to look at focus point from vieword
 	focusPoint -= view;
@@ -10849,7 +10849,7 @@ idPlayer::GetEyePosition
 */
 idVec3 idPlayer::GetEyePosition( void ) const {
 	idVec3 org;
- 
+
 	if ( WantSmoothing() ) {
 		org = predictedOrigin;
 	} else {
@@ -10874,7 +10874,7 @@ void idPlayer::GetViewPos( idVec3 &origin, idMat3 &axis ) const {
 		angles.pitch = -15;
 		axis = angles.ToMat3();
 		origin = GetEyePosition();
-	} else if ( IsInVehicle ( ) ) {	
+	} else if ( IsInVehicle ( ) ) {
 		vehicleController.GetEyePosition ( origin, axis );
 
   		idVec3		shakeOffset;
@@ -10890,7 +10890,7 @@ void idPlayer::GetViewPos( idVec3 &origin, idMat3 &axis ) const {
 	   	idBounds	relBounds(idVec3(0, 0, 0), idVec3(0, 0, 0));
 
   		playerView.ShakeOffsets( shakeOffset, shakeAngleOffset, relBounds );
-  		origin = GetEyePosition() + viewBob + shakeOffset;  		
+  		origin = GetEyePosition() + viewBob + shakeOffset;
 		angles = viewAngles + viewBobAngles + shakeAngleOffset + playerView.AngleOffset();
 
 		axis = angles.ToMat3() * physicsObj.GetGravityAxis();
@@ -10916,7 +10916,7 @@ void idPlayer::CalculateFirstPersonView( void ) {
 
 		ang = viewBobAngles + playerView.AngleOffset();
 		ang.yaw += viewAxis[ 0 ].ToYaw();
-		
+
 		jointHandle_t joint = animator.GetJointHandle( "camera" );
 		animator.GetJointTransform( joint, gameLocal.time, origin, axis );
 		firstPersonViewOrigin = ( origin + modelOffset ) * ( viewAxis * physicsObj.GetGravityAxis() ) + physicsObj.GetOrigin() + viewBob;
@@ -11042,7 +11042,7 @@ void idPlayer::CalculateRenderView( void ) {
 	 			renderView->vieworg = firstPersonViewOrigin;
 	 			renderView->viewaxis = firstPersonViewAxis;
 				SmoothenRenderView( true );
- 
+
 	 			if ( !pm_thirdPerson.GetBool() ) {
 	 				// set the viewID to the clientNum + 1, so we can suppress the right player bodies and
 	 				// allow the right player view weapons
@@ -11070,7 +11070,7 @@ void idPlayer::CalculateRenderView( void ) {
 				renderView->viewID = entityNumber + 1;
 			}
 		}
-		
+
 		// field of view
  		gameLocal.CalcFov( CalcFov( true ), renderView->fov_x, renderView->fov_y );
 
@@ -11249,7 +11249,7 @@ void idPlayer::SetLastHitTime( int time, bool armorHit ) {
 		if ( cursor ) {
 			cursor->HandleNamedEvent( "weaponHit" );
 		}
-		if ( gameLocal.isMultiplayer ) {			
+		if ( gameLocal.isMultiplayer ) {
 			// spectated so we get sounds for a client we're following
 			// localClientNum check so listen server plays only for local player
 			if ( spectated || gameLocal.localClientNum == entityNumber ) {
@@ -11265,7 +11265,7 @@ void idPlayer::SetLastHitTime( int time, bool armorHit ) {
 					}
 				}
 			}
-		
+
 			if ( aimClientNum != -1 ) {
 				if ( mphud ) {
 					mphud->HandleNamedEvent( "aim_hit" );
@@ -11289,7 +11289,7 @@ void idPlayer::SetInfluenceLevel( int level ) {
 		if ( level ) {
 			for ( idEntity *ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 				if ( ent->IsType( idProjectile::GetClassType() ) ) {
 // RAVEN END
 					// remove all projectiles
@@ -11402,17 +11402,17 @@ void idPlayer::Event_StopFxFov( void ) {
 
 /*
 ==================
-idPlayer::StartFxFov 
+idPlayer::StartFxFov
 ==================
 */
-void idPlayer::StartFxFov( float duration ) { 
+void idPlayer::StartFxFov( float duration ) {
 	fxFov = true;
 	PostEventSec( &EV_Player_StopFxFov, duration );
 }
 
 /*
 ==================
-idPlayer::Event_EnableWeapon 
+idPlayer::Event_EnableWeapon
 ==================
 */
 void idPlayer::Event_EnableWeapon( void ) {
@@ -11587,11 +11587,11 @@ idPlayer::Event_ZoomIn
 void idPlayer::Event_ZoomIn ( void ) {
 	float currentFov;
 	float t;
-	
+
 	if ( zoomed ) {
 		return;
 	}
-	
+
 	if ( vehicleController.IsDriving() ) {
 		rvVehicle * vehicle				= vehicleController.GetVehicle();
 		rvVehiclePosition * position	= vehicle ? vehicle->GetPosition( vehicleController.GetPosition() ) : 0;
@@ -11610,7 +11610,7 @@ void idPlayer::Event_ZoomIn ( void ) {
 		t *= weapon->GetZoomTime();
 
 		zoomFov.Init( gameLocal.time, SEC2MS(t), currentFov, weapon->GetZoomFov() );
-				
+
 		zoomed = true;
 		if ( weapon->GetZoomGui() )	{
 			weapon->GetZoomGui()->HandleNamedEvent ( "zoomIn" );
@@ -11623,7 +11623,7 @@ void idPlayer::Event_ZoomIn ( void ) {
 		t *= weapon->GetZoomTime();
 
 		zoomFov.Init( gameLocal.time, SEC2MS(t), currentFov, weapon->GetZoomFov() );
-				
+
 		zoomed = true;
 		if ( weapon->GetZoomGui() )	{
 			weapon->GetZoomGui()->HandleNamedEvent ( "zoomIn" );
@@ -11644,7 +11644,7 @@ void idPlayer::Event_ZoomOut ( void ) {
 	if ( !zoomed ) {
 		return;
 	}
-	
+
 	if ( vehicleController.IsDriving() ) {
 		rvVehicle * vehicle				= vehicleController.GetVehicle();
 		rvVehiclePosition * position	= vehicle ? vehicle->GetPosition( vehicleController.GetPosition() ) : 0;
@@ -11788,7 +11788,7 @@ void idPlayer::LocalClientPredictionThink( void ) {
 	usercmd.buttons &= ~buttonMask;
 
 	if ( idealWeapon != currentWeapon ) {
-		usercmd.buttons &= ~BUTTON_ATTACK;		
+		usercmd.buttons &= ~BUTTON_ATTACK;
 	}
 
  	// clear the ik before we do anything else so the skeleton doesn't get updated twice
@@ -11816,9 +11816,9 @@ void idPlayer::LocalClientPredictionThink( void ) {
 		}
 	}
 
-	if ( IsInVehicle( ) ) {	
+	if ( IsInVehicle( ) ) {
 		vehicleController.SetInput( usercmd, viewAngles );
-				
+
 		// calculate the exact bobbed view position, which is used to
 		// position the view weapon, among other things
 		CalculateFirstPersonView();
@@ -11831,8 +11831,8 @@ void idPlayer::LocalClientPredictionThink( void ) {
 		if ( !fl.hidden ) {
 			UpdateAnimation();
 			Present();
-		}			
-		
+		}
+
 		return;
 	}
 
@@ -11913,7 +11913,7 @@ void idPlayer::LocalClientPredictionThink( void ) {
 	}
 
  	if ( headRenderEnt ) {
-		// in MP, powerup skin overrides influence 	
+		// in MP, powerup skin overrides influence
 		if ( powerUpSkin ) {
 			headRenderEnt->customSkin = powerUpSkin;
 		} else if ( influenceSkin ) {
@@ -11921,7 +11921,7 @@ void idPlayer::LocalClientPredictionThink( void ) {
 		} else {
 			headRenderEnt->customSkin = headSkin;
 		}
- 		
+
 		headRenderEnt->suppressSurfaceInViewID = entityNumber + 1;
  	}
 
@@ -11969,7 +11969,7 @@ void idPlayer::NonLocalClientPredictionThink( void ) {
 
 	//jshepard: added this to make sure clients can see other clients and the host switching weapons
 	if ( idealWeapon != currentWeapon )	{
-		usercmd.buttons &= ~BUTTON_ATTACK;		
+		usercmd.buttons &= ~BUTTON_ATTACK;
 	}
 
  	// clear the ik before we do anything else so the skeleton doesn't get updated twice
@@ -11998,7 +11998,7 @@ void idPlayer::NonLocalClientPredictionThink( void ) {
 	}
 
 #if !LIMITED_PREDICTION
-	if ( IsInVehicle ( ) ) {	
+	if ( IsInVehicle ( ) ) {
 		vehicleController.SetInput ( usercmd, viewAngles );
 
 		// calculate the exact bobbed view position, which is used to
@@ -12013,8 +12013,8 @@ void idPlayer::NonLocalClientPredictionThink( void ) {
 		if ( !fl.hidden ) {
 			UpdateAnimation();
 			Present();
-		}			
-		
+		}
+
 		return;
 	}
 #endif
@@ -12098,7 +12098,7 @@ void idPlayer::NonLocalClientPredictionThink( void ) {
 	}
 
 	if ( headRenderEnt ) {
-		// in MP, powerup skin overrides influence 	
+		// in MP, powerup skin overrides influence
 		if ( powerUpSkin ) {
 			headRenderEnt->customSkin = powerUpSkin;
 		} else if ( influenceSkin ) {
@@ -12138,11 +12138,11 @@ idPlayer::ClientPredictionThink
 ================
 */
 void idPlayer::ClientPredictionThink( void ) {
-	
+
 	if ( doInitWeapon ) {
 		InitWeapon();
 	}
-	
+
 	// common code for both the local & non local clients
 	if ( reloadModel ) {
 		LoadDeferredModel();
@@ -12176,9 +12176,9 @@ idPlayer::GetMasterPosition
 */
 bool idPlayer::GetMasterPosition( idVec3 &masterOrigin, idMat3 &masterAxis ) const {
 	if( !IsInVehicle() ) {
-		return idActor::GetMasterPosition( masterOrigin, masterAxis );	
+		return idActor::GetMasterPosition( masterOrigin, masterAxis );
 	}
-	
+
 	vehicleController.GetDriverPosition( masterOrigin, masterAxis );
 	return true;
 }
@@ -12345,9 +12345,9 @@ void idPlayer::WriteToSnapshot( idBitMsgDelta &msg ) const {
  	msg.WriteBits( isChatting, 1 );
 	msg.WriteLong( connectTime );
 	msg.WriteByte( lastKiller ? lastKiller->entityNumber : 255 );
- 	
+
 	// 	vehicleController.WriteToSnapshot( msg );
- 	
+
  	if ( weapon ) {
  		msg.WriteBits( 1, 1 );
  		weapon->WriteToSnapshot( msg );
@@ -12434,7 +12434,7 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 	} else {
 		lastKiller = NULL;
 	}
-	
+
 	if ( idealWeapon != newIdealWeapon ) {
 		if ( stateHitch ) {
 			weaponCatchup = true;
@@ -12442,10 +12442,10 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 		idealWeapon = newIdealWeapon;
 		StopFiring();
 		UpdateHudWeapon();
-		usercmd.buttons &= (~BUTTON_ATTACK);		
+		usercmd.buttons &= (~BUTTON_ATTACK);
 	}
 
-	// Attach the world and view entities  
+	// Attach the world and view entities
 	weaponWorldModel.SetSpawnId( weaponWorldSpawnId );
 	if ( weaponWorldModel.IsValid() && weaponViewModel.SetSpawnId( weaponSpawnId ) ) {
 		currentWeapon = -1;
@@ -12485,7 +12485,7 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 //RITUAL END
 	}
  	// no msg reading below this
-	
+
 	// if not a local client assume the client has all ammo types
 	if ( entityNumber != gameLocal.localClientNum ) {
 		for( i = 0; i < MAX_AMMO; i++ ) {
@@ -12510,18 +12510,18 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 		if ( !stateHitch ) {
  			StartSound( "snd_death", SND_CHANNEL_VOICE, 0, false, NULL );
  		}
-		
+
 		const idDeclEntityDef* def = static_cast<const idDeclEntityDef*>(declManager->DeclByIndex ( DECL_ENTITYDEF, lastDamageDef ));
-		if ( def ) {		
+		if ( def ) {
 			// TODO: get attackers push scale?
 			InitDeathPush ( lastDamageDir, lastDamageLocation, &def->dict, 1.0f );
 			ClientDamageEffects ( def->dict, lastDamageDir, ( oldHealth - health ) * 4 );
 		}
 
 		//gib them here
-		if ( health < -20 || ( lastKiller && lastKiller->PowerUpActive( POWERUP_QUADDAMAGE )) )	{	
+		if ( health < -20 || ( lastKiller && lastKiller->PowerUpActive( POWERUP_QUADDAMAGE )) )	{
 			ClientGib( lastDamageDir );
-		}		
+		}
 
 		if ( weapon ) {
 			weapon->OwnerDied();
@@ -12529,7 +12529,7 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 			// Get rid of the weapon now
 			delete weapon;
 			weapon = NULL;
-			currentWeapon = -1;			
+			currentWeapon = -1;
 		}
 	} else if ( oldHealth <= 0 && health > 0 ) {
  		// respawn
@@ -12563,7 +12563,7 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
  	if ( lastHitToggle != newHitToggle ) {
 		SetLastHitTime( gameLocal.realClientTime, newHitArmor );
 	}
-	
+
 	if ( msg.HasChanged() ) {
 		UpdateVisuals();
 	}
@@ -12663,7 +12663,7 @@ bool idPlayer::ServerReceiveEvent( int event, int time, const idBitMsg &msg ) {
 
 			// Set the emote locally
 			SetEmote( (playerEmote_t)msg.ReadByte() );
-			
+
 			return true;
 		}
 		default: {
@@ -12700,7 +12700,7 @@ bool idPlayer::ClientReceiveEvent( int event, int time, const idBitMsg &msg ) {
  			} else {
  				ClearPowerup( powerup );
  			}
- 
+
  			return true;
  		}
  		case EVENT_SPECTATE: {
@@ -12711,7 +12711,7 @@ bool idPlayer::ClientReceiveEvent( int event, int time, const idBitMsg &msg ) {
 
 			// spectate might re-link clip for stale players, so re-call ClientStale if we're stale
 			if( fl.networkStale ) {
-				ClientStale();	
+				ClientStale();
 			}
    			return true;
  		}
@@ -12744,7 +12744,7 @@ idPlayer::Hide
 */
 void idPlayer::Hide( void ) {
 	idActor::Hide();
-	
+
 	if ( weapon ) {
 		weapon->HideWorldModel( );
 	}
@@ -12774,7 +12774,7 @@ void idPlayer::ShowTip( const char *title, const char *tip, bool autoHide ) {
 	}
 	hud->SetStateString( "tip", tip );
 	hud->SetStateString( "tiptitle", title );
-	hud->HandleNamedEvent( "tipWindowUp" ); 
+	hud->HandleNamedEvent( "tipWindowUp" );
 	if ( autoHide ) {
 		PostEventSec( &EV_Player_HideTip, 5.0f );
 	}
@@ -12787,7 +12787,7 @@ idPlayer::HideTip
 ===============
 */
 void idPlayer::HideTip( void ) {
-	hud->HandleNamedEvent( "tipWindowDown" ); 
+	hud->HandleNamedEvent( "tipWindowDown" );
 	tipUp = false;
 }
 
@@ -12920,7 +12920,7 @@ void idPlayer::ToggleFlashlight ( void ) {
 				}
 			}
 		}
-		
+
 		// Couldnt find flashlight
 		if ( flashlightWeapon < 0 ) {
 			return;
@@ -12932,7 +12932,7 @@ void idPlayer::ToggleFlashlight ( void ) {
 		flashlightOn = true;
 		idealWeapon = flashlightWeapon;
 	// Inform the weapon to toggle the flashlight, this will eventually cause the players
-	// Flashlight method to be called 
+	// Flashlight method to be called
 	} else if ( weapon ) {
 		weapon->Flashlight ( );
 	}
@@ -12944,7 +12944,7 @@ idPlayer::Flashlight
 ================
 */
 void idPlayer::Flashlight ( bool on ) {
-	flashlightOn = on;	
+	flashlightOn = on;
 }
 
 /*
@@ -12953,7 +12953,7 @@ idPlayer::DamageFeedback
 ================
 */
 void idPlayer::DamageFeedback( idEntity *victim, idEntity *inflictor, int &damage ) {
-	
+
 	//rvTramCars weren't built on the idActor inheritance hierarchy but need to be treated like one when shot.
 	//TODO: Maybe add a key to entity flags that will allow them to be shot as actors even if they aren't actors?
 	if( !victim || ( !victim->IsType( idActor::GetClassType() ) && !victim->IsType( rvTramCar::GetClassType() ) ) || victim->health <= 0 ) {
@@ -12974,7 +12974,7 @@ void idPlayer::DamageFeedback( idEntity *victim, idEntity *inflictor, int &damag
 		if( ((idPlayer*)victim)->inventory.armor > 0 ) {
 			armorHit = true;
 		}
-	} 
+	}
 
 	SetLastHitTime( gameLocal.time, armorHit );
 }
@@ -12994,12 +12994,12 @@ const idDeclEntityDef* idPlayer::GetWeaponDef ( int weaponIndex ) {
 	if ( !weapon.Length() ) {
 		return NULL;
 	}
-		
+
 	cachedWeaponDefs[weaponIndex] = gameLocal.FindEntityDef ( weapon, false );
 	if ( !cachedWeaponDefs[weaponIndex] ) {
 		gameLocal.Error( "Could not find weapon definition '%s'", weapon.c_str() );
-	}	
-	
+	}
+
 	return cachedWeaponDefs[weaponIndex];
 }
 
@@ -13015,16 +13015,16 @@ const idDeclEntityDef* idPlayer::GetPowerupDef ( int powerupIndex ) {
 	const idDict* types;
 	int			  i;
 	int			  num;
-	
+
 	if ( cachedPowerupDefs[powerupIndex] ) {
 		return cachedPowerupDefs[powerupIndex];
 	}
-	
+
 	types = gameLocal.FindEntityDefDict( "powerup_types", false );
 	if ( !types ) {
 		gameLocal.Error( "Could not find entity definition for 'powerup_types'" );
 	}
-	
+
 	num = types->GetNumKeyVals();
 	for( i = 0; i < num; i++ ) {
 		const idKeyValue* kv;
@@ -13036,10 +13036,10 @@ const idDeclEntityDef* idPlayer::GetPowerupDef ( int powerupIndex ) {
 			}
 			return cachedPowerupDefs[powerupIndex];
 		}
-	}	
-	
+	}
+
 	gameLocal.Error( "Could not find powerup definition '%d'", powerupIndex );
-	
+
 	return NULL;
 }
 
@@ -13060,7 +13060,7 @@ void idPlayer::DiscoverSecretArea(const char* _description)	{
 ==============
 idPlayer::StartBossBattle
 
-Starts a boss battle with the given entity.  During a boss battle the health of the boss 
+Starts a boss battle with the given entity.  During a boss battle the health of the boss
 will be displayed on the HUD
 ==============
 */
@@ -13091,7 +13091,7 @@ void idPlayer::SetInitialHud ( void ) {
 
 	mphud->HandleNamedEvent( "InitHud" );
 	mphud->HandleNamedEvent( "TeamChange" );
-	
+
 	if( gameLocal.IsFlagGameType() ) {
 		mphud->SetStateFloat( "ap", gameLocal.mpGame.assaultPoints.Num() );
 
@@ -13100,13 +13100,13 @@ void idPlayer::SetInitialHud ( void ) {
 			if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( i ) == FS_DROPPED ) {
 				mphud->HandleNamedEvent( "flagDrop" );
 			} else if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( i ) == FS_TAKEN ) {
-				mphud->HandleNamedEvent( "flagTaken" );	
+				mphud->HandleNamedEvent( "flagTaken" );
 			} else if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( i ) == FS_TAKEN_MARINE ) {
 				mphud->SetStateInt( "team", TEAM_MARINE );
-				mphud->HandleNamedEvent( "flagTaken" );	
+				mphud->HandleNamedEvent( "flagTaken" );
 			} else if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( i ) == FS_TAKEN_STROGG ) {
 				mphud->SetStateInt( "team", TEAM_STROGG );
-				mphud->HandleNamedEvent( "flagTaken" );	
+				mphud->HandleNamedEvent( "flagTaken" );
 			} else if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( i ) == FS_AT_BASE ) {
 				mphud->SetStateInt( "team", i );
 				mphud->HandleNamedEvent( "flagReturn" );
@@ -13127,12 +13127,12 @@ void idPlayer::SetInitialHud ( void ) {
 void idPlayer::RemoveClientModel ( const char *entityDefName ) {
 	rvClientEntity* cent;
 	rvClientEntity*	next;
-	
+
 	for( cent = clientEntities.Next(); cent != NULL; cent = next ) {
 		next = cent->bindNode.Next();
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( cent->IsType ( rvClientModel::GetClassType() ) ) {
 // RAVEN END
 			if ( !idStr::Icmp ( ( static_cast<rvClientModel*> ( cent ) )->GetClassname(), entityDefName ) ) {
@@ -13140,19 +13140,19 @@ void idPlayer::RemoveClientModel ( const char *entityDefName ) {
 				delete cent;
 			}
 		}
-	}		
+	}
 }
 
 rvClientEntityPtr<rvClientModel> idPlayer::AddClientModel ( const char* entityDefName, const char* shaderName ) {
 	rvClientEntityPtr<rvClientModel> ptr;
 	ptr = NULL;
-	
+
 	if ( entityDefName == NULL ) {
 		return ptr;
 	}
-	
+
 	const idDict* entityDef = gameLocal.FindEntityDefDict ( entityDefName, false );
-	
+
 	if ( entityDef == NULL ) {
 		return ptr;
 	}
@@ -13160,7 +13160,7 @@ rvClientEntityPtr<rvClientModel> idPlayer::AddClientModel ( const char* entityDe
 	rvClientModel *newModel = NULL;
 
 	gameLocal.SpawnClientEntityDef( *entityDef, (rvClientEntity**)(&newModel), false, "rvClientModel" );
-	
+
 	if( newModel == NULL ) {
 		return ptr;
 	}
@@ -13169,14 +13169,14 @@ rvClientEntityPtr<rvClientModel> idPlayer::AddClientModel ( const char* entityDe
 	newModel->SetAxis( rotation );
 
 	newModel->SetOrigin( entityDef->GetVector( "origin" ) * rotation );
-	
+
 	newModel->Bind ( this, animator.GetJointHandle( entityDef->GetString ( "joint" ) ) );
 
 	newModel->SetCustomShader ( shaderName );
 	newModel->GetRenderEntity()->suppressSurfaceInViewID = entityNumber + 1;
 	newModel->GetRenderEntity()->noSelfShadow = true;
 	newModel->GetRenderEntity()->noShadow = true;
-	
+
 	ptr = newModel;
 
 	return ptr;
@@ -13185,18 +13185,18 @@ rvClientEntityPtr<rvClientModel> idPlayer::AddClientModel ( const char* entityDe
 void idPlayer::RemoveClientModels ( void ) {
 	rvClientEntity* cent;
 	rvClientEntity*	next;
-	
+
 	for( cent = clientEntities.Next(); cent != NULL; cent = next ) {
 		next = cent->bindNode.Next();
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( cent->IsType ( rvClientModel::GetClassType() ) ) {
 // RAVEN END
 			cent->Unbind ( );
 			delete cent;
 		}
-	}	
+	}
 }
 
 /*
@@ -13206,7 +13206,7 @@ ddynerman: Spawns client side gibs around this player
 =====================
 */
 void idPlayer::ClientGib( const idVec3& dir ) {
-	
+
 	if( !spawnArgs.GetBool( "gib" )	)	{
 		return;
 	}
@@ -13215,7 +13215,7 @@ void idPlayer::ClientGib( const idVec3& dir ) {
 	idVec3 entityCenter, velocity;
 	idList<rvClientMoveable *> list;
 
-		
+
 	// hide the player
 	SetSkin( gibSkin );
 
@@ -13232,7 +13232,7 @@ void idPlayer::ClientGib( const idVec3& dir ) {
 	}
 
 	// blow out the gibs in the given direction away from the center of the entity
-	
+
 
 	// spawn gib client models
 	rvClientMoveable::SpawnClientMoveables( this, "clientgib", &list );
@@ -13245,7 +13245,7 @@ void idPlayer::ClientGib( const idVec3& dir ) {
 		velocity = list[i]->GetPhysics()->GetAbsBounds().GetCenter() - entityCenter;
 		velocity.NormalizeFast();
 		velocity += ( i & 1 ) ? dir : -dir;
-		
+
 		list[i]->GetPhysics()->ApplyImpulse( 0, list[i]->GetPhysics()->GetOrigin(), velocity * ( 25000.0f + ( gameLocal.random.RandomFloat() * 50000.0f)) );
 //		list[i]->GetPhysics()->SetLinearVelocity( velocity * ( 25.0f + ( gameLocal.random.RandomFloat() * 300.0f)));
 		list[i]->GetPhysics()->SetAngularVelocity( velocity * ( -250.0f + ( gameLocal.random.RandomFloat() * 500.0f)));
@@ -13255,14 +13255,14 @@ void idPlayer::ClientGib( const idVec3& dir ) {
 
 		list[i]->PostEventMS( &CL_FadeOut, SEC2MS( 4.0f ), SEC2MS( 2.0f ) );
 	}
-	
+
 
 	//play gib fx
 	gameLocal.PlayEffect( spawnArgs, "fx_gib", GetPhysics()->GetOrigin(), GetPhysics()->GetAxis() );
 
 	// gibs are PVS agnostic.  If we gib a player outside of our PVS, set the oldHealth
 	// to below 0 so when this player re-appears in our snap we respawn him
-	if( gameLocal.isClient && gameLocal.GetLocalPlayer() && health > 0 ) { 
+	if( gameLocal.isClient && gameLocal.GetLocalPlayer() && health > 0 ) {
 		health = -100;
 	}
 }
@@ -13295,11 +13295,11 @@ void idPlayer::ClientDamageEffects ( const idDict& damageDef, const idVec3& dir,
 	if ( gameLocal.isMultiplayer && !gameLocal.isClient && !gameLocal.isListenServer ) {
 		return;
 	}
-	
+
 	from = dir;
 	from.Normalize();
 	viewAxis.ProjectVector( from, localDir );
-	
+
 	if ( damage ) {
 // RAVEN BEGIN
 // jnewquist: Controller rumble
@@ -13312,7 +13312,7 @@ void idPlayer::ClientDamageEffects ( const idDict& damageDef, const idVec3& dir,
 	}
 
 	// Visual effects
-	if ( health > 0 && damage ) {	
+	if ( health > 0 && damage ) {
 		// Let the hud know about the hit
 		if ( hud ) {
 			hud->SetStateFloat ( "hitdir", localDir.ToAngles()[YAW] + 180.0f );
@@ -13320,25 +13320,25 @@ void idPlayer::ClientDamageEffects ( const idDict& damageDef, const idVec3& dir,
 		}
  	}
 
-	// Sound effects	
+	// Sound effects
 	if ( damageDef.GetFloat ( "hl_volumeDB", "-40", fadeDB ) ) {
 		float fadeTime;
-		
+
 		fadeTime = 0.0f;
 		if ( !pfl.hearingLoss ) {
 			const char* fade;
 
 			fadeTime = damageDef.GetFloat ( "hl_fadeOutTime", ".25" );
 			soundSystem->FadeSoundClasses( SOUNDWORLD_GAME, 0, fadeDB, fadeTime );
-		
+
 			pfl.hearingLoss = true;
 
-			// sound overlayed?		
-			if ( damageDef.GetString ( "snd_hl", "", &fade ) && *fade ) {			
+			// sound overlayed?
+			if ( damageDef.GetString ( "snd_hl", "", &fade ) && *fade ) {
 				StartSoundShader ( declManager->FindSound ( fade ), SND_CHANNEL_DEMONIC, 0, false, NULL );
 			}
 		}
-		
+
 		fadeTime += damageDef.GetFloat ( "hl_time", "1" );
 
 		CancelEvents ( &EV_Player_FinishHearingLoss );
@@ -13379,7 +13379,7 @@ void idPlayer::ApplyImpulse( idEntity *ent, int id, const idVec3 &point, const i
 	if( ent->IsType( idPlayer::Type ) && ent != this ) {
 		lastImpulsePlayer = static_cast<idPlayer*>(ent);
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	} else if( ent->IsType( idProjectile::GetClassType() ) ) {
 // RAVEN END
 		idEntity* owner = static_cast<idProjectile*>(ent)->GetOwner();
@@ -13425,8 +13425,8 @@ void idPlayer::SetupHead( const char* headModel, idVec3 headOffset ) {
 
 			headEnt->SetBody ( this, headDict->GetString ( "model" ), joint );
 
-			headEnt->SetOrigin( vec3_origin );		
-			headEnt->SetAxis( mat3_identity );		
+			headEnt->SetOrigin( vec3_origin );
+			headEnt->SetAxis( mat3_identity );
 			headEnt->Bind( this, joint, true );
 			headEnt->InitCopyJoints();
 
@@ -13452,7 +13452,7 @@ void idPlayer::GUIMainNotice( const char* message, bool persist ) {
 	if( !gameLocal.isMultiplayer || !mphud ) {
 		return;
 	}
-	
+
 	mphud->SetStateString( "main_notice_text", message );
 	mphud->SetStateBool( "main_notice_persist", persist );
 	mphud->StateChanged( gameLocal.time );
@@ -13531,7 +13531,7 @@ idPlayer::GetSpawnClassname
 const char* idPlayer::GetSpawnClassname ( void ) {
 	idEntity*	world;
 	const char*	entityFilter;
-	
+
 	// Test player def
 	if ( *g_testPlayer.GetString() ) {
 		return g_testPlayer.GetString ( );
@@ -13541,16 +13541,16 @@ const char* idPlayer::GetSpawnClassname ( void ) {
 	if ( gameLocal.isMultiplayer ) {
 		return "player_marine_mp";
 	}
-	
+
 	// See if the world spawn specifies a player
 	world = gameLocal.entities[ENTITYNUM_WORLD];
 	assert( world );
-	
+
 	gameLocal.serverInfo.GetString( "si_entityFilter", "", &entityFilter );
 	if ( entityFilter && *entityFilter ) {
 		return world->spawnArgs.GetString( va("player_%s", entityFilter ), world->spawnArgs.GetString( "player", "player_marine" ) );
 	}
-	
+
 	return world->spawnArgs.GetString( "player", "player_marine" );
 }
 
@@ -13580,7 +13580,7 @@ void idPlayer::SetInstance( int newInstance ) {
 	if( weaponWorldModel ) {
 		weaponWorldModel->SetInstance( newInstance );
 	}
-	
+
 	if( weaponViewModel ) {
 		weaponViewModel->SetInstance( newInstance );
 	}
@@ -13598,7 +13598,7 @@ void idPlayer::SetInstance( int newInstance ) {
 						if( player->clientHead.GetEntity() ) {
 							delete player->clientHead;
 							player->clientHead = NULL;
-						}	
+						}
 					} else {
 						player->UpdateModelSetup( true );
 					}
@@ -13624,7 +13624,7 @@ void idPlayer::JoinInstance( int newInstance ) {
 	}
 
 	if( gameLocal.GetNumInstances() <= newInstance || gameLocal.GetInstance( newInstance ) == NULL ) {
-		// don't populate instance until player gets linked into the right one	
+		// don't populate instance until player gets linked into the right one
 		gameLocal.AddInstance( newInstance );
 
 		if( this == gameLocal.GetLocalPlayer() ) {
@@ -13716,13 +13716,13 @@ void idPlayer::SetArena( int newArena ) {
 				GUIMainNotice( common->GetLocalizedString( "#str_107271" ) );
 			}
 // RAVEN END
-			
+
 			if( gameLocal.GetLocalPlayer() ) {
 				gameLocal.mpGame.tourneyGUI.ArenaSelect( newArena, TGH_BRACKET );
 			}
 			gameLocal.mpGame.RemoveAnnouncerSoundRange( AS_TOURNEY_JOIN_ARENA_ONE, AS_TOURNEY_JOIN_ARENA_EIGHT );
 			gameLocal.mpGame.ScheduleAnnouncerSound( (announcerSound_t)(AS_TOURNEY_JOIN_ARENA_ONE + arena), gameLocal.time );
-		} 
+		}
 	}
 }
 
@@ -13732,7 +13732,7 @@ idPlayer::Event_DamageEffect
 ===============
 */
 void idPlayer::Event_DamageEffect( const char *damageDefName, idEntity* _damageFromEnt )
-{ 
+{
 	const idDeclEntityDef *damageDef = gameLocal.FindEntityDef( damageDefName, false );
 	if ( damageDef )
 	{
@@ -13824,10 +13824,10 @@ const idVec4& idPlayer::GetHitscanTint( void ) {
 			return defaultHitscanTint;
 		}
 	}
-	
+
 	if( gameLocal.serverInfo.GetInt( "si_allowHitscanTint" ) >= 1 ) {
-		return hitscanTint;    
-	} 
+		return hitscanTint;
+	}
 
 	return defaultHitscanTint;
 }
@@ -13907,7 +13907,7 @@ idPlayer::ClientStale
 */
 bool idPlayer::ClientStale( void ) {
 	idEntity::ClientStale();
-	
+
 	// remove all powerup effects
 	for( int i = 0; i < POWERUP_MAX; i++ ) {
 		if( inventory.powerups & ( 1 << i ) ) {
@@ -13932,7 +13932,7 @@ idPlayer::ClientUnstale
 */
 void idPlayer::ClientUnstale( void ) {
 	idEntity::ClientUnstale();
-	
+
 	// force render ent to position
 	renderEntity.axis = physicsObj.GetAxis();
 	renderEntity.origin = physicsObj.GetOrigin();

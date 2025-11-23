@@ -299,7 +299,7 @@ void idSound::FindTargets() {
 	}
 
 	idSoundEmitter *emitter = soundSystem->EmitterForIndex( SOUNDWORLD_GAME, refSound.referenceSoundHandle );
-	if ( !emitter ) { 
+	if ( !emitter ) {
 		// if we have targets lets get an emitter
 		refSound.referenceSoundHandle = soundSystem->AllocSoundEmitter( SOUNDWORLD_GAME );
 	}
@@ -333,11 +333,11 @@ void idSound::SetTargetSoundHandles( void ) {
 	if ( !soundSystem->EmitterForIndex( SOUNDWORLD_GAME, refSound.referenceSoundHandle ) ) {
 		return;
 	}
-	
+
 	for ( i = 0; i < targets.Num(); i++ ) {
 		targetEnt = targets[ i ].GetEntity();
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( targetEnt && targetEnt->IsType( idLight::GetClassType() ) ) {
 // RAVEN END
 			idLight	*light = static_cast<idLight*>(targetEnt);
@@ -354,7 +354,7 @@ void idSound::SetTargetSoundHandles( void ) {
 			// update the renderEntity to the renderer
 			light->UpdateVisuals();
 		}
-	}	
+	}
 }
 
 // abahr:

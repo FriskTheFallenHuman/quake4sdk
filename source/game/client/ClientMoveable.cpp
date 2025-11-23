@@ -63,7 +63,7 @@ void rvClientMoveable::FreeEntityDef ( void ) {
 	if ( entityDefHandle >= 0 ) {
 		gameRenderWorld->FreeEntityDef ( entityDefHandle );
 		entityDefHandle = -1;
-	}	
+	}
 }
 
 idVec3 simpleTri[3] =
@@ -109,7 +109,7 @@ void rvClientMoveable::Spawn ( void ) {
 		trm.Shrink( clipShrink * CM_CLIP_EPSILON );
 	}
 
-	physicsObj.SetSelf ( gameLocal.entities[ENTITYNUM_CLIENT] );		
+	physicsObj.SetSelf ( gameLocal.entities[ENTITYNUM_CLIENT] );
 	physicsObj.SetClipModel ( new idClipModel( trm ), spawnArgs.GetFloat ( "density", "0.5" ), entityNumber );
 
 	physicsObj.SetOrigin( GetOrigin() );
@@ -123,14 +123,14 @@ void rvClientMoveable::Spawn ( void ) {
 	physicsObj.SetClipMask( CONTENTS_OPAQUE ); // MASK_SHOT_RENDERMODEL | CONTENTS_CORPSE | CONTENTS_MOVEABLECLIP | CONTENTS_WATER );
 	physicsObj.Activate ( );
 
-	trailEffect = gameLocal.PlayEffect ( spawnArgs, "fx_trail", physicsObj.GetCenterMass(), GetAxis(), true );	
+	trailEffect = gameLocal.PlayEffect ( spawnArgs, "fx_trail", physicsObj.GetCenterMass(), GetAxis(), true );
 	trailAttenuateSpeed = spawnArgs.GetFloat ( "trailAttenuateSpeed", "200" );
-	
+
 	bounceSoundShader = declManager->FindSound ( spawnArgs.GetString ( "snd_bounce" ), false );
 	bounceSoundTime   = 0;
 	mPlayBounceSoundOnce = spawnArgs.GetBool("bounce_sound_once");
 	mHasBounced = false;
-	
+
 	scale.Init( gameLocal.GetTime(), SEC2MS(spawnArgs.GetFloat("scale_reset_duration", "0.2")), Max(VECTOR_EPSILON, spawnArgs.GetFloat("scale", "1.0f")), 1.0f );
 }
 
@@ -174,7 +174,7 @@ void rvClientMoveable::Think ( void ) {
 		return;
 	}
 
-	RunPhysics ( );	
+	RunPhysics ( );
 
 	// Special case the sound update to use the center mass since the origin may be in an odd place
 	idSoundEmitter *emitter = soundSystem->EmitterForIndex( SOUNDWORLD_GAME, refSound.referenceSoundHandle );
@@ -206,7 +206,7 @@ void rvClientMoveable::Think ( void ) {
 		entityDefHandle = gameRenderWorld->AddEntityDef( &renderEntity );
 	} else {
 		gameRenderWorld->UpdateEntityDef( entityDefHandle, &renderEntity );
-	}		
+	}
 }
 
 /*
@@ -223,7 +223,7 @@ idPhysics* rvClientMoveable::GetPhysics ( void ) const {
 rvClientMoveable::Collide
 ================
 */
-bool rvClientMoveable::Collide ( const trace_t &collision, const idVec3 &velocity ) {	
+bool rvClientMoveable::Collide ( const trace_t &collision, const idVec3 &velocity ) {
 	if (mPlayBounceSoundOnce && mHasBounced)
 	{
 		return false;
@@ -236,8 +236,8 @@ bool rvClientMoveable::Collide ( const trace_t &collision, const idVec3 &velocit
 			bounceSoundTime = BOUNCE_SOUND_DELAY;
 			mHasBounced = true;
 		}
-	}	
-		
+	}
+
 	return false;
 }
 
@@ -252,9 +252,9 @@ void rvClientMoveable::Save( idSaveGame *savefile ) const {
 
 	trailEffect.Save( savefile );
 	savefile->WriteFloat( trailAttenuateSpeed );
-		
+
 	savefile->WriteStaticObject( physicsObj );
-	
+
 	savefile->WriteInt( bounceSoundTime );
 	savefile->WriteSoundShader( bounceSoundShader );
 
@@ -275,9 +275,9 @@ void rvClientMoveable::Restore( idRestoreGame *savefile ) {
 
 	trailEffect.Restore( savefile );
 	savefile->ReadFloat( trailAttenuateSpeed );
-		
+
 	savefile->ReadStaticObject( physicsObj );
-	
+
 	savefile->ReadInt( bounceSoundTime );
 	savefile->ReadSoundShader( bounceSoundShader );
 
@@ -300,7 +300,7 @@ rvClientMoveable::Event_FadeOut
 void rvClientMoveable::Event_FadeOut ( int duration ) {
 	renderEntity.noShadow = true;
 	renderEntity.shaderParms[ SHADERPARM_TIME_OF_DEATH ] = gameLocal.time * 0.001f;
-	PostEventMS ( &EV_Remove, duration );	
+	PostEventMS ( &EV_Remove, duration );
 }
 
 /*
@@ -321,7 +321,7 @@ void rvClientMoveable::SpawnClientMoveables( idEntity* ent, const char *type, id
 	const idKeyValue *kv;
 	idVec3 origin;
 	idMat3 axis;
-	
+
 	if( list == NULL || type == NULL ) {
 		return;
 	}
@@ -333,14 +333,14 @@ void rvClientMoveable::SpawnClientMoveables( idEntity* ent, const char *type, id
 		axis = ent->GetPhysics()->GetAxis();
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if( ent->IsType( idAnimatedEntity::GetClassType() ) ) {
 // RAVEN END
 			idAnimatedEntity* animEnt = static_cast<idAnimatedEntity*>(ent);
 			jointHandle_t clientMoveableJoint;
-	
+
 			const char* clientMoveableJointName = ent->spawnArgs.GetString( va( "%s_joint", kv->GetKey().c_str() + 4 ) );
-		
+
 			// use a joint if specified
 			if ( idStr::Icmp( clientMoveableJointName, "") ) {
 				clientMoveableJoint = animEnt->GetAnimator()->GetJointHandle( clientMoveableJointName );
@@ -350,17 +350,17 @@ void rvClientMoveable::SpawnClientMoveables( idEntity* ent, const char *type, id
 					origin = ent->GetPhysics()->GetOrigin();
 					axis = ent->GetPhysics()->GetAxis();
 				}
-			} 
-		} 
+			}
+		}
 
 		// spawn the entity
 		const idDict* entityDef = gameLocal.FindEntityDefDict ( kv->GetValue().c_str(), false );
-	
+
 		if ( entityDef == NULL ) {
 			gameLocal.Warning( "%s refers to invalid entity def '%s' on entity '%s'\n", kv->GetKey().c_str(), kv->GetValue().c_str(), ent->name.c_str() );
 			break;
 		}
-	
+
 		rvClientMoveable* newModel = NULL;
 		// force spawnclass to rvClientMoveable
 		gameLocal.SpawnClientEntityDef( *entityDef, (rvClientEntity**)(&newModel), false, "rvClientMoveable" );

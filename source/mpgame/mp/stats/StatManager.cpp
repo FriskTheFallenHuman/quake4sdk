@@ -22,7 +22,7 @@ int				rvStatManager::lastRailShotHits[ MAX_CLIENTS ] = { 0 };
 
 inGameAwardInfo_t inGameAwardInfo[ IGA_NUM_AWARDS ] = {
 	//IGA_INVALID
-	{ 
+	{
 		NULL
 	},
 	//IGA_CAPTURE
@@ -67,7 +67,7 @@ inGameAwardInfo_t inGameAwardInfo[ IGA_NUM_AWARDS ] = {
 // rhummer: localized these strings.
 endGameAwardInfo_t endGameAwardInfo[ EGA_NUM_AWARDS ] = {
 	//EGA_INVALID
-	{ 
+	{
 		NULL
 	},
 	//EGA_LEMMING
@@ -144,7 +144,7 @@ void *rvStatAllocator::GetBlock( size_t blockSize, int* blockNumOut /* = NULL  *
 		}
 //		gameLocal.Printf( "rvStatAllocator::GetBlock() - Using block %d\n", currentBlock );
 //		statManager->DebugPrint();
-//		int numFreed = 
+//		int numFreed =
 			statManager->FreeEvents( currentBlock );
 //		statManager->DebugPrint();
 //		gameLocal.Printf( "rvStatAllocator::GetBlock() - stat manager freed %d events which used block %d\n", numFreed, currentBlock );
@@ -185,15 +185,15 @@ void rvStatAllocator::Report()
 	// shouchard:  for debugging and tuning only
 	common->Printf( "rvStatAllocator:  dump of usage stats\n" );
 	common->Printf( "\t%d total bytes handed out in %d requests\n", GetTotalBytesUsed(), GetTotalAllocations() );
-	common->Printf( "\tbegin game:    %3d;  end game:      %3d\n", 
-		GetAllocationsByType( ST_BEGIN_GAME ), 
+	common->Printf( "\tbegin game:    %3d;  end game:      %3d\n",
+		GetAllocationsByType( ST_BEGIN_GAME ),
 		GetAllocationsByType( ST_END_GAME ) );
-	common->Printf( "\tplayer hit:    %3d;  player kill:   %3d\n", 
-		GetAllocationsByType( ST_HIT ), 
+	common->Printf( "\tplayer hit:    %3d;  player kill:   %3d\n",
+		GetAllocationsByType( ST_HIT ),
 		GetAllocationsByType( ST_KILL ) );
-	common->Printf( "\tplayer death:  %3d;\n", 
+	common->Printf( "\tplayer death:  %3d;\n",
 		GetAllocationsByType( ST_DEATH ) );
-	common->Printf( "\tdamage dealt:  %3d;  damage taken:  %3d\n", 
+	common->Printf( "\tdamage dealt:  %3d;  damage taken:  %3d\n",
 		GetAllocationsByType( ST_DAMAGE_DEALT ),
 		GetAllocationsByType( ST_DAMAGE_TAKEN ) );
 	common->Printf( "\tstat team:     %3d\n",
@@ -410,9 +410,9 @@ void rvStatManager::ClientDisconnect( int clientNum ) {
 void rvStatManager::Kill( const idPlayer* victim, const idEntity* killer, int methodOfDeath ) {
 	int deathBlock, killBlock;
 	rvStatDeath* statDeath = statAllocator.AllocStatDeath( gameLocal.time, victim->entityNumber, methodOfDeath, &deathBlock );
-	
+
 	statQueue.Append( rvPair<rvStat*, int>( (rvStat*)statDeath, deathBlock ) );
-	
+
 	if( killer && killer->IsType( idPlayer::GetClassType() ) ) {
 		rvStatKill* statKill = statAllocator.AllocStatKill( gameLocal.time, killer->entityNumber, victim->entityNumber, victim->IsGibbed(), methodOfDeath, &killBlock );
 		statQueue.Append( rvPair<rvStat*, int>( (rvStat*)statKill, killBlock ) );
@@ -432,7 +432,7 @@ void rvStatManager::FlagCaptured( const idPlayer* player, int flagTeam ) {
 void rvStatManager::WeaponFired( const idPlayer* player, int weapon, int num ) {
 	playerStats[ player->entityNumber ].weaponShots[ weapon ] += num;
 	lastRailShotHits[ player->entityNumber ] = 0;
-	
+
 	comboKillState_t cks = comboKillState[ player->entityNumber ];
 	comboKillState[ player->entityNumber ] = CKS_NONE;
 	if ( player->GetWeaponIndex( "weapon_rocketlauncher" ) == weapon ) {
@@ -445,7 +445,7 @@ void rvStatManager::WeaponFired( const idPlayer* player, int weapon, int num ) {
 			comboKillState[ player->entityNumber ] = CKS_RAIL_FIRED;
 		}
 	}
-	
+
 }
 
 void rvStatManager::WeaponHit( const idActor* attacker, const idEntity* victim, int weapon, bool countForAccuracy ) {
@@ -471,7 +471,7 @@ void rvStatManager::Damage( const idEntity* attacker, const idEntity* victim, in
 		&& static_cast<const idPlayer*>( victim )->team == static_cast<const idPlayer*>( attacker )->team ) ) {
 		return;
 	}
-	
+
 	if(attacker)
 	{
 		if( attacker->IsType( idPlayer::GetClassType() ) ) {
@@ -531,7 +531,7 @@ void rvStatManager::DebugPrint( void ) {
 int rvStatManager::FreeEvents( int blockNum ) {
 	int blockStart = -1;
 	int blockEnd = -1;
-	
+
 	for( int i = 0; i < statQueue.Num(); i++ ) {
 		if( blockStart == -1 && statQueue[ i ].Second() == blockNum ) {
 			blockStart = i;
@@ -546,7 +546,7 @@ int rvStatManager::FreeEvents( int blockNum ) {
 //		gameLocal.Warning( "rvStatManager::FreeEvents() - Could not find events with block num '%d'\n", blockNum );
 		return 0;
 	}
-	
+
 	statQueue.RemoveRange( blockStart, blockEnd - 1 );
 
 	return (blockEnd - blockStart);
@@ -579,7 +579,7 @@ void rvStatManager::ReceiveInGameAward( const idBitMsg& msg ) {
 	inGameAward_t award = (inGameAward_t)msg.ReadByte();
 	int client = msg.ReadByte();
 
-	// display award on hud		
+	// display award on hud
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	idPlayer* remote = gameLocal.GetClientByNum(client);
 	bool justSound = false;
@@ -594,11 +594,11 @@ void rvStatManager::ReceiveInGameAward( const idBitMsg& msg ) {
 			return;
 		}
 	}
-	
+
 	if( client == gameLocal.localClientNum ) {
 		// don't count awards during warmup
 
-		if( !player || (gameLocal.mpGame.GetGameState()->GetMPGameState() != WARMUP && 
+		if( !player || (gameLocal.mpGame.GetGameState()->GetMPGameState() != WARMUP &&
 			(gameLocal.gameType != GAME_TOURNEY || ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetArena( player->GetArena() ).GetState() != AS_WARMUP )) ) {
 			localInGameAwards[ award ]++;
 			numAwards = localInGameAwards[ award ];
@@ -609,7 +609,7 @@ void rvStatManager::ReceiveInGameAward( const idBitMsg& msg ) {
 		if( player && player->mphud ) {
 			player->mphud->HandleNamedEvent( "clearIGA" );
 			player->mphud->SetStateInt( "ig_awards", idMath::ClampInt( 0, 10, numAwards ) );
-			player->mphud->SetStateString( "ig_award", va( "gfx/mp/awards/%s", inGameAwardInfo[ award ].name ) );	
+			player->mphud->SetStateString( "ig_award", va( "gfx/mp/awards/%s", inGameAwardInfo[ award ].name ) );
 			if( numAwards < 10 ) {
 				player->mphud->SetStateString( "ig_award_num", "");
 				for( int i = 0; i < idMath::ClampInt( 0, 10, numAwards ); i++ )  {
@@ -668,13 +668,13 @@ void rvStatManager::CheckAwardQueue() {
 		player->mphud->HandleNamedEvent( "clearIGA" );
 		localInGameAwards[ award ]++;
 		player->mphud->SetStateInt( "ig_awards", idMath::ClampInt( 0, 10, localInGameAwards[ award ] ) );
-		player->mphud->SetStateString( "ig_award", va( "gfx/mp/awards/%s", inGameAwardInfo[ award ].name ) );	
+		player->mphud->SetStateString( "ig_award", va( "gfx/mp/awards/%s", inGameAwardInfo[ award ].name ) );
 		if(localInGameAwards[ award ] < 10) {
 			player->mphud->SetStateString( "ig_award_num", "");
 			for( int i = 0; i < idMath::ClampInt( 0, 10, localInGameAwards[ award ] ); i++ )  {
 				player->mphud->SetStateInt( va( "ig_awards_%d", i + 1 ), 1 );
 			}
-			
+
 		}
 		else {
 			player->mphud->SetStateInt( "ig_award_num", localInGameAwards[ award ]);
@@ -694,10 +694,10 @@ void rvStatManager::GivePlayerCashForAward( idPlayer* player, inGameAward_t awar
 {
 	if( !player )
 		return;
-	
+
 	if( !gameLocal.isMultiplayer )
 		return;
-	
+
 	if( !gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() )
 		return;
 
@@ -731,12 +731,12 @@ void rvStatManager::GiveInGameAward( inGameAward_t award, int clientNum ) {
 
 	if( gameLocal.isMultiplayer ) {
 		// show in-game awards during warmup, but don't actually let players accumulate them
-		if( !player || (gameLocal.mpGame.GetGameState()->GetMPGameState() != WARMUP && 
+		if( !player || (gameLocal.mpGame.GetGameState()->GetMPGameState() != WARMUP &&
 			(gameLocal.gameType != GAME_TOURNEY || ((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->GetArena( player->GetArena() ).GetState() != AS_WARMUP )) ) {
 			playerStats[ clientNum ].inGameAwards[ award ]++;
 			GivePlayerCashForAward( player, award );
 		}
-		SendInGameAward( award, clientNum );	
+		SendInGameAward( award, clientNum );
 	}
 }
 
@@ -784,7 +784,7 @@ void rvStatManager::SendStat( int toClient, int statClient ) {
 	outMsg.Init( msgBuf, sizeof( msgBuf ) );
 	outMsg.WriteByte( GAME_RELIABLE_MESSAGE_STAT );
 	outMsg.WriteByte( statClient );
-	
+
 	playerStats[ statClient ].PackStats( outMsg );
 
 	networkSystem->ServerSendReliableMessage( toClient, outMsg );
@@ -796,7 +796,7 @@ void rvStatManager::ReceiveStat( const idBitMsg& msg ) {
 	{
 		assert( gameLocal.isClient );
 	}
-	
+
 	int client = msg.ReadByte();
 
 	playerStats[ client ].UnpackStats( msg );
@@ -810,7 +810,7 @@ void rvStatManager::ReceiveStat( const idBitMsg& msg ) {
 }
 
 void rvStatManager::SendAllStats( int clientNum, bool full ) {
-	
+
 	assert( gameLocal.isServer );
 
 	idBitMsg	outMsg;
@@ -841,7 +841,7 @@ void rvStatManager::SendAllStats( int clientNum, bool full ) {
 	networkSystem->ServerSendReliableMessage( clientNum, outMsg );
 
 	//common->Printf("SENT ALL STATS %i\n", Sys_Milliseconds());
-	
+
 }
 
 
@@ -915,7 +915,7 @@ void rvStatManager::CalculateEndGameStats( void ) {
 		toFile = va("Match on map %s played on %s\n", gameLocal.GetMapName(), asctime( newtime ));
 		log->Write(toFile.c_str(), toFile.Length());
 	}
-	
+
 	for( int i = 0; i < MAX_CLIENTS; i++ ) {
 		if( !gameLocal.entities[ i ] ) {
 			continue;
@@ -944,7 +944,7 @@ void rvStatManager::CalculateEndGameStats( void ) {
 					if(player->GetWeaponDef(j))
 					{
 						toFile = va("%s not used\n", common->GetLocalizedString(player->GetWeaponDef(j)->dict.GetString("inv_name")));
-						log->Write(toFile.c_str(), toFile.Length()); 
+						log->Write(toFile.c_str(), toFile.Length());
 					}
 				}
 				continue;
@@ -956,14 +956,14 @@ void rvStatManager::CalculateEndGameStats( void ) {
 				if(player->GetWeaponDef(j))
 				{
 					toFile = va("%s: %i%%\n", common->GetLocalizedString(player->GetWeaponDef(j)->dict.GetString("inv_name")), (int)(((float)playerStats[ i ].weaponHits[ j ] / (float)playerStats[ i ].weaponShots[ j ]) * 100.0f));
-					log->Write(toFile.c_str(), toFile.Length()); 
+					log->Write(toFile.c_str(), toFile.Length());
 				}
 			}
 			if( j == railgunIndex ) {
 				// sniper award
 				if( weaponAccuracy >= 0.9f && playerStats[ i ].weaponShots[ railgunIndex ] >= 10 ) {
 					playerStats[ i ].endGameAwards.Append( EGA_SNIPER );
-				}				
+				}
 			}
 
 			accuracyAverage += weaponAccuracy;
@@ -1033,7 +1033,7 @@ void rvStatManager::CalculateEndGameStats( void ) {
 			maxDamageKillsRatio = playerStats[ i ].damageRatio;
 			maxDamageKillsRatioPlayer = i;
 		}
-		
+
 		if(log)
 		{
 			toFile = "\n";
@@ -1059,7 +1059,7 @@ void rvStatManager::CalculateEndGameStats( void ) {
 		idPlayer* player = (idPlayer*)gameLocal.entities[ maxKillPlayer ];
 		if( !gameLocal.IsTeamGame() || ( gameLocal.IsTeamGame() && player && gameLocal.mpGame.TeamLeader() == player->team ) ) {
 			playerStats[ maxKillPlayer ].endGameAwards.Append( EGA_PERFECT );
-		} 
+		}
 	}
 
 	// Lemming award
@@ -1075,8 +1075,8 @@ void rvStatManager::CalculateEndGameStats( void ) {
 	// Team player award
 	if( maxDamageKillsRatioPlayer >= 0 && maxDamageKillsRatio > 500 ) {
 		playerStats[ maxDamageKillsRatioPlayer ].endGameAwards.Append( EGA_TEAM_PLAYER );
-	}	
-	
+	}
+
 	if(log)
 	{
 		toFile = "\n";
@@ -1240,7 +1240,7 @@ void rvStatManager::UpdateEndGameHud( idUserInterface* statHud, int clientNum ) 
 		SetupEndGameHud( statHud );
 		endGameSetup = true;
 	}
-	
+
 	rvPlayerStat* clientStat = &(playerStats[ clientNum ]);
 
 	statHud->HandleNamedEvent( "clear" );
@@ -1261,7 +1261,7 @@ void rvStatManager::UpdateEndGameHud( idUserInterface* statHud, int clientNum ) 
 	for( int i = 0; i < IGA_NUM_AWARDS; i++ ) {
 		statHud->SetStateString( inGameAwardInfo[ i ].name, va( "%d", igAwardCount[ i ] ) );
 	}
-	
+
 	// end-game awards
 	for( int i = 0; i < clientStat->endGameAwards.Num(); i++ ) {
 		statHud->SetStateInt( va( "eg_award%d", i ), 1 );
@@ -1280,7 +1280,7 @@ void rvStatManager::UpdateEndGameHud( idUserInterface* statHud, int clientNum ) 
 
 	rvStatSummary
 
-	Stores one player's summary information.  Transmitted to clients for 
+	Stores one player's summary information.  Transmitted to clients for
 	intermission summary screen.
 
 ===============================================================================

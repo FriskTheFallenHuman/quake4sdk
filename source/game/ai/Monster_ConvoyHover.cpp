@@ -50,7 +50,7 @@ private:
 	float					maxDistance;
 	jointHandle_t			jointGunRight;
 	jointHandle_t			jointGunLeft;
-	
+
 	int						lastAttackTime;
 	int						attackStartTime;
 
@@ -58,7 +58,7 @@ private:
 	int						blasterAttackRate;
 	int						bombAttackDuration;
 	int						bombAttackRate;
-	
+
 	int						shotCount;
 
 	idPhysics_RigidBody		physicsObj;
@@ -118,7 +118,7 @@ void rvMonsterConvoyHover::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt ( attackStartTime );
 
 	savefile->WriteInt ( shotCount );
-	
+
 	savefile->WriteStaticObject ( physicsObj );
 
 	savefile->Write ( hoverDampening, sizeof ( idAngles ) * DAMPEN_ANGLE_SAMPLES );
@@ -184,7 +184,7 @@ rvMonsterConvoyHover::Spawn
 ================
 */
 void rvMonsterConvoyHover::Spawn ( void ) {
-	physicsObj.SetSelf( this );	
+	physicsObj.SetSelf( this );
 
 	SetClipModel ( physicsObj );
 
@@ -197,7 +197,7 @@ void rvMonsterConvoyHover::Spawn ( void ) {
 	physicsObj.SetGravity( vec3_origin );
 	SetPhysics( &physicsObj );
 
-	animator.CycleAnim ( ANIMCHANNEL_ALL, animator.GetAnim( spawnArgs.GetString( "anim", "idle" ) ), gameLocal.time, 0 );	
+	animator.CycleAnim ( ANIMCHANNEL_ALL, animator.GetAnim( spawnArgs.GetString( "anim", "idle" ) ), gameLocal.time, 0 );
 
 	BecomeActive( TH_THINK );
 
@@ -271,12 +271,12 @@ void rvMonsterConvoyHover::Think ( void ) {
 	rvVehicleMonster::Think();
 
 	idVec3 vel = GetPhysics()->GetLinearVelocity();
-//	vel += idVec3(	idMath::Sin( gameLocal.time + vel.x ), 
-//					idMath::Sin( gameLocal.time + vel.y ), 
+//	vel += idVec3(	idMath::Sin( gameLocal.time + vel.x ),
+//					idMath::Sin( gameLocal.time + vel.y ),
 //					idMath::Sin( gameLocal.time + vel.z ) );
-					
 
-	idAngles hover = idAngles(	idMath::ClampFloat( -45.0f, 45.0f, vel.x / 20.0f ), 
+
+	idAngles hover = idAngles(	idMath::ClampFloat( -45.0f, 45.0f, vel.x / 20.0f ),
 								0.0f,
 								idMath::ClampFloat( -25.0f, 25.0f, vel.z / 20.0f ) );
 
@@ -370,14 +370,14 @@ rvMonsterConvoyHover::AttackBlaster
 void rvMonsterConvoyHover::AttackBlaster ( void ) {
 	idVec3 offset;
 	idMat3 axis;
-	jointHandle_t joint;	
-	
+	jointHandle_t joint;
+
 	joint = ((shotCount++)&1) ? jointGunRight : jointGunLeft;
-	
+
 	if ( joint == INVALID_JOINT ) {
 		return;
 	}
-	
+
 	if ( !GetJointWorldTransform( joint, gameLocal.time, offset, axis ) ) {
 		return;
 	}
@@ -402,14 +402,14 @@ rvMonsterConvoyHover::AttackBeam
 void rvMonsterConvoyHover::AttackBeam ( void ) {
 	idVec3 offset;
 	idMat3 axis;
-	jointHandle_t joint;	
-	
+	jointHandle_t joint;
+
 	joint = ((shotCount++)&1) ? jointGunRight : jointGunLeft;
-	
+
 	if ( joint == INVALID_JOINT ) {
 		return;
 	}
-	
+
 	if ( !GetJointWorldTransform( joint, gameLocal.time, offset, axis ) ) {
 		return;
 	}
@@ -432,13 +432,13 @@ rvMonsterConvoyHover::AttackBomb
 ================
 *
 void rvMonsterConvoyHover::AttackBomb ( void ) {
-	jointHandle_t joint;	
+	jointHandle_t joint;
 	joint = ((shotCount++)&1) ? jointGunRight : jointGunLeft;
 
 	if ( joint == INVALID_JOINT ) {
 		return;
 	}
-	
+
 	if ( !GetJointWorldTransform( joint, gameLocal.time, offset, axis ) ) {
 		return;
 	}
@@ -494,7 +494,7 @@ void rvMonsterConvoyHover::CalcDampening ( const idAngles & cur, idAngles & out 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -544,12 +544,12 @@ stateResult_t rvMonsterConvoyHover::State_BlasterAttack ( const stateParms_t& pa
 		case STAGE_INIT:
 			attackStartTime = gameLocal.time;
 			return SRESULT_STAGE ( STAGE_BLASTER );
-		
+
 		case STAGE_BLASTER:
 			lastAttackTime = gameLocal.time;
 			AttackBlaster ( );
 			return SRESULT_STAGE ( STAGE_BLASTERWAIT );
-		
+
 		case STAGE_BLASTERWAIT:
 			if ( gameLocal.time - attackStartTime > blasterAttackDuration ) {
 				return SRESULT_DONE;
@@ -577,12 +577,12 @@ stateResult_t rvMonsterConvoyHover::State_BeamAttack ( const stateParms_t& parms
 		case STAGE_INIT:
 			attackStartTime = gameLocal.time;
 			return SRESULT_STAGE ( STAGE_BEAM );
-		
+
 		case STAGE_BEAM:
 			lastAttackTime = gameLocal.time;
 			AttackBeam( );
 			return SRESULT_STAGE ( STAGE_BEAMWAIT );
-		
+
 		case STAGE_BEAMWAIT:
 			if ( gameLocal.time - attackStartTime > blasterAttackDuration ) {
 				return SRESULT_DONE;
@@ -610,12 +610,12 @@ stateResult_t rvMonsterConvoyHover::State_BombAttack ( const stateParms_t& parms
 		case STAGE_INIT:
 			attackStartTime = gameLocal.time;
 			return SRESULT_STAGE ( STAGE_BOMB );
-		
+
 		case STAGE_BOMB:
 			lastAttackTime = gameLocal.time;
 			AttackBomb ( );
 			return SRESULT_STAGE ( STAGE_BOMBWAIT );
-		
+
 		case STAGE_BOMBWAIT:
 			if ( !enemy.fl.inFov || gameLocal.time - attackStartTime > bombAttackDuration ) {
 				return SRESULT_DONE;

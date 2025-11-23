@@ -31,7 +31,7 @@ class rvDeclPlaybackData
 {
 public:
 	void					Init( void ) { entity = NULL; Callback = NULL; position.Zero(); velocity.Zero(); acceleration.Zero(); angles.Zero(); changed = 0; button = 0; impulse = 0; }
-	
+
 	void					SetPosition( const idVec3 &pos ) { position = pos; }
 	void					SetVelocity( const idVec3 &vel ) { velocity = vel; }
 	void					SetAcceleration( const idVec3 &accel ) { acceleration = accel; }

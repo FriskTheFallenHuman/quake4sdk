@@ -24,7 +24,7 @@ protected:
 
 	virtual bool		CheckActions					( void );
 
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 	int					shotsFired;
@@ -143,10 +143,10 @@ void rvMonsterStroggMarine::Restore ( idRestoreGame *savefile ) {
 	actionSprayAttack.Restore( savefile );
 	actionAngry.Restore( savefile );
 	actionReload.Restore( savefile );
-	
+
 	savefile->ReadInt ( shots );
-	savefile->ReadInt ( shotsFired ); 
-	
+	savefile->ReadInt ( shotsFired );
+
 	savefile->ReadInt ( fireAnimNum );
 	savefile->ReadBool ( spraySideRight );
 	savefile->ReadInt ( sweepCount );
@@ -194,7 +194,7 @@ bool rvMonsterStroggMarine::CheckAction_JumpBack ( rvAIAction* action, int animN
 	if ( !aifl.damage && gameLocal.time - pain.lastTakenTime > 1500 ) {
 		return false;
 	}
-	
+
 	// enemy must be in front to jump backwards
 	if ( !enemy.ent || !enemy.fl.inFov || !enemy.fl.visible ) {
 		return false;
@@ -391,7 +391,7 @@ rvMonsterStroggMarine::CheckActions
 */
 bool rvMonsterStroggMarine::CheckActions ( void ) {
 
-	if ( idAI::CheckActions ( ) ) 
+	if ( idAI::CheckActions ( ) )
 	{
 		return true;
 	}
@@ -409,7 +409,7 @@ bool rvMonsterStroggMarine::CheckActions ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -423,11 +423,11 @@ END_CLASS_STATES
 
 /*
 ================
-rvMonsterStroggMarine::State_Torso_RollAttack 
+rvMonsterStroggMarine::State_Torso_RollAttack
 ================
 */
 stateResult_t rvMonsterStroggMarine::State_Torso_RollAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		TORSO_ROLLATTACK_ROLL,
 		TORSO_ROLLATTACK_FACE,
 		TORSO_ROLLATTACK_FIRE,
@@ -438,28 +438,28 @@ stateResult_t rvMonsterStroggMarine::State_Torso_RollAttack ( const stateParms_t
 
 	switch ( parms.stage ) {
 		// Start the roll attack animation
-		case TORSO_ROLLATTACK_ROLL:			
+		case TORSO_ROLLATTACK_ROLL:
 			// Full body animations
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 
 			// Play the roll
-			PlayAnim ( ANIMCHANNEL_TORSO, "dive_turn", parms.blendFrames );	
+			PlayAnim ( ANIMCHANNEL_TORSO, "dive_turn", parms.blendFrames );
 			move.fl.noTurn = false;
 			//FaceEnemy();
 			return SRESULT_STAGE ( TORSO_ROLLATTACK_FACE );
-			
+
 		// Wait for roll animation to finish
 		case TORSO_ROLLATTACK_FACE:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 6 ) ) {
 				return SRESULT_STAGE ( TORSO_ROLLATTACK_FIRE );
 			}
 			return SRESULT_WAIT;
-	
+
 		// Play fire animation
 		case TORSO_ROLLATTACK_FIRE:
 			if ( !enemy.ent || !enemy.fl.visible )
 			{//whoops! rolled out of LOS
-				return SRESULT_DONE;			
+				return SRESULT_DONE;
 			}
 			if ( enemy.fl.inFov )
 			{
@@ -471,10 +471,10 @@ stateResult_t rvMonsterStroggMarine::State_Torso_RollAttack ( const stateParms_t
 		// Wait for fire animation to finish
 		case TORSO_ROLLATTACK_FINISH:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 2 ) ) {
-				return SRESULT_DONE;			
+				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}	
+	}
 	return SRESULT_ERROR;
 }
 
@@ -487,14 +487,14 @@ rvMonsterStroggMarine::CalculateShots
 void rvMonsterStroggMarine::CalculateShots ( void ) {
 	// Random number of shots ( scale by aggression range)
 	shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
-	
+
 	// Update the firing animation playback rate
 	/*
-	int	animNum;	
+	int	animNum;
 	animNum = GetAnim( ANIMCHANNEL_TORSO, fireAnim );
 	if ( animNum != 0 ) {
 		const idAnim* anim = GetAnimator()->GetAnim ( animNum );
-		if ( anim ) {			
+		if ( anim ) {
 			GetAnimator()->SetPlaybackRate ( animNum, ((float)anim->Length() * combat.aggressiveScale) / fireRate );
 		}
 	}
@@ -507,7 +507,7 @@ rvMonsterStroggMarine::State_Torso_RangedAttack
 ================
 */
 stateResult_t rvMonsterStroggMarine::State_Torso_RangedAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_START_WAIT,
 		STAGE_SHOOT,
@@ -524,7 +524,7 @@ stateResult_t rvMonsterStroggMarine::State_Torso_RangedAttack ( const stateParms
 				return SRESULT_DONE;
 			}
 
-			// Full body animations						
+			// Full body animations
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 
 			fireAnimNum = gameLocal.random.RandomInt(2)+1;
@@ -538,20 +538,20 @@ stateResult_t rvMonsterStroggMarine::State_Torso_RangedAttack ( const stateParms
 			}
 
 			return SRESULT_STAGE ( STAGE_SHOOT );
-			
+
 		case STAGE_START_WAIT:
 			// When the pre shooting animation is done head over to shooting
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_SHOOT );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_SHOOT:
 			PlayAnim ( ANIMCHANNEL_TORSO, va("range_attack%d_loop", fireAnimNum), 0 );
 			shots--;
 			shotsFired++;
 			return SRESULT_STAGE ( STAGE_SHOOT_WAIT );
-		
+
 		case STAGE_SHOOT_WAIT:
 			// When the shoot animation is done either play another shot animation
 			// or finish up with post_shooting
@@ -560,28 +560,28 @@ stateResult_t rvMonsterStroggMarine::State_Torso_RangedAttack ( const stateParms
 					return SRESULT_STAGE ( STAGE_END );
 				}
 				// If our enemy is no longer in our fov we can stop shooting
-				if ( !enemy.fl.inFov && shotsFired >= minShots ) { 
+				if ( !enemy.fl.inFov && shotsFired >= minShots ) {
 					return SRESULT_STAGE ( STAGE_END );
 				}
 				return SRESULT_STAGE ( STAGE_SHOOT);
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_END:
 			// Attack lead in animation?
 			if ( HasAnim ( ANIMCHANNEL_TORSO, va("range_attack%d_end", fireAnimNum), true ) ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, va("range_attack%d_end", fireAnimNum), parms.blendFrames );
 				return SRESULT_STAGE ( STAGE_END_WAIT );
-			}			
+			}
 			return SRESULT_DONE;
-			
+
 		case STAGE_END_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -590,7 +590,7 @@ rvMonsterStroggMarine::State_Torso_MovingRangedAttack
 ================
 */
 stateResult_t rvMonsterStroggMarine::State_Torso_MovingRangedAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_SHOOT,
 		STAGE_SHOOT_WAIT,
@@ -600,7 +600,7 @@ stateResult_t rvMonsterStroggMarine::State_Torso_MovingRangedAttack ( const stat
 			CalculateShots();
 			shotsFired = 0;
 			return SRESULT_STAGE ( STAGE_SHOOT );
-			
+
 		case STAGE_SHOOT:
 			shots--;
 			shotsFired++;
@@ -628,7 +628,7 @@ stateResult_t rvMonsterStroggMarine::State_Torso_MovingRangedAttack ( const stat
 			}
 			*/
 			return SRESULT_STAGE ( STAGE_SHOOT_WAIT );
-		
+
 		case STAGE_SHOOT_WAIT:
 			// When the shoot animation is done either play another shot animation
 			// or finish up with post_shooting
@@ -638,9 +638,9 @@ stateResult_t rvMonsterStroggMarine::State_Torso_MovingRangedAttack ( const stat
 				}
 				return SRESULT_STAGE ( STAGE_SHOOT);
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -681,7 +681,7 @@ rvMonsterStroggMarine::State_Torso_SprayAttack
 ================
 */
 stateResult_t rvMonsterStroggMarine::State_Torso_SprayAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_SWEEP,
 		STAGE_END,
@@ -701,7 +701,7 @@ stateResult_t rvMonsterStroggMarine::State_Torso_SprayAttack ( const stateParms_
 				PlayAnim ( ANIMCHANNEL_TORSO, "sprayleft_start", 0 );
 			}
 			return SRESULT_STAGE ( STAGE_SWEEP );
-		
+
 		case STAGE_SWEEP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				sweepCount++;
@@ -715,14 +715,14 @@ stateResult_t rvMonsterStroggMarine::State_Torso_SprayAttack ( const stateParms_
 				}
 				return SRESULT_STAGE ( STAGE_END );
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_END:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				bool curEnemyMovingRight = EnemyMovingToRight();
-				if ( sweepCount < 3 
-					&& (!gameLocal.random.RandomInt(2) 
-						|| (spraySideRight && !curEnemyMovingRight) 
+				if ( sweepCount < 3
+					&& (!gameLocal.random.RandomInt(2)
+						|| (spraySideRight && !curEnemyMovingRight)
 						|| (!spraySideRight && curEnemyMovingRight)) )
 				{
 					spraySideRight = !spraySideRight;
@@ -741,13 +741,13 @@ stateResult_t rvMonsterStroggMarine::State_Torso_SprayAttack ( const stateParms_
 					return SRESULT_STAGE ( STAGE_FINISH );
 				}
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 		case STAGE_FINISH:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

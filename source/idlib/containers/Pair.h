@@ -33,7 +33,7 @@ public:
 			return -1;
 		} else if( a->First() < b->First() ) {
 			return 1;
-		} 
+		}
 		return 0;
 	}
 
@@ -46,7 +46,7 @@ public:
 			return -1;
 		} else if( a->Second() < b->Second() ) {
 			return 1;
-		} 
+		}
 		return 0;
 	}
 

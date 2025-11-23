@@ -106,7 +106,7 @@ void DisplayClipProfile( void ) {
 
 static idList<trmCache_s*>		traceModelCache;
 static idHashIndex				traceModelHash;
-	
+
 /*
 ===============
 idClipModel::ClearTraceModelCache
@@ -155,12 +155,12 @@ idClipModel::AllocTraceModel
 int idClipModel::AllocTraceModel( const idTraceModel &trm, const idMaterial *material, bool notHashed ) {
 	int i, hashKey, traceModelIndex;
 	trmCache_t *entry;
-	
+
 	if ( notHashed ) {
 		hashKey = 0xffffffff;
 	} else {
 		hashKey = GetTraceModelHashKey( trm );
-		
+
 		for ( i = traceModelHash.First( hashKey ); i >= 0; i = traceModelHash.Next( i ) ) {
 			if ( traceModelCache[i]->trm == trm ) {
 				traceModelCache[i]->refCount++;
@@ -168,7 +168,7 @@ int idClipModel::AllocTraceModel( const idTraceModel &trm, const idMaterial *mat
 			}
 		}
 	}
-	
+
 
 	entry = new trmCache_t;
 	entry->trm = trm;
@@ -177,7 +177,7 @@ int idClipModel::AllocTraceModel( const idTraceModel &trm, const idMaterial *mat
 	entry->material = material;
 	entry->hash = hashKey;
 	traceModelIndex = traceModelCache.Append( entry );
-	
+
 	if ( !notHashed ) {
 		traceModelHash.Add( hashKey, traceModelIndex );
 	}
@@ -197,7 +197,7 @@ void idClipModel::ReplaceTraceModel( int index, const idTraceModel &trm, const i
 		common->Error( "ReplaceTraceModel was misused. Replace can only be used on non-hashed models right now.\n" );
 		return;
 	}
-	
+
 	trmCache_t *entry = traceModelCache[ index ];
 	entry->trm = trm;
 	entry->trm.GetMassProperties( 1.0f, entry->volume, entry->centerOfMass, entry->inertiaTensor );
@@ -393,7 +393,7 @@ void idClipModel::LoadModel( const idTraceModel &trm, const idMaterial *material
 	} else {
 		ReplaceTraceModel( traceModelIndex, trm, material, notHashed );
 	}
-	
+
 	bounds = trm.bounds;
 }
 
@@ -821,7 +821,7 @@ clipSector_t *idClip::CreateClipSectors_r( const int depth, const idBounds &boun
 	nodeOffsetVisual = bounds[ 0 ];
 
 	int i;
-	for( i = 0; i < 3; i++ ) {		
+	for( i = 0; i < 3; i++ ) {
 //jshepard: this crashes too often
 #ifdef _DEBUG
 		if( bounds[ 1 ][ i ] - bounds[ 0 ][ i ] )	{
@@ -830,13 +830,13 @@ clipSector_t *idClip::CreateClipSectors_r( const int depth, const idBounds &boun
 			gameLocal.Error("zero size bounds while creating clipsectors");
 			nodeScale[ i ] = depth;
 		}
-		if( nodeScale[ i ] ) {	
+		if( nodeScale[ i ] ) {
 			nodeOffset[ i ] = nodeOffsetVisual[ i ] + ( 0.5f / nodeScale[ i ] );
 		} else {
 			gameLocal.Error("zero size nodeScale while creating clipsectors");
 			nodeOffset[ i] = nodeOffset[ i] + 0.5f;
 		}
-#else 
+#else
 		nodeScale[ i ] = depth / ( bounds[ 1 ][ i ] - bounds[ 0 ][ i ] );
 		nodeOffset[ i ] = nodeOffsetVisual[ i ] + ( 0.5f / nodeScale[ i ] );
 
@@ -979,7 +979,7 @@ int idClip::ClipModelsTouchingBounds( const idBounds &bounds, int contentMask, i
 
 	for( x = 0; x < clipCount; x++ ) {
 		idClipModel* model = clipModels[ x ];
-		
+
 		// if the bounds really do overlap
 		if (	model->absBounds[0].x > parms.bounds[1].x ||
 				model->absBounds[1].x < parms.bounds[0].x ||
@@ -1059,7 +1059,7 @@ int idClip::PlayersTouchingBounds( const idBounds &bounds, int contentMask, idPl
 				return playerCount;
 			}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			if ( clipModelList[i]->entity->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 				playerList[playerCount] = static_cast<idPlayer*>(clipModelList[i]->entity);
@@ -1175,7 +1175,7 @@ void idClip::DrawClipSectors( void ) const {
 			}
 
 			if( link ) {
-				
+
 				gameRenderWorld->DrawText( link->clipModel->GetEntity()->GetClassname(), point, 0.5f, colorCyan, player->viewAngles.ToMat3(), 1 );
 				gameRenderWorld->DebugBounds( colorMagenta, bounds );
 				gameRenderWorld->DebugBounds( colorYellow, link->clipModel->GetBounds(), link->clipModel->GetOrigin() );

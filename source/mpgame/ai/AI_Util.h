@@ -20,7 +20,7 @@ const float AI_TETHER_MINRANGE			= 8.0f;
 class rvAITrigger : public idEntity {
 public:
 	CLASS_PROTOTYPE ( rvAITrigger );
-	
+
 	rvAITrigger ( void );
 
 	void			Spawn					( void );
@@ -34,14 +34,14 @@ protected:
 
 	idList< idEntityPtr<idAI> >			testAI;
 	idList< idEntityPtr<rvSpawner> >	testSpawner;
-	
+
 	bool								conditionDead;
 	bool								conditionTether;
 	bool								conditionStop;
 
 	int									wait;
 	int									nextTriggerTime;
-	
+
 	float								percent;
 
 private:
@@ -61,21 +61,21 @@ private:
 class rvAITether : public idEntity {
 public:
 	CLASS_PROTOTYPE ( rvAITether );
-	
+
 	rvAITether ( void );
-	
+
 	void			Spawn						( void );
 	void			Save						( idSaveGame *savefile ) const;
 	void			Restore						( idRestoreGame *savefile );
-	void			InitNonPersistentSpawnArgs	( void );	
-	
-	virtual bool	ValidateAAS				( idAI* ai );	
+	void			InitNonPersistentSpawnArgs	( void );
+
+	virtual bool	ValidateAAS				( idAI* ai );
 	virtual bool	ValidateDestination		( idAI* ai, const idVec3& dest );
 	virtual bool	ValidateBounds			( const idBounds& bounds );
 
 	virtual bool	FindGoal				( idAI* ai, aasGoal_t& goal );
 	virtual float	GetOriginReachedRange	( void ) {return AI_TETHER_MINRANGE;}
-	
+
 	virtual void	DebugDraw				( void );
 
 	bool			CanBreak				( void ) const;
@@ -95,10 +95,10 @@ protected:
 		bool		autoBreak			:1;			// Break when the ai gets within the tether
 		bool		forceRun			:1;			// Alwasy run when heading towards tether
  		bool		forceWalk			:1;			// Alwasy walk when heading towards tether
-		bool		becomeAggressive	:1;			// 
+		bool		becomeAggressive	:1;			//
 		bool		becomePassive		:1;
 	} tfl;
-	
+
 private:
 
 	void			Event_Activate				( idEntity* activator );
@@ -131,15 +131,15 @@ ID_INLINE bool rvAITether::IsAutoBreak ( void ) const {
 class rvAITetherBehind : public rvAITether {
 public:
 	CLASS_PROTOTYPE ( rvAITetherBehind );
-	
+
 					rvAITetherBehind( void ) { range = 0.0f; }
 
 	void			Spawn						( void );
 	void			Save						( idSaveGame *savefile ) const { }
 	void			Restore						( idRestoreGame *savefile );
-	void			InitNonPersistentSpawnArgs	( void );	
+	void			InitNonPersistentSpawnArgs	( void );
 
-	virtual bool	ValidateDestination			( idAI* ai, const idVec3& dest );				
+	virtual bool	ValidateDestination			( idAI* ai, const idVec3& dest );
 	virtual bool	ValidateBounds				( const idBounds& bounds );
 	virtual void	DebugDraw					( void );
 
@@ -163,14 +163,14 @@ public:
 	void			Spawn						( void );
 	void			Save						( idSaveGame *savefile ) const { }
 	void			Restore						( idRestoreGame *savefile );
-	void			InitNonPersistentSpawnArgs	( void );	
+	void			InitNonPersistentSpawnArgs	( void );
 
-	virtual bool	ValidateDestination			( idAI* ai, const idVec3& dest );	
+	virtual bool	ValidateDestination			( idAI* ai, const idVec3& dest );
 	virtual bool	ValidateBounds				( const idBounds& bounds );
 	virtual void	DebugDraw					( void );
 
 	/*
-	virtual float	GetOriginReachedRange		( void ) 
+	virtual float	GetOriginReachedRange		( void )
 	{
 		float rad = sqrt(radiusSqr);
 		float halfRad = rad/2.0f;
@@ -181,7 +181,7 @@ public:
 		return (halfRad<AI_TETHER_MINRANGE)?AI_TETHER_MINRANGE:halfRad;
 	}
 	*/
-	
+
 protected:
 
 	float	radiusSqr;

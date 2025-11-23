@@ -82,7 +82,7 @@ bool idLangDict::Load( const char *fileName, bool clear ) {
 	}
 	idLib::common->Printf( "%i strings read from %s\n", args.Num(), fileName );
 	idLib::fileSystem->FreeFile( (void*)buffer );
-	
+
 	return true;
 }
 
@@ -156,7 +156,7 @@ idLangDict::AddString
 ============
 */
 const char *idLangDict::AddString( const char *str ) {
-	
+
 	if ( ExcludeString( str ) ) {
 		return str;
 	}
@@ -245,7 +245,7 @@ bool idLangDict::ExcludeString( const char *str ) const {
 	if ( i == c ) {
 		return true;
 	}
-	
+
 	return false;
 }
 

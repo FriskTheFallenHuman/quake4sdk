@@ -13,7 +13,7 @@ public:
 
 							rvVehicleSpline					( void );
 							~rvVehicleSpline				( void );
-	
+
 	void					Spawn							( void );
 	void					Save							( idSaveGame *savefile ) const;
 	void					Restore							( idRestoreGame *savefile );

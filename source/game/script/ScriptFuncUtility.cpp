@@ -126,7 +126,7 @@ void rvScriptFuncUtility::Save( idSaveGame *savefile ) const {
 	if( !validFunc ) {
 		return;
 	}
-	
+
 	savefile->WriteString( GetReturnKey() );
 
 	savefile->WriteString( GetFunc()->Name() );

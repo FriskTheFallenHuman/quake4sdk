@@ -55,7 +55,7 @@ private:
 	stateResult_t		State_Idle		( const stateParms_t& parms );
 	stateResult_t		State_Fire		( const stateParms_t& parms );
 	stateResult_t		State_Reload	( const stateParms_t& parms );
-	
+
 	CLASS_STATES_PROTOTYPE ( rvWeaponDarkMatterGun );
 };
 
@@ -89,16 +89,16 @@ rvWeaponDarkMatterGun::Spawn
 ================
 */
 void rvWeaponDarkMatterGun::Spawn ( void ) {
-	SetState ( "Raise", 0 );	
-	
+	SetState ( "Raise", 0 );
+
 	InitRing ( RING_OUTER, "outer" );
 	InitRing ( RING_INNER, "inner" );
 	InitRing ( RING_MIDDLE, "middle" );
-	
+
 	nextRotateTime = 0;
-	
+
 	chargeDuration = SEC2MS ( spawnArgs.GetFloat ( "chargeDuration", ".5" ) );
-	
+
 	jointCore = viewModel->GetAnimator()->GetJointHandle ( spawnArgs.GetString ( "joint_core" ) );
 }
 
@@ -158,7 +158,7 @@ rvWeaponDarkMatterGun::PostSave
 void rvWeaponDarkMatterGun::PostSave ( void ) {
 
 	//start the ring sounds
-	StartSound ( "snd_rings", SND_CHANNEL_VOICE, 0, false, NULL );		
+	StartSound ( "snd_rings", SND_CHANNEL_VOICE, 0, false, NULL );
 }
 
 
@@ -179,19 +179,19 @@ rvWeaponDarkMatterGun::StartRings
 */
 void rvWeaponDarkMatterGun::StartRings ( bool chargeUp ) {
 	int i;
-	
-	if ( ringStartTime == -1 ) {	
-		StartSound ( "snd_rings", SND_CHANNEL_VOICE, 0, false, NULL );		
-		ringStartTime = gameLocal.time;		
+
+	if ( ringStartTime == -1 ) {
+		StartSound ( "snd_rings", SND_CHANNEL_VOICE, 0, false, NULL );
+		ringStartTime = gameLocal.time;
 	}
-	
-	if ( chargeUp ) {	
-		coreStartEffect = viewModel->PlayEffect( "fx_core_start", jointCore );	
+
+	if ( chargeUp ) {
+		coreStartEffect = viewModel->PlayEffect( "fx_core_start", jointCore );
 		for ( i = 0; i < RING_MAX; i ++ ) {
 			viewModel->GetAnimator()->SetJointAngularVelocity ( rings[i].joint, rings[i].angularVelocity, gameLocal.time, chargeDuration / 2 );
-		}		
+		}
 	} else if ( !coreEffect ) {
-		coreEffect = viewModel->PlayEffect( "fx_core", jointCore, true );	
+		coreEffect = viewModel->PlayEffect( "fx_core", jointCore, true );
 		for ( i = 0; i < RING_MAX; i ++ ) {
 			viewModel->GetAnimator()->SetJointAngularVelocity ( rings[i].joint, rings[i].angularVelocity, gameLocal.time, 0 );
 		}
@@ -205,34 +205,34 @@ rvWeaponDarkMatterGun::StopRings
 */
 void rvWeaponDarkMatterGun::StopRings ( void ) {
 	int i;
-	
+
 	if ( !viewModel ) {
 		return;
 	}
-	
+
 	viewModel->StopSound ( SND_CHANNEL_VOICE, false );
-	
+
 	if ( coreEffect ) {
 		coreEffect->Stop ( );
 		coreEffect = NULL;
 	}
-	
+
 	if ( coreStartEffect ) {
 		coreStartEffect->Stop ( );
 		coreStartEffect = NULL;
 	}
-	
+
 	for ( i = 0; i < RING_MAX; i ++ ) {
 		viewModel->GetAnimator()->ClearJoint ( rings[i].joint );
 	}
-	
+
 	ringStartTime  = -1;
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -252,7 +252,7 @@ stateResult_t rvWeaponDarkMatterGun::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( !AmmoAvailable ( ) ) {
@@ -272,28 +272,28 @@ stateResult_t rvWeaponDarkMatterGun::State_Idle( const stateParms_t& parms ) {
 
 			PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
-		case STAGE_WAIT:				
+
+		case STAGE_WAIT:
 
 			if ( wsfl.lowerWeapon ) {
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
-			}		
+			}
 
 			if ( gameLocal.time > nextAttackTime && wsfl.attack && AmmoInClip ( ) ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
-			}  
+			}
 
 			if ( wsfl.netReload ) {
 				if ( owner->entityNumber != gameLocal.localClientNum ) {
 					SetState ( "Reload", 4 );
-					return SRESULT_DONE;			
+					return SRESULT_DONE;
 				} else {
 					wsfl.netReload = false;
 				}
 			}
-			
+
 			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
@@ -308,21 +308,21 @@ stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			StopRings ( );
 
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
+			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );
 			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:		
+
+		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 2 ) || (gameLocal.isMultiplayer && gameLocal.time >= nextAttackTime) ) {
 				SetState ( "Idle", 0 );
 				return SRESULT_DONE;
-			}		
+			}
 			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
@@ -337,7 +337,7 @@ stateResult_t rvWeaponDarkMatterGun::State_Reload ( const stateParms_t& parms ) 
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.netReload ) {
@@ -345,13 +345,13 @@ stateResult_t rvWeaponDarkMatterGun::State_Reload ( const stateParms_t& parms ) 
 			} else {
 				NetReload ( );
 			}
-			
+
 			StartRings ( true );
-			
+
 			SetStatus ( WP_RELOAD );
 			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
 				AddToClip ( ClipSize() );
@@ -373,7 +373,7 @@ stateResult_t rvWeaponDarkMatterGun::State_Reload ( const stateParms_t& parms ) 
 	}
 	return SRESULT_ERROR;
 }
-			
+
 /*
 ===============================================================================
 
@@ -385,7 +385,7 @@ stateResult_t rvWeaponDarkMatterGun::State_Reload ( const stateParms_t& parms ) 
 class rvDarkMatterProjectile : public idProjectile {
 public :
 	CLASS_PROTOTYPE( rvDarkMatterProjectile );
-	
+
 							rvDarkMatterProjectile	( void );
 							~rvDarkMatterProjectile ( void );
 
@@ -448,7 +448,7 @@ rvDarkMatterProjectile::Restore
 */
 void rvDarkMatterProjectile::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadInt ( nextDamageTime );
-	
+
 	radiusDamageDef = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_radius_damage" ) );
 }
 
@@ -463,7 +463,7 @@ void rvDarkMatterProjectile::Think ( void ) {
 
 	if ( gameLocal.time > nextDamageTime ) {
 		gameLocal.RadiusDamage ( GetPhysics()->GetOrigin(), this, owner, owner, NULL, spawnArgs.GetString( "def_radius_damage" ), 1.0f, &hitCount );
-		nextDamageTime = gameLocal.time + SEC2MS ( spawnArgs.GetFloat ( "damageRate", ".05" ) );	
+		nextDamageTime = gameLocal.time + SEC2MS ( spawnArgs.GetFloat ( "damageRate", ".05" ) );
 	}
 }
 

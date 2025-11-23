@@ -43,7 +43,7 @@ idEventDef::idEventDef( const char *command, const char *formatspec, char return
 	if ( !formatspec ) {
 		formatspec = "";
 	}
-	
+
 	this->name = command;
 	this->formatspec = formatspec;
 	this->returnType = returnType;
@@ -303,15 +303,15 @@ idEvent *idEvent::Alloc( const idEventDef *evdef, int numargs, va_list args ) {
 
 // RAVEN BEGIN
 // abahr: type checking change as per Jim D.
-// jshepard: TODO FIXME HACK this never ever produces desired, positive results. Events should be built to prepare for null entities, especially when dealing with 
-//							 script events. This will throw a warning, and events should be prepared to deal with null entities. 
+// jshepard: TODO FIXME HACK this never ever produces desired, positive results. Events should be built to prepare for null entities, especially when dealing with
+//							 script events. This will throw a warning, and events should be prepared to deal with null entities.
 		case D_EVENT_ENTITY :
 			if ( reinterpret_cast<idEntity *>( arg->value ) == NULL ) {
 				gameLocal.Warning( "idEvent::Alloc : NULL entity passed in to event function that expects a non-NULL pointer on arg # %d on '%s' event.", i, evdef->GetName() );
 			}
 			*reinterpret_cast< idEntityPtr<idEntity> * >( dataPtr ) = reinterpret_cast<idEntity *>( arg->value );
 			break;
- 
+
 		case D_EVENT_ENTITY_NULL :
 			*reinterpret_cast< idEntityPtr<idEntity> * >( dataPtr ) = reinterpret_cast<idEntity *>( arg->value );
 			break;
@@ -496,8 +496,8 @@ void idEvent::ClearEventList( void ) {
 	//
 	FreeEvents.Clear();
 	EventQueue.Clear();
-   
-	// 
+
+	//
 	// add the events to the free list
 	//
 	for( i = 0; i < MAX_EVENTS; i++ ) {
@@ -525,11 +525,11 @@ void idEvent::ServiceEvents( void ) {
 
 	num = 0;
 	while( !EventQueue.IsListEmpty() ) {
-		
+
 #ifdef _XENON
 		session->PacifierUpdate();
 #endif
-		
+
 		event = EventQueue.Next();
 		assert( event );
 
@@ -565,7 +565,7 @@ void idEvent::ServiceEvents( void ) {
 					gameLocal.Warning( "idEvent::ServiceEvents : NULL entity passed in to event function that expects a non-NULL pointer on arg # %d on '%s' event.", i, ev->GetName() );
 				}
 				break;
- 
+
 			case D_EVENT_ENTITY_NULL :
 				*reinterpret_cast<idEntity **>( &args[ i ] ) = reinterpret_cast< idEntityPtr<idEntity> * >( &data[ offset ] )->GetEntity();
 				break;
@@ -594,7 +594,7 @@ void idEvent::ServiceEvents( void ) {
 		// is deleted, the event won't be freed twice
 		event->eventNode.Remove();
 		assert( event->object );
-		
+
 		// savegames can trash the object, so do this for safety
 		if ( event->object ) {
 			event->object->ProcessEventArgPtr( ev, args );
@@ -668,7 +668,7 @@ void idEvent::Shutdown( void ) {
 	}
 
 	ClearEventList();
-	
+
 	eventDataAllocator.Shutdown();
 
 	// say it is now shutdown
@@ -782,7 +782,7 @@ void CreateEventCallbackHandler( void ) {
 				argString[ k ] = j & ( 1 << k ) ? 'f' : 'i';
 			}
 			argString[ i ] = '\0';
-			
+
 			string1.Empty();
 			string2.Empty();
 

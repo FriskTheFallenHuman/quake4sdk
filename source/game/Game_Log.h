@@ -19,7 +19,7 @@ public:
 	virtual void		Set			( const char* keyword, float value );
 	virtual void		Set			( const char* keyword, const char* value );
 	virtual void		Set			( const char* keyword, bool value );
-	
+
 	virtual void		Add			( const char* keyword, int value );
 	virtual void		Add			( const char* keyword, float value );
 

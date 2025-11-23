@@ -62,7 +62,7 @@ void rvHeapArena::Shutdown( )
 }
 
 // ResetValues
-// 
+//
 // resets the data members to their pre-initialized state
 void rvHeapArena::ResetValues( )
 {
@@ -81,7 +81,7 @@ void rvHeapArena::Push( rvHeap &newActiveHeap )
 	EnterArenaCriticalSection();
 	assert( newActiveHeap.GetArena() == this );
 	assert(m_tos+1 < maxHeapStackDepth);	// stack overflow?
-	if (m_tos+1 < maxHeapStackDepth) 
+	if (m_tos+1 < maxHeapStackDepth)
 	{
 		m_heapStack[++m_tos] = &newActiveHeap;
 	}
@@ -95,7 +95,7 @@ void rvHeapArena::Pop( )
 {
 	EnterArenaCriticalSection();
 	assert(m_tos > -1);						// stack underflow?
-	if (m_tos > -1) 
+	if (m_tos > -1)
 	{
 		m_tos--;
 	}
@@ -126,7 +126,7 @@ rvHeap *rvHeapArena::GetHeap( void *p )
 
 
 // Allocate
-// 
+//
 // allocates the given amount of memory from this arena.
 void *rvHeapArena::Allocate( unsigned int sizeBytes, int debugTag )
 {
@@ -147,7 +147,7 @@ void *rvHeapArena::Allocate( unsigned int sizeBytes, int debugTag )
 
 // Allocate16
 //
-// allocates the given amount of memory from this arena, 
+// allocates the given amount of memory from this arena,
 // aligned on a 16-byte boundary.
 void *rvHeapArena::Allocate16( unsigned int sizeBytes, int debugTag )
 {
@@ -167,7 +167,7 @@ void *rvHeapArena::Allocate16( unsigned int sizeBytes, int debugTag )
 }
 
 // Free
-// 
+//
 // free memory back to this arena
 void rvHeapArena::Free( void *p )
 {
@@ -177,7 +177,7 @@ void rvHeapArena::Free( void *p )
 		heap->Free( p );
 	}
 }
- 
+
 // Msize
 //
 // returns: the size, in bytes, of the allocation at the given address (including header, alignment bytes, etc).
@@ -237,7 +237,7 @@ void rvHeapArena::ShutdownHeap( rvHeap &activeHeap )
 			{
 				m_heapList = m_heapList->GetNext();
 			}
-			else 
+			else
 			{
 				prevHeap->SetNext( curHeap->GetNext() );
 			}

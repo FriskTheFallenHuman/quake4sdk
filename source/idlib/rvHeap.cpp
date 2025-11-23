@@ -1,5 +1,5 @@
 //
-// rvHeap.cpp - Heap object 
+// rvHeap.cpp - Heap object
 // Date: 12/13/04
 // Created by: Dwight Luetscher
 //
@@ -12,7 +12,7 @@
 //#define DETECT_MEM_OVERWRITES
 
 // Define some structures used by each heap
-struct rvMemoryBlock_s 
+struct rvMemoryBlock_s
 {
 	rvMemoryBlock_s* m_prev;									// previous block in memory (next is implied by address of memory block plus distToNextBlock)
 	dword m_dwordDistToNextBlock : NUM_MEMORY_BLOCK_SIZE_BITS;	// distance, in double words (4 bytes), from the first byte of this rvMemoryBlock_s header to the first byte of the next rvMemoryBlock_s header
@@ -36,7 +36,7 @@ struct rvMemoryBlock_s
 	}
 };
 
-struct rvFreeMemoryBlock_s : rvMemoryBlock_s 
+struct rvFreeMemoryBlock_s : rvMemoryBlock_s
 {
 	rvFreeMemoryBlock_s* m_prevFree;
 	rvFreeMemoryBlock_s* m_nextFree;
@@ -45,7 +45,7 @@ struct rvFreeMemoryBlock_s : rvMemoryBlock_s
 static const dword rvHeapAlignmentPadding	= 0xFFFFFFFF;	// fixed value used for padding an allocation for alignment
 
 #ifdef DETECT_MEM_OVERWRITES
-// a header and a trailer is stored at the front and rear of each allocation for 
+// a header and a trailer is stored at the front and rear of each allocation for
 // the purposes of detecting if an allocation has been written past its bounds
 static const uint OVERWRITE_HEADER_SIZE			= 4;
 static const uint OVERWRITE_TRAILER_SIZE		= 4;
@@ -77,8 +77,8 @@ rvHeap::~rvHeap( )
 }
 
 // Init
-// 
-// initializes this heap for use within the given arena, and with the given size limit that it can grow to 
+//
+// initializes this heap for use within the given arena, and with the given size limit that it can grow to
 //
 // heapArena			heap arena that this heap is associated with
 // maxHeapSizeBytes		maximum number of bytes this heap can grow to
@@ -99,7 +99,7 @@ void rvHeap::Init( rvHeapArena &heapArena, uint maxHeapSizeBytes, uint flags )
 	// determine how many pages the virtual address range will consume
 	m_numPages = (maxHeapSizeBytes + PAGE_SIZE - 1) >> PAGE_SIZE_SHIFT;
 	m_maxHeapSizeBytes = m_numPages << PAGE_SIZE_SHIFT;
-	
+
 	m_heapRangeBytes = m_maxHeapSizeBytes + PAGE_SIZE;	// add a page at the beginning for zero-length allocations (not part of page table and is never committed)
 
 	assert(sizeof(dword) == 4);	// assumed by following code
@@ -113,7 +113,7 @@ void rvHeap::Init( rvHeapArena &heapArena, uint maxHeapSizeBytes, uint flags )
 	}
 	largeFreeRangeByteSize = m_largeFreeRangeStorageSize*sizeof(freeLargePageRange_t);
 
-	numPageTableBytes = m_pageCommitStateArrayByteSize;	// allocate storage for the m_pageCommitStateTable array 
+	numPageTableBytes = m_pageCommitStateArrayByteSize;	// allocate storage for the m_pageCommitStateTable array
 	numPageTableBytes += m_smallFreePageRangeByteSize;	// allocate storage for the m_smallFreePageRangeTable array
 	numPageTableBytes += largeFreeRangeByteSize;		// allocate storage for the m_largeFreeRangeStorage array
 
@@ -184,7 +184,7 @@ void rvHeap::Init( rvHeapArena &heapArena, uint maxHeapSizeBytes, uint flags )
 // releases this heap from use
 void rvHeap::Shutdown( )
 {
-	if ( m_arena != NULL ) 
+	if ( m_arena != NULL )
 	{
 		VirtualFree( m_baseAddress, 0, MEM_RELEASE );
 		m_arena->ShutdownHeap( *this );
@@ -334,7 +334,7 @@ byte *rvHeap::AllocateMemory( uint sizeBytes, int allocationTag, bool align16Fla
 		allocatedBlock = AllocateMemoryLargeBlock( actualSizeBytes );
 	}
 
-	if ( NULL == allocatedBlock ) 
+	if ( NULL == allocatedBlock )
 	{
 		ExitHeapCriticalSection( );
 		return NULL;
@@ -405,7 +405,7 @@ rvMemoryBlock_s *rvHeap::AllocateMemorySmallBlock( uint sizeBytes )
 	while ( smallBlockTableOffset < stopOffset )
 	{
 		// check to see if there is a block that matches exactly
-		if ( m_smallFreeBlocks[smallBlockTableOffset] != NULL ) 
+		if ( m_smallFreeBlocks[smallBlockTableOffset] != NULL )
 		{
 			// there is a block that is just the right size, remove from free list and return it.
 			return AllocateBlockFromTable( smallBlockTableOffset, sizeBytes );
@@ -416,9 +416,9 @@ rvMemoryBlock_s *rvHeap::AllocateMemorySmallBlock( uint sizeBytes )
 
 		// check to see if there is a block that matches at some multiple of the exact size
 		largerBlockOffset = smallBlockTableOffset << 1;
-		while ( largerBlockOffset <= m_largestFreeSmallBlockOffset ) 
+		while ( largerBlockOffset <= m_largestFreeSmallBlockOffset )
 		{
-			if ( m_smallFreeBlocks[largerBlockOffset] != NULL ) 
+			if ( m_smallFreeBlocks[largerBlockOffset] != NULL )
 			{
 				// found a larger block to allocate from
 				return AllocateBlockFromTable( largerBlockOffset, sizeBytes );
@@ -453,14 +453,14 @@ rvMemoryBlock_s *rvHeap::AllocateBlockFromTable( uint smallBlockTableOffset, uin
 	originalBlockSize = allocatedBlockHeader->GetDistToNextBlock();
 	assert( originalBlockSize == SMALL_TABLE_OFFSET_TO_SIZE(smallBlockTableOffset) );
 
-	// remove the free block from the table 
+	// remove the free block from the table
 	m_smallFreeBlocks[smallBlockTableOffset] = m_smallFreeBlocks[smallBlockTableOffset]->m_nextFree;
 	if ( m_smallFreeBlocks[smallBlockTableOffset] != NULL )
 	{
 		m_smallFreeBlocks[smallBlockTableOffset]->m_prevFree = NULL;
 	}
 
-	// see if the requested size essentially covers the entire free block 
+	// see if the requested size essentially covers the entire free block
 	if ( sizeBytes + sizeof(rvFreeMemoryBlock_s) <= allocatedBlockHeader->GetDistToNextBlock() )
 	{
 		// this block is large enough to be split into two - an allocated chunk and a free chunk.
@@ -529,7 +529,7 @@ rvMemoryBlock_s *rvHeap::AllocateMemoryLargeBlock( uint sizeBytes )
 
 	prevNextBlock = &m_largeFreeBlocks;
 	curFreeBlock = m_largeFreeBlocks;
-	while ( curFreeBlock != NULL ) 
+	while ( curFreeBlock != NULL )
 	{
 		if ( sizeBytes <= curFreeBlock->GetDistToNextBlock() )
 		{
@@ -550,7 +550,7 @@ rvMemoryBlock_s *rvHeap::AllocateMemoryLargeBlock( uint sizeBytes )
 
 	if ( NULL == block )
 	{
-		// an existing block could not be found, commit a new page range for use 
+		// an existing block could not be found, commit a new page range for use
 		numPages = (sizeBytes + PAGE_SIZE - 1) >> PAGE_SIZE_SHIFT;
 		newPageStart = (byte *) PageCommit( numPages );
 		if ( NULL == newPageStart )
@@ -574,13 +574,13 @@ rvMemoryBlock_s *rvHeap::AllocateMemoryLargeBlock( uint sizeBytes )
 		// it is not worth creating a free block for what remains of last page
 		block->SetDistToNextBlock( totalAllocated );
 	}
-	else 
+	else
 	{
 		// there is a enough space left at the end of the last page to generate
 		// a free block
 		block->SetDistToNextBlock( sizeBytes );
 		freeBlock = (rvFreeMemoryBlock_s *) ((byte *) block + sizeBytes);
-		assert( !((uint) freeBlock & 0x03) );	
+		assert( !((uint) freeBlock & 0x03) );
 
 		if ( ((uint) block >> PAGE_SIZE_SHIFT) == (((uint) block + sizeBytes) >> PAGE_SIZE_SHIFT) )
 		{
@@ -594,7 +594,7 @@ rvMemoryBlock_s *rvHeap::AllocateMemoryLargeBlock( uint sizeBytes )
 		}
 		freeBlock->SetDistToNextBlock( remainingSize );
 		freeBlock->m_tag = MA_NONE;
-		
+
 		FixUpNextBlocksPrev( (byte *) freeBlock, remainingSize );
 
 		AddFreeBlock( freeBlock );
@@ -619,7 +619,7 @@ void rvHeap::FixUpNextBlocksPrev( byte *newBlock, uint blockSize )
 }
 
 // AddFreeBlock
-// 
+//
 // Adds the given free block to the small allocation table or large allocation list.
 void rvHeap::AddFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 {
@@ -631,7 +631,7 @@ void rvHeap::AddFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 		smallBlockTableOffset = SIZE_TO_SMALL_TABLE_OFFSET(freeBlock->GetDistToNextBlock());
 		assert(smallBlockTableOffset < NUM_SMALL_BLOCK_TABLE_ENTRIES);
 
-		if ( m_smallFreeBlocks[smallBlockTableOffset] != NULL ) 
+		if ( m_smallFreeBlocks[smallBlockTableOffset] != NULL )
 		{
 			m_smallFreeBlocks[smallBlockTableOffset]->m_prevFree = freeBlock;
 		}
@@ -644,7 +644,7 @@ void rvHeap::AddFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 		freeBlock->m_nextFree = m_smallFreeBlocks[smallBlockTableOffset];
 		m_smallFreeBlocks[smallBlockTableOffset] = freeBlock;
 	}
-	else 
+	else
 	{
 		if ( m_largeFreeBlocks != NULL )
 		{
@@ -671,7 +671,7 @@ void rvHeap::RemoveFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 
 			assert( smallBlockTableOffset < NUM_SMALL_BLOCK_TABLE_ENTRIES );
 			assert( m_smallFreeBlocks[smallBlockTableOffset] == freeBlock );
-		
+
 			m_smallFreeBlocks[smallBlockTableOffset] = freeBlock->m_nextFree;
 
 			// check to see if the largest free small block has moved down
@@ -682,15 +682,15 @@ void rvHeap::RemoveFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 			freeBlock->m_prevFree->m_nextFree = freeBlock->m_nextFree;
 		}
 	}
-	else 
+	else
 	{
 		if ( NULL == freeBlock->m_prevFree )
 		{
 			assert( m_largeFreeBlocks == freeBlock );
-			
+
 			m_largeFreeBlocks = freeBlock->m_nextFree;
 		}
-		else 
+		else
 		{
 			freeBlock->m_prevFree->m_nextFree = freeBlock->m_nextFree;
 		}
@@ -704,10 +704,10 @@ void rvHeap::RemoveFreeBlock( rvFreeMemoryBlock_s *freeBlock )
 
 // Free
 //
-// free memory 
+// free memory
 void rvHeap::Free( void *p )
 {
-	rvMemoryBlock_s *block, *prevBlock, *nextBlock;	
+	rvMemoryBlock_s *block, *prevBlock, *nextBlock;
 	rvFreeMemoryBlock_s *freeBlock;
 	byte *nextBlockAddress, *allocation;
 	byte *pageAddress;
@@ -776,7 +776,7 @@ void rvHeap::Free( void *p )
 
 	pageAddress = (byte *) (((dword) allocation) & ~PAGE_SIZE_MASK);
 
-    if ( ( block->m_prev != NULL && (byte *) block->m_prev < pageAddress ) ) 
+    if ( ( block->m_prev != NULL && (byte *) block->m_prev < pageAddress ) )
 	{
 		idLib::common->FatalError( "rvHeap::Free: memory block header corrupted (0x%x)", (dword) allocation );
 	}
@@ -800,7 +800,7 @@ void rvHeap::Free( void *p )
 
 	if ( block->GetDistToNextBlock() > PAGE_SIZE )
 	{
-		// this allocation that is being freed spans multiple pages - uncommit the ones 
+		// this allocation that is being freed spans multiple pages - uncommit the ones
 		// before the last one
 		numPages = block->GetDistToNextBlock() >> PAGE_SIZE_SHIFT;
 
@@ -863,14 +863,14 @@ void rvHeap::Free( void *p )
 		}
 	}
 
-	// determine if block being freed should be added to small allocation table, large 
+	// determine if block being freed should be added to small allocation table, large
 	// allocation list, or if the page itself should be uncommitted
 	freeBlock = (rvFreeMemoryBlock_s *) block;
 	if ( freeBlock->GetDistToNextBlock() < PAGE_SIZE )
 	{
 		AddFreeBlock( freeBlock );
 	}
-	else 
+	else
 	{
 		// this free block has reached the size of an entire page, uncommit it
 		PageUncommit( pageAddress, 1 );
@@ -888,7 +888,7 @@ void rvHeap::Free( void *p )
 // returns: the size, in bytes, of the allocation at the given address (including header, alignment bytes, etc).
 int rvHeap::Msize( void *p )
 {
-	rvMemoryBlock_s *block;	
+	rvMemoryBlock_s *block;
 	byte *allocation;
 	dword size;
 
@@ -977,10 +977,10 @@ void rvHeap::FreeAll( )
 
 // PageCommit
 //
-// commits the given number of contiguous pages to physical memory 
+// commits the given number of contiguous pages to physical memory
 // (actually allocates the physical pages).
 //
-// returns: pointer to the first virtual address of the first committed page, 
+// returns: pointer to the first virtual address of the first committed page,
 //			NULL if commit failed.
 void *rvHeap::PageCommit( uint numDesiredPages )
 {
@@ -998,7 +998,7 @@ void *rvHeap::PageCommit( uint numDesiredPages )
 			if ( m_smallFreePageRangeLists[listOffset] != NULL )
 			{
 				// we have found a contiguous range of pages that will hold the desired amount
-				freePageRange = m_smallFreePageRangeLists[listOffset];	
+				freePageRange = m_smallFreePageRangeLists[listOffset];
 				m_smallFreePageRangeLists[listOffset] =  m_smallFreePageRangeLists[listOffset]->m_nextFree;
 
 				// determine the starting table offset of the page range (starting page number)
@@ -1050,7 +1050,7 @@ void *rvHeap::PageCommit( uint numDesiredPages )
 					m_smallFreePageRangeLists[ remainingListOffset  ] = &m_smallFreePageRangeTable[ remainingPagesOffset ];
 				}
 			}
-			else 
+			else
 			{
 				// add the remainder back into the m_largeFreePageRangeList linked-list (NOTE: structure is still part of list)
 				freeLargePageRange->m_firstPageOffset = remainingPagesOffset;
@@ -1069,7 +1069,7 @@ void *rvHeap::PageCommit( uint numDesiredPages )
 
 // PageUncommit
 //
-// uncommits the given range of contiguous pages back to physical memory 
+// uncommits the given range of contiguous pages back to physical memory
 // (actually frees the physical pages).
 void rvHeap::PageUncommit( byte *pageAddress, uint numPages )
 {
@@ -1153,7 +1153,7 @@ void rvHeap::PageUncommit( byte *pageAddress, uint numPages )
 		}
 	}
 
-	if ( numPages <= MAX_SMALL_PAGE_RANGE ) 
+	if ( numPages <= MAX_SMALL_PAGE_RANGE )
 	{
 		// add the uncommitted page block into the m_smallFreePageRangeTable[]
 		listOffset = numPages - 1;
@@ -1266,7 +1266,7 @@ void *rvHeap::CommitPageRange( uint startPageOffset, uint numPages )
 	}
 
 	assert(sizeof(dword) == 4);	// the following code assumes that a dword is 4 bytes
-	
+
 	// enable the bits that correspond to the pages being committed within the m_pageCommitStateTable array
 	curDWordOffset = startPageOffset >> 5;
 	endDWordOffset = (startPageOffset + numPages - 1) >> 5;
@@ -1281,7 +1281,7 @@ void *rvHeap::CommitPageRange( uint startPageOffset, uint numPages )
 		}
 		m_pageCommitStateTable[ curDWordOffset ] |= mask;
 	}
-	else 
+	else
 	{
 		mask = 0xFFFFFFFF << (startPageOffset & 0x1F);
 		m_pageCommitStateTable[ curDWordOffset++ ] |= mask;
@@ -1314,12 +1314,12 @@ void rvHeap::UncommitPageRange( uint startPageOffset, uint numPages )
 	assert( decommitSize <= m_committedSizeBytes );
 	m_committedSizeBytes -= decommitSize;
 
-	rtnValue = VirtualFree( m_heapStorageStart + (startPageOffset << PAGE_SIZE_SHIFT), 
-							decommitSize, 
+	rtnValue = VirtualFree( m_heapStorageStart + (startPageOffset << PAGE_SIZE_SHIFT),
+							decommitSize,
 							MEM_DECOMMIT );
 	assert( rtnValue );
 	assert(sizeof(dword) == 4);	// the following code assumes that a dword is 4 bytes
-	
+
 	// disable the bits that correspond to the pages being decommitted within the m_pageCommitStateTable array
 	curDWordOffset = startPageOffset >> 5;
 	endDWordOffset = (startPageOffset + numPages - 1) >> 5;
@@ -1334,7 +1334,7 @@ void rvHeap::UncommitPageRange( uint startPageOffset, uint numPages )
 		}
 		m_pageCommitStateTable[ curDWordOffset ] &= ~mask;
 	}
-	else 
+	else
 	{
 		mask = 0xFFFFFFFF << (startPageOffset & 0x1F);
 		m_pageCommitStateTable[ curDWordOffset++ ] &= ~mask;
@@ -1402,24 +1402,24 @@ const char* rvHeap::GetName(void) const
 
 // GetLargeBlockFreeCount
 //
-int rvHeap::GetLargeBlockFreeCount() const 
+int rvHeap::GetLargeBlockFreeCount() const
 {
 	return GetBlockFreeCount( m_largeFreeBlocks );
 }
 
 // GetLargeBlockFreeSize
 //
-dword rvHeap::GetLargeBlockFreeSize() const 
+dword rvHeap::GetLargeBlockFreeSize() const
 {
 	return GetBlockFreeSize( m_largeFreeBlocks );
 }
 
 // GetBlockFreeCount
 //
-int rvHeap::GetBlockFreeCount( rvFreeMemoryBlock_s* currentBlock ) const 
+int rvHeap::GetBlockFreeCount( rvFreeMemoryBlock_s* currentBlock ) const
 {
 	dword freeCount = 0;
-	while ( currentBlock ) 
+	while ( currentBlock )
 	{
 		currentBlock = currentBlock->m_nextFree;
 		++freeCount;
@@ -1429,65 +1429,65 @@ int rvHeap::GetBlockFreeCount( rvFreeMemoryBlock_s* currentBlock ) const
 
 // GetBlockFreeSize
 //
-dword rvHeap::GetBlockFreeSize( rvFreeMemoryBlock_s* currentBlock ) const 
+dword rvHeap::GetBlockFreeSize( rvFreeMemoryBlock_s* currentBlock ) const
 {
 	dword freeSize = 0;
-	while (currentBlock) 
+	while (currentBlock)
 	{
 		dword blockSize = currentBlock->m_dwordDistToNextBlock << 2;
-		
+
 		if ( blockSize > PAGE_SIZE )
 		{
 #ifdef _DEBUG
    			dword initialBlockSize = blockSize;
-#endif			
+#endif
 			// Round up to the next block boundary
 			dword rem = (dword)currentBlock & ~PAGE_SIZE_MASK;
 			blockSize-=rem;
-			
+
 			// Subtract off the pages that should be decomitted
-			while ( blockSize > PAGE_SIZE ) 
+			while ( blockSize > PAGE_SIZE )
 			{
 				blockSize-=PAGE_SIZE;
 			}
-			
+
 			// Make sure we didn't wrap
 #ifdef _DEBUG
    			assert( initialBlockSize > blockSize );
-#endif			
+#endif
 			freeSize+=blockSize;
-		} 
+		}
 		else
 		{
 			// Does not span blocks, so just add
 			freeSize+=blockSize;
 		}
-		
+
 		currentBlock = currentBlock->m_nextFree;
 	}
-	
+
 	return freeSize;
 }
 
 // GetSmallBlockFreeSize
 //
-void Mem_FragmentationStats_f( const idCmdArgs &args ) 
+void Mem_FragmentationStats_f( const idCmdArgs &args )
 {
 	rvHeap *heapArray[MAX_SYSTEM_HEAPS];
 	rvGetAllSysHeaps( heapArray );
-	
+
 	dword unusedMem = 0;
 	dword totalFragments = 0;
-	
-	for ( int i = 0; i < MAX_SYSTEM_HEAPS; ++i ) 
+
+	for ( int i = 0; i < MAX_SYSTEM_HEAPS; ++i )
 	{
 		rvHeap *curr = heapArray[i];
-		if ( curr ) 
+		if ( curr )
 		{
-			for ( int j = 0; j < curr->SmallBlockCount(); ++j ) 
+			for ( int j = 0; j < curr->SmallBlockCount(); ++j )
 			{
 				int freeCount = curr->GetSmallBlockFreeCount( j );
-				if ( freeCount ) 
+				if ( freeCount )
 				{
 					dword unused = curr->GetSmallBlockFreeSize(j);
 					idLib::common->Printf( "i:%d c:%d t:%d - ", j, freeCount, unused );
@@ -1495,19 +1495,19 @@ void Mem_FragmentationStats_f( const idCmdArgs &args )
 					totalFragments+=freeCount;
 				}
 			}
-			
+
 			dword unused = curr->GetLargeBlockFreeSize();
 			dword freeCount = curr->GetLargeBlockFreeCount();
 			unusedMem+=unused;
 			totalFragments+=freeCount;
 			idLib::common->Printf( "i:large c:%d t:%d\n", freeCount, unused );
-			
+
 //			dword comSize = curr->GetCommittedSize();
 			dword bytesAl = curr->GetBytesAllocated();
-			
+
 			idLib::common->Printf( "Total fragments: %d Fragment memory: %d\n", totalFragments, unusedMem );
 			idLib::common->Printf( "Fragmentation: %f\n", float(unusedMem) / float(bytesAl) );
-			
+
 			// We only want the first one, since they all appear to be the same heap right now.
 			break;
 		}
@@ -1525,13 +1525,13 @@ void rvHeap::TestFreeBlockValidity()
 	rvFreeMemoryBlock_s *freeBlock;
 	int smallBlockTableOffset;
 
-	for ( smallBlockTableOffset = 0; 
-		  smallBlockTableOffset < NUM_SMALL_BLOCK_TABLE_ENTRIES; 
+	for ( smallBlockTableOffset = 0;
+		  smallBlockTableOffset < NUM_SMALL_BLOCK_TABLE_ENTRIES;
 		  smallBlockTableOffset++ )
 	{
 		// check to see if there is a block that matches exactly
 		freeBlock = m_smallFreeBlocks[smallBlockTableOffset];
-		while ( freeBlock != NULL ) 
+		while ( freeBlock != NULL )
 		{
 			// check the blocks around this block
 			if ( freeBlock->m_prev != NULL && freeBlock->m_prev->m_tag == MA_NONE )
@@ -1541,12 +1541,12 @@ void rvHeap::TestFreeBlockValidity()
 
 			nextBlock = (rvMemoryBlock_s *) ((byte*) freeBlock + freeBlock->GetDistToNextBlock());
 			pageAddress = (byte *) (((dword) freeBlock) & ~PAGE_SIZE_MASK);
-			
+
 			if ( (byte*) nextBlock < pageAddress+PAGE_SIZE && nextBlock->m_tag == MA_NONE )
 			{
 				common->Warning( "Next block failed to merge" );
 			}
-						
+
 			freeBlock = freeBlock->m_nextFree;
 		}
 	}

@@ -64,7 +64,7 @@ private:
 	idInterpreter				interpreter;
 
 	idDict						spawnArgs;
-								
+
 	int 						threadNum;
 	idStr 						threadName;
 
@@ -203,9 +203,9 @@ private:
 	void						Event_SetMatSort( const char *name, const char *val ) const;
 // RAVEN END
 
-public:							
+public:
 								CLASS_PROTOTYPE( idThread );
-								
+
 								idThread();
 								idThread( idEntity *self, const function_t *func );
 								idThread( const function_t *func );
@@ -227,7 +227,7 @@ public:
 	void						WaitMS( int time );
 	void						WaitSec( float time );
 	void						WaitFrame( void );
-								
+
 								// NOTE: If this is called from within a event called by this thread, the function arguments will be invalid after calling this function.
 	void						CallFunction( const function_t	*func, bool clearStack );
 
@@ -253,12 +253,12 @@ public:
 	static void					ListThreads_f( const idCmdArgs &args );
 	static void					Restart( void );
 	static void					ObjectMoveDone( int threadnum, idEntity *obj );
-									
+
 	static idList<idThread*>&	GetThreads( void );
-	
+
 	bool						IsDoneProcessing( void );
-	bool						IsDying ( void );	
-								
+	bool						IsDying ( void );
+
 	void						End( void );
 	static void					KillThread( const char *name );
 	static void					KillThread( int num );
@@ -283,7 +283,7 @@ public:
 
 	void						Error( const char *fmt, ... ) const;
 	void						Warning( const char *fmt, ... ) const;
-								
+
 	static idThread				*CurrentThread( void );
 	static int					CurrentThreadNum( void );
 	static bool					BeginMultiFrameEvent( idEntity *ent, const idEventDef *event );
@@ -342,7 +342,7 @@ idThread::GetThreads
 */
 ID_INLINE idList<idThread*>& idThread::GetThreads ( void ) {
 	return threadList;
-}	
+}
 
 /*
 ================

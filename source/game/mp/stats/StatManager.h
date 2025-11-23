@@ -150,16 +150,16 @@ class rvStatAllocator {
 			return placeInBlock;
 		}
 
-		ID_INLINE size_t GetTotalBytesUsed() const { 
-			return totalBytesUsed; 
+		ID_INLINE size_t GetTotalBytesUsed() const {
+			return totalBytesUsed;
 		}
 
 		ID_INLINE size_t GetTotalAllocations() const {
 			return totalAllocations;
 		}
 
-		ID_INLINE size_t GetAllocationsByType( statType_t type ) const { 
-			return allocationsByType[ type ]; 
+		ID_INLINE size_t GetAllocationsByType( statType_t type ) const {
+			return allocationsByType[ type ];
 		}
 
 		ID_INLINE size_t GetTotalBytesAllocated() const {
@@ -187,9 +187,9 @@ public:
 
 	int				weaponShots[ MAX_WEAPONS ];
 	int				weaponHits[ MAX_WEAPONS ];
-	
+
 	int				weaponKills[ MAX_WEAPONS ];
-	
+
 	int				kills;
 	int				deaths;
 	int				suicides;
@@ -211,7 +211,7 @@ public:
 ================
 rvStatManager
 
-The statistics management interface.  This is the entrypoint into 
+The statistics management interface.  This is the entrypoint into
 statistics from the game.
 
 The game calls into rvStatManager at appropriate times (i.e. 'FlagCaptured')
@@ -219,7 +219,7 @@ The game calls into rvStatManager at appropriate times (i.e. 'FlagCaptured')
 rvStatManager creates stat events (see StatEvent.h) with the appropriate
 information and append them to the statQueue.
 
-The statQueue is parsed at the end of a game to tabulate statistics, give 
+The statQueue is parsed at the end of a game to tabulate statistics, give
 end-game awards.
 
 ================
@@ -230,7 +230,7 @@ public:
 
 	void						Init( void );
 	void						Shutdown( void );
-	
+
 	// generic events
 	void						BeginGame( void );
 	void						EndGame( void );
@@ -264,7 +264,7 @@ public:
 	void						SendStat( int toClient, int statClient );
 	void						ReceiveStat( const idBitMsg& msg );
 
-	void						SendInGameAward( inGameAward_t award, int clientNum );	
+	void						SendInGameAward( inGameAward_t award, int clientNum );
 	void						ReceiveInGameAward( const idBitMsg& msg );
 	void						CheckAwardQueue();
 
@@ -283,7 +283,7 @@ public:
 	rvStat*						GetStat( int i );
 
 	void						GetAccuracyLeaders( int accuracyLeaders[ MAX_WEAPONS ] );
-	
+
 	void						SetupStatWindow( idUserInterface* statHud );
 	void						SelectStatWindow( int selectionIndex, int selectionTeam );
 	int							GetSelectedClientNum( int* selectionIndexOut = NULL, int* selectionTeamOut = NULL );
@@ -335,9 +335,9 @@ private:
 };
 
 ID_INLINE rvStat* rvStatManager::GetStat( int i ) {
-	if( i < 0 || i >= statQueue.Num() ) { 
-		return NULL; 
-	} 
+	if( i < 0 || i >= statQueue.Num() ) {
+		return NULL;
+	}
 
 	return statQueue[ i ].First();
 }

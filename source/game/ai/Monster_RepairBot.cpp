@@ -14,7 +14,7 @@ public:
 	rvClientEffectPtr	effectImpact;
 
     int					periodicEndTime;
-	
+
 						repairBotArm_t	() {
 							periodicEndTime = -1;
 						}
@@ -39,21 +39,21 @@ public:
 	virtual void			GetDebugInfo		( debugInfoProc_t proc, void* userData );
 
 protected:
-	
+
 	virtual bool			CheckActions		( void );
 	virtual void			OnDeath				( void );
 
 	int						repairEndTime;
 	float					repairEffectDist;
-	
+
 	repairBotArm_t			armLeft;
 	repairBotArm_t			armRight;
-	
+
 private:
 
 	void					UpdateRepairs		( repairBotArm_t& arm );
 	void					StopRepairs			( repairBotArm_t& arm );
-	
+
 	// Leg states
 	stateResult_t		State_Legs_Move					( const stateParms_t& parms );
 	stateResult_t		State_TorsoAction_Repair		( const stateParms_t& parms );
@@ -142,7 +142,7 @@ rvMonsterRepairBot::Think
 */
 void rvMonsterRepairBot::Think ( void ) {
 	idAI::Think ( );
-	
+
 	// Update repair effects? (dont worry about stopping them, the state ending will do so)
 	UpdateRepairs ( armLeft );
 	UpdateRepairs ( armRight );
@@ -176,18 +176,18 @@ void rvMonsterRepairBot::UpdateRepairs ( repairBotArm_t& arm ) {
 		} else {
 			arm.repairTime = gameLocal.time + gameLocal.random.RandomInt ( 2500 );
 			arm.repairing  = true;
-		}				
-	} 
-	
+		}
+	}
+
 	if ( !arm.repairing ) {
 		return;
 	}
-			
+
 	// Left repair effect
 	GetJointWorldTransform ( arm.joint, gameLocal.time, origin, axis );
 	gameLocal.TracePoint ( this, tr, origin, origin + axis[0] * repairEffectDist, MASK_SHOT_RENDERMODEL, this );
 
-	if ( tr.fraction >= 1.0f ) {		
+	if ( tr.fraction >= 1.0f ) {
 		StopRepairs ( arm );
 	} else {
 		// Start the repair effect if not already started
@@ -195,7 +195,7 @@ void rvMonsterRepairBot::UpdateRepairs ( repairBotArm_t& arm ) {
 			arm.effectRepair = PlayEffect ( "fx_repair", arm.joint, true );
 		}
 		// If the repair effect is running then set its end origin
-		if ( arm.effectRepair ) {	
+		if ( arm.effectRepair ) {
 			arm.effectRepair->SetEndOrigin ( tr.endpos );
 		}
 		// Start the impact effect
@@ -248,7 +248,7 @@ void rvMonsterRepairBot::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -277,27 +277,27 @@ stateResult_t rvMonsterRepairBot::State_Legs_Move ( const stateParms_t& parms ) 
 		case STAGE_START:
 			PlayAnim ( ANIMCHANNEL_LEGS, "idle_to_run", 4 );
 			return SRESULT_STAGE ( STAGE_START_WAIT );
-		
+
 		case STAGE_START_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
 				return SRESULT_STAGE ( STAGE_MOVE );
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_MOVE:
 			PlayCycle (  ANIMCHANNEL_LEGS, "run", 4 );
 			return SRESULT_STAGE ( STAGE_MOVE_WAIT );
-		
+
 		case STAGE_MOVE_WAIT:
 			if ( !move.fl.moving || !CanMove() ) {
 				return SRESULT_STAGE ( STAGE_STOP );
 			}
 			return SRESULT_WAIT;
-				
+
 		case STAGE_STOP:
 			PlayAnim ( ANIMCHANNEL_LEGS, "run_to_idle", 4 );
 			return SRESULT_STAGE ( STAGE_STOP_WAIT );
-		
+
 		case STAGE_STOP_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 4 );
@@ -325,7 +325,7 @@ stateResult_t rvMonsterRepairBot::State_TorsoAction_Repair ( const stateParms_t&
 			repairEndTime = gameLocal.time + SEC2MS(scriptedActionEnt->spawnArgs.GetInt ( "duration", "5" ) );
 			PostAnimState ( ANIMCHANNEL_TORSO, "TorsoAction_RepairDone", 0, 0, SFLAG_ONCLEAR );
 			return SRESULT_STAGE(STAGE_REPAIR);
-			
+
 		case STAGE_REPAIR:
 			if ( gameLocal.time > repairEndTime ) {
 				return SRESULT_DONE;
@@ -343,7 +343,7 @@ rvMonsterRepairBot::State_TorsoAction_RepairDone
 stateResult_t rvMonsterRepairBot::State_TorsoAction_RepairDone ( const stateParms_t& parms ) {
 	StopRepairs ( armLeft );
 	StopRepairs ( armRight );
-	
+
 	return SRESULT_DONE;
 }
 
@@ -357,7 +357,7 @@ void repairBotArm_t::Save ( idSaveGame* savefile ) const {
 	savefile->WriteBool ( repairing );
 	effectRepair.Save ( savefile );
 	effectImpact.Save ( savefile );
-	
+
     savefile->WriteInt ( periodicEndTime );
 }
 

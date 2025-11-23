@@ -15,7 +15,7 @@ public:
 	void					Spawn						( void );
 	void					Save						( idSaveGame *savefile ) const;
 	void					Restore						( idRestoreGame *savefile );
-	
+
 	void					BeginHealing				( idEntity *toHeal );
 	void					EndHealing					( void );
 

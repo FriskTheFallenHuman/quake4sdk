@@ -10,7 +10,7 @@
 	Does not use memory allocation during parsing. The lexer uses no
 	memory allocation if a source is loaded with LoadMemory().
 	However, idToken may still allocate memory for large strings.
-	
+
 	A number directly following the escape character '\' in a string is
 	assumed to be in decimal format instead of octal. Binary numbers of
 	the form 0b.. or 0B.. can also be used.
@@ -122,20 +122,20 @@ typedef struct punctuation_s
 #ifdef LEXER_READ_AHEAD
 class LexerIOWrapper {
 	idFile *file;
-	
+
 	int offset;
 	int size;
 	char *memory;
 
-public:	
-	LexerIOWrapper();	
+public:
+	LexerIOWrapper();
 	void InitFromMemory(char const * const ptr, int length);
 	bool OpenFile(char const *filename, bool OSPath);
-	int Length();	
-	int Tell();	
-	void Seek( int loc, int mode );	
-	void Read( void *dest, int s );	
-	void Close();	
+	int Length();
+	int Tell();
+	void Seek( int loc, int mode );
+	void Read( void *dest, int s );
+	void Close();
 	int IsLoaded();
 };
 #endif
@@ -144,7 +144,7 @@ class idLexer {
 	friend class idParser;
 
 public:
-// RAVEN END					
+// RAVEN END
 					// constructor
 					idLexer();
 					idLexer( int flags );
@@ -306,7 +306,7 @@ class Lexer {
 
 public:
 
-#ifdef LEXER_READ_AHEAD	
+#ifdef LEXER_READ_AHEAD
 	static void				BeginLevelLoad();
 	static void				EndLevelLoad();
 #endif
@@ -421,13 +421,13 @@ protected:
 
 private:
 	bool					OpenFile(char const *filename, bool OSPath);
-	
+
 #ifdef LEXER_READ_AHEAD
 	LexerIOWrapper			mLexerIOWrapper;
 #else
 	idFile					*mFile;
 #endif
-	
+
 	unsigned int			offset;
 	idToken					unreadToken;
 	unsigned int			unreadSize;

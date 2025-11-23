@@ -75,14 +75,14 @@ rvMonsterFailedTransfer::OnDeath
 */
 void rvMonsterFailedTransfer::OnDeath ( void ) {
 	idAI::OnDeath ( );
-	
+
 	if ( allowSplit ) {
 		idEntity* torso;
 		idDict	  args;
 
 		LoadAF ( "ragdoll_legs", true );
 
-		PlayEffect ( "fx_bloodyburst", animator.GetJointHandle ( "chest" ) );	
+		PlayEffect ( "fx_bloodyburst", animator.GetJointHandle ( "chest" ) );
 		SetSkin ( declManager->FindSkin	 ( spawnArgs.GetString ( "skin_legs" ) ) );
 
 		args.Copy ( *gameLocal.FindEntityDefDict ( "monster_failed_transfer_torso" ) );
@@ -112,7 +112,7 @@ void rvMonsterFailedTransfer::Killed( idEntity *inflictor, idEntity *attacker, i
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */

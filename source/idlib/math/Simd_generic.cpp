@@ -3335,8 +3335,8 @@ void VPCALL idSIMD_Generic::MixedSoundToSamples( short * RESTRICT samples, const
 /*
 ============
 idSIMD_Generic::JointMat_MultiplyMats
-// dluetscher: added support for concatenating matrices from two idJointMat arrays, based on the given palette mapping, 
-//			   storing the resulting transform palette in an array of 4x4 matrices, 
+// dluetscher: added support for concatenating matrices from two idJointMat arrays, based on the given palette mapping,
+//			   storing the resulting transform palette in an array of 4x4 matrices,
 //			   stored in row-major array ordering, with translation in last column (column-major matrix)
 //
 //				For example the following matrix: Xx Yx Zx Tx
@@ -3347,10 +3347,10 @@ idSIMD_Generic::JointMat_MultiplyMats
 //				is stored in the resulting order: Xx Yx Zx Tx  Xy Yy Zx Ty  Xz Yz Zz Tz  0  0  0  1
 ============
 */
-void VPCALL idSIMD_Generic::JointMat_MultiplyMats( float * RESTRICT destMats, 
-														   const idJointMat * RESTRICT src1Mats, 
-														   const idJointMat * RESTRICT src2Mats, 
-														   int * RESTRICT transformPalette, 
+void VPCALL idSIMD_Generic::JointMat_MultiplyMats( float * RESTRICT destMats,
+														   const idJointMat * RESTRICT src1Mats,
+														   const idJointMat * RESTRICT src2Mats,
+														   int * RESTRICT transformPalette,
 														   int transformCount ) {
 	TIME_THIS_SCOPE("SIMD JointMat_MultiplyMats");
 	float * RESTRICT destPtr;
@@ -3374,12 +3374,12 @@ void VPCALL idSIMD_Generic::JointMat_MultiplyMats( float * RESTRICT destMats,
 		destPtr[1 * 4 + 1] = src1Ptr[0 * 4 + 1] * src2Ptr[1 * 4 + 0] + src1Ptr[1 * 4 + 1] * src2Ptr[1 * 4 + 1] + src1Ptr[2 * 4 + 1] * src2Ptr[1 * 4 + 2];
 		destPtr[2 * 4 + 1] = src1Ptr[0 * 4 + 1] * src2Ptr[2 * 4 + 0] + src1Ptr[1 * 4 + 1] * src2Ptr[2 * 4 + 1] + src1Ptr[2 * 4 + 1] * src2Ptr[2 * 4 + 2];
 		destPtr[3 * 4 + 1] = 0.f;
-		
+
 		destPtr[0 * 4 + 2] = src1Ptr[0 * 4 + 2] * src2Ptr[0 * 4 + 0] + src1Ptr[1 * 4 + 2] * src2Ptr[0 * 4 + 1] + src1Ptr[2 * 4 + 2] * src2Ptr[0 * 4 + 2];
 		destPtr[1 * 4 + 2] = src1Ptr[0 * 4 + 2] * src2Ptr[1 * 4 + 0] + src1Ptr[1 * 4 + 2] * src2Ptr[1 * 4 + 1] + src1Ptr[2 * 4 + 2] * src2Ptr[1 * 4 + 2];
 		destPtr[2 * 4 + 2] = src1Ptr[0 * 4 + 2] * src2Ptr[2 * 4 + 0] + src1Ptr[1 * 4 + 2] * src2Ptr[2 * 4 + 1] + src1Ptr[2 * 4 + 2] * src2Ptr[2 * 4 + 2];
 		destPtr[3 * 4 + 2] = 0.f;
-		
+
 		destPtr[0 * 4 + 3] = src1Ptr[0 * 4 + 3] * src2Ptr[0 * 4 + 0] + src1Ptr[1 * 4 + 3] * src2Ptr[0 * 4 + 1] + src1Ptr[2 * 4 + 3] * src2Ptr[0 * 4 + 2];
 		destPtr[1 * 4 + 3] = src1Ptr[0 * 4 + 3] * src2Ptr[1 * 4 + 0] + src1Ptr[1 * 4 + 3] * src2Ptr[1 * 4 + 1] + src1Ptr[2 * 4 + 3] * src2Ptr[1 * 4 + 2];
 		destPtr[2 * 4 + 3] = src1Ptr[0 * 4 + 3] * src2Ptr[2 * 4 + 0] + src1Ptr[1 * 4 + 3] * src2Ptr[2 * 4 + 1] + src1Ptr[2 * 4 + 3] * src2Ptr[2 * 4 + 2];
@@ -3394,13 +3394,13 @@ void VPCALL idSIMD_Generic::JointMat_MultiplyMats( float * RESTRICT destMats,
 // RAVEN END
 
 // RAVEN BEGIN
-// dluetscher: added TransformVertsMinMax to transform an array of index-weighted vertices into 
+// dluetscher: added TransformVertsMinMax to transform an array of index-weighted vertices into
 //			   an array of idSilTraceVerts, while simulatenously calculating the bounds
 #ifdef _MD5R_SUPPORT
-void VPCALL idSIMD_Generic::TransformVertsMinMax4Bone( rvSilTraceVertT * RESTRICT silTraceVertOutputData, 
-													   idVec3 &min, idVec3 &max, 
-													   byte * RESTRICT vertexInputData, 
-													   int vertStride, int numVerts, 
+void VPCALL idSIMD_Generic::TransformVertsMinMax4Bone( rvSilTraceVertT * RESTRICT silTraceVertOutputData,
+													   idVec3 &min, idVec3 &max,
+													   byte * RESTRICT vertexInputData,
+													   int vertStride, int numVerts,
 													   float * RESTRICT skinToModelTransforms ) {
 	TIME_THIS_SCOPE("SIMD TransformVertsMinMax4Bone");
 	float curMin[3], curMax[3];
@@ -3417,23 +3417,23 @@ void VPCALL idSIMD_Generic::TransformVertsMinMax4Bone( rvSilTraceVertT * RESTRIC
 
 	vertexOutputData = (byte* RESTRICT ) silTraceVertOutputData;
 	endVertexInputData = vertexInputData + vertStride*numVerts;
-	do 
+	do
 	{
 		vertexPos = (float * RESTRICT ) vertexInputData;
 		blendIndices = vertexInputData + sizeof(float)*3;
 		blendWeights = (float * RESTRICT ) (vertexInputData + sizeof(float)*3 + sizeof(byte)*4);
 		transformedPos = (float * RESTRICT ) vertexOutputData;
-		
+
 		curTransform = skinToModelTransforms + ((dword) blendIndices[0] << 4);
 		transformedPos[0] = blendWeights[0]*(vertexPos[0]*curTransform[0] + vertexPos[1]*curTransform[1] + vertexPos[2]*curTransform[2] + curTransform[3]);
 		transformedPos[1] = blendWeights[0]*(vertexPos[0]*curTransform[4] + vertexPos[1]*curTransform[5] + vertexPos[2]*curTransform[6] + curTransform[7]);
 		transformedPos[2] = blendWeights[0]*(vertexPos[0]*curTransform[8] + vertexPos[1]*curTransform[9] + vertexPos[2]*curTransform[10] + curTransform[11]);
-		
+
 		curTransform = skinToModelTransforms + ((dword) blendIndices[1] << 4);
 		transformedPos[0] += blendWeights[1]*(vertexPos[0]*curTransform[0] + vertexPos[1]*curTransform[1] + vertexPos[2]*curTransform[2] + curTransform[3]);
 		transformedPos[1] += blendWeights[1]*(vertexPos[0]*curTransform[4] + vertexPos[1]*curTransform[5] + vertexPos[2]*curTransform[6] + curTransform[7]);
 		transformedPos[2] += blendWeights[1]*(vertexPos[0]*curTransform[8] + vertexPos[1]*curTransform[9] + vertexPos[2]*curTransform[10] + curTransform[11]);
-		
+
 		curTransform = skinToModelTransforms + ((dword) blendIndices[2] << 4);
 		transformedPos[0] += blendWeights[2]*(vertexPos[0]*curTransform[0] + vertexPos[1]*curTransform[1] + vertexPos[2]*curTransform[2] + curTransform[3]);
 		transformedPos[1] += blendWeights[2]*(vertexPos[0]*curTransform[4] + vertexPos[1]*curTransform[5] + vertexPos[2]*curTransform[6] + curTransform[7]);
@@ -3447,15 +3447,15 @@ void VPCALL idSIMD_Generic::TransformVertsMinMax4Bone( rvSilTraceVertT * RESTRIC
 		curMin[0] = transformedPos[0] < curMin[0] ? transformedPos[0] : curMin[0];
 		curMin[1] = transformedPos[1] < curMin[1] ? transformedPos[1] : curMin[1];
 		curMin[2] = transformedPos[2] < curMin[2] ? transformedPos[2] : curMin[2];
-																	 	
+
 		curMax[0] = transformedPos[0] > curMax[0] ? transformedPos[0] : curMax[0];
 		curMax[1] = transformedPos[1] > curMax[1] ? transformedPos[1] : curMax[1];
 		curMax[2] = transformedPos[2] > curMax[2] ? transformedPos[2] : curMax[2];
 
 		vertexInputData += vertStride;
 		vertexOutputData += sizeof(rvSilTraceVertT);
-		
-	} 
+
+	}
 	while ( vertexInputData < endVertexInputData );
 
 	min.x = curMin[0];
@@ -3467,10 +3467,10 @@ void VPCALL idSIMD_Generic::TransformVertsMinMax4Bone( rvSilTraceVertT * RESTRIC
 	max.z = curMax[2];
 }
 
-void VPCALL idSIMD_Generic::TransformVertsMinMax1Bone( rvSilTraceVertT * RESTRICT silTraceVertOutputData, 
-													   idVec3 &min, idVec3 &max, 
-													   byte * RESTRICT vertexInputData, 
-													   int vertStride, int numVerts, 
+void VPCALL idSIMD_Generic::TransformVertsMinMax1Bone( rvSilTraceVertT * RESTRICT silTraceVertOutputData,
+													   idVec3 &min, idVec3 &max,
+													   byte * RESTRICT vertexInputData,
+													   int vertStride, int numVerts,
 													   float * RESTRICT skinToModelTransforms ) {
 	TIME_THIS_SCOPE("SIMD TransformVertsMinMax1Bone");
 	float curMin[3], curMax[3];
@@ -3487,12 +3487,12 @@ void VPCALL idSIMD_Generic::TransformVertsMinMax1Bone( rvSilTraceVertT * RESTRIC
 
 	vertexOutputData = (byte* RESTRICT ) silTraceVertOutputData;
 	endVertexInputData = vertexInputData + vertStride*numVerts;
-	do 
+	do
 	{
 		vertexPos = (float * RESTRICT ) vertexInputData;
 		blendIndices = vertexInputData + sizeof(float)*3;
 		transformedPos = (float * RESTRICT ) vertexOutputData;
-		
+
 		curTransform = skinToModelTransforms + ((dword) blendIndices[0] << 4);
 		transformedPos[0] = (vertexPos[0]*curTransform[0] + vertexPos[1]*curTransform[1] + vertexPos[2]*curTransform[2] + curTransform[3]);
 		transformedPos[1] = (vertexPos[0]*curTransform[4] + vertexPos[1]*curTransform[5] + vertexPos[2]*curTransform[6] + curTransform[7]);
@@ -3501,15 +3501,15 @@ void VPCALL idSIMD_Generic::TransformVertsMinMax1Bone( rvSilTraceVertT * RESTRIC
 		curMin[0] = transformedPos[0] < curMin[0] ? transformedPos[0] : curMin[0];
 		curMin[1] = transformedPos[1] < curMin[1] ? transformedPos[1] : curMin[1];
 		curMin[2] = transformedPos[2] < curMin[2] ? transformedPos[2] : curMin[2];
-																	 	
+
 		curMax[0] = transformedPos[0] > curMax[0] ? transformedPos[0] : curMax[0];
 		curMax[1] = transformedPos[1] > curMax[1] ? transformedPos[1] : curMax[1];
 		curMax[2] = transformedPos[2] > curMax[2] ? transformedPos[2] : curMax[2];
 
 		vertexInputData += vertStride;
 		vertexOutputData += sizeof(rvSilTraceVertT);
-		
-	} 
+
+	}
 	while ( vertexInputData < endVertexInputData );
 
 	min.x = curMin[0];

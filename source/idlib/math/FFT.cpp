@@ -17,7 +17,7 @@ typedef struct {
 */
 // RAVEN BEGIN
 // jscott: added stride
-void idFFT::FFT1D( cpxFloat_t *data, int N, int ISI, int stride ) 
+void idFFT::FFT1D( cpxFloat_t *data, int N, int ISI, int stride )
 {
 // RAVEN END
 	int i, j, m, mmax, istep;
@@ -84,7 +84,7 @@ void idFFT::FFT1D( cpxFloat_t *data, int N, int ISI, int stride )
 
 // RAVEN BEGIN
 // jscott: added 2d Fourier transform - cost 2N
-void idFFT::FFT2D( cpxFloat_t *data, int N, int ISI ) 
+void idFFT::FFT2D( cpxFloat_t *data, int N, int ISI )
 {
 	cpxFloat_t	*orig;
 	int			i;
@@ -108,7 +108,7 @@ void idFFT::FFT2D( cpxFloat_t *data, int N, int ISI )
 }
 
 // jscott: added 3d Fourier transform - cost 3N^2
-void idFFT::FFT3D( cpxFloat_t *data, int N, int ISI ) 
+void idFFT::FFT3D( cpxFloat_t *data, int N, int ISI )
 {
 	cpxFloat_t	*orig;
 	int			i, j;

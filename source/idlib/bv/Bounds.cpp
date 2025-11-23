@@ -108,7 +108,7 @@ float idBounds::ShortestDistance( const idVec3 &point ) const {
 	return( idMath::Sqrt( distance ) );
 }
 
-// abahr: 
+// abahr:
 idVec3 idBounds::FindEdgePoint( const idVec3& dir ) const {
 	return FindEdgePoint( GetCenter(), dir );
 }
@@ -120,7 +120,7 @@ idVec3 idBounds::FindEdgePoint( const idVec3& start, const idVec3& dir ) const {
 	float scale = 0.0f;
 
     RayIntersection( point, -dir, scale );
-	
+
 	idVec3 p = point + -dir * scale;
 	return p;
 }

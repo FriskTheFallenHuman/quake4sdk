@@ -75,7 +75,7 @@ extern idCVar		com_updateLoadSize;
 extern idCVar		com_videoRam;
 
 // RAVEN BEGIN
-// ksergent: added bundler 
+// ksergent: added bundler
 extern idCVar		com_Bundler;
 
 #ifndef _XENON
@@ -228,7 +228,7 @@ public:
 // RAVEN END
 
 // RAVEN BEGIN
-// dluetscher: added the following method to initialize each of the memory heaps 
+// dluetscher: added the following method to initialize each of the memory heaps
 #ifdef _RV_MEM_SYS_SUPPORT
 	virtual void				InitHeaps( void ) = 0;		// initializes each of the memory heaps for use
 	virtual void				ShutdownHeaps( void ) = 0;	// shuts down each of the memory heaps from further use
@@ -247,8 +247,8 @@ public:
 // RAVEN BEGIN
 // bdube: new exports
 								// Modview thinks in the middle of a game frame
-	virtual void				ModViewThink ( void ) = 0;	
-	
+	virtual void				ModViewThink ( void ) = 0;
+
 // rjohnson: added option for guis to always think
 	virtual void				RunAlwaysThinkGUIs ( int time ) = 0;
 
@@ -318,7 +318,7 @@ public:
 
 								// Returns the number of strings in the English langdict
 	virtual int					GetNumLocalizedStrings( void ) const = 0;
-	
+
 								// Returns the name of the language
 	virtual const char *		GetLanguage( int index ) const = 0;
 
@@ -329,11 +329,11 @@ public:
 	virtual const char *		KeysFromBinding( const char *bind ) = 0;
 
 								// Returns the binding bound to the key
-	virtual const char *		BindingFromKey( const char *key ) = 0; 
+	virtual const char *		BindingFromKey( const char *key ) = 0;
 
 								// Directly sample a button.
 	virtual int					ButtonState( int key ) = 0;
-	
+
 								// Directly sample a keystate.
 	virtual int					KeyState( int key ) = 0;
 

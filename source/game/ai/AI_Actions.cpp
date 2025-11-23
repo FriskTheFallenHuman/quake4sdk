@@ -121,7 +121,7 @@ bool rvAIAction::Init ( const idDict& args, const char* name, const char* defaul
 	fl.noTurn			= args.GetBool ( va("%s_noturn",name), "1" );
 	fl.overrideLegs		= args.GetBool ( va("%s_overrideLegs",name), "1" );
 	fl.noSimpleThink	= args.GetBool ( va("%s_nosimplethink",name), "0" );
-	
+
 	blendFrames = args.GetInt ( va("%s_blendFrames",name), "4" );
 	failRate = SEC2MS ( args.GetInt ( va("%s_failRate",name), ".1" ) );
 
@@ -132,7 +132,7 @@ bool rvAIAction::Init ( const idDict& args, const char* name, const char* defaul
 
 	chance = args.GetFloat ( va("%s_chance",name), "1" );
 	diversity = args.GetFloat ( va("%s_diversity", name ), ".5" );
-	
+
 	// action state
 	state = args.GetString ( va("%s_state",name), (!defaultState||!*defaultState) ? "Torso_Action" : defaultState );
 
@@ -143,7 +143,7 @@ bool rvAIAction::Init ( const idDict& args, const char* name, const char* defaul
 			anims.Append ( kv->GetValue ( ) );
 		}
 	}
-			
+
 	return true;
 }
 
@@ -160,7 +160,7 @@ void rvAIAction::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt ( anims.Num ( ) );
 	for ( i = 0; i < anims.Num(); i ++ ) {
 		savefile->WriteString ( anims[i] );
-	}	
+	}
 	savefile->WriteString ( state );
 
 	timer.Save ( savefile );
@@ -194,7 +194,7 @@ void rvAIAction::Restore ( idRestoreGame *savefile ) {
 	anims.SetNum ( num );
 	for ( num--; num >= 0; num -- ) {
 		savefile->ReadString ( anims[num] );
-	}	
+	}
 	savefile->ReadString ( state );
 
 	timer.Restore ( savefile );
@@ -264,7 +264,7 @@ bool idAI::CheckAction_JumpBack ( rvAIAction* action, int animNum ) {
 		return false;
 	}
 	// TODO: enemy must be in front to jump backwards
-	
+
 	// Can we actually move backwards?
 	if ( !TestAnimMove ( animNum ) ) {
 		return false;
@@ -337,7 +337,7 @@ bool idAI::UpdateAction ( void ) {
 	if ( aifl.action ) {
 		return false;
 	}
-		
+
 	return CheckActions ( );
 }
 
@@ -350,15 +350,15 @@ bool idAI::CheckPainActions ( void ) {
 	if ( !pain.takenThisFrame || !actionTimerPain.IsDone ( actionTime ) ) {
 		return false;
 	}
-	
+
 	if ( !pain.threshold || pain.takenThisFrame < pain.threshold ) {
 		return false;
 	}
-	
+
 	PerformAction ( "Torso_Pain", 2, true );
 	actionTimerPain.Reset ( actionTime );
-	
-	return true;	
+
+	return true;
 }
 
 /*
@@ -385,12 +385,12 @@ bool idAI::CheckActions ( void ) {
 			 PerformAction ( &actionJumpBack,	 (checkAction_t)&idAI::CheckAction_JumpBack, &actionTimerEvade )			 ||
 			 PerformAction ( &actionLeapAttack,  (checkAction_t)&idAI::CheckAction_LeapAttack )	) {
 			return true;
-		} else if ( PerformAction ( &actionRangedAttack,(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) || 
+		} else if ( PerformAction ( &actionRangedAttack,(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ||
 					PerformAction ( &actionMeleeAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack )							    ) {
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -405,9 +405,9 @@ void idAI::PerformAction ( const char* stateName, int blendFrames, bool noPain )
 
 	// Start the action
 	if ( legsAnim.Disabled() ) {
-		//MCG: Hmmm... I hope this doesn't break anything, but if an action happens *right* 
+		//MCG: Hmmm... I hope this doesn't break anything, but if an action happens *right*
 		//		at the end of a trigger_anim, then the legs will be enabled (by the SetAnimState
-		//		on the torso) with no state!  The actor will then be stuck in place until 
+		//		on the torso) with no state!  The actor will then be stuck in place until
 		//		something actually sets the legsAnim state... so let's check for disabled and
 		//		set a default state right here...?
 		SetAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 0 );
@@ -442,7 +442,7 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 		action->status = rvAIAction::STATUS_FAIL_DISABLED;
 		return false;
 	}
-	
+
 	// Action timers still running?
 	if ( !action->timer.IsDone ( actionTime ) ) {
 		action->status = rvAIAction::STATUS_FAIL_TIMER;
@@ -454,7 +454,7 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 		return false;
 	}
 
-	// Special code for attacks	
+	// Special code for attacks
 	if ( action->fl.isAttack ) {
 		// Attacks disabled?
 		if ( ai_disableAttacks.GetBool() ) {
@@ -466,9 +466,9 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 			action->status = rvAIAction::STATUS_FAIL_NOENEMY;
 			return false;
 		}
-	}		
+	}
 
-	// Min Range check	
+	// Min Range check
 	if ( action->minRange ) {
 		if ( !enemy.ent || !enemy.range || enemy.range < action->minRange ) {
 			action->status = rvAIAction::STATUS_FAIL_MINRANGE;
@@ -482,7 +482,7 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 		}
 	}
 
-	// Max Range check	
+	// Max Range check
 	if ( action->maxRange != 0 ) {
 		float maxrange = action->maxRange == -1 ? combat.attackRange[1] : action->maxRange;
 		if ( !enemy.ent || !enemy.range || enemy.range > maxrange ) {
@@ -521,7 +521,7 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 			return false;
 		}
 	}
-	
+
 	int animNum;
 	if ( action->anims.Num ( ) ) {
 		// Pick a random animation from the list
@@ -530,10 +530,10 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 			action->status = rvAIAction::STATUS_FAIL_ANIM;
 			return false;
 		}
-	} else { 
+	} else {
 		animNum = -1;
 	}
-	
+
 	// Random chance?
 	if ( action->chance < 1.0f && gameLocal.random.RandomFloat ( ) > action->chance ) {
 		action->status = rvAIAction::STATUS_FAIL_CHANCE;
@@ -541,17 +541,17 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 		action->timer.Add ( 100 );
 		return false;
 	}
-	
+
 	// Check the condition
 	if ( condition && !(this->*(condition)) ( action, animNum ) ) {
 		action->status = rvAIAction::STATUS_FAIL_CONDITION;
 		action->timer.Clear ( actionTime );
 		action->timer.Add ( action->failRate );
-		return false;		
+		return false;
 	}
 
 	// Disallow turning during action?
-	if ( action->fl.noTurn ) {	
+	if ( action->fl.noTurn ) {
 		OverrideFlag ( AIFLAGOVERRIDE_NOTURN, true );
 	}
 
@@ -587,6 +587,6 @@ bool idAI::PerformAction ( rvAIAction* action, bool (idAI::*condition)(rvAIActio
 	action->status = rvAIAction::STATUS_OK;
 
 	actionAnimNum  = animNum;
-	     	
+
 	return true;
 }

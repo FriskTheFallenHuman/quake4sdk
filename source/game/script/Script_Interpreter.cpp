@@ -155,7 +155,7 @@ void idInterpreter::Reset( void ) {
 ================
 idInterpreter::GetRegisterValue
 
-Returns a string representation of the value of the register.  This is 
+Returns a string representation of the value of the register.  This is
 used primarily for the debugger and debugging
 
 //FIXME:  This is pretty much wrong.  won't access data in most situations.
@@ -174,11 +174,11 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 	const function_t *func;
 
 	out.Empty();
-	
+
 	if ( scopeDepth == -1 ) {
 		scopeDepth = callStackDepth;
-	}	
-	
+	}
+
 	if ( scopeDepth == callStackDepth ) {
 		func = currentFunction;
 	} else {
@@ -193,7 +193,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 	if ( funcName ) {
 		*funcName = '\0';
 		scopeObj = gameLocal.program.GetDef( NULL, funcObject, &def_namespace );
-		funcName += 2;				
+		funcName += 2;
 		if ( scopeObj )
 		{
 			scope = gameLocal.program.GetDef( NULL, funcName, scopeObj );
@@ -210,7 +210,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 	}
 
 	d = gameLocal.program.GetDef( NULL, name, scope );
-	
+
 	// Check the objects for it if it wasnt local to the function
 	if ( !d )
 	{
@@ -222,14 +222,14 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 				break;
 			}
 		}
-	}	
+	}
 
 	if ( !d )
 	{
 		out = "???";
 		return false;
 	}
-	
+
 	reg = GetVariable( d );
 	switch( d->Type() ) {
 	case ev_float:
@@ -242,7 +242,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 		break;
 
 	case ev_vector:
-		if ( reg.vectorPtr ) {				
+		if ( reg.vectorPtr ) {
 			out = va( "%g,%g,%g", reg.vectorPtr->x, reg.vectorPtr->y, reg.vectorPtr->z );
 		} else {
 			out = "0,0,0";
@@ -261,9 +261,9 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 
 	case ev_field:
 	{
-		idEntity*		entity;			
+		idEntity*		entity;
 		idScriptObject*	obj;
-		
+
 		if ( scope == &def_namespace ) {
 			// should never happen, but handle it safely anyway
 			return false;
@@ -280,7 +280,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 		if ( !obj ) {
 			return false;
 		}
-		
+
 		switch ( field->Type() ) {
 			case ev_boolean:
 				out = va( "%d", *( reinterpret_cast<int *>( &obj->data[ reg.ptrOffset ] ) ) );
@@ -289,7 +289,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 			case ev_float:
 				out = va( "%g", *( reinterpret_cast<float *>( &obj->data[ reg.ptrOffset ] ) ) );
 				return true;
-				
+
 			case ev_string:	{
 				const char* str;
 				str = reinterpret_cast<const char*>( &obj->data[ reg.ptrOffset ] );
@@ -297,7 +297,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 					out = "\"\"";
 				} else {
 					out  = "\"";
-					out += str;			
+					out += str;
 					out += "\"";
 				}
 				return true;
@@ -306,7 +306,7 @@ bool idInterpreter::GetRegisterValue( const char *name, idStr &out, int scopeDep
 			default:
 				return false;
 		}
-		
+
 		break;
 	}
 
@@ -415,7 +415,7 @@ void idInterpreter::StackTrace( void ) const {
 	if ( top >= MAX_STACK_DEPTH ) {
 		top = MAX_STACK_DEPTH - 1;
 	}
-	
+
 	if ( !currentFunction ) {
 		gameLocal.Printf( "<NO FUNCTION>\n" );
 	} else {
@@ -601,7 +601,7 @@ void idInterpreter::EnterFunction( const function_t *func, bool clearStack ) {
 
 	if ( debug ) {
 		if ( currentFunction ) {
-			gameLocal.Printf( "%d: call '%s' from '%s'(line %d)%s\n", gameLocal.time, func->Name(), currentFunction->Name(), 
+			gameLocal.Printf( "%d: call '%s' from '%s'(line %d)%s\n", gameLocal.time, func->Name(), currentFunction->Name(),
 				gameLocal.program.GetStatement( instructionPointer ).linenumber, clearStack ? " clear stack" : "" );
 		} else {
             gameLocal.Printf( "%d: call '%s'%s\n", gameLocal.time, func->Name(), clearStack ? " clear stack" : "" );
@@ -640,7 +640,7 @@ idInterpreter::LeaveFunction
 void idInterpreter::LeaveFunction( idVarDef *returnDef ) {
 	prstack_t *stack;
 	varEval_t ret;
-	
+
 	if ( callStackDepth <= 0 ) {
 		Error( "prog stack underflow" );
 	}
@@ -679,7 +679,7 @@ void idInterpreter::LeaveFunction( idVarDef *returnDef ) {
 
 	// up stack
 	callStackDepth--;
-	stack = &callStack[ callStackDepth ]; 
+	stack = &callStack[ callStackDepth ];
 	currentFunction = stack->f;
 	localstackBase = stack->stackbase;
 	NextInstruction( stack->s );
@@ -720,7 +720,7 @@ void idInterpreter::CallEvent( const function_t *func, int argsize ) {
 
 	if ( !eventEntity || !eventEntity->RespondsTo( *evdef ) ) {
 // RAVEN BEGIN
-// jshepard: added catch for entities that don't exist 
+// jshepard: added catch for entities that don't exist
 		if ( eventEntity && developer.GetBool() ) {
 			// give a warning in developer mode
 			Warning( "Function '%s' not supported on entity '%s'", evdef->GetName(), eventEntity->name.c_str() );
@@ -733,7 +733,7 @@ void idInterpreter::CallEvent( const function_t *func, int argsize ) {
 				}
 			} else {
 				Warning( "Null entity referenced -- check entity name spelling.");
-			}		
+			}
 		}
 // RAVEN END
 		// always return a safe value when an object doesn't exist
@@ -821,7 +821,7 @@ void idInterpreter::CallEvent( const function_t *func, int argsize ) {
 	}
 
 	popParms = argsize;
-	eventEntity->ProcessEventArgPtr( evdef, data );	
+	eventEntity->ProcessEventArgPtr( evdef, data );
 	if ( !multiFrameEvent ) {
 		if ( popParms ) {
 			PopParms( popParms );
@@ -838,7 +838,7 @@ void idInterpreter::CallEvent( const function_t *func, int argsize ) {
 idInterpreter::BeginMultiFrameEvent
 ================
 */
-bool idInterpreter::BeginMultiFrameEvent( idEntity *ent, const idEventDef *event ) { 
+bool idInterpreter::BeginMultiFrameEvent( idEntity *ent, const idEventDef *event ) {
 	if ( eventEntity != ent ) {
 		Error( "idInterpreter::BeginMultiFrameEvent called with wrong entity" );
 	}
@@ -1006,8 +1006,8 @@ bool idInterpreter::Execute( void ) {
 			common->DebuggerCheckBreakpoint ( this, &gameLocal.program, instructionPointer );
 		} else if ( g_debugScript.GetBool ( ) ) {
 			static int lastLineNumber = -1;
-			if ( lastLineNumber != gameLocal.program.GetStatement ( instructionPointer ).linenumber ) {				
-				gameLocal.Printf ( "%s (%d)\n", 
+			if ( lastLineNumber != gameLocal.program.GetStatement ( instructionPointer ).linenumber ) {
+				gameLocal.Printf ( "%s (%d)\n",
 					gameLocal.program.GetFilename ( gameLocal.program.GetStatement ( instructionPointer ).file ),
 					gameLocal.program.GetStatement ( instructionPointer ).linenumber
 					);
@@ -1056,7 +1056,7 @@ bool idInterpreter::Execute( void ) {
 			CallEvent( st->a->value.functionPtr, st->b->value.argSize );
 			break;
 
-		case OP_OBJECTCALL:	
+		case OP_OBJECTCALL:
 			var_a = GetVariable( st->a );
 			obj = GetScriptObject( *var_a.entityNumberPtr );
 			if ( obj ) {
@@ -1273,7 +1273,7 @@ bool idInterpreter::Execute( void ) {
 			*var_c.floatPtr = ( *var_a.intPtr != 0 ) && ( *var_b.intPtr != 0 );
 			break;
 
-		case OP_OR:	
+		case OP_OR:
 			var_a = GetVariable( st->a );
 			var_b = GetVariable( st->b );
 			var_c = GetVariable( st->c );
@@ -1293,14 +1293,14 @@ bool idInterpreter::Execute( void ) {
 			var_c = GetVariable( st->c );
 			*var_c.floatPtr = ( *var_a.floatPtr != 0.0f ) || ( *var_b.intPtr != 0 );
 			break;
-			
+
 		case OP_OR_BOOLBOOL:
 			var_a = GetVariable( st->a );
 			var_b = GetVariable( st->b );
 			var_c = GetVariable( st->c );
 			*var_c.floatPtr = ( *var_a.intPtr != 0 ) || ( *var_b.intPtr != 0 );
 			break;
-			
+
 		case OP_NOT_BOOL:
 			var_a = GetVariable( st->a );
 			var_c = GetVariable( st->c );
@@ -1538,7 +1538,7 @@ bool idInterpreter::Execute( void ) {
 			*var_b.entityNumberPtr = *var_a.entityNumberPtr;
 			break;
 
-		case OP_STORE_BOOL:	
+		case OP_STORE_BOOL:
 			var_a = GetVariable( st->a );
 			var_b = GetVariable( st->b );
 			*var_b.intPtr = *var_a.intPtr;
@@ -1652,7 +1652,7 @@ bool idInterpreter::Execute( void ) {
 				*var_b.evalPtr->vectorPtr = *var_a.vectorPtr;
 			}
 			break;
-		
+
 		case OP_STOREP_FTOS:
 			var_b = GetVariable( st->b );
 			if ( var_b.evalPtr && var_b.evalPtr->stringPtr ) {

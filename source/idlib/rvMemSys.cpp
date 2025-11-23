@@ -17,14 +17,14 @@ rvHeapArena mainHeapArena;
 rvHeapArena *currentHeapArena;		// this is the main heap arena that all other heaps use
 rvHeap defaultHeap;					// this is the default system heap
 
-static rvHeap *systemHeapArray[MAX_SYSTEM_HEAPS];		// array of pointers to rvHeaps that are common to idLib, Game, and executable 
+static rvHeap *systemHeapArray[MAX_SYSTEM_HEAPS];		// array of pointers to rvHeaps that are common to idLib, Game, and executable
 
 #if defined(_WIN32) && !defined(_XENON)
 static LPVOID sharedMem = NULL;      // pointer to shared memory
 static HANDLE hMapObject = NULL;	// handle to file mapping
 #endif
 
-// Descriptions that go with each tag.  When updating the tag enum in Heap.h please 
+// Descriptions that go with each tag.  When updating the tag enum in Heap.h please
 // update this list as well.
 // (also update the list in Heap.cpp)
 char *TagNames[] = {
@@ -74,9 +74,9 @@ class TagTableCheck<1>
 {
 };
 
-// An error here means you need to synchronize TagNames and Mem_Alloc_Types_t 
+// An error here means you need to synchronize TagNames and Mem_Alloc_Types_t
 TagTableCheck<sizeof(TagNames)/sizeof(char*) == MA_MAX> TagTableCheckedHere;
-// An error here means there are too many tags.  No more than 32! 
+// An error here means there are too many tags.  No more than 32!
 TagTableCheck<MA_DO_NOT_USE<32> TagMaxCheckedHere;
 
 #ifndef ENABLE_INTEL_SMP
@@ -113,7 +113,7 @@ void rvSetSysHeap(Rv_Sys_Heap_ID_t sysHeapID, rvHeap *heapPtr)
 		// set the system heap back to the default heap
 		systemHeapArray[ (uint) sysHeapID ] = &defaultHeap;
 	}
-	else 
+	else
 	{
 		systemHeapArray[ (uint) sysHeapID ] = heapPtr;
 	}
@@ -184,13 +184,13 @@ void Mem_Init( void )
 									   0,                    // size: high 32-bits
 									   sizeof(systemHeapArray)+sizeof(currentHeapArena),     // size: low 32-bits
 									   "quake4share");		// name of map object
-        if ( hMapObject == NULL ) 
+        if ( hMapObject == NULL )
 		{
-            return; 
+            return;
 		}
- 
+
         // The first process to attach initializes memory.
-        bool firstInit = (GetLastError() != ERROR_ALREADY_EXISTS); 
+        bool firstInit = (GetLastError() != ERROR_ALREADY_EXISTS);
 
         // Get a pointer to the file-mapped shared memory.
         sharedMem = MapViewOfFile(hMapObject,     // object to map view of
@@ -198,9 +198,9 @@ void Mem_Init( void )
 								  0,              // high offset:  map from
 								  0,              // low offset:   beginning
 								  0);             // default: map entire file
-        if ( sharedMem == NULL ) 
+        if ( sharedMem == NULL )
 		{
-            return; 
+            return;
 		}
 
 		if ( !firstInit )
@@ -275,7 +275,7 @@ void Mem_EnableLeakTest( const char *name )
 Mem_UpdateStats
 ==================
 */
-void Mem_UpdateStats( memoryStats_t &stats, int size ) 
+void Mem_UpdateStats( memoryStats_t &stats, int size )
 {
 	stats.num++;
 	if ( size < stats.minSize ) {
@@ -292,7 +292,7 @@ void Mem_UpdateStats( memoryStats_t &stats, int size )
 Mem_UpdateAllocStats
 ==================
 */
-void Mem_UpdateAllocStats( int size ) 
+void Mem_UpdateAllocStats( int size )
 {
 	Mem_UpdateStats( mem_frame_allocs, size );
 	Mem_UpdateStats( mem_total_allocs, size );
@@ -405,7 +405,7 @@ static char				mem_leakName[256] = "";
 Mem_CleanupFileName
 ==================
 */
-const char *Mem_CleanupFileName( const char *fileName ) 
+const char *Mem_CleanupFileName( const char *fileName )
 {
 	int i1, i2;
 	idStr newFileName;
@@ -440,7 +440,7 @@ const char *Mem_CleanupFileName( const char *fileName )
 Mem_Dump
 ==================
 */
-void Mem_Dump( const char *fileName ) 
+void Mem_Dump( const char *fileName )
 {
 	int i, numBlocks, totalSize;
 	char dump[32], *ptr;
@@ -486,7 +486,7 @@ void Mem_Dump( const char *fileName )
 Mem_Dump_f
 ==================
 */
-void Mem_Dump_f( const idCmdArgs &args ) 
+void Mem_Dump_f( const idCmdArgs &args )
 {
 	const char *fileName;
 
@@ -499,7 +499,7 @@ void Mem_Dump_f( const idCmdArgs &args )
 	Mem_Dump( fileName );
 }
 
-typedef struct allocInfo_s 
+typedef struct allocInfo_s
 {
 	const char *			fileName;
 	short					lineNumber;
@@ -511,7 +511,7 @@ typedef struct allocInfo_s
 	struct allocInfo_s *	next;
 } allocInfo_t;
 
-typedef enum 
+typedef enum
 {
 	MEMSORT_SIZE,
 	MEMSORT_LOCATION,
@@ -526,7 +526,7 @@ typedef enum
 Mem_DumpCompressed
 ==================
 */
-void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sortCallStack, int numFrames, bool verbose  ) 
+void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sortCallStack, int numFrames, bool verbose  )
 {
 	int numBlocks, totalSize, r, j;
 	debugMemory_t *b;
@@ -548,7 +548,7 @@ void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sor
 		totalSize += b->size;
 
 		// search for an allocation from the same source location
-		for ( a = allocInfo; a; a = a->next ) 
+		for ( a = allocInfo; a; a = a->next )
 		{
 			if ( a->lineNumber != b->lineNumber )
 			{
@@ -580,7 +580,7 @@ void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sor
 		}
 
 		// if this is an allocation from a new source location
-		if ( !a ) 
+		if ( !a )
 		{
 			a = (allocInfo_t *) currentHeapArena->Allocate( sizeof( allocInfo_t ) );
 			a->fileName = b->fileName;
@@ -598,7 +598,7 @@ void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sor
 	}
 
 	// sort list
-	for ( a = allocInfo; a; a = nexta ) 
+	for ( a = allocInfo; a; a = nexta )
 	{
 		nexta = a->next;
 
@@ -667,14 +667,14 @@ void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sor
 	}
 
 // RAVEN BEGIN
-// dluetscher: changed xenon version to output anything above 1K to the console 
+// dluetscher: changed xenon version to output anything above 1K to the console
 // mwhitlock: added verbose option to show < 1K also since I need to see leaks,
 // no matter how small.
 #ifdef _XENON
-	
+
 	unsigned int notShownSize = 0;
 	unsigned int notShownNumAllocs = 0;
-	
+
 	// write list to debug output and console
 	char buff[256];
 	for ( a = sortedAllocInfo; a; a = nexta ) {
@@ -746,7 +746,7 @@ void Mem_DumpCompressed( const char *fileName, memorySortType_t memSort, int sor
 Mem_DumpCompressed_f
 ==================
 */
-void Mem_DumpCompressed_f( const idCmdArgs &args ) 
+void Mem_DumpCompressed_f( const idCmdArgs &args )
 {
 	int argNum;
 	const char *arg, *fileName;
@@ -811,7 +811,7 @@ void Mem_DumpCompressed_f( const idCmdArgs &args )
 Mem_AllocDebugMemory
 ==================
 */
-void *Mem_AllocDebugMemory( const int size, const char *fileName, const int lineNumber, const bool align16, byte tag ) 
+void *Mem_AllocDebugMemory( const int size, const char *fileName, const int lineNumber, const bool align16, byte tag )
 {
 	void *p;
 	debugMemory_t *m;
@@ -823,11 +823,11 @@ void *Mem_AllocDebugMemory( const int size, const char *fileName, const int line
 		Mem_Init();
 	}
 
-	if ( align16 ) 
+	if ( align16 )
 	{
 		p = currentHeapArena->Allocate16( size + sizeof( debugMemory_t ), tag );
 	}
-	else 
+	else
 	{
 		p = currentHeapArena->Allocate( size + sizeof( debugMemory_t ), tag );
 	}
@@ -857,7 +857,7 @@ void *Mem_AllocDebugMemory( const int size, const char *fileName, const int line
 	{
 		idLib::sys->GetCallStack( m->callStack, MAX_CALLSTACK_DEPTH );
 	}
-	else 
+	else
 	{
 		memset( m->callStack, 0, sizeof(m->callStack) );
 	}
@@ -870,34 +870,34 @@ void *Mem_AllocDebugMemory( const int size, const char *fileName, const int line
 Mem_FreeDebugMemory
 ==================
 */
-void Mem_FreeDebugMemory( void *p, const char *fileName, const int lineNumber, const bool align16 ) 
+void Mem_FreeDebugMemory( void *p, const char *fileName, const int lineNumber, const bool align16 )
 {
 	debugMemory_t *m;
 
-	if ( !p ) 
+	if ( !p )
 	{
 		return;
 	}
 
 	m = (debugMemory_t *) ( ( (byte *) p ) - sizeof( debugMemory_t ) );
 
-	if ( m->size < 0 ) 
+	if ( m->size < 0 )
 	{
 		idLib::common->FatalError( "memory freed twice, first from %s, now from %s", idLib::sys->GetCallStackStr( m->callStack, MAX_CALLSTACK_DEPTH ), idLib::sys->GetCallStackCurStr( MAX_CALLSTACK_DEPTH ) );
 	}
 
 	Mem_UpdateFreeStats( currentHeapArena->Msize( m ) );
 
-	if ( m->next ) 
+	if ( m->next )
 	{
 		m->next->prev = m->prev;
 	}
 
-	if ( m->prev ) 
+	if ( m->prev )
 	{
 		m->prev->next = m->next;
 	}
-	else 
+	else
 	{
 		mem_debugMemory = m->next;
 	}
@@ -927,9 +927,9 @@ void *Mem_Alloc( const int size, const char *fileName, const int lineNumber, byt
 Mem_Free
 ==================
 */
-void Mem_Free( void *ptr, const char *fileName, const int lineNumber ) 
+void Mem_Free( void *ptr, const char *fileName, const int lineNumber )
 {
-	if ( !ptr ) 
+	if ( !ptr )
 	{
 		return;
 	}
@@ -941,7 +941,7 @@ void Mem_Free( void *ptr, const char *fileName, const int lineNumber )
 Mem_Alloc16
 ==================
 */
-void *Mem_Alloc16( const int size, const char *fileName, const int lineNumber, byte tag ) 
+void *Mem_Alloc16( const int size, const char *fileName, const int lineNumber, byte tag )
 {
 	void *mem = Mem_AllocDebugMemory( size, fileName, lineNumber, true, tag );
 	// make sure the memory is 16 byte aligned
@@ -954,7 +954,7 @@ void *Mem_Alloc16( const int size, const char *fileName, const int lineNumber, b
 Mem_Free16
 ==================
 */
-void Mem_Free16( void *ptr, const char *fileName, const int lineNumber ) 
+void Mem_Free16( void *ptr, const char *fileName, const int lineNumber )
 {
 	if ( !ptr ) {
 		return;
@@ -969,7 +969,7 @@ void Mem_Free16( void *ptr, const char *fileName, const int lineNumber )
 Mem_ClearedAlloc
 ==================
 */
-void *Mem_ClearedAlloc( const int size, const char *fileName, const int lineNumber, byte tag ) 
+void *Mem_ClearedAlloc( const int size, const char *fileName, const int lineNumber, byte tag )
 {
 	void *mem = Mem_Alloc( size, fileName, lineNumber, tag );
 
@@ -977,7 +977,7 @@ void *Mem_ClearedAlloc( const int size, const char *fileName, const int lineNumb
 	{
 		SIMDProcessor->Memset( mem, 0, size );
 	}
-	else 
+	else
 	{
 		idLib::common->FatalError( "Ran out of memory during a cleared allocation" );
 	}
@@ -989,10 +989,10 @@ void *Mem_ClearedAlloc( const int size, const char *fileName, const int lineNumb
 Mem_CopyString
 ==================
 */
-char *Mem_CopyString( const char *in, const char *fileName, const int lineNumber ) 
+char *Mem_CopyString( const char *in, const char *fileName, const int lineNumber )
 {
 	char	*out;
-	
+
 	out = (char *)Mem_Alloc( strlen(in) + 1, fileName, lineNumber );
 	strcpy( out, in );
 	return out;
@@ -1054,27 +1054,27 @@ void *Mem_Alloc( const int size, byte tag )
 #if defined( _XENON ) && !defined( _FINAL )
 	MemTracker::OnAlloc(p, size);
 #endif
-	
+
 	return p;
 }
 
 // Mem_ClearedAlloc
-// 
+//
 // Allocate memory from the heap at the top of the current arena stack,
 // clear that memory to zero before returning it.
 void *Mem_ClearedAlloc( const int size, byte tag )
 {
 	byte *allocation = (byte *) Mem_Alloc( size, tag );
-	
+
 #if defined( _XENON ) && !defined( _FINAL )
 	MemTracker::OnAlloc(allocation, size);
 #endif
-	
+
 	if ( allocation != NULL )
 	{
 		SIMDProcessor->Memset( allocation, 0, size );
 	}
-	else 
+	else
 	{
 		idLib::common->FatalError( "Ran out of memory during a cleared allocation" );
 	}
@@ -1089,12 +1089,12 @@ Mem_Free
 */
 void Mem_Free( void *ptr )
 {
-	if ( !ptr ) 
+	if ( !ptr )
 	{
 		return;
 	}
 	assert( currentHeapArena != NULL );
-	
+
 #if defined( _XENON ) && !defined( _FINAL )
 	MemTracker::OnDelete(ptr);
 #endif
@@ -1121,7 +1121,7 @@ char *Mem_CopyString( const char *in )
 	{
 		strcpy( out, in );
 	}
-	else 
+	else
 	{
 		idLib::common->FatalError( "Ran out of memory during string copy allocation" );
 	}
@@ -1132,7 +1132,7 @@ char *Mem_CopyString( const char *in )
 ==================
 Mem_Alloc16
 
-Allocate memory from the heap at the top of the current arena 
+Allocate memory from the heap at the top of the current arena
 stack that is aligned on a 16-byte boundary.
 ==================
 */
@@ -1160,13 +1160,13 @@ Mem_Free
 */
 void Mem_Free16( void *ptr )
 {
-	if ( !ptr ) 
+	if ( !ptr )
 	{
 		return;
 	}
 	assert( currentHeapArena != NULL );
 	currentHeapArena->Free( ptr );
-	
+
 #if defined( _XENON ) && !defined( _FINAL )
 	MemTracker::OnDelete(ptr);
 #endif
@@ -1240,7 +1240,7 @@ rvHeap* rvGetHeapContainingMemory( const void* mem )
 {
 	return (currentHeapArena!=0)?currentHeapArena->GetHeap(const_cast<void*>(mem)):0;
 }
-#endif 
+#endif
 
 /*
 ==================

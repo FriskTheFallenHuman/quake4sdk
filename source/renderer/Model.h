@@ -72,7 +72,7 @@ typedef struct shadowCache_s {
 #ifdef _PENUMBRA_MAP_SUPPORT
 typedef struct penumbraCache_s {
 	idVec3						xyz;					// local coordinates
-	idVec2						colorParam;				
+	idVec2						colorParam;
 } penumbraCache_t;
 #endif
 // RAVEN END
@@ -98,7 +98,7 @@ typedef struct srfTriangles_s {
 // dluetscher: added support for the rvSilTraceVertT as a replacement for some system-memory idDrawVerts (MD5R case)
 #ifdef _MD5R_SUPPORT
 	rvSilTraceVertT *			silTraceVerts;			// sil-trace vertices (system memory copy of verts for sil-trace usage)
-	rvSilTraceVertT *			silTraceVertsAlloc;		// if not NULL, same array of sil-trace vertices as above, but must be freed 
+	rvSilTraceVertT *			silTraceVertsAlloc;		// if not NULL, same array of sil-trace vertices as above, but must be freed
 #elif defined( Q4SDK_MD5R )
 // Q4SDK: maintain compatible structure padding
 	void*						silTraceVerts;
@@ -154,13 +154,13 @@ typedef struct srfTriangles_s {
 // RAVEN END
 
 // RAVEN BEGIN
-// dluetscher: added support for new style of meshes (rvMesh used by rvRenderModelMD5R) that 
+// dluetscher: added support for new style of meshes (rvMesh used by rvRenderModelMD5R) that
 //			   are based on primitive batches of "static" geometry (can be skinned) whose
 //			   vertices always live on the video card for the purposes of drawing
 #ifdef _MD5R_SUPPORT
 	rvMesh *					primBatchMesh;				// rvMesh that is based on static vertex buffers, index buffers, and primitive batches
 	float *						skinToModelTransforms;		// array of skin-to-model transforms, 4x4, stored in row-major array ordering, with translation in last column (column-major matrix)
-	float *						skinToModelTransformsAlloc;	// if not NULL, same array of skin-to-model transforms as above, but must be freed 
+	float *						skinToModelTransformsAlloc;	// if not NULL, same array of skin-to-model transforms as above, but must be freed
 	int							numSkinToModelTransforms;	// the number of skin-to-model transforms stored in the above array
 #elif defined( Q4SDK_MD5R )
 // Q4SDK: maintain compatible structure padding
@@ -208,7 +208,7 @@ typedef struct modelSurface_s {
 typedef struct modelTag_s {
 	idStr			name;
 	idVec3			t;
-	idMat3			m;	
+	idMat3			m;
 } modelTag_t;
 // RAVEN END
 
@@ -263,9 +263,9 @@ typedef struct fluidImpact_s
 
 	// The force of the impact.
 	float fForce;
-	
+
 	float radius;
-	
+
 } fluidImpact_t;
 // RAVEN END
 
@@ -421,7 +421,7 @@ public:
 	// which can regenerate the data with LoadModel()
 	virtual void				PurgeModel() = 0;
 
-	// resets any model information that needs to be reset on a same level load etc.. 
+	// resets any model information that needs to be reset on a same level load etc..
 	// currently only implemented for liquids
 	virtual void				Reset() = 0;
 
@@ -551,13 +551,13 @@ public:
 	virtual void				SetViewEntity( const struct viewEntity_s *ve ) = 0;
 // RAVEN END
 
-// RAVEN BEGIN 
-#if defined( _MD5R_SUPPORT ) 
-// dluetscher: added method to determine if model maintains system-memory dynamic meshes (used 
-//			   for traces and silhouette determination) that are separate from pairs of video-memory 
+// RAVEN BEGIN
+#if defined( _MD5R_SUPPORT )
+// dluetscher: added method to determine if model maintains system-memory dynamic meshes (used
+//			   for traces and silhouette determination) that are separate from pairs of video-memory
 //			   meshes - one used for shadow volume drawing and one used for normal interaction drawing
 //			   NOTE: currently, only MD5R models return true, all others return false
-	virtual bool				HasSeparateSilTraceMeshes( void ) const;		
+	virtual bool				HasSeparateSilTraceMeshes( void ) const;
 #endif
 // RAVEN END
 

@@ -25,7 +25,7 @@ rvClientEntity::rvClientEntity( void ) {
 	bindAxis.Identity();
 	bindJoint = INVALID_JOINT;
 	bindOrientated = false;
-	
+
 	memset( &refSound, 0, sizeof(refSound) );
 	refSound.referenceSoundHandle = -1;
 }
@@ -113,7 +113,7 @@ void rvClientEntity::Bind ( idEntity* master, jointHandle_t joint, bool isOrient
 	bindAxis   = worldAxis;
 
 	bindNode.AddToEnd ( bindMaster->clientEntities );
-	
+
 	bindOrientated = isOrientated;
 	if( physics ) {
 		physics->SetMaster( bindMaster, bindOrientated );
@@ -156,7 +156,7 @@ rvClientEntity::SetAxis
 */
 void rvClientEntity::SetAxis( const idMat3& axis ) {
 	if ( bindMaster ) {
-		bindAxis = axis * bindMaster->GetRenderEntity()->axis.Transpose();		
+		bindAxis = axis * bindMaster->GetRenderEntity()->axis.Transpose();
 	} else {
 		worldAxis = axis;
 	}
@@ -201,10 +201,10 @@ rvClientEntity::DrawDebugInfo
 */
 void rvClientEntity::DrawDebugInfo ( void ) const {
 	idBounds bounds ( idVec3(-8,-8,-8), idVec3(8,8,8) );
-	
+
 	gameRenderWorld->DebugBounds ( colorGreen, bounds, worldOrigin );
 
-	if ( gameLocal.GetLocalPlayer() ) {	
+	if ( gameLocal.GetLocalPlayer() ) {
 		gameRenderWorld->DrawText ( GetClassname ( ), worldOrigin, 0.1f, colorWhite, gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1 );
 	}
 }
@@ -278,16 +278,16 @@ int rvClientEntity::StartSoundShader ( const idSoundShader* shader, const s_chan
 	if ( !shader ) {
 		return 0;
 	}
-	
+
 	idSoundEmitter *emitter = soundSystem->EmitterForIndex( SOUNDWORLD_GAME, refSound.referenceSoundHandle );
 	if ( !emitter ) {
 		refSound.referenceSoundHandle = soundSystem->AllocSoundEmitter( SOUNDWORLD_GAME );
 	}
 
 	UpdateSound();
-	
+
 	emitter = soundSystem->EmitterForIndex( SOUNDWORLD_GAME, refSound.referenceSoundHandle );
-	if( !emitter ) { 
+	if( !emitter ) {
 		return( 0 );
 	}
 
@@ -326,7 +326,7 @@ void rvClientEntity::Save( idSaveGame *savefile ) const {
 	savefile->WriteVec3( bindOrigin );
 	savefile->WriteMat3( bindAxis );
 	savefile->WriteJoint( bindJoint );
-	
+
 	savefile->WriteRefSound( refSound );
 }
 
@@ -349,7 +349,7 @@ void rvClientEntity::Restore( idRestoreGame *savefile ) {
 	savefile->ReadVec3( bindOrigin );
 	savefile->ReadMat3( bindAxis );
 	savefile->ReadJoint( bindJoint );
-	
+
 	savefile->ReadRefSound( refSound );
 }
 
@@ -368,7 +368,7 @@ void rvClientEntity::RunPhysics ( void ) {
 	static_cast<rvClientPhysics*>( clientPhysics )->currentEntityNumber = entityNumber;
 
 	// order important: 1) set client physics bind master to client ent's bind master
-	//					2) set physics to client ent's physics, which sets physics 
+	//					2) set physics to client ent's physics, which sets physics
 	//					   master to client ent's master
 	//					3) set client physics origin to client ent origin, depends on
 	//					   proper bind master from 1
@@ -583,13 +583,13 @@ rvClientPhysics::Collide
 */
 bool rvClientPhysics::Collide( const trace_t &collision, const idVec3 &velocity ) {
 	assert ( currentEntityNumber >= 0 && currentEntityNumber < MAX_CENTITIES );
-	
+
 	rvClientEntity* cent;
 	cent = gameLocal.clientEntities [ currentEntityNumber ];
 	if ( cent ) {
 		return cent->Collide ( collision, velocity );
 	}
-	
+
 	return false;
 }
 

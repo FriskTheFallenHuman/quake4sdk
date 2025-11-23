@@ -15,7 +15,7 @@ AI.h
 #endif
 #ifndef __AAS_TACTICAL_H__
 	#include "AAS_tactical.h"
-#endif	
+#endif
 
 typedef enum {
 	AITACTICAL_NONE,
@@ -134,7 +134,7 @@ typedef struct rvAICombat_s{
 		bool		noChatter			:1;				// No combat announcements
 		bool		crouchViewClear		:1;				// Can I crouch at the position that I stopped at?
 	} fl;
-	
+
 	float					max_chasing_turn;
 	float					shotAtTime;
 	float					shotAtAngle;
@@ -151,10 +151,10 @@ typedef struct rvAICombat_s{
  	float					visRange;					// Maximum distance to check enemy visibility
  	float					earRange;					// Maximum distance to check hearing an enemy from
  	float					awareRange;					// Distance to become automatically aware of an enemy
-	
+
 	int						tacticalMaskAvailable;		// Currently available tactical states
 	int						tacticalMaskUpdate;			// states currently being evaluated
-	aiTactical_t			tacticalCurrent;			// Current tactical state	
+	aiTactical_t			tacticalCurrent;			// Current tactical state
 	int						tacticalUpdateTime;			// Last time the tacitcal state was updated (for delaying updating)
  	int						tacticalPainTaken;			// Amount of damage taken in the current tactical state
  	int						tacticalPainThreshold;		// Threshold of pain before invalidating the current tactical state
@@ -193,8 +193,8 @@ typedef struct rvAIEnemy_s {
 	idVec3					lastVisibleChestPosition;		// Origin of last known visible chest position
 	int						lastVisibleTime;				// Time we last saw and enemy
 
-	idVec3					smoothedLinearVelocity;			
-	idVec3					smoothedPushedVelocity;			
+	idVec3					smoothedLinearVelocity;
+	idVec3					smoothedPushedVelocity;
 	float					smoothVelocityRate;
 
 	idVec3					lastKnownPosition;				// last place the enemy was known to be (does not mean visiblity)
@@ -216,7 +216,7 @@ typedef struct rvAIPassive_s {
 	idStr					animFidgetPrefix;
 	idStr					animTalkPrefix;
 	//idStr					talkPrefix;
-	
+
 	idStr					prefix;
 	idStr					idleAnim;
 	int						idleAnimChangeTime;
@@ -238,10 +238,10 @@ public:
 	rvAIActionTimer ( void );
 
 	bool	Init			( const idDict& args, const char* name );
-				
+
 	void	Save			( idSaveGame *savefile ) const;
 	void	Restore			( idRestoreGame *savefile );
-				
+
 	void	Clear			( int currentTime );
 	void	Reset			( int currentTime, float diversity = 0.0f, float scale = 1.0f );
 	void	Add				( int _time, float diversity = 0.0f );
@@ -250,7 +250,7 @@ public:
 
 	int		GetTime			( void ) const;
 	int		GetRate			( void ) const;
-		
+
 protected:
 
 	int			time;
@@ -272,12 +272,12 @@ class rvAIAction {
 public:
 
 	rvAIAction ( void );
-	
+
 	bool	Init			( const idDict& args, const char* name, const char* defaultState, int flags );
 
 	void	Save			( idSaveGame *savefile ) const;
 	void	Restore			( idRestoreGame *savefile );
-	
+
 	enum EStatus {
 		STATUS_UNUSED,
 		STATUS_OK,								// action was performed
@@ -292,7 +292,7 @@ public:
 		STATUS_FAIL_NOENEMY,					// enemy cant be attacked
 		STATUS_MAX
 	};
-	
+
 	struct flags_s {
 		bool		disabled			:1;		// action disabled?
 		bool		noPain				:1;		// no pain during action
@@ -302,24 +302,24 @@ public:
 		bool		overrideLegs		:1;		// override legs on this action?
 		bool		noSimpleThink		:1;		// dont use simple think logic for this action
 	} fl;
-	
-	
+
+
 	idStrList			anims;
 	idStr				state;
 
 	rvAIActionTimer		timer;
-	
+
 	int					blendFrames;
 	int					failRate;
-	
+
 	float				minRange;
 	float				maxRange;
 	float				minRange2d;
 	float				maxRange2d;
-	
+
 	float				chance;
 	float				diversity;
-	
+
 	EStatus				status;
 };
 
@@ -493,14 +493,14 @@ public:
 
 	// physics
 	idPhysics_Monster		physicsObj;
-	
+
 	// weapon/attack vars
 	bool					lastHitCheckResult;
 	int						lastHitCheckTime;
 	int						lastAttackTime;
 	float					projectile_height_to_distance_ratio;	// calculates the maximum height a projectile can be thrown
 	idList<rvAIAttackAnimInfo_t>	attackAnimInfo;
-	
+
 	mutable idClipModel*	projectileClipModel;
 	idEntityPtr<idProjectile> projectile;
 
@@ -516,7 +516,7 @@ public:
 
 	// Focus
 	idEntityPtr<idEntity>	lookTarget;
-	aiFocus_t				focusType;	
+	aiFocus_t				focusType;
 	idEntityPtr<idEntity>	focusEntity;
 	float					focusRange;
 	int						focusAlignTime;
@@ -538,7 +538,7 @@ public:
 	float					eyeHorizontalOffset;
 	float					headFocusRate;
 	float					eyeFocusRate;
-	
+
 	// joint controllers
 	idAngles				eyeMin;
 	idAngles				eyeMax;
@@ -571,7 +571,7 @@ public:
 		bool		meleeSuperhero			:1;
 		bool		killerGuard				:1;			// Do 100 points of damage with each hit
 	} aifl;
-	
+
 	//
 	// ai/ai.cpp
 	//
@@ -585,7 +585,7 @@ public:
 	virtual void			AdjustHealthByDamage			( int inDamage );
 	void					CalculateAttackOffsets			( void );
 
-	void					InitNonPersistentSpawnArgs		( void );	
+	void					InitNonPersistentSpawnArgs		( void );
 
 	/*
 	===============================================================================
@@ -760,7 +760,7 @@ public:
 	virtual idProjectile*	AttackRanged					( const char* attackName, const idDict* attackDict, jointHandle_t joint, idEntity* target, const idVec3& pushVelocity = vec3_origin );
 	virtual idProjectile*	AttackProjectile				( const idDict* projectileDict, const idVec3 &org, const idAngles &ang );
 	virtual bool			AttackMelee						( const char* attackName, const idDict* meleeDict );
-	
+
 	void					CreateProjectileClipModel		( void ) const;
 	idProjectile*			CreateProjectile				( const idDict* projectileDict, const idVec3 &pos, const idVec3 &dir );
 	void					RemoveProjectile				( void );
@@ -811,7 +811,7 @@ public:
 	void					RestoreFlag						( aiFlagOverride_t flag );
 
 	virtual bool			SkipImpulse						( idEntity *ent, int id );
-	
+
 	virtual const char*		GetIdleAnimName					( void );
 
 	bool					RespondToFlashlight				( void )				{ return !aifl.ignoreFlashlight;}
@@ -936,7 +936,7 @@ private:
 
 	/*
 	===============================================================================
-									Handlers 
+									Handlers
 	===============================================================================
 	*/
 
@@ -965,7 +965,7 @@ protected:
 									Movement / Turning
 	===============================================================================
 	*/
-	
+
 protected:
 
 	bool					StartMove						( aiMoveCommand_t command, const idVec3& goalOrigin, int goalArea, idEntity* goalEntity, aasFeature_t* feature, float range );
@@ -1028,12 +1028,12 @@ protected:
 	rvAIActionTimer			actionTimerEvade;
 	rvAIActionTimer			actionTimerSpecialAttack;
 	rvAIActionTimer			actionTimerPain;
-	
+
 	rvAIAction				actionEvadeLeft;
 	rvAIAction				actionEvadeRight;
 	rvAIAction				actionRangedAttack;
 	rvAIAction				actionMeleeAttack;
-	rvAIAction				actionLeapAttack;	
+	rvAIAction				actionLeapAttack;
 	rvAIAction				actionJumpBack;
 
 	bool					UpdateAction						( void );
@@ -1049,7 +1049,7 @@ protected:
 	// RAVEN END
 
 public:
-		
+
 	virtual bool			CheckAction_EvadeLeft				( rvAIAction* action, int animNum );
 	virtual bool			CheckAction_EvadeRight				( rvAIAction* action, int animNum );
 	virtual bool			CheckAction_RangedAttack			( rvAIAction* action, int animNum );
@@ -1064,7 +1064,7 @@ public:
 	*/
 
 private:
-	
+
 	// Orphaned events
 	void					Event_ClosestReachableEnemyOfEntity	( idEntity *team_mate );
 	void					Event_GetReachableEntityPosition	( idEntity *ent );
@@ -1084,7 +1084,7 @@ private:
 	void					Event_Activate						( idEntity *activator );
 	void					Event_Touch							( idEntity *other, trace_t *trace );
 	void					Event_LookAt						( idEntity* lookAt );
-	
+
 	void					Event_SetAngles						( idAngles const &ang );
 	void					Event_SetEnemy						( idEntity *ent );
 	void					Event_SetHealth						( float newHealth );
@@ -1149,7 +1149,7 @@ private:
 	void					Event_IsTethered					( void );
 	void					Event_IsWithinTether				( void );
 	void					Event_IsMoving						( void );
-	
+
 	void					Event_Speak							( const char *speechDecl );
 	void					Event_SpeakRandom					( const char *speechDecl );
 
@@ -1166,7 +1166,7 @@ private:
 	void					Event_FindEnemy						( float distSquare );
 	void					Event_SetKey						( const char *key, const char *value );
 
-	
+
 	/*
 	===============================================================================
 									States
@@ -1180,7 +1180,7 @@ protected:
 	stateResult_t			State_Wait_ScriptedDone				( const stateParms_t& parms );
 	stateResult_t			State_Wait_Action					( const stateParms_t& parms );
 	stateResult_t			State_Wait_ActionNoPain				( const stateParms_t& parms );
-	
+
 	// Global states
 	stateResult_t			State_WakeUp						( const stateParms_t& parms );
 	stateResult_t			State_TriggerAnim					( const stateParms_t& parms );
@@ -1204,8 +1204,8 @@ protected:
 	stateResult_t			State_MoveTether					( const stateParms_t& parms );
 	stateResult_t			State_MoveFollow					( const stateParms_t& parms );
 
-	stateResult_t			State_ScriptedMove					( const stateParms_t& parms );	
-	stateResult_t			State_ScriptedFace					( const stateParms_t& parms );	
+	stateResult_t			State_ScriptedMove					( const stateParms_t& parms );
+	stateResult_t			State_ScriptedFace					( const stateParms_t& parms );
 	stateResult_t			State_ScriptedStop					( const stateParms_t& parms );
 	stateResult_t			State_ScriptedPlaybackMove			( const stateParms_t& parms );
 	stateResult_t			State_ScriptedPlaybackAim			( const stateParms_t& parms );
@@ -1218,10 +1218,10 @@ protected:
 	stateResult_t			State_Torso_Action					( const stateParms_t& parms );
 	stateResult_t			State_Torso_FinishAction			( const stateParms_t& parms );
 	stateResult_t			State_Torso_Pain					( const stateParms_t& parms );
-	stateResult_t			State_Torso_ScriptedAnim			( const stateParms_t& parms );	
+	stateResult_t			State_Torso_ScriptedAnim			( const stateParms_t& parms );
 	stateResult_t			State_Torso_PassiveIdle				( const stateParms_t& parms );
 	stateResult_t			State_Torso_PassiveFidget			( const stateParms_t& parms );
-	
+
 	// Leg States
 	stateResult_t			State_Legs_Idle						( const stateParms_t& parms );
 	stateResult_t			State_Legs_TurnLeft					( const stateParms_t& parms );
@@ -1229,8 +1229,8 @@ protected:
 	stateResult_t			State_Legs_Move						( const stateParms_t& parms );
 	stateResult_t			State_Legs_MoveThink				( const stateParms_t& parms );
 	stateResult_t			State_Legs_ChangeDirection			( const stateParms_t& parms );
-	
-	// Head states	
+
+	// Head states
 	stateResult_t			State_Head_Idle						( const stateParms_t& parms );
 
 	CLASS_STATES_PROTOTYPE ( idAI );
@@ -1266,19 +1266,19 @@ ID_INLINE bool idAI::IsEnemyVisible ( void ) const {
 
 ID_INLINE bool idAI::IsEnemyRecentlyVisible( float maxLostVisTimeScale ) const {
 	return (enemy.ent
-			&& combat.fl.seenEnemyDirectly 
+			&& combat.fl.seenEnemyDirectly
  			&& (enemy.lastVisibleTime && gameLocal.time-enemy.lastVisibleTime < (combat.maxLostVisTime * maxLostVisTimeScale)));
 }
- 
+
 ID_INLINE bool idAI::LookAtCoverTall( void ) const {
  	return ( aasSensor->Look()
  			&& (aasSensor->Look()->flags&FEATURE_LOOK_OVER)
  			&& aasSensor->Look()->height > 40.0f );
 }
- 
+
 ID_INLINE bool idAI::InLookAtCoverMode ( void ) const {
- 	return (!IsBehindCover() 
- 			&& !aifl.action 
+ 	return (!IsBehindCover()
+ 			&& !aifl.action
 			&& move.fl.moving
  			&& (combat.fl.alert || combat.fl.aware)
 			&& aasSensor->Look()
@@ -1286,15 +1286,15 @@ ID_INLINE bool idAI::InLookAtCoverMode ( void ) const {
  			&& combat.tacticalCurrent != AITACTICAL_HIDE
  			&& !IsEnemyRecentlyVisible(0.2f));
 }
- 
-ID_INLINE bool idAI::InCoverMode ( void ) const {	
+
+ID_INLINE bool idAI::InCoverMode ( void ) const {
 	return ( (1<<combat.tacticalCurrent) & AITACTICAL_COVER_BITS ) && aasSensor->Reserved ( );
 }
- 
+
 ID_INLINE bool idAI::InCrouchCoverMode ( void ) const {
 	return ( InCoverMode() && (aasSensor->Reserved()->flags&FEATURE_LOOK_OVER) );
 }
-   
+
 ID_INLINE bool idAI::IsBehindCover ( void ) const {
 	return ( InCoverMode() && move.fl.done && (aifl.action || DistanceTo2d ( aasSensor->ReservedOrigin() ) < AI_COVER_MINRANGE) );
 }
@@ -1311,11 +1311,11 @@ ID_INLINE bool idAI::IsCoverValid (  ) const {
  	return combat.coverValidTime && (gameLocal.time - combat.coverValidTime < combat.maxInvalidCoverTime);
 }
 
-ID_INLINE idActor* idAI::GetLeader ( void ) const { 
+ID_INLINE idActor* idAI::GetLeader ( void ) const {
 	return leader;
 }
 
-ID_INLINE idEntity* idAI::GetGoalEntity ( void ) const { 
+ID_INLINE idEntity* idAI::GetGoalEntity ( void ) const {
 	return move.goalEntity;
 }
 
@@ -1353,7 +1353,7 @@ ID_INLINE void idAI::ForceTacticalUpdate ( void ) {
 	combat.tacticalMaskUpdate = 0;
 	delete aasFind;
 	aasFind = NULL;
-}	
+}
 
 /*
 ===============================================================================
@@ -1370,4 +1370,4 @@ extern const char* aiMoveCommandString	[ NUM_MOVE_COMMANDS ];
 extern const char* aiFocusString		[ AIFOCUS_MAX ];
 
 #endif /* !__AI_H__ */
- 
+

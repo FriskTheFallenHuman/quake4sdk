@@ -120,8 +120,8 @@ size_t idAASLocal::StatsSummary( void ) const {
 		return( 0 );
 	}
 
-	size = ( numAreaTravelTimes * sizeof( unsigned short ) ) 
-			+ ( areaCacheIndexSize * sizeof( idRoutingCache * ) ) 
+	size = ( numAreaTravelTimes * sizeof( unsigned short ) )
+			+ ( areaCacheIndexSize * sizeof( idRoutingCache * ) )
 			+ ( portalCacheIndexSize * sizeof( idRoutingCache * ) );
 
 	return( file->GetMemorySize() + size );
@@ -174,7 +174,7 @@ int idAASLocal::BoundsReachableAreaNum( const idBounds &bounds, const int areaFl
 	if ( !file ) {
 		return 0;
 	}
-	
+
 	return file->BoundsReachableAreaNum( bounds, areaFlags, TFL_INVALID );
 }
 
@@ -345,14 +345,14 @@ idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum,
 	if ( !file ) {
 		return TEST_BADAREA;
 	}
-	
+
 	// Get area for edges
 	aasArea_t& area = file->GetArea ( areaNum );
 
 	if ( ai_debugTactical.GetInteger ( ) > 1 ) {
 		gameRenderWorld->DebugLine ( colorYellow, area.center, area.center + idVec3(0,0,80.0f), 10000 );
 	}
-	
+
 	// Make sure the area itself is valid
 	if ( !TestArea ( aas, areaNum, area ) ) {
 		return TEST_BADAREA;
@@ -361,7 +361,7 @@ idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum,
 	if ( ai_debugTactical.GetInteger ( ) > 1 && point ) {
 		gameRenderWorld->DebugLine ( colorMagenta, *point, *point + idVec3(0,0,64.0f), 10000 );
 	}
-	
+
 	// Test the original origin first
 	if ( point && TestPointDistance ( origin, *point, minDistance, maxDistance) && TestPoint ( aas, *point ) ) {
 		goal.areaNum = areaNum;
@@ -372,26 +372,26 @@ idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum,
 	if ( ai_debugTactical.GetInteger ( ) > 1 ) {
 		gameRenderWorld->DebugLine ( colorCyan, area.center, area.center + idVec3(0,0,64.0f), 10000 );
 	}
-	
+
 	// Test the center of the area
 	if ( TestPointDistance ( origin, area.center, minDistance, maxDistance) && TestPoint ( aas, area.center, area.ceiling ) ) {
 		goal.areaNum = areaNum;
 		goal.origin  = area.center;
 		return TEST_OK;
 	}
-	
+
 	// For each face test all available edges
 	int	f;
 	int	e;
 	for ( f = 0; f < area.numFaces; f ++ ) {
 		aasFace_t& face = file->GetFace ( abs ( file->GetFaceIndex (area.firstFace + f ) ) );
-		
+
 		// for each edge test a point between the center of the edge and the center
 		for ( e = 0; e < face.numEdges; e ++ ) {
-			idVec3 edgeCenter = file->EdgeCenter ( abs( file->GetEdgeIndex( face.firstEdge + e ) ) ); 	
+			idVec3 edgeCenter = file->EdgeCenter ( abs( file->GetEdgeIndex( face.firstEdge + e ) ) );
 			idVec3 dir        = area.center - edgeCenter;
 			float  dist;
-			for ( dist = dir.Normalize() - 64.0f; dist > 0.0f; dist -= 64.0f ) {				
+			for ( dist = dir.Normalize() - 64.0f; dist > 0.0f; dist -= 64.0f ) {
 				idVec3 testPoint = edgeCenter + dir * dist;
 				if ( ai_debugTactical.GetInteger ( ) > 1 ) {
 					gameRenderWorld->DebugLine ( colorPurple, testPoint, testPoint + idVec3(0,0,64.0f), 10000 );
@@ -405,7 +405,7 @@ idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum,
 			}
 		}
 	}
-	
+
 	return TEST_BADPOINT;
 }
 

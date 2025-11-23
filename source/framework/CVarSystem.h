@@ -211,11 +211,11 @@ public:
 
 								idCVarHelp( const idCVarHelp &copy );
 
-	const char *				GetCVarName( void ) const { return cvarName; }	
-	const char *				GetFriendlyName( void ) const { return friendlyName; }	
-	const char *				GetChoices( void ) const { return choices; }	
-	const char *				GetValues( void ) const { return values; }	
-	const cvarHelpCategory_t	GetCategory( void ) const { return category; }	
+	const char *				GetCVarName( void ) const { return cvarName; }
+	const char *				GetFriendlyName( void ) const { return friendlyName; }
+	const char *				GetChoices( void ) const { return choices; }
+	const char *				GetValues( void ) const { return values; }
+	const cvarHelpCategory_t	GetCategory( void ) const { return category; }
 	const idCVarHelp *			GetNext( void ) const { return next; }
 
 	void						SetNext( const idCVarHelp *value ) { next = value; }

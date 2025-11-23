@@ -358,7 +358,7 @@ idPhysics_Static::IsInWater
 bool idPhysics_Static::IsInWater ( void ) const {
 	return false;
 }
-// RAVEN END	
+// RAVEN END
 
 /*
 ================
@@ -542,8 +542,8 @@ idPhysics_Static::GetGravity
 const idVec3 &idPhysics_Static::GetGravity( void ) const {
 	static idVec3 gravity( 0, 0, -g_gravity.GetFloat() );
 	if( gameLocal.isMultiplayer ) {
-		gravity = idVec3( 0, 0, -g_mp_gravity.GetFloat() );	
-	} 
+		gravity = idVec3( 0, 0, -g_mp_gravity.GetFloat() );
+	}
 
 	return gravity;
 }
@@ -573,7 +573,7 @@ void idPhysics_Static::ClipTranslation( trace_t &results, const idVec3 &translat
 		gameLocal.Translation( self, results, current.origin, current.origin + translation,
 			clipModel, current.axis, MASK_SOLID, self );
 // RAVEN END
-	}	
+	}
 }
 
 /*

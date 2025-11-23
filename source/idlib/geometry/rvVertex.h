@@ -15,7 +15,7 @@
 class rvBlend4DrawVert {
 public:
 	idVec3			xyz;
-	int				blendIndex[4];			
+	int				blendIndex[4];
 	float			blendWeight[4];		// NOTE: the vertex stored in the actual buffer that is actually used for drawing may leave out the last weight (implied 1 - sum of other weights)
 	idVec3			normal;
 	idVec3			tangent;
@@ -51,29 +51,29 @@ assert_sizeof( rvSilTraceVertT,			SILTRACEVERT_SIZE );
 assert_sizeof( rvSilTraceVertT,			(1<<SILTRACEVERT_SIZE_SHIFT) );
 assert_offsetof( rvSilTraceVertT, xyzw,	SILTRACEVERT_XYZW_OFFSET );
 
-ID_INLINE float rvSilTraceVertT::operator[]( const int index ) const 
+ID_INLINE float rvSilTraceVertT::operator[]( const int index ) const
 {
 	assert( index >= 0 && index < 4 );
 	return ((float *)(&xyzw))[index];
 }
 
-ID_INLINE float	&rvSilTraceVertT::operator[]( const int index ) 
+ID_INLINE float	&rvSilTraceVertT::operator[]( const int index )
 {
 	assert( index >= 0 && index < 4 );
 	return ((float *)(&xyzw))[index];
 }
 
-ID_INLINE void rvSilTraceVertT::Clear( void ) 
+ID_INLINE void rvSilTraceVertT::Clear( void )
 {
 	xyzw.Zero();
 }
 
-ID_INLINE void rvSilTraceVertT::Lerp( const rvSilTraceVertT &a, const rvSilTraceVertT &b, const float f ) 
+ID_INLINE void rvSilTraceVertT::Lerp( const rvSilTraceVertT &a, const rvSilTraceVertT &b, const float f )
 {
 	xyzw = a.xyzw + f * ( b.xyzw - a.xyzw );
 }
 
-ID_INLINE void rvSilTraceVertT::LerpAll( const rvSilTraceVertT &a, const rvSilTraceVertT &b, const float f ) 
+ID_INLINE void rvSilTraceVertT::LerpAll( const rvSilTraceVertT &a, const rvSilTraceVertT &b, const float f )
 {
 	xyzw = a.xyzw + f * ( b.xyzw - a.xyzw );
 }

@@ -1,4 +1,4 @@
-		
+
 #include "../idlib/precompiled.h"
 #pragma hdrstop
 
@@ -178,7 +178,7 @@ void idDragEntity::Update( idPlayer *player ) {
 					}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 					if ( newEnt->IsType( idAFEntity_Base::GetClassType() ) && static_cast<idAFEntity_Base *>(newEnt)->IsActiveAF() ) {
 // RAVEN END
 						idAFEntity_Base *af = static_cast<idAFEntity_Base *>(newEnt);
@@ -191,7 +191,7 @@ void idDragEntity::Update( idPlayer *player ) {
 						newBodyName = af->GetAFPhysics()->GetBody( trace.c.id )->GetName();
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 					} else if ( !newEnt->IsType( idWorldspawn::GetClassType() ) ) {
 // RAVEN END
 
@@ -217,7 +217,7 @@ void idDragEntity::Update( idPlayer *player ) {
 
 					if ( !cursor ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 						cursor = ( idCursor3D * )gameLocal.SpawnEntityType( idCursor3D::GetClassType() );
 // RAVEN END
 					}
@@ -233,7 +233,7 @@ void idDragEntity::Update( idPlayer *player ) {
 					cursor->Show();
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 					if ( phys->IsType( idPhysics_AF::GetClassType() ) ||
 							phys->IsType( idPhysics_RigidBody::GetClassType() ) ||
 								phys->IsType( idPhysics_Monster::GetClassType() ) ) {
@@ -319,7 +319,7 @@ void idDragEntity::BindSelected( void ) {
 	af = static_cast<idAFEntity_Base *>(dragEnt.GetEntity());
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !af || !af->IsType( idAFEntity_Base::GetClassType() ) || !af->IsActiveAF() ) {
 // RAVEN END
 		return;
@@ -374,7 +374,7 @@ void idDragEntity::UnbindSelected( void ) {
 	af = static_cast<idAFEntity_Base *>(selected.GetEntity());
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !af || !af->IsType( idAFEntity_Base::GetClassType() ) || !af->IsActiveAF() ) {
 // RAVEN END
 		return;
@@ -479,7 +479,7 @@ bool idEditEntities::SelectEntity( const idVec3 &origin, const idVec3 &dir, cons
 	if ( !ent ) {
 		return false;
 	}
-	
+
 	ClearSelectedEntities();
 
 	AddSelectedEntity( ent );
@@ -547,7 +547,7 @@ bool idEditEntities::EntityIsSelectable( idEntity *ent, idVec4 *color, idStr *te
 		}
 	}
 	for ( int i = 0; i < selectableEntityClasses.Num(); i++ ) {
-		if ( ent->IsType ( *selectableEntityClasses[i].typeInfo ) ) {		
+		if ( ent->IsType ( *selectableEntityClasses[i].typeInfo ) ) {
 // RAVEN END
 			if ( text ) {
 				*text = selectableEntityClasses[i].textKey;
@@ -592,7 +592,7 @@ void idEditEntities::DisplayEntities( void ) {
 	switch( g_editEntityMode.GetInteger() ) {
 		case 1:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idLight::GetClassType();
 // RAVEN END
 			sit.textKey = "texture";
@@ -600,7 +600,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 2:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idSound::GetClassType();
 // scork: added secondary "name" field as well (Zack request)
 			sit.textKey = "s_shader|name";
@@ -613,7 +613,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 3:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idAFEntity_Base::GetClassType();
 // RAVEN END
 			sit.textKey = "articulatedFigure";
@@ -621,7 +621,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 4:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idFuncEmitter::GetClassType();
 // RAVEN END
 			sit.textKey = "model";
@@ -629,7 +629,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 5:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idAI::GetClassType();
 // RAVEN END
 			sit.textKey = "name";
@@ -637,7 +637,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 6:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idEntity::GetClassType();
 // RAVEN END
 			sit.textKey = "name";
@@ -645,7 +645,7 @@ void idEditEntities::DisplayEntities( void ) {
 			break;
 		case 7:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &idEntity::GetClassType();
 // RAVEN END
 			sit.textKey = "model";
@@ -655,13 +655,13 @@ void idEditEntities::DisplayEntities( void ) {
 // bdube: added fx entities
 		case 8:
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 			sit.typeInfo = &rvEffect::GetClassType();
 // RAVEN END
 			sit.textKey = "fx";
 			selectableEntityClasses.Append ( sit );
 			break;
-// RAVEN END						
+// RAVEN END
 		default:
 			return;
 	}
@@ -707,21 +707,21 @@ void idEditEntities::DisplayEntities( void ) {
 
 		bool drawArrows = false;
 // RAVEN BEGIN
-// bdube: added		
+// bdube: added
 		bool drawDirection = false;
 // RAVEN END
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->GetType() == &idAFEntity_Base::GetClassType() ) {
 // RAVEN END
 			if ( !static_cast<idAFEntity_Base *>(ent)->IsActiveAF() ) {
 				continue;
 			}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		} else if ( ent->GetType() == &idSound::GetClassType() ) {
 // RAVEN END
-			if ( ent->fl.selected ) 
+			if ( ent->fl.selected )
 			{
 				drawArrows = true;
 				int iFlag = ent->GetRefSoundShaderFlags();
@@ -740,8 +740,8 @@ void idEditEntities::DisplayEntities( void ) {
 				color.Set( 1.0f, 0.0f, 1.0f, 1.0f );
 			}
 // RAVEN BEGIN
-// bdube: added			
-// jnewquist: Use accessor for static class type 
+// bdube: added
+// jnewquist: Use accessor for static class type
 		} else if ( ent->GetType() == &rvEffect::GetClassType() ) {
 			drawDirection = true;
 			if ( ent->fl.selected ) {
@@ -867,7 +867,7 @@ void idGameEdit::ClearEntitySelection() {
 		ent->fl.selected = false;
 	}
 // RAVEN BEGIN
-// bdube: fixed potential crash	
+// bdube: fixed potential crash
 	if ( gameLocal.editEntities ) {
 		gameLocal.editEntities->ClearSelectedEntities();
 	}
@@ -912,7 +912,7 @@ idGameEdit::FindEntity
 ================
 */
 idEntity *idGameEdit::FindEntity( const char *name ) const {
-	return gameLocal.FindEntity( name ); 
+	return gameLocal.FindEntity( name );
 }
 
 /*
@@ -1040,7 +1040,7 @@ void idGameEdit::EntityChangeSpawnArgs( idEntity *ent, const idDict *newArgs ) {
 	if ( ent ) {
 		for ( int i = 0 ; i < newArgs->GetNumKeyVals () ; i ++ ) {
 			const idKeyValue *kv = newArgs->GetKeyVal( i );
-	        
+
 			if ( kv->GetValue().Length() > 0 ) {
 				ent->spawnArgs.Set ( kv->GetKey() ,kv->GetValue() );
 			} else {
@@ -1136,7 +1136,7 @@ bool idGameEdit::EntityIsDerivedFrom ( idEntity* ent, const char* classname ) co
 	if ( !type ) {
 		return false;
 	}
-	
+
 	return ent->IsType ( *type );
 }
 
@@ -1231,14 +1231,14 @@ idGameEdit::EntitySetFrame
 */
 void idGameEdit::EntitySetFrame ( idEntity* ent, int animNum, int frame, int time, int blendtime ) {
 	idAnimator* animator;
-		
-	animator = ent->GetAnimator ( );	
+
+	animator = ent->GetAnimator ( );
 	if ( !animator ) {
 		return;
 	}
 
 	animator->ClearAllAnims ( time, time );
-	
+
 	// Move to the first frame of the animation
 // RAVEN BEGIN
 	frameBlend_t frameBlend = { 0, frame, frame, 1.0f, 0 };
@@ -1300,10 +1300,10 @@ void idGameEdit::EntitySetName( idEntity* pEnt, const char *psName )
 idGameEdit::LightSetParms
 ================
 */
-void idGameEdit::LightSetParms ( idEntity* ent, int maxLevel, int currentLevel, float radius ) {	
+void idGameEdit::LightSetParms ( idEntity* ent, int maxLevel, int currentLevel, float radius ) {
 	int		 data;
 	idLight* light;
-	
+
 	// Switch to a light entity
 	light = dynamic_cast<idLight*>(ent);
 	if ( !light )
@@ -1315,8 +1315,8 @@ void idGameEdit::LightSetParms ( idEntity* ent, int maxLevel, int currentLevel, 
 	light->ProcessEvent ( &EV_Light_SetCurrentLightLevel, (int)currentLevel );
 
 	(*(float*)&data) = radius;
-	light->ProcessEventArgPtr ( &EV_Light_SetRadius, &data );		
-	
+	light->ProcessEventArgPtr ( &EV_Light_SetRadius, &data );
+
 	light->SetLightLevel();
 }
 // RAVEN END
@@ -1410,7 +1410,7 @@ void idGameEdit::MapSave( const char *path ) const {
 				} else {
 					mapFile->Write ( file->GetName(), ".map" );
 				}
-			}				
+			}
 		}
 // RAVEN END
 	}
@@ -1549,7 +1549,7 @@ int idGameEdit::MapGetEntitiesMatchingClassWithString( const char *classname, co
 			if (ent) {
 				idStr work = ent->epairs.GetString("classname");
 				if ( work.Icmp( classname ) == 0 ) {
-					if ( match && *match ) { 
+					if ( match && *match ) {
 						work = ent->epairs.GetString( "soundgroup" );
 						if ( count < max && work.Icmp( match ) == 0 ) {
 							list[count++] = ent->epairs.GetString( "name" );
@@ -1594,11 +1594,11 @@ bool idGameEdit::PlayerTraceFromEye ( trace_t &results, float length, int conten
 	idVec3		start;
 	idVec3		end;
 	idAngles	angles;
-		
+
 	PlayerGetEyePosition( start );
 	PlayerGetEyePosition( end );
 	PlayerGetViewAngles ( angles );
-	
+
 	end += angles.ToForward() * length;
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
@@ -1612,7 +1612,7 @@ idGameEdit::EffectRefreshTemplate
 ================
 */
 void idGameEdit::EffectRefreshTemplate ( const idDecl *effect ) const {
-	rvClientEntity* cent;	
+	rvClientEntity* cent;
 
 	// Restart all effects
 	for ( cent = gameLocal.clientSpawnedEntities.Next(); cent; cent = cent->spawnNode.Next() ) {
@@ -1635,7 +1635,7 @@ int idGameEdit::GetGameTime ( int *previous ) const {
 	if ( previous ) {
 		*previous = gameLocal.previousTime;
 	}
-	
+
 	return gameLocal.time;
 }
 
@@ -1780,12 +1780,12 @@ idGameEdit::ScriptGetRegisterValue
 const char* idGameEdit::ScriptGetRegisterValue ( idInterpreter* interpreter, const char* varname, int callstackDepth ) const {
 	static char	value[4096];
 	idStr		out;
-	
+
 	value[0] = '\0';
-	if ( interpreter->GetRegisterValue ( varname, out, callstackDepth ) ) {	
-		idStr::snPrintf ( value, 4095, out.c_str() );	
+	if ( interpreter->GetRegisterValue ( varname, out, callstackDepth ) ) {
+		idStr::snPrintf ( value, 4095, out.c_str() );
 	}
-	
+
 	return value;
 }
 
@@ -1847,7 +1847,7 @@ const char* idGameEdit::ThreadGetState ( idThread* thread ) {
 	} else if ( thread->IsDoneProcessing() ) {
 		return "Stopped";
 	}
-	
+
 	return "Running";
 }
 
@@ -1916,16 +1916,16 @@ void idGameEdit::FlushUnusedAnims ( void ) {
 class rvModviewModel : public idActor {
 public:
 	CLASS_PROTOTYPE( rvModviewModel );
-	
+
 	rvModviewModel ( void );
-		
+
 private:
-	
+
 	void					Event_Speak		( const char* lipsync );
 };
 
 CLASS_DECLARATION( idActor, rvModviewModel )
-	EVENT( AI_Speak,				rvModviewModel::Event_Speak )	
+	EVENT( AI_Speak,				rvModviewModel::Event_Speak )
 END_CLASS
 
 /*
@@ -1943,18 +1943,18 @@ rvModviewModel::Event_Speak
 */
 void rvModviewModel::Event_Speak ( const char* lipsync ) {
 	assert( idStr::Icmpn( lipsync, "lipsync_", 7 ) == 0 );
-	
+
 	lipsync = spawnArgs.GetString ( lipsync );
 	if ( !lipsync || !*lipsync ) {
 		return;
 	}
-	
+
 	if ( head ) {
 		head->StartLipSyncing( lipsync );
 	} else {
 		StartSoundShader (declManager->FindSound ( lipsync ), SND_CHANNEL_VOICE, 0, false, NULL );
 	}
-}	
+}
 
 // RAVEN END
 

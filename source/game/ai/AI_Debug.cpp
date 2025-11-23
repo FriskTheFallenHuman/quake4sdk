@@ -91,7 +91,7 @@ const char* aiActionStatusString [ rvAIAction::STATUS_MAX ] = {
 	"Failed: out of max range",
 	"Failed: random chance",
 	"Failed: bad animation",
-	"Failed: condition",	
+	"Failed: condition",
 	"Failed: no enemy",
 };
 
@@ -103,7 +103,7 @@ idAI::GetDebugInfo
 void idAI::GetDebugInfo ( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idActor::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "aifl.damage",			aifl.damage ? "true" : "false", userData );
 	proc ( "idAI", "aifl.undying",			aifl.undying ? "true" : "false", userData );
 	proc ( "idAI", "aifl.pain",				aifl.pain ? "true" : "false", userData );
@@ -163,7 +163,7 @@ void idAI::GetDebugInfo ( debugInfoProc_t proc, void* userData ) {
 	proc ( "idAI", "combat.attackRangeMin",		va("%g",combat.attackRange[0]), userData );
 	proc ( "idAI", "combat.attackRangeMax",		va("%g",combat.attackRange[1]), userData );
 	proc ( "idAI", "combat.tacticalCurrent",	aiTacticalString[combat.tacticalCurrent], userData );
-		
+
 	proc ( "idAI", "action_rangedAttack",		aiActionStatusString[actionRangedAttack.status], userData );
 	proc ( "idAI", "action_meleeAttack",		aiActionStatusString[actionMeleeAttack.status], userData );
 	proc ( "idAI", "action_leapAttack",			aiActionStatusString[actionLeapAttack.status], userData );
@@ -258,16 +258,16 @@ void idAI::DrawTactical ( void ) {
 		} else {
 			enemyEyePosition = enemy.ent->GetPhysics()->GetOrigin();
 		}
-		
+
 		offset = idVec3(0,0,team*2.0f);
-		
+
 		gameRenderWorld->DebugLine  ( aiTeamColor[team], GetEyePosition() + offset, enemy.lastVisibleFromEyePosition + offset, 4.0f );
 		if ( enemyEyePosition != enemy.lastVisibleEyePosition ) {
 			gameRenderWorld->DebugLine  ( aiTeamColor[team], enemy.lastVisibleFromEyePosition + offset, enemy.lastVisibleEyePosition + offset, 4.0f );
-			gameRenderWorld->DebugArrow ( aiTeamColor[team], enemy.lastVisibleEyePosition + offset, enemyEyePosition + offset, 4.0f );		
+			gameRenderWorld->DebugArrow ( aiTeamColor[team], enemy.lastVisibleEyePosition + offset, enemyEyePosition + offset, 4.0f );
 		} else {
-			gameRenderWorld->DebugArrow ( aiTeamColor[team], enemy.lastVisibleFromEyePosition + offset, enemyEyePosition + offset, 4.0f );		
-		}		
+			gameRenderWorld->DebugArrow ( aiTeamColor[team], enemy.lastVisibleFromEyePosition + offset, enemyEyePosition + offset, 4.0f );
+		}
 	}
 
 	// Ivalid Cover Timer
@@ -279,13 +279,13 @@ void idAI::DrawTactical ( void ) {
 
 
 	// Vis Crouch
-	gameRenderWorld->DebugArrow ( colorBrown, 
-								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visCrouchHeight, 
+	gameRenderWorld->DebugArrow ( colorBrown,
+								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visCrouchHeight,
 								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visCrouchHeight + viewAxis[0] * 16.0f, 10.0f );
 
 	// Vis Stand
-	gameRenderWorld->DebugArrow ( colorBrown, 
-								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visStandHeight, 
+	gameRenderWorld->DebugArrow ( colorBrown,
+								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visStandHeight,
 								  GetPhysics()->GetOrigin ( ) - GetPhysics()->GetGravityNormal() * combat.visStandHeight + viewAxis[0] * 16.0f, 10.0f );
 
 	// Aggression
@@ -326,5 +326,5 @@ void idAI::DrawTactical ( void ) {
 	// Draw Move Destination
 	if ( !move.fl.done ) {
 		gameRenderWorld->DebugArrow ( colorMagenta, GetPhysics()->GetOrigin(), move.moveDest, 5 );
-	} 
-}	
+	}
+}

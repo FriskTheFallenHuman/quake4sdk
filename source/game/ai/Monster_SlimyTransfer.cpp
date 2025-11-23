@@ -29,7 +29,7 @@ protected:
 private:
 
 	rvAIAction			actionVomitAttack;
-	
+
 	// Torso States
 	stateResult_t		State_Torso_VomitAttack			( const stateParms_t& parms );
 	stateResult_t		State_Torso_FinishVomitAttack	( const stateParms_t& parms );
@@ -54,7 +54,7 @@ rvMonsterSlimyTransfer::rvMonsterSlimyTransfer ( void ) {
 
 void rvMonsterSlimyTransfer::InitSpawnArgsVariables ( void ) {
 	jointVomitMuzzle = animator.GetJointHandle ( spawnArgs.GetString ( "joint_vomitMuzzle", "puke_bone" ) );
-	
+
 	vomitAttackRate = SEC2MS ( spawnArgs.GetFloat ( "attack_vomit_rate", ".15" ) );
 }
 
@@ -119,7 +119,7 @@ void rvMonsterSlimyTransfer::OnDeath ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -137,11 +137,11 @@ END_CLASS_STATES
 rvMonsterSlimyTransfer::State_Torso_VomitAttack
 ================
 */
-stateResult_t rvMonsterSlimyTransfer::State_Torso_VomitAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterSlimyTransfer::State_Torso_VomitAttack ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			DisableAnimState ( ANIMCHANNEL_LEGS );
@@ -151,22 +151,22 @@ stateResult_t rvMonsterSlimyTransfer::State_Torso_VomitAttack ( const stateParms
 			// Loop the flame animation
 			PlayAnim( ANIMCHANNEL_TORSO, "vomit_attack", parms.blendFrames );
 
-			// Make sure we clean up some things when this state is finished (effects for one)			
+			// Make sure we clean up some things when this state is finished (effects for one)
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishVomitAttack", 0, 0, SFLAG_ONCLEAR );
-			
+
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
 			}
-			
+
 			if ( vomitNextAttackTime && gameLocal.time >= vomitNextAttackTime ) {
 				Attack ( "vomit", jointVomitMuzzle, enemy.ent );
 				vomitNextAttackTime = gameLocal.time + vomitAttackRate;
 			}
-			
-			return SRESULT_WAIT;			
+
+			return SRESULT_WAIT;
 	}
 
 	return SRESULT_ERROR;
@@ -177,7 +177,7 @@ stateResult_t rvMonsterSlimyTransfer::State_Torso_VomitAttack ( const stateParms
 rvMonsterSlimyTransfer::State_Torso_FinishVomitAttack
 ================
 */
-stateResult_t rvMonsterSlimyTransfer::State_Torso_FinishVomitAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterSlimyTransfer::State_Torso_FinishVomitAttack ( const stateParms_t& parms ) {
 	State_Frame_StopVomit ( parms );
 	return SRESULT_DONE;
 }
@@ -187,9 +187,9 @@ stateResult_t rvMonsterSlimyTransfer::State_Torso_FinishVomitAttack ( const stat
 rvMonsterSlimyTransfer::State_Frame_StartVomit
 ================
 */
-stateResult_t rvMonsterSlimyTransfer::State_Frame_StartVomit ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterSlimyTransfer::State_Frame_StartVomit ( const stateParms_t& parms ) {
 	PlayEffect ( "fx_vomit_muzzle", jointVomitMuzzle, true );
-	vomitNextAttackTime = gameLocal.time;	
+	vomitNextAttackTime = gameLocal.time;
 	return SRESULT_DONE;
 }
 
@@ -198,7 +198,7 @@ stateResult_t rvMonsterSlimyTransfer::State_Frame_StartVomit ( const stateParms_
 rvMonsterSlimyTransfer::State_Frame_StopVomit
 ================
 */
-stateResult_t rvMonsterSlimyTransfer::State_Frame_StopVomit ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterSlimyTransfer::State_Frame_StopVomit ( const stateParms_t& parms ) {
 	StopEffect ( "fx_vomit_muzzle" );
 	vomitNextAttackTime = 0;
 	return SRESULT_DONE;

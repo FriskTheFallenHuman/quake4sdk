@@ -71,7 +71,7 @@ public:	// common physics interface
 	virtual float				GetMass( int id = -1 ) const = 0;
 
 // RAVEN BEGIN
-// bdube: added center mass	
+// bdube: added center mass
 								// get the center of mass origin
 	virtual idVec3				GetCenterMass ( int id = -1 ) const = 0;
 // RAVEN END
@@ -103,7 +103,7 @@ public:	// common physics interface
 // RAVEN BEGIN
 // bdube: water interraction
 	virtual bool				IsInWater ( void ) const = 0;
-// RAVEN END	
+// RAVEN END
 								// save and restore the physics state
 	virtual void				SaveState( void ) = 0;
 	virtual void				RestoreState( void ) = 0;

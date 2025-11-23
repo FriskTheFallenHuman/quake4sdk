@@ -100,7 +100,7 @@ public:
 	virtual void				ShowWalkPath( const idVec3 &origin, int goalAreaNum, const idVec3 &goalOrigin ) const;
 	virtual void				ShowFlyPath( const idVec3 &origin, int goalAreaNum, const idVec3 &goalOrigin ) const;
 	virtual bool				FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 origin, const idVec3 &target, int travelFlags, float minDistance, float maxDistance, aasObstacle_t *obstacles, int numObstacles, idAASCallback &callback ) const;
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // creed: Added Area Wall Extraction For AASTactical
 	virtual idAASFile*			GetFile( void ) {return file;}
 // cdr: Alternate Routes Bug
@@ -178,7 +178,7 @@ private:	// debug
 	void						RandomPullPlayer( const idVec3 &origin ) const;
 	void						ShowPushIntoArea( const idVec3 &origin ) const;
 
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // rjohnson: added more debug drawing
 	void						DrawSimpleEdge( int edgeNum ) const;
 	void						DrawSimpleFace( int faceNum, bool visited ) const;

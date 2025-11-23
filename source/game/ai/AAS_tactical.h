@@ -5,7 +5,7 @@
 // out from a given start point and report a variety of tactically important
 // objectives, including corners, walls, and pinch points.
 //
-// By seeing the AAS graph as a qualitative and simplified spatial 
+// By seeing the AAS graph as a qualitative and simplified spatial
 // representation of the game world.  This representation is amply capapble of
 // rendering higher level tactical data efficiently in real time.
 //
@@ -18,7 +18,7 @@
 // rvAASTacticalSensor
 //
 // The sensor structure is the public interface to the internals of AAS
-// tactical features.  
+// tactical features.
 ///////////////////////////////////////////////////////////////////////////////
 struct rvAASTacticalSensor
 {

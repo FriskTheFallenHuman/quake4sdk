@@ -384,7 +384,7 @@ ID_INLINE void idList<type>::Resize( int newsize ) {
 		// not changing the size, so just exit
 		return;
 	}
-	
+
 	temp	= list;
 	size	= newsize;
 	if ( size < num ) {
@@ -472,7 +472,7 @@ ID_INLINE void idList<type>::Resize( int newsize, int newgranularity ) {
 	for( i = 0; i < num; i++ ) {
 		list[ i ] = temp[ i ];
 	}
-	
+
 // RAVEN BEGIN
 // mwhitlock: Dynamic memory consolidation
 #if defined(_RV_MEM_SYS_SUPPORT_CONTAINERS)
@@ -741,7 +741,7 @@ ID_INLINE int idList<type>::Append( type const & obj ) {
 ================
 idList<type>::Insert
 
-Increases the size of the list by at leat one element if necessary 
+Increases the size of the list by at leat one element if necessary
 and inserts the supplied data into it.
 
 Returns the index of the new element.
@@ -891,7 +891,7 @@ ID_INLINE int idList<type>::FindNull( void ) const {
 idList<type>::IndexOf
 
 Takes a pointer to an element in the list and returns the index of the element.
-This is NOT a guarantee that the object is really in the list. 
+This is NOT a guarantee that the object is really in the list.
 Function will assert in debug builds if pointer is outside the bounds of the list,
 but remains silent in release builds.
 ================
@@ -954,7 +954,7 @@ ID_INLINE bool idList<type>::Remove( type const & obj ) {
 	if ( index >= 0 ) {
 		return RemoveIndex( index );
 	}
-	
+
 	return false;
 }
 
@@ -1122,7 +1122,7 @@ ID_INLINE void idList<type>::HeapAdd( const type & obj ) {
 ================
 idList<type>::HeapPop
 
-Removes the top element from the heap and 
+Removes the top element from the heap and
 First swaps the top element of the heap with the lowest
 element, destroys the lowest element (wich was the top),
 and then sorts the new top element down the heap as

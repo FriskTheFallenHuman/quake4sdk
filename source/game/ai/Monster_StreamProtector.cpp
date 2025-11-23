@@ -43,11 +43,11 @@ private:
 	rvAIAction			actionHeavyBlasterAttack;
 	rvAIAction			actionLightningActtack;
 	rvAIAction			actionChaingunAttack;
-	
+
 	// Torso States
 	stateResult_t		State_Killed					( const stateParms_t& parms );
 	stateResult_t		State_Dead						( const stateParms_t& parms );
-	
+
 	stateResult_t		State_Torso_PlasmaAttack		( const stateParms_t& parms );
 	stateResult_t		State_Torso_FinishPlasmaAttack	( const stateParms_t& parms );
 	stateResult_t		State_Torso_BlasterAttack		( const stateParms_t& parms );
@@ -73,7 +73,7 @@ rvMonsterStreamProtector::rvMonsterStreamProtector ( void ) {
 
 void rvMonsterStreamProtector::InitSpawnArgsVariables ( void ) {
 	jointPlasmaMuzzle = animator.GetJointHandle ( spawnArgs.GetString ( "joint_plasmaMuzzle", "NM_muzzle" ) );
-	
+
 	plasmaAttackRate = SEC2MS ( spawnArgs.GetFloat ( "attack_plasma_rate", ".15" ) );
 }
 /*
@@ -152,7 +152,7 @@ bool rvMonsterStreamProtector::CheckPainActions ( void ) {
 	if ( !pain.takenThisFrame || !actionTimerPain.IsDone ( actionTime ) ) {
 		return false;
 	}
-	
+
 	if ( !pain.threshold || pain.takenThisFrame < pain.threshold ) {
 		if ( painConsecutive < 10 ) {
 			return false;
@@ -160,11 +160,11 @@ bool rvMonsterStreamProtector::CheckPainActions ( void ) {
 			painConsecutive = 0;
 		}
 	}
-	
+
 	PerformAction ( "Torso_Pain", 2, true );
 	actionTimerPain.Reset ( actionTime );
-	
-	return true;	
+
+	return true;
 }
 
 /*
@@ -187,8 +187,8 @@ bool rvMonsterStreamProtector::CheckActions ( void ) {
 
 	if ( PerformAction ( &actionPlasmaAttack,		(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||
 		 PerformAction ( &actionRocketAttack,		(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||
-		 PerformAction ( &actionLightningActtack,	(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||	
-		 PerformAction ( &actionHeavyBlasterAttack,	(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||	
+		 PerformAction ( &actionLightningActtack,	(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||
+		 PerformAction ( &actionHeavyBlasterAttack,	(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )  ||
 		 PerformAction ( &actionBlasterAttack,		(checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )      ) {
 		return true;
 	}
@@ -226,7 +226,7 @@ bool rvMonsterStreamProtector::Pain( idEntity *inflictor, idEntity *attacker, in
 rvMonsterStreamProtector::Damage
 ================
 */
-void rvMonsterStreamProtector::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void rvMonsterStreamProtector::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 								  const char *damageDefName, const float damageScale, const int location ) {
 	if ( attacker && attacker->IsType( rvMonsterStreamProtector::GetClassType() ) ) {
 		//don't take damage from ourselves or other stream protectors
@@ -238,7 +238,7 @@ void rvMonsterStreamProtector::Damage( idEntity *inflictor, idEntity *attacker, 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -251,7 +251,7 @@ CLASS_STATES_DECLARATION ( rvMonsterStreamProtector )
 	STATE ( "Torso_FinishPlasmaAttack",	rvMonsterStreamProtector::State_Torso_FinishPlasmaAttack )
 	STATE ( "Torso_BlasterAttack",		rvMonsterStreamProtector::State_Torso_BlasterAttack )
 	STATE ( "Torso_LightningAttack",	rvMonsterStreamProtector::State_Torso_LightningAttack )
-	
+
 	STATE ( "Torso_TurnRight90",		rvMonsterStreamProtector::State_Torso_TurnRight90 )
 	STATE ( "Torso_TurnLeft90",			rvMonsterStreamProtector::State_Torso_TurnLeft90 )
 END_CLASS_STATES
@@ -272,7 +272,7 @@ stateResult_t rvMonsterStreamProtector::State_Killed ( const stateParms_t& parms
 	DisableAnimState ( ANIMCHANNEL_LEGS );
 	PlayAnim ( ANIMCHANNEL_TORSO, "death", parms.blendFrames );
 	PostState ( "State_Dead" );
-	return SRESULT_DONE;	
+	return SRESULT_DONE;
 }
 
 /*
@@ -293,7 +293,7 @@ rvMonsterStreamProtector::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterStreamProtector::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -306,17 +306,17 @@ stateResult_t rvMonsterStreamProtector::State_Torso_BlasterAttack ( const stateP
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blaster_start", parms.blendFrames );
 			shots = (gameLocal.random.RandomInt ( 8 ) + 4) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blaster_fire", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (IsEnemyVisible() && !enemy.fl.inFov)  ) {
@@ -326,14 +326,14 @@ stateResult_t rvMonsterStreamProtector::State_Torso_BlasterAttack ( const stateP
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -341,7 +341,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_BlasterAttack ( const stateP
 rvMonsterStreamProtector::State_Torso_PlasmaAttack
 ================
 */
-stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const stateParms_t& parms ) {
 	enum {
 		STAGE_START,
 		STAGE_START_WAIT,
@@ -350,7 +350,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 		STAGE_FIRE_WAIT,
 		STAGE_END,
 		STAGE_END_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_START:
 			DisableAnimState ( ANIMCHANNEL_LEGS );
@@ -358,11 +358,11 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 			// Loop the flame animation
 			PlayAnim( ANIMCHANNEL_TORSO, "range_plasma_start", parms.blendFrames );
 
-			// Make sure we clean up some things when this state is finished (effects for one)			
+			// Make sure we clean up some things when this state is finished (effects for one)
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishPlasmaAttack", 0, 0, SFLAG_ONCLEAR );
-			
+
 			return SRESULT_STAGE ( STAGE_START_WAIT );
-		
+
 		case STAGE_START_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_FIRE );
@@ -372,12 +372,12 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 		case STAGE_FIRE:
 			attackEndTime = gameLocal.time + 500;
 			attackNextTime = gameLocal.time;
-			
+
 			// Flame effect
 			PlayEffect ( "fx_plasma_muzzle", jointPlasmaMuzzle, true );
-			
+
 			PlayCycle ( ANIMCHANNEL_TORSO, "range_plasma_fire", 0 );
-			
+
 			return SRESULT_STAGE ( STAGE_INITIALFIRE_WAIT );
 
 		case STAGE_INITIALFIRE_WAIT:
@@ -391,7 +391,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 				attackNextTime = gameLocal.time + plasmaAttackRate;
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_FIRE_WAIT:
 			// If we have been using plasma too long or havent seen our enemy for at least half a second then
 			// stop now.
@@ -405,17 +405,17 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 				attackNextTime = gameLocal.time + plasmaAttackRate;
 			}
 			return SRESULT_WAIT;
-				
+
 		case STAGE_END:
 			// End animations
-			PlayAnim( ANIMCHANNEL_TORSO, "range_plasma_end", parms.blendFrames );			
+			PlayAnim( ANIMCHANNEL_TORSO, "range_plasma_end", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_END_WAIT );
-		
+
 		case STAGE_END_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;						
+			return SRESULT_WAIT;
 	}
 
 	return SRESULT_ERROR;
@@ -426,7 +426,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_PlasmaAttack ( const statePa
 rvMonsterStreamProtector::State_Torso_FinishPlasmaAttack
 ================
 */
-stateResult_t rvMonsterStreamProtector::State_Torso_FinishPlasmaAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterStreamProtector::State_Torso_FinishPlasmaAttack ( const stateParms_t& parms ) {
 	StopEffect ( "fx_plasma_muzzle" );
 	return SRESULT_DONE;
 }
@@ -437,7 +437,7 @@ rvMonsterStreamProtector::State_Torso_LightningAttack
 ================
 */
 stateResult_t rvMonsterStreamProtector::State_Torso_LightningAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -450,17 +450,17 @@ stateResult_t rvMonsterStreamProtector::State_Torso_LightningAttack ( const stat
 			attackEndTime = gameLocal.time + 5000;
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack_lightning_start", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack_lightning_fire", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( gameLocal.time > attackEndTime || (IsEnemyVisible() && !enemy.fl.inFov)  ) {
@@ -471,14 +471,14 @@ stateResult_t rvMonsterStreamProtector::State_Torso_LightningAttack ( const stat
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -486,8 +486,8 @@ stateResult_t rvMonsterStreamProtector::State_Torso_LightningAttack ( const stat
 rvMonsterStreamProtector::State_Torso_TurnRight90
 ================
 */
-stateResult_t rvMonsterStreamProtector::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterStreamProtector::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -497,7 +497,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_TurnRight90 ( const statePar
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_right_90", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -506,7 +506,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_TurnRight90 ( const statePar
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -514,8 +514,8 @@ stateResult_t rvMonsterStreamProtector::State_Torso_TurnRight90 ( const statePar
 rvMonsterStreamProtector::State_Torso_TurnLeft90
 ================
 */
-stateResult_t rvMonsterStreamProtector::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterStreamProtector::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -525,7 +525,7 @@ stateResult_t rvMonsterStreamProtector::State_Torso_TurnLeft90 ( const stateParm
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_left_90", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -534,5 +534,5 @@ stateResult_t rvMonsterStreamProtector::State_Torso_TurnLeft90 ( const stateParm
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

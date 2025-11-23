@@ -162,7 +162,7 @@ public:
 		bool				networkSync			:1; // if true the entity is synchronized over the network
 
 // RAVEN BEGIN
-// bdube: added			
+// bdube: added
 		bool				networkStale		:1; // was in the snapshot but isnt anymore
 // bgeisler: added block
 		bool				triggerAnim			:1;
@@ -403,7 +403,7 @@ public:
 
 	// damage
 // RAVEN BEGIN
-	// twhitaker:			// Sets the damage enitty 
+	// twhitaker:			// Sets the damage enitty
 	void					SetDamageEntity ( idEntity * forward ) { forwardDamageEnt = forward; }
 
 	// bdube: added ignore entity
@@ -470,7 +470,7 @@ public:
 	enum {
 		EVENT_STARTSOUNDSHADER,
 		EVENT_STOPSOUNDSHADER,
-// RAVEN BEGIN		
+// RAVEN BEGIN
 // bdube: new events
 		EVENT_PLAYEFFECT,
 		EVENT_PLAYEFFECT_JOINT,
@@ -679,18 +679,18 @@ protected:
 
 // RAVEN BEGIN
 // bdube: added inlines
-ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, const idVec3& origin, const idMat3& axis, bool loop, const idVec3& endOrigin, 
-												 bool broadcast, effectCategory_t category, const idVec4& effectTint ) { 
+ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, const idVec3& origin, const idMat3& axis, bool loop, const idVec3& endOrigin,
+												 bool broadcast, effectCategory_t category, const idVec4& effectTint ) {
 	return PlayEffect( gameLocal.GetEffect( spawnArgs, effectName ), origin, axis, loop, endOrigin, broadcast, category, effectTint );
 }
 
-ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, jointHandle_t jointHandle, bool loop, const idVec3& endOrigin, 
-												bool broadcast, effectCategory_t category, const idVec4& effectTint ) { 
+ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, jointHandle_t jointHandle, bool loop, const idVec3& endOrigin,
+												bool broadcast, effectCategory_t category, const idVec4& effectTint ) {
 	return PlayEffect( gameLocal.GetEffect( spawnArgs, effectName ), jointHandle, vec3_origin, mat3_identity, loop, endOrigin, broadcast, category, effectTint );
 }
 
-ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, jointHandle_t jointHandle, const idVec3& originOffset, const idMat3& axisOffset, bool loop, const idVec3& endOrigin, 
-												bool broadcast, effectCategory_t category, const idVec4& effectTint ) { 
+ID_INLINE rvClientEffect* idEntity::PlayEffect( const char* effectName, jointHandle_t jointHandle, const idVec3& originOffset, const idMat3& axisOffset, bool loop, const idVec3& endOrigin,
+												bool broadcast, effectCategory_t category, const idVec4& effectTint ) {
 	return PlayEffect( gameLocal.GetEffect( spawnArgs, effectName ), jointHandle, originOffset, axisOffset, loop, endOrigin, broadcast, category, effectTint );
 }
 
@@ -812,15 +812,15 @@ void UpdateGuiParms( idUserInterface *gui, const idDict *args );
 // RAVEN END
 
 ID_INLINE float idEntity::DistanceTo ( idEntity* ent ) {
-	return DistanceTo ( ent->GetPhysics()->GetOrigin() ); 
+	return DistanceTo ( ent->GetPhysics()->GetOrigin() );
 }
 
 ID_INLINE float idEntity::DistanceTo ( const idVec3& pos ) const {
-	return (pos - GetPhysics()->GetOrigin()).LengthFast ( ); 
+	return (pos - GetPhysics()->GetOrigin()).LengthFast ( );
 }
 
 ID_INLINE float idEntity::DistanceTo2d ( idEntity* ent ) {
-	return DistanceTo2d ( ent->GetPhysics()->GetOrigin() ); 
+	return DistanceTo2d ( ent->GetPhysics()->GetOrigin() );
 }
 
 ID_INLINE bool idEntity::CanTakeDamage ( void ) const {

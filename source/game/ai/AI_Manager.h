@@ -10,9 +10,9 @@ typedef enum {
 typedef enum {
 	AITEAMTIMER_ANNOUNCE_TACTICAL,					// Tactical change
 	AITEAMTIMER_ANNOUNCE_SUPPRESSING,
-	AITEAMTIMER_ANNOUNCE_SUPPRESSED,				
+	AITEAMTIMER_ANNOUNCE_SUPPRESSED,
 	AITEAMTIMER_ANNOUNCE_FRIENDLYFIRE,				// Shot by a teammate
-	AITEAMTIMER_ANNOUNCE_ENEMYSTEATH,	
+	AITEAMTIMER_ANNOUNCE_ENEMYSTEATH,
 	AITEAMTIMER_ANNOUNCE_NEWENEMY,					// New enemy was aquired
 	AITEAMTIMER_ANNOUNCE_SNIPER,					// Sniper sighted
 	AITEAMTIMER_ANNOUNCE_CANIHELPYOU,				// Player standing in front of a friendly too long
@@ -70,13 +70,13 @@ public:
 
 	virtual bool	IsCombat				( void ) const;
 	virtual bool	ValidateDestination		( const idAI* ent, const idVec3& dest ) const;
-	
+
 	idVec3			GetDirection			( const idAI* ent ) const;
 
 protected:
 
 	virtual void	OnActivate				( bool active );
-	
+
 private:
 
 	void			Event_Activate			( idEntity *activator );
@@ -144,7 +144,7 @@ public:
 	void				RemoveTeammate			( idActor* ent );
 
 	idActor*			GetAllyTeam				( aiTeam_t team );
-	idActor*			GetEnemyTeam			( aiTeam_t team );	
+	idActor*			GetEnemyTeam			( aiTeam_t team );
 
 	idActor*			NearestTeammateToPoint	( idActor* from, idVec3 point, bool nonPlayer = false, float maxRange = 1000.0f, bool checkFOV = false, bool checkLOS = false );
 	idEntity*			NearestTeammateEnemy	( idActor* from, float maxRange=1000.0f, bool checkFOV = false, bool checkLOS = false, idActor** ally = NULL );
@@ -187,8 +187,8 @@ public:
 	idTimer				timerFindEnemy;
 	idTimer				timerTactical;
 	idTimer				timerMove;
-	idTimer				timerThink;	
-	
+	idTimer				timerThink;
+
 	int					thinkCount;
 	int					simpleThinkCount;
 
@@ -200,12 +200,12 @@ protected:
 	void				DebugDrawHelpers		( void );
 
 	idList<aiBlocked_t>		blockedReaches;
-	idLinkList<idAI>		simpleThink;	
+	idLinkList<idAI>		simpleThink;
 	idLinkList<rvAIHelper>	helpers;
 
 	idLinkList<idActor>		teams[AITEAM_NUM];
 	int						teamTimers[AITEAM_NUM][AITEAMTIMER_MAX];
-	
+
 	idList<aiAvoid_t>		avoids;
 };
 

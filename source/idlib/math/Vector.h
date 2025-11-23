@@ -115,7 +115,7 @@ ID_INLINE bool idVec2::Compare( const idVec2 &a, const float epsilon ) const {
 	if ( idMath::Fabs( x - a.x ) > epsilon ) {
 		return false;
 	}
-			
+
 	if ( idMath::Fabs( y - a.y ) > epsilon ) {
 		return false;
 	}
@@ -227,7 +227,7 @@ ID_INLINE void idVec2::SnapInt( void ) {
 ID_INLINE idVec2 idVec2::operator-() const {
 	return idVec2( -x, -y );
 }
-	
+
 ID_INLINE idVec2 idVec2::operator-( const idVec2 &a ) const {
 	return idVec2( x - a.x, y - a.y );
 }
@@ -324,7 +324,7 @@ ID_INLINE void idVec2::EnsureIncremental( void )
 //===============================================================
 
 class idVec3 {
-public:	
+public:
 	float			x;
 	float			y;
 	float			z;
@@ -455,7 +455,7 @@ public:
 	//                 ___---/
 	//          ___---/
 	//  (Start)/
-	//  
+	//
     ////////////////////////////////////////////////////////////////////////////////////
 	bool			IsLeftOf(const idVec3 &Start, const idVec3 &End) const {
 		return (AreaParallelPipid(Start, End)>0.0f);
@@ -477,7 +477,7 @@ public:
 	//                 ___---/
 	//          ___---/
 	//  (Start)/
-	//  
+	//
     ////////////////////////////////////////////////////////////////////////////////////
 	float			DistToLineSeg(const idVec3 &Start, const idVec3 &End, float& Scale) const {
 		static idVec3 U;
@@ -503,7 +503,7 @@ public:
 	//			    \     ---/
 	//          __ (Result)
 	//  (Start)
-	//  
+	//
     ////////////////////////////////////////////////////////////////////////////////////
 	bool			ProjectToLineSeg(const idVec3 &Start, const idVec3 &End) {
 		static idVec3 U;
@@ -522,7 +522,7 @@ public:
 		} else if (Scale>1.0f)	{
 			(*this) = End;						// If Positive Scale, Projected In Beyond End
 			return false;						// Off The End
-		} else {			
+		} else {
 			(*this) = Start + (U*Scale);		// Otherwise, project U to new location and return dist
 		}
 		return true;							// Perpendicular Intersection Is On The Segment
@@ -550,7 +550,7 @@ public:
 	{
 		idVec3 delta(x,y,Pt.z);
 		delta = delta - Pt;
-		return delta.LengthFast();	
+		return delta.LengthFast();
 	}
 // RAVEN END
 
@@ -565,11 +565,11 @@ public:
 // jscott: for rvAngles
 	rvAngles		ToRadians( void ) const;
 	idMat3			&ToMat3( idMat3 &mat ) const;		// vector should be normalized
-	float			Dist(const idVec3 &Pt) const 
+	float			Dist(const idVec3 &Pt) const
 	{
 		idVec3 delta(x,y,z);
 		delta = delta - Pt;
-		return delta.LengthFast();	
+		return delta.LengthFast();
 	}
 
 // RAVEN END
@@ -708,7 +708,7 @@ ID_INLINE bool idVec3::Compare( const idVec3 &a, const float epsilon ) const {
 	if ( idMath::Fabs( x - a.x ) > epsilon ) {
 		return false;
 	}
-			
+
 	if ( idMath::Fabs( y - a.y ) > epsilon ) {
 		return false;
 	}
@@ -864,7 +864,7 @@ ID_INLINE float idVec3::Normalize( void ) {
 	sqrLength = x * x + y * y + z * z;
 // RAVEN BEGIN
 // jscott: fixed degenerate case
-	if ( !sqrLength ) {		
+	if ( !sqrLength ) {
 		return 0.0f;
 	}
 // RAVEN END
@@ -1001,9 +1001,9 @@ ID_INLINE void idVec3::OrthogonalBasis( idVec3 &left, idVec3 &up ) const {
 
 ID_INLINE void idVec3::ProjectOntoPlane( const idVec3 &normal, const float overBounce ) {
 	float backoff;
-	
+
 	backoff = *this * normal;
-	
+
 	if ( overBounce != 1.0 ) {
 		if ( backoff < 0 ) {
 			backoff *= overBounce;
@@ -1024,8 +1024,8 @@ ID_INLINE void idVec3::ProjectOntoPlane( const idVec3 &normal, const float overB
 // Vector.  That then becomes the new vector.
 //
 // The value returned is the scale of the new vector with respect to the one passed
-// to the function.  If the scale is less than (1.0) then the new vector is shorter 
-// than (U).  If the scale is negative, then the vector is going in the opposite 
+// to the function.  If the scale is less than (1.0) then the new vector is shorter
+// than (U).  If the scale is negative, then the vector is going in the opposite
 // direction of (U).
 //
 //               _  (U)
@@ -1075,14 +1075,14 @@ ID_INLINE void idVec3::EnsureIncremental( void )
 		x = y;
 		y = temp;
 	}
-	
+
 	if ( z < y )
 	{
 		temp = y;
 		y = z;
 		z = temp;
 	}
-	
+
 	if ( y < x )
 	{
 		temp = x;
@@ -1135,7 +1135,7 @@ ID_INLINE bool idVec3::IsZero( void ) const {
 #else
 class idVec4 {
 #endif
-public:	
+public:
 #ifndef _XENON
 	float			x;
 	float			y;
@@ -1341,7 +1341,7 @@ ID_INLINE idVec4::operator int( void )
 {
   	int			tmp, retval;
   	float		constant = 255.0f;
-  
+
   	_asm
   	{
   		push	edx
@@ -1350,25 +1350,25 @@ ID_INLINE idVec4::operator int( void )
   		fld		dword ptr[edx + 4]
   		fld		dword ptr[edx + 8]
   		fld		dword ptr[edx + 12]
-  
+
   		fmul	[constant]
-  		fistp	tmp	   
+  		fistp	tmp
   		mov		ah, byte ptr [tmp]
-  
+
   		fmul	[constant]
- 		fistp	tmp	   
+ 		fistp	tmp
   		mov		al, byte ptr [tmp]
- 
+
   		shl		eax, 16
- 		
+
   		fmul	[constant]
   		fistp	tmp
   		mov		ah, byte ptr [tmp]
-  
+
   		fmul	[constant]
   		fistp	tmp
   		mov		al, byte ptr [tmp]
-  
+
   		mov		[retval], eax
   		pop		edx
   	}
@@ -1411,7 +1411,7 @@ ID_INLINE bool idVec4::Compare( const idVec4 &a, const float epsilon ) const {
 	if ( idMath::Fabs( x - a.x ) > epsilon ) {
 		return false;
 	}
-			
+
 	if ( idMath::Fabs( y - a.y ) > epsilon ) {
 		return false;
 	}
@@ -1596,7 +1596,7 @@ ID_INLINE float& idVec5::operator[]( int index ) {
 	return ( &x )[ index ];
 }
 
-ID_INLINE idVec5 &idVec5::operator=( const idVec3 &a ) { 
+ID_INLINE idVec5 &idVec5::operator=( const idVec3 &a ) {
 	x = a.x;
 	y = a.y;
 	z = a.z;
@@ -1632,7 +1632,7 @@ ID_INLINE float *idVec5::ToFloatPtr( void ) {
 //===============================================================
 
 class idVec6 {
-public:	
+public:
 					idVec6( void );
 					explicit idVec6( const float *a );
 					explicit idVec6( const float a1, const float a2, const float a3, const float a4, const float a5, const float a6 );
@@ -1790,7 +1790,7 @@ ID_INLINE bool idVec6::Compare( const idVec6 &a, const float epsilon ) const {
 	if ( idMath::Fabs( p[0] - a[0] ) > epsilon ) {
 		return false;
 	}
-			
+
 	if ( idMath::Fabs( p[1] - a[1] ) > epsilon ) {
 		return false;
 	}
@@ -1918,7 +1918,7 @@ ID_INLINE float *idVec6::ToFloatPtr( void ) {
 class idVecX {
 	friend class idMatX;
 
-public:	
+public:
 					idVecX( void );
 					explicit idVecX( int length );
 					explicit idVecX( int length, float *data );
@@ -2033,7 +2033,7 @@ ID_INLINE idVecX idVecX::operator-() const {
 	return m;
 }
 
-ID_INLINE idVecX &idVecX::operator=( const idVecX &a ) { 
+ID_INLINE idVecX &idVecX::operator=( const idVecX &a ) {
 	SetSize( a.size );
 #ifdef VECX_SIMD
 	SIMDProcessor->Copy16( p, a.p, a.size );
@@ -2414,7 +2414,7 @@ ID_INLINE float *idVecX::ToFloatPtr( void ) {
 //===============================================================
 
 class idPolar3 {
-public:	
+public:
 	float			radius, theta, phi;
 
 					idPolar3( void );
@@ -2439,7 +2439,7 @@ ID_INLINE idPolar3::idPolar3( const float radius, const float theta, const float
 	this->theta = theta;
 	this->phi = phi;
 }
-	
+
 ID_INLINE void idPolar3::Set( const float radius, const float theta, const float phi ) {
 	assert( radius > 0 );
 	this->radius = radius;
@@ -2459,7 +2459,7 @@ ID_INLINE idPolar3 idPolar3::operator-() const {
 	return idPolar3( radius, -theta, -phi );
 }
 
-ID_INLINE idPolar3 &idPolar3::operator=( const idPolar3 &a ) { 
+ID_INLINE idPolar3 &idPolar3::operator=( const idPolar3 &a ) {
 	radius = a.radius;
 	theta = a.theta;
 	phi = a.phi;

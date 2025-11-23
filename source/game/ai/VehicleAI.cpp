@@ -133,7 +133,7 @@ void rvVehicleAI::OnWakeUp ( void ) {
 rvVehicleAI::CustomMove
 ================
 */
-void rvVehicleAI::CustomMove ( void ) {	
+void rvVehicleAI::CustomMove ( void ) {
 	if ( !driver->pathTargetInfo.node && !(flags & VAIF_Freeze) ) {
 		driver->ProcessEvent( &AI_ScriptedMove, FindClosestNode(), 0.0f, 0 );
 	}
@@ -231,7 +231,7 @@ void rvVehicleAI::Think ( void ) {
 		CheckForEnemy ( true );
 	}
 
-	//HACK: always choose player as the enemy... something is broken somewhere, 
+	//HACK: always choose player as the enemy... something is broken somewhere,
 	// and this is a quick way to get some gameplay out of this for now.  Deadlines pwn.
 	if ( driver && driver->IsDriving() ) {
 		enemy.ent	= gameLocal.GetLocalPlayer();

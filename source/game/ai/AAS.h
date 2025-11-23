@@ -40,23 +40,23 @@ typedef struct aasObstacle_s {
 class idAASCallback {
 public:
 	virtual	~idAASCallback ( void );
-	
+
 	enum testResult_t {
 		TEST_OK,
 		TEST_BADAREA,
 		TEST_BADPOINT
 	};
-	
+
 	virtual void				Init		( void );
 	virtual void				Finish		( void );
-	
+
 	testResult_t				Test		( class idAAS *aas, int areaNum, const idVec3& origin, float minDistance, float maxDistance, const idVec3* point, aasGoal_t& goal );
-	
+
 protected:
 
 	virtual bool				TestArea	( class idAAS *aas, int areaNum, const aasArea_t& area );
 	virtual	bool				TestPoint	( class idAAS *aas, const idVec3& pos, const float zAllow=0.0f );
-	
+
 private:
 
 	bool		TestPointDistance		( const idVec3& origin, const idVec3& point, float minDistance, float maxDistance );
@@ -104,7 +104,7 @@ public:
 	virtual float				AreaRadius( int areaNum ) const = 0;
 	virtual idBounds &			AreaBounds( int areaNum ) const = 0;
 	virtual float				AreaCeiling( int areaNum ) const = 0;
-// RAVEN END	
+// RAVEN END
 								// Returns the area flags.
 	virtual int					AreaFlags( int areaNum ) const = 0;
 								// Returns the travel flags for traveling through the area.
@@ -148,7 +148,7 @@ public:
 								// Find the nearest goal which satisfies the callback.
 	virtual bool				FindNearestGoal( aasGoal_t &goal, int areaNum, const idVec3 origin, const idVec3 &target, int travelFlags, float minDistance, float maxDistance, aasObstacle_t *obstacles, int numObstacles, idAASCallback &callback ) const = 0;
 
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // CDR : Added Area Wall Extraction For AASTactical
 	virtual idAASFile*			GetFile( void ) = 0;
 // cdr: Alternate Routes Bug

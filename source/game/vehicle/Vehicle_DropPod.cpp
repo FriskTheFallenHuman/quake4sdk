@@ -10,7 +10,7 @@ public:
 	CLASS_PROTOTYPE( rvVehicleDropPod );
 
 	rvVehicleDropPod ( void );
-	
+
 	void				Spawn					( void );
 
 	virtual bool		GetPhysicsToVisualTransform ( idVec3 &origin, idMat3 &axis );
@@ -55,7 +55,7 @@ void rvVehicleDropPod::Spawn	( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -79,7 +79,7 @@ stateResult_t rvVehicleDropPod::State_IdleOffline ( const stateParms_t& parms ) 
 	PlayCycle ( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_LEGS, "Wait_Driver", 0 );
 	PostAnimState ( ANIMCHANNEL_LEGS, "State_Idle", 0 );
-	
+
 	return SRESULT_DONE;
 }
 
@@ -88,11 +88,11 @@ stateResult_t rvVehicleDropPod::State_IdleOffline ( const stateParms_t& parms ) 
 rvVehicleDropPod::State_Idle
 ================
 */
-stateResult_t rvVehicleDropPod::State_Idle ( const stateParms_t& parms ) {	
+stateResult_t rvVehicleDropPod::State_Idle ( const stateParms_t& parms ) {
 	if ( SRESULT_WAIT != State_IdleThink ( parms ) ) {
 		return SRESULT_DONE;
 	}
-	
+
 	return SRESULT_DONE;
 }
 
@@ -101,7 +101,7 @@ stateResult_t rvVehicleDropPod::State_Idle ( const stateParms_t& parms ) {
 rvVehicleDropPod::State_IdleThink
 ================
 */
-stateResult_t rvVehicleDropPod::State_IdleThink ( const stateParms_t& parms ) { 
+stateResult_t rvVehicleDropPod::State_IdleThink ( const stateParms_t& parms ) {
 	if ( !vfl.driver ) {
 		PostAnimState ( ANIMCHANNEL_LEGS, "State_IdleOffline", parms.blendFrames );
 		return SRESULT_DONE;

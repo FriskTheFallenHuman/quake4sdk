@@ -33,7 +33,7 @@ extern	idCVar				bse_maxParticles;
 class rvBSEManager
 {
 public:
-	virtual						~rvBSEManager( void ) {}	
+	virtual						~rvBSEManager( void ) {}
 
 	virtual	bool				Init( void ) = 0;
 	virtual	bool				Shutdown( void ) = 0;

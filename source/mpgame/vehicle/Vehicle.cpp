@@ -65,7 +65,7 @@ rvVehicle::rvVehicle ( void ) {
 
 rvVehicle::~rvVehicle ( void ) {
 	int i;
-	
+
 	// Force all the drivers out
 	for ( i = 0; i < positions.Num(); i ++ ) {
 		idActor* driver = positions[i].GetDriver ( );
@@ -96,8 +96,8 @@ void rvVehicle::Spawn( void ) {
 	SetPositions ( );
 
 	healthMax		   = health;
-	healthLow		   = spawnArgs.GetInt ( "lowhealth", va("%d", health / 10 ) );	
-	damageStaticChance = spawnArgs.GetFloat ( "damageStaticChance", "0" );				
+	healthLow		   = spawnArgs.GetInt ( "lowhealth", va("%d", health / 10 ) );
+	damageStaticChance = spawnArgs.GetFloat ( "damageStaticChance", "0" );
 	crashSpeedSmall	   = spawnArgs.GetFloat ( "crashSpeedSmall",  "50" );
 	crashSpeedMedium   = spawnArgs.GetFloat ( "crashSpeedMedium", "125" );
 	crashSpeedLarge	   = spawnArgs.GetFloat ( "crashSpeedLarge",  "200" );
@@ -125,14 +125,14 @@ void rvVehicle::Spawn( void ) {
 	}
 
 	// Get shield parameters
-	shieldMaxHealth  = spawnArgs.GetInt ( "shieldHealth", "0" );	
+	shieldMaxHealth  = spawnArgs.GetInt ( "shieldHealth", "0" );
 	shieldRegenTime  = SEC2MS ( spawnArgs.GetFloat ( "shieldRegenTime", "0" ) );
 	shieldRegenDelay = SEC2MS ( spawnArgs.GetFloat ( "shieldRegenDelay", "0" ) );
-	shieldHitTime    = 0;	
+	shieldHitTime    = 0;
 	shieldHealth.Init ( gameLocal.time, 0, shieldMaxHealth, shieldMaxHealth );
-	
+
 	SetCombatModel();
-		
+
 	cachedContents = GetPhysics()->GetContents();
 
 	funcs.enter.Init( spawnArgs.GetString( "enter_script" ) );
@@ -157,12 +157,12 @@ rvVehicle::Save
 void rvVehicle::Save ( idSaveGame *savefile ) const {
 	int i;
 
-	savefile->WriteInt ( positions.Num ( ) );	
+	savefile->WriteInt ( positions.Num ( ) );
 	for ( i = 0; i < positions.Num(); i ++ ) {
 		positions[i].Save ( savefile );
 	}
 	savefile->WriteInt ( drivers );
-	
+
 	savefile->WriteUserInterface( hud, false );
 
 	savefile->WriteFloat ( crashSpeedSmall );
@@ -175,13 +175,13 @@ void rvVehicle::Save ( idSaveGame *savefile ) const {
 
 	savefile->WriteFloat ( autoRightDir );
 	savefile->WriteBool ( autoRight );
-	
+
 	savefile->WriteInt( autoCorrectionBegin );
 
 	savefile->Write( &vfl, sizeof( vfl ) );
 
 	savefile->WriteFloat ( damageStaticChance );
-	
+
 	savefile->WriteFloat ( shieldMaxHealth );
 	savefile->WriteInterpolate( shieldHealth );
 	savefile->WriteInt ( shieldHitTime );
@@ -229,7 +229,7 @@ void rvVehicle::Restore ( idRestoreGame *savefile ) {
 		positions[i].Restore ( savefile );
 	}
 	savefile->ReadInt ( drivers );
-	
+
 	savefile->ReadUserInterface( hud, &spawnArgs );
 
 	savefile->ReadFloat ( crashSpeedSmall );
@@ -239,16 +239,16 @@ void rvVehicle::Restore ( idRestoreGame *savefile ) {
 	crashEffect.Restore ( savefile );
 	savefile->ReadInt ( crashNextSound );
 	savefile->ReadInt ( crashTime );
-	
+
 	savefile->ReadFloat ( autoRightDir );
 	savefile->ReadBool ( autoRight );
-	
+
 	savefile->ReadInt( (int&)autoCorrectionBegin );
 
 	savefile->Read( &vfl, sizeof( vfl ) );
 
 	savefile->ReadFloat ( damageStaticChance );
-	
+
 	savefile->ReadFloat ( shieldMaxHealth );
 	savefile->ReadInterpolate( shieldHealth );
 	savefile->ReadInt ( shieldHitTime );
@@ -293,7 +293,7 @@ void rvVehicle::SetPositions ( void ) {
 	int					positionCount;
 	int					index;
 	const idKeyValue*	kv;
-	
+
 	// Count the positions first so we can allocate them all at once
 	positionCount = 0;
 	kv = spawnArgs.MatchPrefix( "def_position", NULL );
@@ -301,7 +301,7 @@ void rvVehicle::SetPositions ( void ) {
 		positionCount++;
 		kv = spawnArgs.MatchPrefix( "def_position", kv );
 	}
-	
+
 	// Every vehicle needs a def_position in it's def file
 	if ( positionCount == 0)	{
 		//gameLocal.Error ( "Vehicle '%s' has no def_position entries.", name.c_str() );
@@ -316,20 +316,20 @@ void rvVehicle::SetPositions ( void ) {
 	// Initialize all of the positions
 	index = 0;
 	kv = spawnArgs.MatchPrefix( "def_position", NULL );
-	while ( kv ) {	
+	while ( kv ) {
 		const idDict* dict;
-		
+
 		// Get the position dictionary
 		dict = gameLocal.FindEntityDefDict ( kv->GetValue(), false );
 		if ( !dict ) {
 			gameLocal.Error ( "Invalid vehicle part definition '%'", kv->GetValue().c_str() );
 		}
-		
+
 		// Initialize the position
-		positions[index++].Init ( this, *dict );					
-				
+		positions[index++].Init ( this, *dict );
+
 		kv = spawnArgs.MatchPrefix( "def_position", kv );
-	}		
+	}
 }
 
 /*
@@ -339,7 +339,7 @@ rvVehicle::SetCombatModel
 */
 void rvVehicle::SetCombatModel ( void ) {
 	idActor::SetCombatModel ( );
-		
+
 	if ( shieldMaxHealth ) {
 		idBounds bounds;
 		bounds.Clear ( );
@@ -393,16 +393,16 @@ void rvVehicle::LinkCombat ( void ) {
 // ddynerman: multiple clip worlds
 		shieldModel->Link( this, 0, renderEntity.origin, renderEntity.axis );
 // RAVEN END
-		
+
 		if ( combatModel ) {
 			combatModel->Unlink ( );
 		}
 	} else {
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
-		combatModel->Link( this, 0, renderEntity.origin, renderEntity.axis, modelDefHandle );	
+		combatModel->Link( this, 0, renderEntity.origin, renderEntity.axis, modelDefHandle );
 // RAVEN END
-		
+
 		if ( shieldModel ) {
 			shieldModel->Unlink ( );
 		}
@@ -451,11 +451,11 @@ rvVehicle::UpdateState
 void rvVehicle::UpdateState ( void ) {
 	rvVehiclePosition* pos;
   	pos = &positions[0];
-  	
+
   	vfl.forward  = (pos->IsOccupied() && pos->mInputCmd.forwardmove > 0);
   	vfl.backward = (pos->IsOccupied() && pos->mInputCmd.forwardmove < 0);
   	vfl.right    = (pos->IsOccupied() && pos->mInputCmd.rightmove > 0);
-  	vfl.left     = (pos->IsOccupied() && pos->mInputCmd.rightmove < 0);	
+  	vfl.left     = (pos->IsOccupied() && pos->mInputCmd.rightmove < 0);
 	vfl.driver   = pos->IsOccupied();
 	vfl.strafe	 = (pos->IsOccupied() && pos->mInputCmd.buttons & BUTTON_STRAFE );
 }
@@ -466,7 +466,7 @@ void rvVehicle::UpdateState ( void ) {
 rvVehicle::Think
 ================
 */
-void rvVehicle::Think ( void ) {	
+void rvVehicle::Think ( void ) {
 	UpdateState();
 	UpdateAnimState ( );
 	UpdateIncomingProjectiles();
@@ -509,15 +509,15 @@ void rvVehicle::Think ( void ) {
 			} else {
 				idVec3  upSpeed = -GetPhysics()->GetGravityNormal() * 72.0f;
 				idMat3	axis    = GetPhysics()->GetAxis();
-				
+
 				// Rotate around the forward axis
-				axis.RotateRelative ( 0, (renderEntity.axis.ToAngles().roll<0?180:-180) * MS2SEC(gameLocal.GetMSec()) * 1.5f );					
+				axis.RotateRelative ( 0, (renderEntity.axis.ToAngles().roll<0?180:-180) * MS2SEC(gameLocal.GetMSec()) * 1.5f );
 				GetPhysics()->SetAxis ( axis );
-	
-				// Move up to make room for the rotation					
+
+				// Move up to make room for the rotation
 				GetPhysics()->SetLinearVelocity( upSpeed );
 			}
-		} 
+		}
 
 		// twhitaker: nothing special here
 		RunPrePhysics();
@@ -531,9 +531,9 @@ void rvVehicle::Think ( void ) {
 		// Give each position a chance to think after physics has been run
 		vfl.godmode = false;
 		fl.notarget = false;
-		for( i = 0; i < positions.Num(); i++ ) {		
+		for( i = 0; i < positions.Num(); i++ ) {
 			positions[i].RunPostPhysics( );
-			
+
 			// Include the eye origin into the bounds to ensure the driver
 			// is inside the render bounds when the vehicle is rendered.
 			if ( positions[i].IsOccupied ( ) ) {
@@ -545,7 +545,7 @@ void rvVehicle::Think ( void ) {
 						vfl.godmode = true;
 					}
 				}
-				
+
 				// Inherit notarget if our driver has it on
 				if ( positions[i].mDriver && positions[i].mDriver->fl.notarget ) {
 					fl.notarget = true;
@@ -569,7 +569,7 @@ void rvVehicle::Think ( void ) {
 	}
 
 	// Regenerate the shield
-	if ( shieldMaxHealth && shieldHealth.GetCurrentValue(gameLocal.time) < shieldMaxHealth ) {		
+	if ( shieldMaxHealth && shieldHealth.GetCurrentValue(gameLocal.time) < shieldMaxHealth ) {
 		if ( gameLocal.time > shieldHitTime + shieldRegenDelay && shieldHealth.IsDone ( gameLocal.time ) ) {
 			StopSound ( SND_CHANNEL_BODY2, false );
 			StartSound ( "snd_shieldRecharge", SND_CHANNEL_BODY2, 0, false, NULL );
@@ -580,19 +580,19 @@ void rvVehicle::Think ( void ) {
 			regenTime *= (float)shieldRegenTime;
 			shieldHealth.Init ( gameLocal.time, regenTime, shieldHealth.GetCurrentValue(gameLocal.time), shieldMaxHealth );
 		}
-	}		
+	}
 
 	// Regenerate health, if needed
 	// do nothing if the vehicle is at full hit points
-	if (health < healthMax) 
-	{	
+	if (health < healthMax)
+	{
 		// also do nothing if we've been damaged less than healthRegenDelay seconds ago
 		if ( healthRegenRate && shieldHitTime + healthRegenDelay <= gameLocal.time )
 		{
 			// do we need to start the interpolation?
 			if ( healthRegenAmount.IsDone( gameLocal.time ))
 			{
-				healthRegenAmount.Init( gameLocal.time, SEC2MS((float)(healthMax - health)/healthRegenRate), 
+				healthRegenAmount.Init( gameLocal.time, SEC2MS((float)(healthMax - health)/healthRegenRate),
 										health, healthMax );
 			}
 			else // get our interpolated health value for the current time.
@@ -600,7 +600,7 @@ void rvVehicle::Think ( void ) {
 				health = healthRegenAmount.GetCurrentValue( gameLocal.time );
 			}
 		}
-	}		
+	}
 
 	// Check hazards
 	if ( hazardWarningTime && gameLocal.time > hazardWarningTime + VEHICLE_HAZARD_TIMEOUT ) {
@@ -609,14 +609,14 @@ void rvVehicle::Think ( void ) {
 
 		if ( renderEntity.gui[0] ) {
 			renderEntity.gui[0]->HandleNamedEvent ( "info_safe" );
-		}		
+		}
 	}
 
 	// Stop the crash effect if no collide happened this frame
 	if ( crashEffect && crashTime != gameLocal.time ) {
 		crashEffect->Stop ( );
 		crashEffect = NULL;
-	}		
+	}
 
 	UpdateAnimation();
 
@@ -639,27 +639,27 @@ void rvVehicle::UpdateDrivers ( int delta ) {
 	int oldDrivers = drivers;
 
 	drivers = idMath::ClampInt ( 0, positions.Num(), drivers + delta );
-	
-	if ( drivers && !oldDrivers ) {	
-		if ( fl.takedamage ) {	
+
+	if ( drivers && !oldDrivers ) {
+		if ( fl.takedamage ) {
 			aiManager.AddTeammate ( this );
 		}
-		
+
 		// script function for spawning guys
 		const char* temp;
 		if( spawnArgs.GetString( "call_enter", "", &temp ) && *temp ) {
 			gameLocal.CallFrameCommand ( this, temp );
-		}		
+		}
 	} else if ( !drivers ) {
 		aiManager.RemoveTeammate ( this );
 
-		refSound.listenerId = entityNumber + 1;		
+		refSound.listenerId = entityNumber + 1;
 
 		// script function for spawning guys
 		const char* temp;
 		if( spawnArgs.GetString( "call_exit", "", &temp ) && *temp ) {
 			gameLocal.CallFrameCommand ( this, temp );
-		}		
+		}
 	}
 }
 
@@ -698,7 +698,7 @@ rvVehicle::GetDriverPosition
 */
 void rvVehicle::GetDriverPosition ( int pos, idVec3& origin, idMat3& axis ) {
 	const rvVehiclePosition *position = GetPosition( pos );
-	
+
 	position->GetDriverPosition( origin, axis );
 }
 
@@ -776,46 +776,46 @@ bool rvVehicle::FindClearExitPoint( int pos, idVec3& origin, idMat3& axis ) cons
 ================
 rvVehicle::AddDriver
 
-Add a driver to the vehicle at the given position.  Its possible that the given position is 
-occupied, in that case the driver will be assigned the closest valid position.  If no position 
+Add a driver to the vehicle at the given position.  Its possible that the given position is
+occupied, in that case the driver will be assigned the closest valid position.  If no position
 can be found then (-1) will be returned, otherwise the position the driver is now driving will
 be returned.
 ================
 */
 int rvVehicle::AddDriver ( int position, idActor* driver ) {
 	int wraparound;
-	
+
 	// Ensure the given position is valid
 	if ( position < 0 || position >= positions.Num() ) {
 		gameLocal.Warning ( "position %d is invalid for vehicle '%s'", position, name.c_str() );
 		return -1;
 	}
-	
+
 	wraparound = position;
-	
+
 	do {
 		// If the position isnt occupied then set the driver
 		if ( !positions[position].IsOccupied ( ) ) {
 			positions[position].SetDriver ( driver );
-			
+
 			// Vehicle is on same team as driver
 			team = driver->team;
-			
+
 			UpdateDrivers ( 1 );
-			
-			// The local player will hear all private sounds of the vehicle			
+
+			// The local player will hear all private sounds of the vehicle
 			if ( driver == gameLocal.GetLocalPlayer ( ) ) {
 				refSound.listenerId = driver->GetListenerId ( );
 			}
-						
+
 			return position;
 		}
-	
+
 		// Check the next position, wrap around if necessary
 		position = (position + 1) % positions.Num();
-	
+
 	} while ( wraparound != position );
-	
+
 	return -1;
 }
 
@@ -823,7 +823,7 @@ int rvVehicle::AddDriver ( int position, idActor* driver ) {
 ================
 rvVehicle::RemoveDriver
 
-Removes the given driver from the vehicle.  This includes physically taking the driver out 
+Removes the given driver from the vehicle.  This includes physically taking the driver out
 of the vehicle and placing them back into the world and will follow all constraints that limit
 the driver from exiting the vehicle.
 ================
@@ -832,7 +832,7 @@ bool rvVehicle::RemoveDriver ( int position, bool force ) {
 	if ( !positions[position].EjectDriver ( force ) ) {
 		return false;
 	}
-	
+
 	UpdateDrivers ( -1 );
 	return true;
 }
@@ -923,8 +923,8 @@ void rvVehicle::Damage ( idEntity *inflictor, idEntity *attacker, const idVec3 &
 		if ( save > 0 )	{
 			int shield;
 			save = Min( save, damage );
-			damage -= save;	
-			
+			damage -= save;
+
 			shield = shieldHealth.GetCurrentValue ( gameLocal.time ) - save;
 			shieldHealth.Init ( gameLocal.time, 0, shield, shield );
 			// always stop the sound because we may be playing the recharge just now.
@@ -942,7 +942,7 @@ void rvVehicle::Damage ( idEntity *inflictor, idEntity *attacker, const idVec3 &
 		godModeDamage += damage;
 		damage = 0;
 	}
-	
+
 	if ( !damage ) {
 		return;
 	}
@@ -951,12 +951,12 @@ void rvVehicle::Damage ( idEntity *inflictor, idEntity *attacker, const idVec3 &
 	if ( renderEntity.gui[0] && gameLocal.random.RandomFloat() < damageStaticChance ) {
 		renderEntity.gui[0]->HandleNamedEvent ( "shot_static" );
 	}
- 
+
 	// Play low health warning on transition to low health value
 	if ( health >= healthLow && health - damage < healthLow ) {
 		StartSound ( "snd_voiceLowHealth", SND_CHANNEL_VOICE, 0, false, NULL );
 	}
- 
+
 // RAVEN BEGIN
 // MCG - added damage over time
 	if ( !inDamageEvent ) {
@@ -1029,15 +1029,15 @@ void rvVehicle::Killed ( idEntity *inflictor, idEntity *attacker, int damage, co
 
 	// Try removing the vehicle from all lists it could be part of.
 	aiManager.RemoveTeammate ( this );
-	
-	// Remove all drivers from the vehicle and kill them	
+
+	// Remove all drivers from the vehicle and kill them
 	for ( i = 0; i < positions.Num(); i ++ ) {
 		idActor* driver = positions[i].GetDriver();
 		if ( !driver ) {
 			continue;
 		}
 
-		// Dump the driver out of the vehicle and kill them	
+		// Dump the driver out of the vehicle and kill them
 		driver->health = 0;
 		driver->ProcessEvent ( &AI_ExitVehicle, true );
 		driver->Killed( inflictor, attacker, damage, dir, location );
@@ -1048,7 +1048,7 @@ void rvVehicle::Killed ( idEntity *inflictor, idEntity *attacker, int damage, co
 
 	if ( spawnArgs.GetBool( "remove_on_death", "1" ) ) {
 		StartSound ( "snd_death", SND_CHANNEL_ANY, 0, false, NULL );
-		
+
 		if ( spawnArgs.GetBool( "orient_death_fx", "0" ) ) {
 			gameLocal.PlayEffect ( spawnArgs, "fx_death", GetPhysics()->GetAbsBounds().GetCenter(), GetPhysics()->GetAxis() );
 		} else {
@@ -1121,38 +1121,38 @@ bool rvVehicle::Collide( const trace_t &collision, const idVec3 &velocity ) {
 		// TODO: MAterial types
 		if ( !crashEffect ) {
 			crashEffect = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_crash" ), collision.c.point, collision.c.normal.ToMat3(), true );
-		}	
+		}
 		if ( crashEffect )	{
 			crashEffect->SetOrigin ( collision.c.point );
 			crashEffect->SetAxis ( collision.c.normal.ToMat3() );
 			crashEffect->Attenuate ( idMath::ClampFloat ( 0.01f, 1.0f, speed / (float)crashSpeedLarge ) );
 		}
 	}
-		
+
 	idStr collDmgDef = "damage_gev_collision_self";
 	if ( gameLocal.time > crashNextSound ) {
 
 		float dot = dir * collision.c.normal;
-		if( dot < -0.5f ) { 
+		if( dot < -0.5f ) {
 
-		// Crash impact sounds	
+		// Crash impact sounds
 		if ( speed > crashSpeedLarge ) {
 			collisionSelfDamage += 50.0f;
 			StartSound ( "snd_crash_large", SND_CHANNEL_ANY, 0, false, NULL );
 			crashNextSound = gameLocal.time + VEHICLE_CRASH_DELAY;
 	//		damage = true;
-		} else if ( speed > crashSpeedMedium ) {	
+		} else if ( speed > crashSpeedMedium ) {
 			collisionSelfDamage += 25.0f;
 			StartSound ( "snd_crash_medium", SND_CHANNEL_ANY, 0, false, NULL );
 			crashNextSound = gameLocal.time + VEHICLE_CRASH_DELAY;
 	//		damage = true;
-		} else if ( speed > crashSpeedSmall ) {	
+		} else if ( speed > crashSpeedSmall ) {
 			StartSound ( "snd_crash_small", SND_CHANNEL_ANY, 0, false, NULL );
 			crashNextSound = gameLocal.time + VEHICLE_CRASH_DELAY;
 		}
 		}
 	}
-	
+
 	crashTime = gameLocal.time;
 	float	vel	= GetPhysics()->GetLinearVelocity().Length();
 
@@ -1168,10 +1168,10 @@ bool rvVehicle::Collide( const trace_t &collision, const idVec3 &velocity ) {
 				const idDict* damageDef	= gameLocal.FindEntityDefDict ( crashDamage, false );
 				//MCG NOTE: This used to call vehicleController.GetDriver(), which was always NULL...
 				idActor* theDriver		= positions[0].GetDriver();
-				
-				if ( ent->fl.takedamage 
-					&& ent->health >= 0 
-					&& !ent->spawnArgs.GetBool( "ignore_vehicle_damage" ) 
+
+				if ( ent->fl.takedamage
+					&& ent->health >= 0
+					&& !ent->spawnArgs.GetBool( "ignore_vehicle_damage" )
 					&& (vel > 100.0f || !ent->IsType(idPlayer::GetClassType())) ) {
 					//MCG NOTE: now that theDriver is being set correctly, this damage will get credited to the driver (as the attacker), unlike before
 					float dScale = f * ent->spawnArgs.GetFloat( "vehicle_damage_scale", "1" );
@@ -1184,9 +1184,9 @@ bool rvVehicle::Collide( const trace_t &collision, const idVec3 &velocity ) {
 				}
 
 				// ApplyImpulse doesn't like it when you give it a null driver
-				// MCG: okay, now ApplyImpulse actually is getting called, 
-				//		but I'm only going to allow it on idMoveables since ApplyImpulse is 
-				//		rejected by idActors if it comes from an idActor and this code was 
+				// MCG: okay, now ApplyImpulse actually is getting called,
+				//		but I'm only going to allow it on idMoveables since ApplyImpulse is
+				//		rejected by idActors if it comes from an idActor and this code was
 				//		never being called before.
 				if ( theDriver && damageDef && !ent->spawnArgs.GetBool("ignore_vehicle_push") && ent->IsType( idMoveable::GetClassType() ) ) {
 					float push		= damageDef->GetFloat( "push" ) * speed / idMath::ClampFloat ( 0.01f, 1.0f, speed / (float)crashSpeedLarge );
@@ -1195,7 +1195,7 @@ bool rvVehicle::Collide( const trace_t &collision, const idVec3 &velocity ) {
 
 					// Send him flying
 					ent->ApplyImpulse( theDriver, collision.c.id, collision.c.point, impulse );
-					
+
 					if ( g_debugVehicle.GetInteger() ) {
 						gameRenderWorld->DebugArrow ( colorGreen, collision.c.point, collision.c.point + impulse, 3, 10000 );
 					}
@@ -1222,7 +1222,7 @@ bool rvVehicle::Give( const char *statname, const char *value ) {
 		}
 		health = Min ( atoi( value ) + health, healthMax );
 	}
-	
+
 	return true;
 }
 
@@ -1244,11 +1244,11 @@ void rvVehicle::AutoRight( idEntity* activator ) {
 
 	float dot = DotProduct( vec, renderEntity.axis[		1 ] );
 
-	if( dot < 0 ) 
+	if( dot < 0 )
 	{
 		autoRightDir = -1.0f;
-	} 
-	else 
+	}
+	else
 	{
 		autoRightDir = 1.0f;
 	}
@@ -1295,9 +1295,9 @@ void rvVehicle::UpdateHUD ( int position, idUserInterface* gui ) {
 	gui->SetStateFloat ( "vehicle_shield", (float)shieldHealth.GetCurrentValue(gameLocal.time) / (float)shieldMaxHealth );
 	gui->SetStateInt ( "vehicle_haz", hazardWarningTime != 0 );
 	gui->SetStateInt ( "vehicle_locked", IsLocked ( ) );
-	
-	// Update position specific information	
-	positions[position].UpdateHUD ( gui );	
+
+	// Update position specific information
+	positions[position].UpdateHUD ( gui );
 }
 
 /*
@@ -1306,7 +1306,7 @@ rvVehicle::UpdateCursorGUI
 ================
 */
 void rvVehicle::UpdateCursorGUI ( int position, idUserInterface* gui ) {
-	positions[position].UpdateCursorGUI ( gui );	
+	positions[position].UpdateCursorGUI ( gui );
 }
 
 /*
@@ -1318,9 +1318,9 @@ void rvVehicle::DrawHUD ( int position ) {
 	if ( !hud || gameLocal.GetLocalPlayer()->IsObjectiveUp() || gameLocal.GetLocalPlayer()->objectiveSystemOpen ) {
 		return;
 	}
-	
+
 	UpdateHUD ( position, hud );
-	
+
 	hud->Redraw ( gameLocal.time );
 }
 
@@ -1337,8 +1337,8 @@ void rvVehicle::IssueHazardWarning ( void ) {
 			renderEntity.gui[0]->HandleNamedEvent ( "warning_hazard" );
 		}
 	}
-	
-	hazardWarningTime = gameLocal.time;	
+
+	hazardWarningTime = gameLocal.time;
 }
 
 /*
@@ -1377,7 +1377,7 @@ rvVehicle::Show
 */
 void rvVehicle::Show ( void ) {
 	idActor::Show ( );
-	
+
 	GetPhysics()->SetContents ( CONTENTS_BODY );
 	GetPhysics()->GetClipModel()->Link();
 }
@@ -1491,7 +1491,7 @@ void rvVehicle::Event_Lock ( bool lock ) {
 rvVehicle::Event_IsLocked
 ==================
 */
-void rvVehicle::Event_IsLocked ( void ) {	
+void rvVehicle::Event_IsLocked ( void ) {
 	idThread::ReturnFloat( (float)IsLocked() );
 }
 
@@ -1500,7 +1500,7 @@ void rvVehicle::Event_IsLocked ( void ) {
 rvVehicle::Event_EnableWeapon
 ==================
 */
-void rvVehicle::Event_EnableWeapon ( void ) {	
+void rvVehicle::Event_EnableWeapon ( void ) {
 	vfl.disableWeapons = false;
 }
 
@@ -1509,7 +1509,7 @@ void rvVehicle::Event_EnableWeapon ( void ) {
 rvVehicle::Event_DisableWeapon
 ==================
 */
-void rvVehicle::Event_DisableWeapon ( void ) {	
+void rvVehicle::Event_DisableWeapon ( void ) {
 	vfl.disableWeapons = true;
 }
 
@@ -1519,7 +1519,7 @@ void rvVehicle::Event_DisableWeapon ( void ) {
 rvVehicle::Event_EnableMovement
 ==================
 */
-void rvVehicle::Event_EnableMovement( void ) {	
+void rvVehicle::Event_EnableMovement( void ) {
 	vfl.disableMovement = false;
 }
 
@@ -1528,7 +1528,7 @@ void rvVehicle::Event_EnableMovement( void ) {
 rvVehicle::Event_DisableMovement
 ==================
 */
-void rvVehicle::Event_DisableMovement ( void ) {	
+void rvVehicle::Event_DisableMovement ( void ) {
 	vfl.disableMovement = true;
 }
 
@@ -1586,7 +1586,7 @@ rvVehicle::Event_SetScript
 void rvVehicle::Event_SetScript( const char* scriptName, const char* funcName ) {
 	if ( !funcName || !funcName[0] ) {
 		return;
-	} 
+	}
 
 	// Set the associated script
 	if ( !idStr::Icmp ( scriptName, "enter" ) ) {
@@ -1659,7 +1659,7 @@ void rvVehicle::Event_GetViewAngles ( ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -1677,6 +1677,6 @@ stateResult_t rvVehicle::State_Wait_Driver ( int blendFrames ) {
 	if ( !vfl.driver || vfl.stalled ) {
 		return SRESULT_WAIT;
 	}
-	
+
 	return SRESULT_DONE;
 }

@@ -91,7 +91,7 @@ void rvMonsterGunner::Spawn ( void ) {
 	actionSideStepLeft.Init ( spawnArgs, "action_sideStepLeft", NULL, 0 );
 	actionSideStepRight.Init ( spawnArgs, "action_sideStepRight", NULL, 0 );
 	actionTimerSideStep.Init ( spawnArgs, "actionTimer_sideStep" );
-	
+
 	InitSpawnArgsVariables();
 }
 
@@ -106,7 +106,7 @@ void rvMonsterGunner::Save ( idSaveGame *savefile ) const {
 	actionSideStepLeft.Save ( savefile );
 	actionSideStepRight.Save ( savefile );
 	actionTimerSideStep.Save ( savefile );
-	
+
 	savefile->WriteInt ( shots );
 	savefile->WriteInt ( shotsFired );
 	savefile->WriteString ( nailgunPrefix );
@@ -124,7 +124,7 @@ void rvMonsterGunner::Restore ( idRestoreGame *savefile ) {
 	actionSideStepLeft.Restore ( savefile );
 	actionSideStepRight.Restore ( savefile );
 	actionTimerSideStep.Restore ( savefile );
-	
+
 	savefile->ReadInt ( shots );
 	savefile->ReadInt ( shotsFired );
 	savefile->ReadString ( nailgunPrefix );
@@ -198,7 +198,7 @@ int rvMonsterGunner::FilterTactical ( int availableTactical ) {
 			}
 		}
 	}
-	
+
 	return idAI::FilterTactical ( availableTactical );
 }
 
@@ -298,7 +298,7 @@ rvMonsterGunner::GetDebugInfo
 void rvMonsterGunner::GetDebugInfo ( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "action_grenadeAttack",		aiActionStatusString[actionGrenadeAttack.status], userData );
 	proc ( "idAI", "action_nailgunAttack",		aiActionStatusString[actionNailgunAttack.status], userData );
 	proc ( "idAI", "actionSideStepLeft",		aiActionStatusString[actionSideStepLeft.status], userData );
@@ -313,7 +313,7 @@ bool rvMonsterGunner::Pain( idEntity *inflictor, idEntity *attacker, int damage,
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -329,7 +329,7 @@ rvMonsterGunner::State_Torso_MovingRangedAttack
 ================
 */
 stateResult_t rvMonsterGunner::State_Torso_MovingRangedAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_SHOOT,
 		STAGE_SHOOT_WAIT,
@@ -339,7 +339,7 @@ stateResult_t rvMonsterGunner::State_Torso_MovingRangedAttack ( const stateParms
 			shots = (gameLocal.random.RandomInt ( nailgunMaxShots - nailgunMinShots ) + nailgunMinShots) * combat.aggressiveScale;
 			shotsFired = 0;
 			return SRESULT_STAGE ( STAGE_SHOOT );
-			
+
 		case STAGE_SHOOT:
 			shots--;
 			shotsFired++;
@@ -367,7 +367,7 @@ stateResult_t rvMonsterGunner::State_Torso_MovingRangedAttack ( const stateParms
 			}
 			*/
 			return SRESULT_STAGE ( STAGE_SHOOT_WAIT );
-		
+
 		case STAGE_SHOOT_WAIT:
 			// When the shoot animation is done either play another shot animation
 			// or finish up with post_shooting
@@ -377,9 +377,9 @@ stateResult_t rvMonsterGunner::State_Torso_MovingRangedAttack ( const stateParms
 				}
 				return SRESULT_STAGE ( STAGE_SHOOT);
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 
@@ -390,7 +390,7 @@ rvMonsterGunner::State_Torso_NailgunAttack
 */
 stateResult_t rvMonsterGunner::State_Torso_NailgunAttack ( const stateParms_t& parms ) {
 	static const char* nailgunAnims [ ] = { "nailgun_short", "nailgun_long" };
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -416,18 +416,18 @@ stateResult_t rvMonsterGunner::State_Torso_NailgunAttack ( const stateParms_t& p
 			}
 			PlayAnim ( ANIMCHANNEL_TORSO, va("%s_start", nailgunPrefix.c_str() ), parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, va("%s_loop", nailgunPrefix.c_str() ), 0 );
 			shotsFired++;
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (shotsFired >= nailgunMinShots && !enemy.fl.inFov) || aifl.damage ) {
@@ -437,12 +437,12 @@ stateResult_t rvMonsterGunner::State_Torso_NailgunAttack ( const stateParms_t& p
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

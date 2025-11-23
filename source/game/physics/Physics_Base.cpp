@@ -301,7 +301,7 @@ bool idPhysics_Base::IsPushable( void ) const {
 bool idPhysics_Base::IsInWater ( void ) const {
 	return false;
 }
-// RAVEN END	
+// RAVEN END
 
 /*
 ================

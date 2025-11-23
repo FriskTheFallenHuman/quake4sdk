@@ -26,7 +26,7 @@ public:
 
 	rvMonsterFatty ( void ) {}
 	~rvMonsterFatty ( void );
-	
+
 	void				InitSpawnArgsVariables			( void );
 	void				Spawn							( void );
 	void				Save							( idSaveGame *savefile ) const;
@@ -48,12 +48,12 @@ protected:
 
 	monsterFattyChain_t	chains[CHAIN_MAX];
 
-	float				missHeight;		
+	float				missHeight;
 
 	virtual bool		CheckActions			( void );
 
 	void				PlayAttackAnim			( const idVec3& target, int blendFrames );
-	
+
 	void				ResetAllChains			( void );
 	void				ChainIn					( int chain );
 	void				ChainOut				( int chain );
@@ -66,7 +66,7 @@ private:
 	// Frame Commands
 	stateResult_t		Frame_LeftChainOut		( const stateParms_t& parms );
 	stateResult_t		Frame_LeftChainIn		( const stateParms_t& parms );
-	
+
 	stateResult_t		Frame_RightChainOut		( const stateParms_t& parms );
 	stateResult_t		Frame_RightChainIn		( const stateParms_t& parms );
 
@@ -95,8 +95,8 @@ void rvMonsterFatty::InitSpawnArgsVariables ( void )
 
 	chains[CHAIN_RIGHT].orientationJoint	= animator.GetJointHandle ( spawnArgs.GetString ( "joint_rightChain", "chaina1" ) );
 	chains[CHAIN_RIGHT].attackJoint			= animator.GetJointHandle ( spawnArgs.GetString ( "joint_rightChainAttack", "hooka" ) );
-		
-	missHeight = spawnArgs.GetFloat ( "missHeight", "72" );	
+
+	missHeight = spawnArgs.GetFloat ( "missHeight", "72" );
 }
 /*
 ================
@@ -107,7 +107,7 @@ void rvMonsterFatty::Spawn ( void ) {
 	// Custom actions
 	actionWhipAttack.Init ( spawnArgs, "action_whipAttack", "Torso_WhipAttack", AIACTIONF_ATTACK );
 
-	// Cache joints	
+	// Cache joints
 	chains[CHAIN_LEFT].out					= false;
 	chains[CHAIN_LEFT].projectile			= NULL;
 
@@ -124,12 +124,12 @@ rvMonsterFatty::Save
 */
 void rvMonsterFatty::Save ( idSaveGame *savefile ) const {
 	int i;
-	
+
 	actionWhipAttack.Save( savefile );
 
 	for ( i = 0; i < CHAIN_MAX; i ++ ) {
 		savefile->WriteBool( chains[i].out );
-		chains[i].projectile.Save ( savefile );		
+		chains[i].projectile.Save ( savefile );
 	}
 }
 
@@ -140,14 +140,14 @@ rvMonsterFatty::Restore
 */
 void rvMonsterFatty::Restore ( idRestoreGame *savefile ) {
 	int i;
-	
+
 	actionWhipAttack.Restore( savefile );
 
 	for ( i = 0; i < CHAIN_MAX; i ++ ) {
 		savefile->ReadBool( chains[i].out );
-		chains[i].projectile.Restore ( savefile );		
+		chains[i].projectile.Restore ( savefile );
 	}
-	
+
 	InitSpawnArgsVariables();
 }
 
@@ -183,11 +183,11 @@ bool rvMonsterFatty::UpdateAnimationControllers ( void ) {
 			if ( !chains[i].out ) {
 				continue;
 			}
-			
+
 			animator.ClearJoint ( chains[i].orientationJoint );
 			GetJointWorldTransform ( chains[i].orientationJoint, gameLocal.time, origin, axis );
 			dir = target - origin;
-			dir.Normalize ( );	
+			dir.Normalize ( );
 			axis.ProjectVector ( dir, localDir );
 			animator.SetJointAxis ( chains[i].orientationJoint, JOINTMOD_LOCAL, localDir.ToMat3() );
 		}
@@ -244,15 +244,15 @@ void rvMonsterFatty::PlayAttackAnim ( const idVec3& target, int blendFrames ) {
 	idVec3 		localDir;
 	float  		yaw;
 	const char* animName;
-	
+
 	// Get the local direction vector
 	dir = target - GetPhysics()->GetOrigin();
 	dir.Normalize ( );
 	viewAxis.ProjectVector( dir, localDir );
-	
+
 	// Get the yaw relative to forward
 	yaw = idMath::AngleNormalize180 ( localDir.ToAngles ( )[YAW] );
-	
+
 	if ( yaw < -45.0f ) {
 		animName = "attack4b";
 	} else if ( yaw < -20.0f ) {
@@ -268,7 +268,7 @@ void rvMonsterFatty::PlayAttackAnim ( const idVec3& target, int blendFrames ) {
 	} else{
 		animName = "attack1b";
 	}
-	
+
 	PlayAnim ( ANIMCHANNEL_TORSO, animName, blendFrames );
 }
 
@@ -280,7 +280,7 @@ rvMonsterFatty::ChainOut
 void rvMonsterFatty::ChainOut ( int chain ) {
 	idEntity*		ent;
 	idProjectile*	proj;
-	
+
 	gameLocal.SpawnEntityDef( *gameLocal.FindEntityDefDict ( spawnArgs.GetString ( "def_attack_hook" ) ), &ent, false );
 	proj = dynamic_cast<idProjectile*>(ent);
 	if ( !proj ) {
@@ -289,14 +289,14 @@ void rvMonsterFatty::ChainOut ( int chain ) {
 	}
 
 	chains[chain].out = true;
-				
+
 	proj->Create ( this, vec3_origin, idVec3(0,0,1) );
 	proj->Launch ( vec3_origin, idVec3(0,0,1), vec3_origin );
 
-	chains[chain].projectile = proj;				
+	chains[chain].projectile = proj;
 	ent->BindToJoint ( this, chains[chain].attackJoint, false );
 	ent->SetOrigin ( vec3_origin );
-	ent->SetAxis ( mat3_identity );	
+	ent->SetAxis ( mat3_identity );
 }
 
 /*
@@ -310,7 +310,7 @@ void rvMonsterFatty::ChainIn ( int chain ) {
 		delete chains[chain].projectile;
 		chains[chain].projectile = NULL;
 	}
-}	
+}
 
 /*
 ================
@@ -319,9 +319,9 @@ rvMonsterFatty::ResetChains
 */
 void rvMonsterFatty::ResetAllChains ( void ) {
 	int i;
-	
+
 	animator.ClearAllJoints ( );
-	
+
 	for ( i = 0; i < CHAIN_MAX; i ++ ) {
 		ChainIn ( i );
 	}
@@ -330,7 +330,7 @@ void rvMonsterFatty::ResetAllChains ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -359,15 +359,15 @@ stateResult_t rvMonsterFatty::State_Torso_WhipAttack ( const stateParms_t& parms
 	switch ( parms.stage ) {
 		case STAGE_ATTACK: {
 			if ( !enemy.ent ) {
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
-		
-			// Predict a bit				
+
+			// Predict a bit
 			PlayAttackAnim ( enemy.ent->GetEyePosition(), parms.blendFrames );
 
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
 		}
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				ResetAllChains ( );

@@ -34,7 +34,7 @@ idForce_Constant::Save
 */
 void idForce_Constant::Save( idSaveGame *savefile ) const {
 	savefile->WriteVec3( force );
-	// TOSAVE: idPhysics *		physics	
+	// TOSAVE: idPhysics *		physics
 	savefile->WriteInt( id );
 	savefile->WriteVec3( point );
 }

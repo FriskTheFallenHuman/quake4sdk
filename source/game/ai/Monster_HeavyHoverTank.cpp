@@ -16,12 +16,12 @@ public:
 	void					Spawn				( void );
 	void					Save				( idSaveGame *savefile ) const;
 	void					Restore				( idRestoreGame *savefile );
-		
+
 	virtual void			Think				( void );
-	
+
 	virtual	void			Damage				( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
 	virtual void			OnDeath				( void );
-	
+
 protected:
 
 	enum weaponState_t {
@@ -34,13 +34,13 @@ protected:
 	int					shots;
 	weaponState_t		weaponStateCurrent;
 	weaponState_t		weaponStateIdeal;
-	
+
 	rvAIAction			actionRocketAttack;
 	rvAIAction			actionBlasterAttack;
 	rvAIAction			actionStrafe;
-	
+
 	jointHandle_t		jointHoverEffect;
-	
+
 	rvClientEffectPtr	effectDust;
 	rvClientEffectPtr	effectHover;
 
@@ -76,10 +76,10 @@ rvMonsterHeavyHoverTank::rvMonsterHeavyHoverTank
 rvMonsterHeavyHoverTank::rvMonsterHeavyHoverTank ( ) {
 	weaponStateIdeal   = WEAPONSTATE_BLASTER;
 	weaponStateCurrent = weaponStateIdeal;
-	
+
 	effectDust  = NULL;
 	effectHover = NULL;
-	
+
 	blasterAnimIndex = 0;
 	shots			 = 0;
 
@@ -100,7 +100,7 @@ void rvMonsterHeavyHoverTank::Spawn ( void ) {
 	actionRocketAttack.Init ( spawnArgs, "action_rocketAttack", "Torso_RocketAttack", AIACTIONF_ATTACK );
 	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack", "Torso_BlasterAttack", AIACTIONF_ATTACK );
 	actionStrafe.Init  ( spawnArgs, "action_strafe",	"Torso_Strafe",	0 );
-	
+
 	InitSpawnArgsVariables();
 
 	if ( jointHoverEffect != INVALID_JOINT ) {
@@ -115,17 +115,17 @@ rvMonsterHeavyHoverTank::Think
 */
 void rvMonsterHeavyHoverTank::Think ( void ) {
 	idAI::Think ( );
-	
+
 	// If thinking we should play an effect on the ground under us
 	if ( jointHoverEffect != INVALID_JOINT ) {
 		if ( !fl.hidden && !fl.isDormant && (thinkFlags & TH_THINK ) && !aifl.dead ) {
 			trace_t tr;
 			idVec3	origin;
 			idMat3	axis;
-			
+
 			// Project the effect 128 units down from the hover effect joint
 			GetJointWorldTransform ( jointHoverEffect, gameLocal.time, origin, axis );
-			
+
 	// RAVEN BEGIN
 	// ddynerman: multiple clip worlds
 			gameLocal.TracePoint ( this, tr, origin, origin + axis[0] * 128.0f, CONTENTS_SOLID, this );
@@ -135,14 +135,14 @@ void rvMonsterHeavyHoverTank::Think ( void ) {
 			if ( !effectDust ) {
 				effectDust = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_dust" ), tr.endpos, tr.c.normal.ToMat3(), true );
 			}
-			
+
 			// If the effect is playing we should update its attenuation as well as its origin and axis
 			if ( effectDust ) {
 				effectDust->Attenuate ( 1.0f - idMath::ClampFloat ( 0.0f, 1.0f, (tr.endpos - origin).LengthFast ( ) / 127.0f ) );
 				effectDust->SetOrigin ( tr.endpos );
 				effectDust->SetAxis ( tr.c.normal.ToMat3() );
 			}
-			
+
 			// If the hover effect is playing we can set its end origin to the ground
 			if ( effectHover ) {
 				effectHover->SetEndOrigin ( tr.endpos );
@@ -164,11 +164,11 @@ void rvMonsterHeavyHoverTank::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt ( shots );
 	savefile->WriteInt ( (int)weaponStateCurrent );
 	savefile->WriteInt ( (int)weaponStateIdeal );
-	
+
 	actionRocketAttack.Save ( savefile );
 	actionBlasterAttack.Save ( savefile );
 	actionStrafe.Save ( savefile );
-	
+
 	effectDust.Save ( savefile );
 	effectHover.Save ( savefile );
 }
@@ -183,11 +183,11 @@ void rvMonsterHeavyHoverTank::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadInt ( shots );
 	savefile->ReadInt ( (int&)weaponStateCurrent );
 	savefile->ReadInt ( (int&)weaponStateIdeal );
-	
+
 	actionRocketAttack.Restore ( savefile );
 	actionBlasterAttack.Restore ( savefile );
 	actionStrafe.Restore ( savefile );
-	
+
 	effectDust.Restore ( savefile );
 	effectHover.Restore ( savefile );
 
@@ -228,7 +228,7 @@ void rvMonsterHeavyHoverTank::OnDeath ( void ) {
 		effectHover->Stop ( );
 		effectHover = NULL;
 	}
-	
+
 	idAI::OnDeath ( );
 }
 
@@ -297,7 +297,7 @@ rvMonsterHeavyHoverTank::OnEnemyChange
 */
 void rvMonsterHeavyHoverTank::OnEnemyChange ( idEntity* oldEnemy ) {
 	idAI::OnEnemyChange ( oldEnemy );
-	
+
 	if ( !enemy.ent ) {
 		return;
 	}
@@ -317,15 +317,15 @@ const char* rvMonsterHeavyHoverTank::GetIdleAnimName ( void ) {
 	if ( weaponStateCurrent == WEAPONSTATE_ROCKET ) {
 		return "rocket_idle";
 	}
-	
+
 	return idAI::GetIdleAnimName ( );
-}	
+}
 */
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -345,7 +345,7 @@ rvMonsterHeavyHoverTank::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterHeavyHoverTank::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -356,25 +356,25 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_BlasterAttack ( const statePa
 		case STAGE_INIT:
 			weaponStateIdeal = WEAPONSTATE_BLASTER;
 			if ( weaponStateIdeal != weaponStateCurrent  ) {
-				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_ChangeWeaponState", parms.blendFrames );				
-				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_BlasterAttack", parms.blendFrames );				
+				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_ChangeWeaponState", parms.blendFrames );
+				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_BlasterAttack", parms.blendFrames );
 				return SRESULT_DONE;
 			}
 			shots = gameLocal.random.RandomInt ( 8 ) + 4;
 			blasterAnimIndex = (blasterAnimIndex + 1) % 2;
 			PlayAnim ( ANIMCHANNEL_TORSO, va("blaster_%d_preshoot", blasterAnimIndex + 1 ), parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, va("blaster_%d_fire", blasterAnimIndex + 1 ), 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 ) {
@@ -384,14 +384,14 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_BlasterAttack ( const statePa
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -400,7 +400,7 @@ rvMonsterHeavyHoverTank::State_Torso_RocketAttack
 ================
 */
 stateResult_t rvMonsterHeavyHoverTank::State_Torso_RocketAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -411,20 +411,20 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_RocketAttack ( const statePar
 		case STAGE_INIT:
 			weaponStateIdeal = WEAPONSTATE_ROCKET;
 			if ( weaponStateIdeal != weaponStateCurrent  ) {
-				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_ChangeWeaponState", parms.blendFrames );				
-				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_RocketAttack", parms.blendFrames );				
+				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_ChangeWeaponState", parms.blendFrames );
+				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_RocketAttack", parms.blendFrames );
 				return SRESULT_DONE;
 			}
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}		
+	}
 
 	return SRESULT_ERROR;
 }
@@ -439,8 +439,8 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_ChangeWeaponState ( const sta
 		{ NULL, "blaster_to_rocket" },			// WEAPONSTATE_BLASTER
 		{ "rocket_to_blaster", NULL },			// WEAPONSTATE_ROCKET
 	};
-		
-	enum { 
+
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -449,11 +449,11 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_ChangeWeaponState ( const sta
 			// No anim for that transition?
 			if ( stateAnims [ weaponStateCurrent ] [ weaponStateIdeal ] == NULL ) {
 				return SRESULT_DONE;
-			}	
+			}
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, stateAnims [ weaponStateCurrent ] [ weaponStateIdeal ], parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				weaponStateCurrent = weaponStateIdeal;
@@ -461,7 +461,7 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_ChangeWeaponState ( const sta
 					case WEAPONSTATE_ROCKET:
 						animPrefix = "rocket";
 						break;
-					
+
 					default:
 						animPrefix = "";
 						break;
@@ -474,7 +474,7 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_ChangeWeaponState ( const sta
 }
 
 stateResult_t rvMonsterHeavyHoverTank::State_Torso_EvadeLeft ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -488,7 +488,7 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_EvadeLeft ( const stateParms_
 				PlayAnim ( ANIMCHANNEL_TORSO, "evade_left", parms.blendFrames );
 			}
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
@@ -499,7 +499,7 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_EvadeLeft ( const stateParms_
 }
 
 stateResult_t rvMonsterHeavyHoverTank::State_Torso_EvadeRight ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -513,7 +513,7 @@ stateResult_t rvMonsterHeavyHoverTank::State_Torso_EvadeRight ( const stateParms
 				PlayAnim ( ANIMCHANNEL_TORSO, "evade_right", parms.blendFrames );
 			}
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;

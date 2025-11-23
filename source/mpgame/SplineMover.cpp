@@ -38,7 +38,7 @@ bool splinePState_t::ShouldAccelerate() const {
 	} else if( !Sign(speed) ) {
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -202,7 +202,7 @@ void rvPhysics_Spline::Restore( idRestoreGame *savefile ) {
 	splineEntity.Restore( savefile );
 
 	savefile->ReadTrace( pushResults );
-	
+
 	savefile->ReadClipModel( clipModel );
 
 	accelDecelStateThread.Restore( savefile, this );
@@ -221,7 +221,7 @@ void rvPhysics_Spline::SetClipModel( idClipModel *model, const float density, in
 	if ( clipModel && clipModel != model && freeOld ) {
 		delete clipModel;
 	}
-	
+
 	clipModel = model;
 
 	LinkClip();
@@ -291,7 +291,7 @@ void rvPhysics_Spline::SetSpline( idCurve_Spline<idVec3>* spline ) {
 	}
 
 	this->spline = spline;
- 
+
 	splineLength = spline->GetLengthForTime( spline->GetTime(spline->GetNumValues() - 1) );
 	if( GetSpeed() < 0.0f ) {
 		current.dist = splineLength - current.dist;
@@ -390,7 +390,7 @@ bool rvPhysics_Spline::Evaluate( int timeStepMSec, int endTimeMSec ) {
 			current = previous;
 			Rest();
 			self->ProcessEvent( &EV_DoneMoving );
-			
+
 			if( gameLocal.program.GetReturnedBool() ) {
 				current.speed = 0.0f;
 				return false;
@@ -398,7 +398,7 @@ bool rvPhysics_Spline::Evaluate( int timeStepMSec, int endTimeMSec ) {
 				return true;
 			}
 		}
-	
+
 		float currentTime = splineEntity->GetSampledTime ( current.dist );
 		if (  currentTime ==  -1.0f ) {
 			currentTime = spline->GetTimeForLength( Min(current.dist, splineLength), 0.01f );
@@ -408,7 +408,7 @@ bool rvPhysics_Spline::Evaluate( int timeStepMSec, int endTimeMSec ) {
 		current.origin = spline->GetCurrentValue( currentTime );
 		current.localOrigin = current.origin;
 		current.localAxis = current.axis;
-	} else if( self->IsBound() ) {	
+	} else if( self->IsBound() ) {
 		self->GetMasterPosition( masterOrigin, masterAxis );
 		current.axis = current.localAxis * masterAxis;
 	    current.origin = masterOrigin + current.localOrigin * masterAxis;
@@ -1727,7 +1727,7 @@ void rvTramCar::SpawnOccupants( const char* partKey ) {
 		if( !kv->GetValue().Length() ) {
 			continue;
 		}
-		
+
 		occupant = (idAI*)SpawnPart( kv->GetValue().c_str(), partKey );
 		occupants.AddUnique( occupant );
 	}
@@ -1757,7 +1757,7 @@ idEntity* rvTramCar::SpawnPart( const char* partDefName, const char* subPartDefN
 	entityDef.SetVector( "origin", GetPhysics()->GetOrigin() + info->GetVector("spawn_offset") * GetPhysics()->GetAxis() );
 	entityDef.SetFloat( "angle", info->GetInt("spawn_facing_offset") + spawnArgs.GetFloat("angle") );
 	entityDef.Set( "bind", GetName() );
-	gameLocal.SpawnEntityDef( entityDef, &part ); 
+	gameLocal.SpawnEntityDef( entityDef, &part );
 
 	return part;
 }
@@ -2067,14 +2067,14 @@ idSplinePath* rvTramCar::FindSplineToTrack( idSplinePath* spline, const idStr& t
 		switch( ConvertToTrackNumber(trackInfo) - GetCurrentTrack() ) {
 			case LOOK_LEFT: {
 				if( !LookLeft(list) ) {
-					return target; 
+					return target;
 				}
 				break;
 			}
 
 			case LOOK_RIGHT: {
 				if( !LookRight(list) ) {
-					return target; 
+					return target;
 				}
 				break;
 			}
@@ -2422,7 +2422,7 @@ void rvTramCar::OperateRamp( const char* operation ) {
 	if( !operation || !operation[0] ) {
 		return;
 	}
-		
+
 	PlayAnim( ANIMCHANNEL_ALL, operation, 0 );
 
 	OperateRamp( operation, leftDoor );
@@ -2591,7 +2591,7 @@ stateResult_t rvTramCar::State_Idle( const stateParms_t& parms ) {
 		StartSound( "snd_speed_idle_tram", SND_CHANNEL_BODY2, 0, false, NULL );
 		return SRESULT_STAGE( parms.stage + 1 );
 	}
-	return SRESULT_WAIT; 
+	return SRESULT_WAIT;
 }
 
 /*
@@ -2634,7 +2634,7 @@ stateResult_t rvTramCar::State_ExcessiveSpeed( const stateParms_t& parms ) {
 
 	if( speedScale < 1.0f ) {
 		speedSoundEffectsStateThread.SetState( "NormalSpeed" );
-		return SRESULT_DONE;	
+		return SRESULT_DONE;
 	}
 
 	AttenuateTrackChannel( speedScale );
@@ -2985,7 +2985,7 @@ rvTramCar_Marine::Event_SetPlayerDamageEntity
 ================
 */
 void rvTramCar_Marine::Event_SetPlayerDamageEntity(float f)	{
-	
+
 	gameLocal.GetLocalPlayer()->SetDamageEntity( (f? this : NULL) );
 }
 
@@ -3012,7 +3012,7 @@ stateResult_t rvTramCar_Marine::State_Occupied( const stateParms_t& parms ) {
 	}
 
 	if( !PlayerIsInside() ) {
-		playerOccupationStateThread.SetState( "NotOccupied" );	
+		playerOccupationStateThread.SetState( "NotOccupied" );
 		//gameLocal.GetLocalPlayer()->SetDamageEntity( NULL );
 		fl.takedamage = false;
 		return SRESULT_DONE_WAIT;
@@ -3190,7 +3190,7 @@ bool rvTramCar_Strogg::TargetIsToLeft() {
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -3209,7 +3209,7 @@ bool rvTramCar_Strogg::TargetIsToRight() {
 			}
 		}
 	}
-	
+
 	return false;
 }
 

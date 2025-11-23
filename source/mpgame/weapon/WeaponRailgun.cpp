@@ -53,7 +53,7 @@ rvWeaponRailgun::Spawn
 ================
 */
 void rvWeaponRailgun::Spawn ( void ) {
-	SetState ( "Raise", 0 );	
+	SetState ( "Raise", 0 );
 }
 
 /*
@@ -110,14 +110,14 @@ void rvWeaponRailgun::Think ( void ) {
 		int ammo = AmmoInClip();
 		if ( ammo >= 0 ) {
 			zoomGui->SetStateInt( "player_ammo", ammo );
-		}			
+		}
 	}
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -137,7 +137,7 @@ stateResult_t rvWeaponRailgun::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( !AmmoAvailable ( ) ) {
@@ -149,17 +149,17 @@ stateResult_t rvWeaponRailgun::State_Idle( const stateParms_t& parms ) {
 			}
 			PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
-		case STAGE_WAIT:			
+
+		case STAGE_WAIT:
 			if ( wsfl.lowerWeapon ) {
 				StopSound( SND_CHANNEL_BODY2, false );
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
-			}		
+			}
 			if ( gameLocal.time > nextAttackTime && wsfl.attack && AmmoInClip ( ) ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
-			}  
+			}
 			// Auto reload?
 			if ( AutoReload() && !AmmoInClip ( ) && AmmoAvailable () ) {
 				SetState ( "reload", 2 );
@@ -167,7 +167,7 @@ stateResult_t rvWeaponRailgun::State_Idle( const stateParms_t& parms ) {
 			}
 			if ( wsfl.netReload || (wsfl.reload && AmmoInClip() < ClipSize() && AmmoAvailable()>AmmoInClip()) ) {
 				SetState ( "Reload", 4 );
-				return SRESULT_DONE;			
+				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
 	}
@@ -183,20 +183,20 @@ stateResult_t rvWeaponRailgun::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
+			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );
 			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:		
-			if ( ( gameLocal.isMultiplayer && gameLocal.time >= nextAttackTime ) || 
+
+		case STAGE_WAIT:
+			if ( ( gameLocal.isMultiplayer && gameLocal.time >= nextAttackTime ) ||
 				 ( !gameLocal.isMultiplayer && ( AnimDone ( ANIMCHANNEL_ALL, 2 ) ) ) ) {
 				SetState ( "Idle", 0 );
 				return SRESULT_DONE;
-			}		
+			}
 			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
@@ -212,7 +212,7 @@ stateResult_t rvWeaponRailgun::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.netReload ) {
@@ -220,11 +220,11 @@ stateResult_t rvWeaponRailgun::State_Reload ( const stateParms_t& parms ) {
 			} else {
 				NetReload ( );
 			}
-						
+
 			SetStatus ( WP_RELOAD );
 			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
 				AddToClip ( ClipSize() );
@@ -244,7 +244,7 @@ stateResult_t rvWeaponRailgun::State_Reload ( const stateParms_t& parms ) {
 /*
 ===============================================================================
 
-	Event 
+	Event
 
 ===============================================================================
 */

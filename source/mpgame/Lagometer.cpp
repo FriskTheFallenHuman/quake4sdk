@@ -52,8 +52,8 @@ void idLagometer::Update(int ahead, int dupe)
 {
 	frameIndex = (frameIndex + 1) % LAGOMETER_HISTORY;
 
-	aheadOfServer[frameIndex] = 2 * idMath::ClampInt(-10, 5, 
+	aheadOfServer[frameIndex] = 2 * idMath::ClampInt(-10, 5,
 									floorf( (float)ahead / net_clientLagOMeterResolution.GetInteger() ));
 
 	dupeUserCmds[frameIndex] = 2 * Min( 6, dupe );
-} 
+}

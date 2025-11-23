@@ -13,13 +13,13 @@ struct rvFreeMemoryBlock_s;
 
 //#define _DETECT_BLOCK_MERGE_PROBLEMS
 
-// Define some flags used in describing various properties of allocations 
+// Define some flags used in describing various properties of allocations
 // coming from this heap (these flags are passed into rvHeap::Init()).
 static const uint rvHeapFlagDefault				= 0;
 static const uint rvHeapFlagWriteCombine		= 0x0001;	// flag specified if the memory allocated from this heap is intended to have a write-combine cache policy
 static const uint rvHeapFlagNoCache				= 0x0002;	// flag specified if the memory allocated from this heap is intended to have a no cache policy
 
-// Define some limits used by each heap 
+// Define some limits used by each heap
 static const uint NUM_MEMORY_BLOCK_SIZE_BITS	= 27;
 static const uint NUM_TAG_BITS					= 5;
 
@@ -54,20 +54,20 @@ typedef struct freeLargePageRange_s
 }
 freeLargePageRange_t;
 
-class rvHeap 
+class rvHeap
 {
 public:
 	rvHeap( );											// constructor
 	~rvHeap( );											// destructor
 
-	void Init( rvHeapArena &heapArena, uint maxHeapSizeBytes, uint flags = rvHeapFlagDefault );	// initializes this heap for use within the given arena, and with the given size limit that it can grow to 
+	void Init( rvHeapArena &heapArena, uint maxHeapSizeBytes, uint flags = rvHeapFlagDefault );	// initializes this heap for use within the given arena, and with the given size limit that it can grow to
 	void Shutdown( );									// releases this heap from use
 
 	ID_INLINE bool IsInitialized( ) const;				// returns true if this heap is currently initialized, and not shutdown
-	
+
 	ID_INLINE void *Allocate( uint sizeBytes, int debugTag = 0 );	// allocate memory
 	ID_INLINE void *Allocate16( uint sizeBytes, int debugTag = 0 );	// allocate memory aligned on a 16-byte boundary
-	void Free( void *allocation );						// free memory 
+	void Free( void *allocation );						// free memory
 
 	int Msize( void *allocation );						// returns the size, in bytes, of the allocation at the given address (including header, alignment bytes, etc).
 
@@ -90,7 +90,7 @@ public:
 
 	ID_INLINE uint GetBytesAllocatedByTag( Mem_Alloc_Types_t allocType ) const;		// returns the number of bytes currently allocated from this heap with the given allocation tag (actual memory footprint of all active allocations including internal headers and alignment bytes)
 	ID_INLINE uint GetPeekBytesAllocatedByTag( Mem_Alloc_Types_t allocType ) const;	// returns the peek number of bytes allocated from this heap with the given allocation tag (actual memory footprint of all active allocations including internal headers and alignment bytes)
-	ID_INLINE int GetNumAllocationsByTag( Mem_Alloc_Types_t allocType ) const;		// returns the current number of allocation from this heap with the given allocation tag 
+	ID_INLINE int GetNumAllocationsByTag( Mem_Alloc_Types_t allocType ) const;		// returns the current number of allocation from this heap with the given allocation tag
 
 	ID_INLINE bool IsWriteCombine( ) const;				// returns true if memory allocated from this heap has a write-combine cache policy, false otherwise
 	ID_INLINE bool IsNoCache( ) const;					// returns true if memory allocated from this heap has a no-cache policy, false otherwise
@@ -98,7 +98,7 @@ public:
 	int SmallBlockCount() const { return NUM_SMALL_BLOCK_TABLE_ENTRIES; }
 	int GetSmallBlockFreeCount( int block ) const;
 	dword GetSmallBlockFreeSize( int block ) const;
-	
+
 	int GetLargeBlockFreeCount() const;
 	dword GetLargeBlockFreeSize() const;
 
@@ -116,7 +116,7 @@ protected:
 	CRITICAL_SECTION m_criticalSection;					// critical section associated with this heap
 
 	byte *m_baseAddress;								// base address of this heap (virtual)
-	byte *m_zeroLengthAllocPage;						// special page for zero-length allocations (remains uncommitted) 
+	byte *m_zeroLengthAllocPage;						// special page for zero-length allocations (remains uncommitted)
 	byte *m_heapStorageStart;							// address of the start of this heap's storage (just past page table)
 
 	rvFreeMemoryBlock_s *m_smallFreeBlocks[NUM_SMALL_BLOCK_TABLE_ENTRIES];	// table used to manage linked-lists of small free memory blocks
@@ -176,7 +176,7 @@ protected:
 	void AddFreeBlock( rvFreeMemoryBlock_s *freeBlock );	// adds the given free block to the small allocation table or large allocation list.
 	void RemoveFreeBlock( rvFreeMemoryBlock_s *freeBlock );	// removes the given block from the small allocation table or large allocation list.
 
-	void *PageCommit( uint numDesiredPages );				// commits the given number of contiguous pages to physical memory 
+	void *PageCommit( uint numDesiredPages );				// commits the given number of contiguous pages to physical memory
 	void PageUncommit( byte *pageAddress, uint numPages );	// uncommits the given range of contiguous pages back to physical memory
 
 	void RemoveFromSmallFreeRangeList( uint pageOffset, uint freeBlockPageCount );					// removes the given page range from the m_smallFreePageRangeLists[]
@@ -201,7 +201,7 @@ protected:
 };
 
 // IsInitialized
-// 
+//
 // returns: true if this heap is currently initialized, and not shutdown
 ID_INLINE bool rvHeap::IsInitialized( ) const
 {
@@ -209,7 +209,7 @@ ID_INLINE bool rvHeap::IsInitialized( ) const
 }
 
 // Allocate
-// 
+//
 // allocate memory
 void *rvHeap::Allocate( uint sizeBytes, int debugTag )
 {
@@ -249,7 +249,7 @@ ID_INLINE rvHeap *rvHeap::GetNext( )
 }
 
 // PushCurrent
-//  
+//
 // makes this heap the new top of stack for its associated arena, thus making it current.
 ID_INLINE void rvHeap::PushCurrent( )
 {
@@ -258,7 +258,7 @@ ID_INLINE void rvHeap::PushCurrent( )
 
 // PopCurrent
 //
-// pops this heap, or any other heap, from the top of stack of this heap's associated arena, 
+// pops this heap, or any other heap, from the top of stack of this heap's associated arena,
 // thus making its predecessor current
 ID_INLINE void rvHeap::PopCurrent( )
 {
@@ -274,7 +274,7 @@ ID_INLINE uint rvHeap::GetCommittedSize( ) const
 }
 
 // GetMaxSize
-// 
+//
 // returns the maximum size that this heap can grow to, in bytes
 ID_INLINE uint rvHeap::GetMaxSize( ) const
 {
@@ -283,8 +283,8 @@ ID_INLINE uint rvHeap::GetMaxSize( ) const
 
 // GetBytesAllocated
 //
-// returns: the number of bytes currently allocated from this heap 
-//			(actual memory footprint of all active allocations 
+// returns: the number of bytes currently allocated from this heap
+//			(actual memory footprint of all active allocations
 //			including internal headers and alignment bytes)
 //
 ID_INLINE uint rvHeap::GetBytesAllocated( ) const
@@ -312,8 +312,8 @@ ID_INLINE int rvHeap::GetNumAllocations( ) const
 
 // GetBytesAllocatedByTag
 //
-// returns: the number of bytes currently allocated from this heap with the given allocation tag 
-//			(actual memory footprint of all active allocations including internal headers and 
+// returns: the number of bytes currently allocated from this heap with the given allocation tag
+//			(actual memory footprint of all active allocations including internal headers and
 //			alignment bytes).
 ID_INLINE uint rvHeap::GetBytesAllocatedByTag( Mem_Alloc_Types_t allocType ) const
 {
@@ -323,7 +323,7 @@ ID_INLINE uint rvHeap::GetBytesAllocatedByTag( Mem_Alloc_Types_t allocType ) con
 
 // GetPeekBytesAllocatedByTag
 //
-// returns: the peek number of bytes allocated from this heap with the given allocation tag (actual 
+// returns: the peek number of bytes allocated from this heap with the given allocation tag (actual
 //			memory footprint of all active allocations including internal headers and alignment bytes)
 ID_INLINE uint rvHeap::GetPeekBytesAllocatedByTag( Mem_Alloc_Types_t allocType ) const
 {
@@ -332,8 +332,8 @@ ID_INLINE uint rvHeap::GetPeekBytesAllocatedByTag( Mem_Alloc_Types_t allocType )
 }
 
 // GetNumAllocationsByTag
-// 
-// returns: the current number of allocation from this heap with the given allocation tag 
+//
+// returns: the current number of allocation from this heap with the given allocation tag
 ID_INLINE int rvHeap::GetNumAllocationsByTag( Mem_Alloc_Types_t allocType ) const
 {
 	assert( allocType < MA_MAX );
@@ -365,7 +365,7 @@ ID_INLINE void rvHeap::SetArena( rvHeapArena *arena )
 }
 
 // SetNext
-// 
+//
 // sets the next heap associated with the same arena
 ID_INLINE void rvHeap::SetNext( rvHeap *next )
 {

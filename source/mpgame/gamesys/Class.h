@@ -79,7 +79,7 @@ public:																	\
 #else
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 #define CLASS_PROTOTYPE( nameofclass )									\
 private:																\
 	static	idTypeInfo						*Type;						\
@@ -99,7 +99,7 @@ CLASS_DECLARATION
 
 This macro must be included in the code to properly initialize variables
 used in type checking and run-time instanciation.  It also defines the list
-of events that the class responds to.  Take special care to ensure that the 
+of events that the class responds to.  Take special care to ensure that the
 proper superclass is indicated or the run-time type information will be
 incorrect.  Use this on concrete classes only.
 ================
@@ -204,7 +204,7 @@ public:																	\
 #else
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 #define ABSTRACT_PROTOTYPE( nameofclass )								\
 private:																\
 	static	idTypeInfo						*Type;						\
@@ -258,7 +258,7 @@ on abstract classes only.
 
 // RAVEN BEGIN
 // bdube: added states
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 #define ABSTRACT_DECLARATION( nameofsuperclass, nameofclass )										\
 	idTypeInfo *nameofclass::Type = NULL;															\
 	void nameofclass::RegisterClass( void ) {														\
@@ -313,7 +313,7 @@ public:
 	void						CallSpawn( void );
 	bool						IsType( const idTypeInfo &c ) const;
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	bool						IsType( const idTypeInfo *c ) const { return IsType(*c); }
 // RAVEN END
 	const char *				GetClassname( void ) const;
@@ -411,11 +411,11 @@ private:
 	static int					typeNumBits;
 	static int					memused;
 	static int					numobjects;
-	
+
 // RAVEN BEGIN
 // bdube: states
 	CLASS_STATES_PROTOTYPE(idClass);
-// RAVEN END	
+// RAVEN END
 };
 
 /***********************************************************************
@@ -448,12 +448,12 @@ public:
 
 	idHierarchy<idTypeInfo>		node;
 
-								idTypeInfo( const char *classname, const char *superclass, 
+								idTypeInfo( const char *classname, const char *superclass,
 												idEventFunc<idClass> *eventCallbacks, idClass *( *CreateInstance )( void ), void ( idClass::*Spawn )( void ),
 // RAVEN BEGIN
 // bdube: added
 												rvStateFunc<idClass> *stateCallbacks,
-// RAVEN END												
+// RAVEN END
 												void ( idClass::*Save )( idSaveGame *savefile ) const, void	( idClass::*Restore )( idRestoreGame *savefile ) );
 								~idTypeInfo();
 
@@ -462,7 +462,7 @@ public:
 
 	bool						IsType( const idTypeInfo &superclass ) const;
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	bool						IsType( const idTypeInfo *superclass ) const { return IsType(*superclass); }
 // RAVEN END
 	bool						RespondsTo( const idEventDef &ev ) const;
@@ -472,7 +472,7 @@ public:
 ================
 idTypeInfo::IsType
 
-Checks if the object's class is a subclass of the class defined by the 
+Checks if the object's class is a subclass of the class defined by the
 passed in idTypeInfo.
 ================
 */
@@ -499,7 +499,7 @@ ID_INLINE bool idTypeInfo::RespondsTo( const idEventDef &ev ) const {
 ================
 idClass::IsType
 
-Checks if the object's class is a subclass of the class defined by the 
+Checks if the object's class is a subclass of the class defined by the
 passed in idTypeInfo.
 ================
 */

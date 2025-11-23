@@ -32,7 +32,7 @@ public:
 
 	ID_INLINE void EnterArenaCriticalSection();			// enters this heap arena's critical section
 	ID_INLINE void ExitArenaCriticalSection();			// exits this heap arena's critical section
-	
+
 	void *Allocate( unsigned int sizeBytes, int debugTag = 0);		// allocates the given amount of memory from this arena
 	void *Allocate16( unsigned int sizeBytes, int debugTag = 0);	// allocates the given amount of memory from this arena, aligned on a 16-byte boundary
 	void Free( void *p );											// free memory back to this arena
@@ -51,7 +51,7 @@ protected:
 	rvHeap *m_heapStack[maxHeapStackDepth];		// stack of heap object pointers
 	CRITICAL_SECTION m_criticalSection;			// critical section associated with this heap
 	int m_tos;									// top of stack
-	rvHeap *m_heapList;							// linked-list of all the heaps that are actively associated with this arena 
+	rvHeap *m_heapList;							// linked-list of all the heaps that are actively associated with this arena
 	bool m_isInitialized;						// set to true if this rvHeapArena object is currently initialized and not released
 
 	void ResetValues( );						// resets the data members to their pre-initialized state
@@ -75,7 +75,7 @@ ID_INLINE bool rvHeapArena::IsInitialized( ) const
 // EnterArenaCriticalSection
 //
 // enters this heap arena's critical section
-ID_INLINE void rvHeapArena::EnterArenaCriticalSection() 
+ID_INLINE void rvHeapArena::EnterArenaCriticalSection()
 {
 	::EnterCriticalSection( &m_criticalSection );
 }
@@ -83,10 +83,10 @@ ID_INLINE void rvHeapArena::EnterArenaCriticalSection()
 // ExitArenaCriticalSection
 //
 // exits this heap arena's critical section
-ID_INLINE void rvHeapArena::ExitArenaCriticalSection() 
+ID_INLINE void rvHeapArena::ExitArenaCriticalSection()
 {
 	::LeaveCriticalSection( &m_criticalSection );
-}	
+}
 
 // IsStackFull
 //

@@ -27,7 +27,7 @@ public:
 	void				SetAxis				( const idMat3& axis );
 	const idVec3&		GetOrigin			( void );
 	const idMat3&		GetAxis				( void );
-	
+
 	void				Bind				( idEntity* master, jointHandle_t joint = INVALID_JOINT, bool isOrientated = false );
 	void				Unbind				( void );
 
@@ -63,7 +63,7 @@ protected:
 	void				UpdateSound			( void );
 
 public:
-	
+
 	int							entityNumber;
 
 	idLinkList<rvClientEntity>	spawnNode;
@@ -116,7 +116,7 @@ public:
 	type *					GetEntity		( void ) const;
 	int						GetEntityNum	( void ) const;
 
-	type *					operator->		( void ) const { return GetEntity ( ); }			
+	type *					operator->		( void ) const { return GetEntity ( ); }
 	operator				type*			( void ) const { return GetEntity ( ); }
 
 	void					Save			( idSaveGame *savefile ) const;
@@ -216,7 +216,7 @@ private:
 	jointHandle_t		pushedBindJoint;
 	idVec3				pushedOrigin;
 	idMat3				pushedAxis;
-	bool				pushedOrientated;		
+	bool				pushedOrientated;
 };
 
 #endif // __GAME_CLIENT_ENTITY_H__

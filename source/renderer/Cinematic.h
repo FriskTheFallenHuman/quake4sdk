@@ -5,7 +5,7 @@
 
 // RAVEN BEGIN
 //nrausch: I made some semi-heavy changes to this entire file
-//	- changed to idCinematic to use a private implementation which 
+//	- changed to idCinematic to use a private implementation which
 //	is determined & allocated when InitFromFile is called. A different
 //	PIMPL is used depending on if the video file is a roq or a wmv.
 //	This replaces the functionality that was in a few versions ago under the
@@ -43,10 +43,10 @@ typedef struct {
 
 class idCinematic {
 	idCinematic* PIMPL;
-	
+
 	// Store off the current mode - wmv or roq
 	// If the cinematic is in the same mode if InitFromFile
-	// is called again on it, this will prevent reallocation 
+	// is called again on it, this will prevent reallocation
 	// of the PIMPL
 	int mode;
 public:
@@ -61,7 +61,7 @@ public:
 	static idCinematic	*Alloc();
 
 						idCinematic();
-	
+
 	// frees all allocated memory
 	virtual				~idCinematic();
 
@@ -70,7 +70,7 @@ public:
 		SUPPORT_IMAGEFORTIME = 2,
 		SUPPORT_DEFAULT = SUPPORT_IMAGEFORTIME
 	};
-	
+
 	// returns false if it failed to load
 	// this interface can take either a wmv or roq file
 	// wmv will imply movie audio, unless there is no audio encoded in the stream
@@ -93,15 +93,15 @@ public:
 	// draw the current animation frame to screen
 	// will do nothing if InitFromFile was not called with SUPPORT_DRAW
 	virtual void		Draw();
-	
+
 	// Set draw position & size
 	// will do nothing if InitFromFile was not called with SUPPORT_DRAW
 	virtual void		SetScreenRect(int left, int right, int bottom, int top);
-	
+
 	// Get draw position & size
 	// will do nothing if InitFromFile was not called with SUPPORT_DRAW
 	virtual void		GetScreenRect(int &left, int &right, int &bottom, int &top);
-	
+
 	// True if the video is playing
 	// will do nothing if InitFromFile was not called with SUPPORT_DRAW
 	virtual bool		IsPlaying();
@@ -117,7 +117,7 @@ public:
 
 class idSndWindow : public idCinematic {
 public:
-	
+
 						idSndWindow() { showWaveform = false; }
 						~idSndWindow() {}
 

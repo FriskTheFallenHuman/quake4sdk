@@ -32,7 +32,7 @@ protected:
 	stateResult_t		State_Torso_BlasterAttack	( const stateParms_t& parms );
 
 	int					shieldHealth;
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 
@@ -70,7 +70,7 @@ void rvMonsterTurretFlying::Spawn ( void ) {
 
 	InitSpawnArgsVariables();
 	shots		= 0;
-	
+
 	actionBlasterAttack.Init ( spawnArgs,	"action_blasterAttack",	"Torso_BlasterAttack",	AIACTIONF_ATTACK );
 
 	//don't take damage until we open up
@@ -118,7 +118,7 @@ rvMonsterTurretFlying::Save
 void rvMonsterTurretFlying::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt ( shieldHealth );
 	savefile->WriteInt ( shots );
-	actionBlasterAttack.Save ( savefile ) ;	
+	actionBlasterAttack.Save ( savefile ) ;
 }
 
 /*
@@ -129,7 +129,7 @@ rvMonsterTurretFlying::Restore
 void rvMonsterTurretFlying::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt ( shieldHealth );
 	savefile->ReadInt ( shots );
-	actionBlasterAttack.Restore ( savefile ) ;	
+	actionBlasterAttack.Restore ( savefile ) ;
 
 	InitSpawnArgsVariables();
 }
@@ -137,7 +137,7 @@ void rvMonsterTurretFlying::Restore( idRestoreGame *savefile ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -149,7 +149,7 @@ CLASS_STATES_DECLARATION ( rvMonsterTurretFlying )
 
 	STATE ( "Torso_Idle",			rvMonsterTurretFlying::State_Torso_Idle )
 	STATE ( "Legs_Idle",			rvMonsterTurretFlying::State_Legs_Idle )
-	
+
 	STATE ( "Torso_BlasterAttack",	rvMonsterTurretFlying::State_Torso_BlasterAttack )
 END_CLASS_STATES
 
@@ -164,16 +164,16 @@ stateResult_t rvMonsterTurretFlying::State_Combat ( const stateParms_t& parms ) 
 		PostState ( "State_Fall", 0 );
 		return SRESULT_DONE;
 	}
-	
+
 	// Keep the enemy status up to date
 	if ( !enemy.ent || enemy.fl.dead ) {
 		enemy.fl.dead = false;
 		CheckForEnemy ( true );
 	}
-			
+
 	// try moving, if there was no movement run then just try and action instead
 	UpdateAction ( );
-		
+
 	return SRESULT_WAIT;
 }
 
@@ -197,27 +197,27 @@ stateResult_t rvMonsterTurretFlying::State_Fall ( const stateParms_t& parms ) {
 			PlayEffect ( "fx_droptrail", animator.GetJointHandle ( "origin" ), true );
 			PlayCycle ( ANIMCHANNEL_TORSO, "idle_closed", 0 );
 			return SRESULT_STAGE(STAGE_WAITIMPACT);
-			
+
 		case STAGE_WAITIMPACT:
 			if ( move.fl.onGround ) {
 				return SRESULT_STAGE(STAGE_IMPACT);
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_IMPACT:
 			StopSound ( SND_CHANNEL_VOICE, false );
 			StopEffect ( "fx_droptrail" );
 			PlayEffect ( "fx_landing", GetPhysics()->GetOrigin(), (-GetPhysics()->GetGravityNormal()).ToMat3() );
 			PlayAnim ( ANIMCHANNEL_TORSO, "open", 2 );
 			return SRESULT_STAGE ( STAGE_WAITOPEN );
-		
+
 		case STAGE_WAITOPEN:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_OPENED );
 			}
 			return SRESULT_WAIT;
-		
-		case STAGE_OPENED:		 
+
+		case STAGE_OPENED:
 			// Activate shield
 			fl.takedamage = true;
 			health += shieldHealth;
@@ -239,7 +239,7 @@ stateResult_t rvMonsterTurretFlying::State_Killed ( const stateParms_t& parms ) 
 	gameLocal.ProjectDecal( GetPhysics()->GetOrigin(), GetPhysics()->GetGravity(), 128.0f, true, 96.0f, "textures/decals/genericdamage" );
 	return idAI::State_Killed ( parms );
 }
-	
+
 /*
 ================
 rvMonsterTurretFlying::State_Torso_Idle
@@ -269,7 +269,7 @@ rvMonsterTurretFlying::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterTurretFlying::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_FIRE,
 		STAGE_WAIT,
@@ -279,7 +279,7 @@ stateResult_t rvMonsterTurretFlying::State_Torso_BlasterAttack ( const stateParm
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			shots = (minShots + gameLocal.random.RandomInt(maxShots-minShots+1)) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_FIRE );
-			
+
 		case STAGE_FIRE:
 			PlayAnim ( ANIMCHANNEL_TORSO, (shots&1)?"range_attack_top":"range_attack_bottom", 2 );
 			return SRESULT_STAGE ( STAGE_WAIT );
@@ -293,5 +293,5 @@ stateResult_t rvMonsterTurretFlying::State_Torso_BlasterAttack ( const stateParm
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

@@ -38,7 +38,7 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 // mekberg: added
 	idList<int> marineScores;
 	idList<int> stroggScores;
-	
+
 	int selectionIndex = -1;
 	int selectionTeam = -1;
 
@@ -56,7 +56,7 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 
 		for( int i = 0; i < gameLocal.mpGame.GetNumRankedPlayers(); i++ ) {
 			idPlayer* player = gameLocal.mpGame.GetRankedPlayer( i );
-			
+
 			if( player->team == TEAM_MARINE ) {
 				marinePlayers.Append( player );
 				marineScores.Append( gameLocal.mpGame.GetRankedPlayerScore( i ) );
@@ -68,13 +68,13 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 
 		for( int i = 0; i < MAX_CLIENTS; i++ ) {
 			if( i < marinePlayers.Num() ) {
-				statHud->SetStateString( va( "team_1_names_item_%d", i ), 
+				statHud->SetStateString( va( "team_1_names_item_%d", i ),
 										 va( "%s\t%s\t%s\t%d\t",	( player->IsFriend( marinePlayers[ i ] ) ? I_FRIEND_ENABLED : I_FRIEND_DISABLED ),
 																	( player->IsPlayerMuted( marinePlayers[ i ] ) ? I_VOICE_DISABLED : I_VOICE_ENABLED ),
-																	marinePlayers[ i ]->GetUserInfo()->GetString( "ui_name"), 
+																	marinePlayers[ i ]->GetUserInfo()->GetString( "ui_name"),
 																	marineScores[ i ] ) );
 
-				if( useSpectator ) { 
+				if( useSpectator ) {
 					if( marinePlayers[ i ]->entityNumber == player->spectator ) {
 						selectionTeam = TEAM_MARINE;
 						selectionIndex = i;
@@ -92,12 +92,12 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 
 		for( int i = 0; i < MAX_CLIENTS; i++ ) {
 			if( i < stroggPlayers.Num() ) {
-				statHud->SetStateString( va( "team_2_names_item_%d", i ), 
+				statHud->SetStateString( va( "team_2_names_item_%d", i ),
 					    				 va( "%s\t%s\t%s\t%d\t",	( player->IsFriend( stroggPlayers[ i ] ) ? I_FRIEND_ENABLED : I_FRIEND_DISABLED ),
 																	( player->IsPlayerMuted( stroggPlayers[ i ] ) ? I_VOICE_DISABLED : I_VOICE_ENABLED ),
-																	stroggPlayers[ i ]->GetUserInfo()->GetString( "ui_name"), 
+																	stroggPlayers[ i ]->GetUserInfo()->GetString( "ui_name"),
 																	stroggScores[ i ] ) );
-				if( useSpectator ) { 
+				if( useSpectator ) {
 					if( stroggPlayers[ i ]->entityNumber == player->spectator ) {
 						selectionTeam = TEAM_STROGG;
 						selectionIndex = i;
@@ -126,13 +126,13 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 
 		for( int i = 0; i < MAX_CLIENTS; i++ ) {
 			if( i < players.Num() ) {
-				statHud->SetStateString( va( "dm_names_item_%d", i ), 
+				statHud->SetStateString( va( "dm_names_item_%d", i ),
 					    				 va( "%s\t%s\t%s\t%d\t",	( player->IsFriend( players[ i ] ) ? I_FRIEND_ENABLED : I_FRIEND_DISABLED ),
 																	( player->IsPlayerMuted( players[ i ] ) ? I_VOICE_DISABLED : I_VOICE_ENABLED ),
-																	players[ i ]->GetUserInfo()->GetString( "ui_name"), 
-								
+																	players[ i ]->GetUserInfo()->GetString( "ui_name"),
+
 																	gameLocal.mpGame.GetScore( players[ i ] ) ) );
-				if( useSpectator ) { 
+				if( useSpectator ) {
 					if( players[ i ]->entityNumber == player->spectator ) {
 						selectionTeam = 0;
 						selectionIndex = i;
@@ -159,12 +159,12 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 
 	for( int i = 0; i < MAX_CLIENTS; i++ ) {
 		if( i < spectators.Num() ) {
-			statHud->SetStateString( va( "spec_names_item_%d", i ), 
+			statHud->SetStateString( va( "spec_names_item_%d", i ),
 									 va( "%s\t%s\t%s\t",	( player->IsFriend( spectators[ i ] ) ? I_FRIEND_ENABLED : I_FRIEND_DISABLED ),
 															( player->IsPlayerMuted( spectators[ i ] ) ? I_VOICE_DISABLED : I_VOICE_ENABLED ),
 															spectators[ i ]->GetUserInfo()->GetString( "ui_name") ) );
-			
-			if( useSpectator ) { 
+
+			if( useSpectator ) {
 				if( spectators[ i ]->entityNumber == player->spectator ) {
 					selectionTeam = TEAM_MAX;
 					selectionIndex = i;
@@ -177,7 +177,7 @@ void rvStatWindow::SetupStatWindow( idUserInterface* hud, bool useSpectator ) {
 			}
 		} else {
 			statHud->SetStateString( va( "spec_names_item_%d", i ), "" );
-			
+
 		}
 	}
 
@@ -341,7 +341,7 @@ int rvStatWindow::ClientNumFromSelection( int selectionIndex, int selectionTeam 
 				return -1;
 			}
 			clientNum = marinePlayers[ selectionIndex ]->entityNumber;
-			
+
 			// explicitly set the gui selection if we called in here not from a GUI
 			statHud->SetStateInt( "team_1_names_sel_0", selectionIndex );
 			statHud->SetStateString( "dm_names_sel_0", "-1" );

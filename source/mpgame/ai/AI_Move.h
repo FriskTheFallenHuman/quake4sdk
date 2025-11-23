@@ -3,8 +3,8 @@
 
 AI_Move.h
 
-This file has all movement related typedefs, enums, flags, and structures.  It 
-and its sister CPP file were split from AI.h and AI.cpp in order to prevent 
+This file has all movement related typedefs, enums, flags, and structures.  It
+and its sister CPP file were split from AI.h and AI.cpp in order to prevent
 merge conflicts and to make further changes to the system possible.
 
 ===============================================================================
@@ -63,7 +63,7 @@ typedef enum {
 	NUM_NONMOVING_COMMANDS,
 
 	MOVE_TO_ENEMY = NUM_NONMOVING_COMMANDS,
-	MOVE_TO_ENTITY, 
+	MOVE_TO_ENTITY,
 	MOVE_TO_ATTACK,
 	MOVE_TO_HELPER,
 	MOVE_TO_TETHER,
@@ -76,7 +76,7 @@ typedef enum {
 	MOVE_WANDER,
 	MOVE_RV_PLAYBACK,
 	NUM_MOVE_COMMANDS
-	
+
 } aiMoveCommand_t;
 
 /*
@@ -124,9 +124,9 @@ typedef struct obstaclePath_s {
 	idVec3				seekPos;					// seek position avoiding obstacles
 	idEntity *			firstObstacle;				// if != NULL the first obstacle along the path
 	idVec3				startPosOutsideObstacles;	// start position outside obstacles
-	idEntity *			startPosObstacle;			// if != NULL the obstacle containing the start position 
+	idEntity *			startPosObstacle;			// if != NULL the obstacle containing the start position
 	idVec3				seekPosOutsideObstacles;	// seek position outside obstacles
-	idEntity *			seekPosObstacle;			// if != NULL the obstacle containing the seek position 
+	idEntity *			seekPosObstacle;			// if != NULL the obstacle containing the seek position
 	// RAVEN BEGIN
 	// cdr: Alternate Routes Bug
 	idList<idEntity*>	allObstacles;
@@ -264,7 +264,7 @@ public:
 	aiMoveDir_t				idealDirection;			// Direction we want to be moving in
 	float					walkRange;				// Distance to target before starting to walk
 	float					walkTurn;				// Turn delta threshold for walking when turning
-	idVec2					followRange;			// Min and max range for AI following their leader	
+	idVec2					followRange;			// Min and max range for AI following their leader
 	idVec2					searchRange;			// Min and max range to use when searching for a new place to move to
 	float					attackPositionRange;	// Override for how close you have to get to your attackPosition before stopping
 	float					turnDelta;				// Amount to turn when turning

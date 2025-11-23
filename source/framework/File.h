@@ -54,7 +54,7 @@ public:
 	virtual int				VPrintf( const char *fmt, va_list arg ) = 0;
 							// Write a string with high precision floating point numbers to the file.
 	virtual int				WriteFloatString( const char *fmt, ... ) id_attribute((format(printf,2,3))) = 0;
-	
+
 	// Endian portable alternatives to Read(...)
 	virtual int				ReadInt( int &value ) = 0;
 	virtual int				ReadUnsignedInt( unsigned int &value ) = 0;
@@ -72,7 +72,7 @@ public:
 	virtual int				ReadVec6( idVec6 &vec ) = 0;
 	virtual int				ReadMat3( idMat3 &mat ) = 0;
 	virtual int				ReadBounds( idBounds &bounds ) = 0;
-	
+
 	// Endian portable alternatives to Write(...)
 	virtual int				WriteInt( const int value ) = 0;
 	virtual int				WriteUnsignedInt( const unsigned int value ) = 0;
@@ -131,7 +131,7 @@ public:
 	virtual int				VPrintf( const char *fmt, va_list arg );
 							// Write a string with high precision floating point numbers to the file.
 	virtual int				WriteFloatString( const char *fmt, ... ) id_attribute((format(printf,2,3)));
-	
+
 	// Endian portable alternatives to Read(...)
 	virtual int				ReadInt( int &value );
 	virtual int				ReadUnsignedInt( unsigned int &value );
@@ -149,7 +149,7 @@ public:
 	virtual int				ReadVec6( idVec6 &vec );
 	virtual int				ReadMat3( idMat3 &mat );
 	virtual int				ReadBounds( idBounds &bounds );
-	
+
 	// Endian portable alternatives to Write(...)
 	virtual int				WriteInt( const int value );
 	virtual int				WriteUnsignedInt( const unsigned int value );
@@ -292,7 +292,7 @@ public:
 	virtual int				Read( void *buffer, int len );
 							// Write data from the buffer to the file.
 	virtual int				Write( const void *buffer, int len );
-	
+
 	// Endian portable alternatives to Read(...)
 	virtual int				ReadInt( int &value );
 	virtual int				ReadUnsignedInt( unsigned int &value );
@@ -309,7 +309,7 @@ public:
 	virtual int				ReadVec5( idVec5 &vec );
 	virtual int				ReadVec6( idVec6 &vec );
 	virtual int				ReadMat3( idMat3 &mat );
-	
+
 	// Endian portable alternatives to Write(...)
 	virtual int				WriteInt( const int value );
 	virtual int				WriteUnsignedInt( const unsigned int value );

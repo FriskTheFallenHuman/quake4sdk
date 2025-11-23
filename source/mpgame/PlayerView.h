@@ -102,9 +102,9 @@ private:
 // RAVEN END
 
 	int					kickFinishTime;		// view kick will be stopped at this time
-	idAngles			kickAngles;			
+	idAngles			kickAngles;
 
-	bool				bfgVision;			// 
+	bool				bfgVision;			//
 
 	const idMaterial *	tunnelMaterial;		// health tunnel vision
 	const idMaterial *	armorMaterial;		// armor damage view effect

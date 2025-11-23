@@ -179,7 +179,7 @@ rvTramGate::Event_Touch
 ================
 */
 void rvTramGate::ClearAnim( int channel, int blendFrames ) {
-	GetAnimator()->Clear( channel, gameLocal.GetTime(), FRAME2MS(blendFrames) ); 
+	GetAnimator()->Clear( channel, gameLocal.GetTime(), FRAME2MS(blendFrames) );
 }
 
 /*
@@ -239,9 +239,9 @@ void rvTramGate::Event_Touch( idEntity* other, trace_t* trace ) {
 
 	if( IsClosed() ) {
 		OpenGate();
-		GetDoorMaster()->ProcessEvent( &EV_Touch, this, trace );	
+		GetDoorMaster()->ProcessEvent( &EV_Touch, this, trace );
 	} else if( IsOpen() ) {
-		GetDoorMaster()->ProcessEvent( &EV_Touch, this, trace );	
+		GetDoorMaster()->ProcessEvent( &EV_Touch, this, trace );
 	}
 }
 
@@ -254,7 +254,7 @@ void rvTramGate::Event_Activate( idEntity* activator ) {
 	if( !IsDoorMasterValid() ) {
 		return;
 	}
-	
+
 	// FIXME: may need some better logic than this.
 	const char* animName = (IsClosed()) ? "open" : (IsOpen()) ? "close" : NULL;
 	if( animName ) {

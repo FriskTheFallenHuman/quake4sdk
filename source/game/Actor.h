@@ -99,7 +99,7 @@ private:
 	idAnimator *			animator;
 	int						channel;
 	bool					disabled;
-	
+
 	rvStateThread			stateThread;
 };
 
@@ -151,7 +151,7 @@ public:
 							// script state management
 	void					ShutdownThreads		( void );
 	void					UpdateState			( void );
-	
+
 	virtual void			OnStateThreadClear ( const char *statename, int flags = 0 );
 	void					SetState		( const char *statename, int flags = 0 );
 	void					PostState		( const char* statename, int delay = 0, int flags = 0 );
@@ -223,7 +223,7 @@ public:
 
 	virtual void			Teleport( const idVec3 &origin, const idAngles &angles, idEntity *destination );
 
-	virtual	renderView_t *	GetRenderView();	
+	virtual	renderView_t *	GetRenderView();
 
 	// Animation
 	int						PlayAnim				( int channel, const char *name, int blendFrames );
@@ -233,14 +233,14 @@ public:
 	bool					HasAnim					( int channel, const char *name, bool forcePrefix = false );
 	int						GetAnim					( int channel, const char *name, bool forcePrefix = false );
 	bool					AnimDone				( int channel, int blendFrames );
-	
+
 	// animation state control
 	void					UpdateAnimState			( void );
 	void					SetAnimState			( int channel, const char *name, int blendFrames = 0, int flags = 0 );
 	void					PostAnimState			( int channel, const char *name, int blendFrames = 0, int delay = 0, int flags = 0 );
 	void					StopAnimState			( int channel );
 	bool					InAnimState				( int channel, const char *name );
-	
+
 	virtual void			SpawnGibs( const idVec3 &dir, const char *damageDefName );
 
 // RAVEN BEGIN
@@ -278,7 +278,7 @@ protected:
 	bool					inDamageEvent;		// hacky-ass bool to prevent us from starting a new EV_DamageOverTime in our ::Damage
 
 	bool					use_combat_bbox;	// whether to use the bounding box for combat collision
-	
+
 	// joint handles
 	jointHandle_t			leftEyeJoint;
 	jointHandle_t			rightEyeJoint;
@@ -303,7 +303,7 @@ protected:
 	idAnimState				headAnim;
 	idAnimState				torsoAnim;
 	idAnimState				legsAnim;
-	
+
 	rvStateThread			stateThread;
 
 	idEntityPtr<idAFAttachment>	head;				// safe pointer to attached head
@@ -327,7 +327,7 @@ protected:
 
 							// removes attachments with "remove" set for when character dies
 	void					RemoveAttachments( void );
-	
+
 // RAVEN BEGIN
 // bdube: vehicles
 	rvVehicleController		vehicleController;
@@ -348,7 +348,7 @@ protected:
 
 	// Add some dynamic externals for debugging
 	virtual void			GetDebugInfo		( debugInfoProc_t proc, void* userData );
-// RAVEN END	
+// RAVEN END
 
 protected:
 
@@ -358,7 +358,7 @@ protected:
 private:
 	void					SyncAnimChannels( int channel, int syncToChannel, int blendFrames );
 	void					FinishSetup( void );
-	
+
 	void					Event_EnableEyeFocus( void );
 	void					Event_DisableEyeFocus( void );
 	void					Event_EnableBlink( void );

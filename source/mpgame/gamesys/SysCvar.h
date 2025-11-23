@@ -277,7 +277,7 @@ extern idCVar	g_simpleItems;
 extern idCVar	g_showHud;
 // RAVEN BEGIN
 extern idCVar	g_crosshairColor;
-// cnicholson: Custom Crosshair 
+// cnicholson: Custom Crosshair
 extern idCVar	g_crosshairCustom;
 extern idCVar	g_crosshairCustomFile;
 extern idCVar	g_crosshairCharInfoFar;

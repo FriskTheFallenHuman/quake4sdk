@@ -328,13 +328,13 @@ idDict::GetAngles
 bool idDict::GetAngles( const char *key, const char *defaultString, idAngles &out ) const {
 	bool		found;
 	const char	*s;
-	
+
 	if ( !defaultString ) {
 		defaultString = "0 0 0";
 	}
 
 	found = GetString( key, defaultString, &s );
-	out.Zero();	
+	out.Zero();
 	sscanf( s, "%f %f %f", &out.pitch, &out.yaw, &out.roll );
 	return found;
 }
@@ -347,7 +347,7 @@ idDict::GetVector
 bool idDict::GetVector( const char *key, const char *defaultString, idVec3 &out ) const {
 	bool		found;
 	const char	*s;
-	
+
 	if ( !defaultString ) {
 		defaultString = "0 0 0";
 	}
@@ -366,7 +366,7 @@ idDict::GetVec2
 bool idDict::GetVec2( const char *key, const char *defaultString, idVec2 &out ) const {
 	bool		found;
 	const char	*s;
-	
+
 	if ( !defaultString ) {
 		defaultString = "0 0";
 	}
@@ -385,7 +385,7 @@ idDict::GetVec4
 bool idDict::GetVec4( const char *key, const char *defaultString, idVec4 &out ) const {
 	bool		found;
 	const char	*s;
-	
+
 	if ( !defaultString ) {
 		defaultString = "0 0 0 0";
 	}
@@ -404,7 +404,7 @@ idDict::GetMatrix
 bool idDict::GetMatrix( const char *key, const char *defaultString, idMat3 &out ) const {
 	const char	*s;
 	bool		found;
-		
+
 	if ( !defaultString ) {
 		defaultString = "1 0 0 0 1 0 0 0 1";
 	}
@@ -626,17 +626,17 @@ int idDict::WriteToMemory( void *mem, int maxSize ) const {
 		out+=sizeof(int);
 	}
 	bytesWritten+=sizeof(int);
-	
+
 	int l;
 	for ( int i = 0; i < args.Num(); i++ ) {
 		l = args[i].GetKey().Length();
 		++l;
-		
+
 		if ( bytesWritten + l > maxSize ) {
 			assert( 0 );
 			return bytesWritten;
 		}
-		
+
 		if ( out ) {
 			memcpy( out, args[i].GetKey().c_str(), l );
 		}
@@ -644,10 +644,10 @@ int idDict::WriteToMemory( void *mem, int maxSize ) const {
 			out+=l;
 		}
 		bytesWritten+=l;
-		
+
 		l = args[i].GetValue().Length();
 		++l;
-		
+
 		if ( bytesWritten + l > maxSize ) {
 			assert( 0 );
 			return bytesWritten;
@@ -672,15 +672,15 @@ idDict::ReadFromMemory
 */
 void idDict::ReadFromMemory( void *mem, int size ) {
 	int bytesRead = 0;
-	
+
 	char *in = (char*)mem;
 	int c = *((int*)in);
 	in+=sizeof(int);
-	
+
 	idStr key, val;
 
 	Clear();
-		
+
 	int readLen;
 	for ( int i = 0; i < c; i++ ) {
 		key = in;
@@ -691,7 +691,7 @@ void idDict::ReadFromMemory( void *mem, int size ) {
 			assert( 0 );
 			return;
 		}
-		
+
 		val = in;
 		readLen = val.Length() + 1;
 		in+=readLen;
@@ -700,7 +700,7 @@ void idDict::ReadFromMemory( void *mem, int size ) {
 			assert( 0 );
 			return;
 		}
-		
+
 		Set( key, val );
 	}
 }

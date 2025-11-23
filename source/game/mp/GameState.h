@@ -196,7 +196,7 @@ public:
 
 	void			SetAPOwner( int ap, int owner );
 	int				GetAPOwner( int ap );
-	
+
 	void			SetFlagState( int flag, flagState_t newState );
 	flagState_t		GetFlagState( int flag );
 	int				GetFlagCarrier( int flag );
@@ -209,7 +209,7 @@ public:
 	virtual	bool	IsType( gameStateType_t type ) const;
 	static gameStateType_t GetClassType( void );
 private:
-	flagStatus_t	flagStatus[ TEAM_MAX ];	
+	flagStatus_t	flagStatus[ TEAM_MAX ];
 	apState_t		apState[ MAX_AP ];
 
 	static gameStateType_t type;
@@ -313,7 +313,7 @@ public:
 	int				GetTourneyCount( void );
 	void			SetTourneyCount( int count ) { tourneyCount = count; }
 
-	void			UpdateTourneyBrackets( void ); 
+	void			UpdateTourneyBrackets( void );
 
 	void			UpdateTourneyHistory( int round );
 	int				FirstAvailableArena( void );
@@ -373,7 +373,7 @@ ID_INLINE idPlayer** rvTourneyGameState::GetArenaPlayers( int arena ) {
 
 ID_INLINE rvTourneyArena& rvTourneyGameState::GetArena( int arena ) {
 	assert( type == GS_TOURNEY );
-	return arenas[ arena ]; 
+	return arenas[ arena ];
 }
 
 ID_INLINE const char* rvTourneyGameState::GetRoundDescription( void ) {
@@ -450,7 +450,7 @@ public:
 
 	virtual void	GameStateChanged( void );
 	virtual void	Run( void );
-	
+
 	void			SetDZState( int dz, dzState_t newState );
 	dzState_t		GetDZState( int dz );
 
@@ -461,7 +461,7 @@ public:
 	int				dzShaderParm;
 
 private:
-	dzStatus_t		dzStatus[ TEAM_MAX ];	
+	dzStatus_t		dzStatus[ TEAM_MAX ];
 
 	void ControlZoneStateChanged( int team );
 };

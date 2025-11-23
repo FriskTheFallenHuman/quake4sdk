@@ -13,7 +13,7 @@ rvHealingStation::Think
 ================
 */
 void rvHealingStation::Think ( void ) {
-	// TODO: I'm guessing this is bad, but I wanted to get this in so that people could start 
+	// TODO: I'm guessing this is bad, but I wanted to get this in so that people could start
 	// placing it.  The entity decided to stop thinking and I didn't have time to debug it.
 	BecomeActive( TH_ALL );
 
@@ -38,7 +38,7 @@ void rvHealingStation::Spawn ( void ) {
 	nextHealTime	= 0;
 	healFrequency	= spawnArgs.GetInt( "heal_frequency", "24" );
 	healAmount		= spawnArgs.GetInt( "heal_amount", "1" );
-	
+
 	healthDispensed	= 0;
 	soundStartTime	= 0;
 	soundLength		= 0;
@@ -126,7 +126,7 @@ void rvHealingStation::CreateFrame ( float station_health ) {
 	int frame		= lerp;
 	lerp			= lerp - frame;
 	frameBlend_t frameBlend	= { 0, frame, frame + 1, 1.0f - lerp, lerp };
-	GetAnimator()->SetFrame( ANIMCHANNEL_ALL, dispenseAnim, frameBlend );	
+	GetAnimator()->SetFrame( ANIMCHANNEL_ALL, dispenseAnim, frameBlend );
 }
 
 /*
@@ -145,7 +145,7 @@ bool rvHealingStation::IsPlaying ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -160,7 +160,7 @@ rvHealingStation::State_Healing
 ================
 */
 stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 		STAGE_DISPENSE,
@@ -169,7 +169,7 @@ stateResult_t rvHealingStation::State_Healing ( const stateParms_t& parms ) {
 	if ( entityToHeal.IsValid() ) {
 		idPlayer* player = static_cast<idPlayer*>( entityToHeal.GetEntity( ) );
 		const int entityMaxHealth = player->inventory.maxHealth;
-		
+
 		if ( healthDispensed		< maxHealth &&			// and we have health to dispense...
 			 entityToHeal->health	< entityMaxHealth &&	// and the entity needs health.
 			 entityToHeal->health   > 0	)					// and he's still alive.

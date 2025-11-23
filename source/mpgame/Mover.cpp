@@ -5,7 +5,7 @@
 #include "Game_local.h"
 #include "ai/AI_Manager.h"
 
-// a mover will update any gui entities in it's target list with 
+// a mover will update any gui entities in it's target list with
 // a key/val pair of "mover" "state" from below.. guis can represent
 // realtime info like this
 // binary only
@@ -304,7 +304,7 @@ void idMover::Restore( idRestoreGame *savefile ) {
 // RAVEN BEGIN
 		PostEventMS( &EV_PostRestoreExt, 0, starttime, totaltime, accel, decel, useAngles );
 // RAVEN END
-	} 
+	}
 
 // RAVEN BEGIN
 // mekberg: added for attenuation and idle sound
@@ -368,7 +368,7 @@ void idMover::Spawn( void ) {
 
 	dest_position = GetPhysics()->GetOrigin();
 	dest_angles = GetPhysics()->GetAxis().ToAngles();
-	
+
 	physicsObj.SetSelf( this );
 // RAVEN BEGIN
 // mwhitlock: Dynamic memory consolidation
@@ -439,9 +439,9 @@ void idMover::Spawn( void ) {
 	if ( !idStr::Icmp( spawnArgs.GetString( "snd_idle", "" ), "" ) ) {
 		useIdleSound = false;
 	} else {
-		StartSound( "snd_idle", SND_CHANNEL_BODY, 0, false, NULL );	
+		StartSound( "snd_idle", SND_CHANNEL_BODY, 0, false, NULL );
 		useIdleSound = true;
-	}	
+	}
 
 	splineStateThread.SetName( "SplineStateThread" );
 	splineStateThread.SetOwner( this );
@@ -478,7 +478,7 @@ void idMover::Think( void ) {
 
 		speed = deltaPosition.Length( ) * ( 1000.0f / float( deltaTime ) );
 
-		if ( speed >= VECTOR_EPSILON ) {		
+		if ( speed >= VECTOR_EPSILON ) {
 			soundShaderParms_t parms = refSound.parms;
 
 			attenuation = 0.8f + 0.2f * ( speed / attenuationScale );
@@ -743,7 +743,7 @@ void idMover::Event_InitGuiTargets( void ) {
 /***********************************************************************
 
 	Translation control functions
-	
+
 ***********************************************************************/
 
 /*
@@ -809,7 +809,7 @@ void idMover::UpdateMoveSound( moveStage_t stage ) {
 		}
 		case DECELERATION_STAGE: {
 			if ( !useIdleSound ) {
-				StopSound( SND_CHANNEL_BODY, false );	
+				StopSound( SND_CHANNEL_BODY, false );
 			}
 			StartSound( "snd_decel", SND_CHANNEL_BODY2, 0, false, NULL );
 			break;
@@ -817,7 +817,7 @@ void idMover::UpdateMoveSound( moveStage_t stage ) {
 		case FINISHED_STAGE: {
 			if ( !useIdleSound ) {
 				StopSound( SND_CHANNEL_BODY, false );
-			}			
+			}
 			// cnicholson: added stop sound support
 			StartSound( "snd_stopped", SND_CHANNEL_BODY2, 0, false, NULL );
 			break;
@@ -959,7 +959,7 @@ void idMover::BeginMove( idThread *thread ) {
 /***********************************************************************
 
 	Rotation control functions
-	
+
 ***********************************************************************/
 
 /*
@@ -1164,8 +1164,8 @@ void idMover::BeginRotation( idThread *thread, bool stopwhendone ) {
 
 /***********************************************************************
 
-	Script callable routines  
-	
+	Script callable routines
+
 ***********************************************************************/
 
 /*
@@ -1700,8 +1700,8 @@ void idMover::Event_StartSpline( idEntity *splineEntity ) {
 		splineStateThread.SetState( "Accel" );
 	} else {
 		splineStateThread.SetState( "Linear" );
-	}	
-	
+	}
+
 	splineStartTime = gameLocal.time;
 // RAVEN END
 }
@@ -1840,7 +1840,7 @@ stateResult_t idMover::State_Accel( const stateParms_t& parms ) {
 			StartSound( "snd_accel", SND_CHANNEL_BODY2, 0, false, NULL );
 			if ( !useIdleSound ) {
 				StartSound( "snd_move", SND_CHANNEL_BODY, 0, false, NULL );
-			}			
+			}
 			return SRESULT_STAGE( STAGE_WAIT );
 
 		case STAGE_WAIT:
@@ -1869,7 +1869,7 @@ stateResult_t idMover::State_Linear( const stateParms_t& parms ) {
 			if ( !useIdleSound ) {
 				StartSound( "snd_move", SND_CHANNEL_BODY, 0, false, NULL );
 			}
-			return SRESULT_STAGE( STAGE_WAIT );			
+			return SRESULT_STAGE( STAGE_WAIT );
 
 		case STAGE_WAIT:
 			if ( gameLocal.time >= splineStartTime + move_time - deceltime ) {
@@ -1897,7 +1897,7 @@ stateResult_t idMover::State_Decel( const stateParms_t& parms ) {
 	switch( parms.stage ) {
 		case STAGE_INIT:
 			if ( !useIdleSound ) {
-				StopSound( SND_CHANNEL_BODY, false );	
+				StopSound( SND_CHANNEL_BODY, false );
 			}
 			StartSound( "snd_decel", SND_CHANNEL_BODY2, 0, false, NULL );
 			return SRESULT_STAGE( STAGE_WAIT );
@@ -2048,7 +2048,7 @@ idSplinePath::RemoveNullTargets
 void idSplinePath::ActivateTargets( idEntity *activator, const idList< idEntityPtr<idEntity> >& list ) const {
 	idEntity	*ent;
 	int			i, j;
-	
+
 	for( i = 0; i < list.Num(); i++ ) {
 		ent = list[ i ].GetEntity();
 		if ( !ent ) {
@@ -2057,7 +2057,7 @@ void idSplinePath::ActivateTargets( idEntity *activator, const idList< idEntityP
 		if ( ent->RespondsTo( EV_Activate ) || ent->HasSignal( SIG_TRIGGER ) ) {
 			ent->Signal( SIG_TRIGGER );
 			ent->ProcessEvent( &EV_Activate, activator );
-		} 		
+		}
 		for ( j = 0; j < MAX_RENDERENTITY_GUI; j++ ) {
 			if ( ent->GetRenderEntity()->gui[ j ] ) {
 				ent->GetRenderEntity()->gui[ j ]->Trigger( gameLocal.time );
@@ -2321,13 +2321,13 @@ idElevator::Event_Touch
 ===============
 */
 void idElevator::Event_Touch( idEntity *other, trace_t *trace ) {
-	
+
 	if ( gameLocal.time < lastTouchTime + 2000 ) {
 		return;
 	}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !other->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 		return;
@@ -2381,7 +2381,7 @@ void idElevator::Think( void ) {
 			for ( j = 0; j < MAX_RENDERENTITY_GUI && renderEntity.gui[j]; j++ ) {
 				InitStatusGui ( renderEntity.gui[j] );
 			}
-			
+
 			// Initialize all the status guis of the elevator
 			const idKeyValue* kv;
 			for ( kv = spawnArgs.MatchPrefix( "statusGui" ); kv; kv = spawnArgs.MatchPrefix( "statusGui", kv ) ) {
@@ -2410,7 +2410,7 @@ void idElevator::Think( void ) {
 				MoveToPos( fi->pos );
 			}
 		}
-	} 
+	}
 	RunPhysics();
 	Present();
 }
@@ -2470,7 +2470,7 @@ void idElevator::Event_TeamBlocked( idEntity *blockedEntity, idEntity *blockingE
 	if ( blockedEntity == this ) {
 		Event_GotoFloor( lastFloor );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	} else if ( blockedEntity && blockedEntity->IsType( idDoor::GetClassType() ) ) {
 // RAVEN END
 		// open the inner doors if one is blocked
@@ -2518,7 +2518,7 @@ bool idElevator::HandleSingleGuiCommand( idEntity *entityGui, idLexer *src ) {
 				newFloor = atoi( token );
 			}
 // RAVEN END
-			
+
 			if ( newFloor == currentFloor ) {
 				// open currentFloor and interior doors
 				OpenInnerDoor();
@@ -2655,7 +2655,7 @@ void idElevator::BeginMove( idThread *thread ) {
 
 	idMover::BeginMove( thread );
 
-	UpdateStatusGuis ( );	
+	UpdateStatusGuis ( );
 // RAVEN END
 }
 
@@ -2673,14 +2673,14 @@ idDoor *idElevator::GetDoor( const char *name ) {
 	if ( name && *name ) {
 		ent = gameLocal.FindEntity( name );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent && ent->IsType( idDoor::GetClassType() ) ) {
 // RAVEN END
 			doorEnt = static_cast<idDoor*>( ent );
 			master = doorEnt->GetMoveMaster();
 			if ( master != doorEnt ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 				if ( master->IsType( idDoor::GetClassType() ) ) {
 // RAVEN END
 					doorEnt = static_cast<idDoor*>( master );
@@ -2720,7 +2720,7 @@ void idElevator::DoneMoving( void ) {
 // RAVEN BEGIN
 // bdube: factored into a function
 	UpdateStatusGuis ( );
-// RAVEN END	
+// RAVEN END
 	if ( spawnArgs.GetInt( "pauseOnFloor", "-1" ) == currentFloor ) {
 		PostEventSec( &EV_PostArrival, spawnArgs.GetFloat( "pauseTime" ) );
 	} else {
@@ -2835,7 +2835,7 @@ void idElevator::InitStatusGui ( idUserInterface* gui ) {
 	int floor;
 	int topFloor;
 	int bottomFloor;
-	
+
 	topFloor = -1;
 	bottomFloor = 9999;
 	for ( floor = 0; floor < floorInfo.Num(); floor ++ ) {
@@ -2886,7 +2886,7 @@ idElevator::UpdateStatusGuis
 */
 void idElevator::UpdateStatusGuis ( void ) {
 	int j;
-	
+
 	// Treat the guis on the elevator as status guis
 	for ( j = 0; j < MAX_RENDERENTITY_GUI; j++ ) {
 		if ( renderEntity.gui[ j ] ) {
@@ -2998,7 +2998,7 @@ idMover_Binary::~idMover_Binary() {
 			}
 		}
 	}
-	
+
 	SetPhysics( NULL );
 }
 
@@ -3364,7 +3364,7 @@ void idMover_Binary::Event_MatchActivateTeam( moverState_t newstate, int time ) 
 ================
 idMover_Binary::BindTeam
 
-All entities in a mover team will be bound 
+All entities in a mover team will be bound
 ================
 */
 void idMover_Binary::BindTeam( idEntity *bindTo ) {
@@ -3494,7 +3494,7 @@ void idMover_Binary::Event_Reached_BinaryMover( void ) {
 
 		// fire targets
 		ActivateTargets( moveMaster->GetActivator() );
-		
+
 		SetBlocked ( false );
 	} else if ( moverState == MOVER_2TO1 ) {
 		// reached pos1
@@ -3629,7 +3629,7 @@ void idMover_Binary::GotoPosition2( void ) {
 idMover_Binary::UpdateBuddies
 ================
 */
-void idMover_Binary::UpdateBuddies( int val ) 
+void idMover_Binary::UpdateBuddies( int val )
 {
 // RAVEN BEGIN
 // jdischler: was using update status but that was never getting set anyway.
@@ -4188,7 +4188,7 @@ void idDoor::Spawn( void ) {
 	// if "start_open", reverse position 1 and 2
 	if ( start_open ) {
 		// post it after EV_SpawnBind
-		PostEventMS( &EV_Door_StartOpen, 1 );		
+		PostEventMS( &EV_Door_StartOpen, 1 );
 	}
 
 	if ( spawnArgs.GetFloat( "time", "1", time ) ) {
@@ -4239,7 +4239,7 @@ void idDoor::Spawn( void ) {
 
 	enabled = true;
 	blocked = false;
-	
+
 // RAVEN BEGIN
 // bdube: added
 	// Instruct ai to avoid standing in doors
@@ -4421,7 +4421,7 @@ void idDoor::Use( idEntity *other, idEntity *activator ) {
 		}
 		ActivateTargets( activator );
 		Use_BinaryMover( activator );
-	} 
+	}
 }
 
 /*
@@ -4525,7 +4525,7 @@ void idDoor::CalcTriggerBounds( float size, idBounds &bounds ) {
 
 	// find the bounds of everything on the team
 	bounds = GetPhysics()->GetAbsBounds();
-	
+
 	if ( health > 0 ) {
 		fl.takedamage = true;
 	}
@@ -4851,7 +4851,7 @@ void idDoor::Event_Touch( idEntity *other, trace_t *trace ) {
 		}
 	} else if ( sndTrigger && trace->c.id == sndTrigger->GetId() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( other && other->IsType( idPlayer::GetClassType() ) && IsLocked() && gameLocal.time > nextSndTriggerTime ) {
 // RAVEN END
 			StartSound( "snd_locked", SND_CHANNEL_ANY, 0, false, NULL );
@@ -4871,7 +4871,7 @@ void idDoor::Event_SpectatorTouch( idEntity *other, trace_t *trace ) {
 	idPlayer	*p;
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	assert( other && other->IsType( idPlayer::GetClassType() ) && static_cast< idPlayer * >( other )->spectating );
 // RAVEN END
 
@@ -4937,7 +4937,7 @@ void idDoor::Event_Activate( idEntity *activator ) {
 		renderEntity.shaderParms[ SHADERPARM_MODE ] = 1;
 		UpdateVisuals();
 
-		Use_BinaryMover( activator );	
+		Use_BinaryMover( activator );
 	}
 //RAVEN END
 }
@@ -5259,7 +5259,7 @@ idPlat::Event_Touch
 */
 void idPlat::Event_Touch( idEntity *other, trace_t *trace ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !other->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 		return;
@@ -5280,7 +5280,7 @@ void idPlat::Event_TeamBlocked( idEntity *blockedEntity, idEntity *blockingEntit
 	Use_BinaryMover( activatedBy.GetEntity() );
 
 	Use_BinaryMover( this );
-	
+
 }
 
 /*
@@ -5539,7 +5539,7 @@ void idRotater::Event_Activate( idEntity *activator ) {
 		spawnArgs.GetFloat( "speed", "100", speed );
 		spawnArgs.GetBool( "x_axis", "0", x_axis );
 		spawnArgs.GetBool( "y_axis", "0", y_axis );
-		
+
 		// set the axis of rotation
 		if ( x_axis ) {
 			delta[2] = speed;
@@ -5801,18 +5801,18 @@ rvConveyor::Spawn
 */
 void rvConveyor::Spawn ( void ) {
 	spawnArgs.GetFloat ( "speed", "100", moveSpeed );
-	
+
 	float angle;
 	if ( spawnArgs.GetFloat ( "moveAngle", "0", angle ) ) {
 		moveDir = idAngles ( 0, angle, 0 ).ToMat3()[0];
-	} else { 
+	} else {
 		moveDir = GetPhysics()->GetAxis()[0];
 	}
-	
+
 	GetPhysics()->SetContents ( CONTENTS_SOLID );
 	GetPhysics()->SetClipMask( MASK_SOLID );
 	GetPhysics()->EnableClip ( );
-	
+
 	BecomeActive ( TH_THINK|TH_PHYSICS );
 }
 
@@ -5822,24 +5822,24 @@ rvConveyor::Think
 ================
 */
 void rvConveyor::Think ( void ) {
-	trace_t pushResults;	
+	trace_t pushResults;
 	idVec3	newOrigin;
 	idMat3	newAxis;
 	idVec3	oldOrigin;
 	idMat3	oldAxis;
-	
+
 	oldOrigin = GetPhysics()->GetOrigin ( );
 	oldAxis   = GetPhysics()->GetAxis ( );
-	
+
 	newOrigin = GetPhysics()->GetOrigin() + moveDir * moveSpeed * MS2SEC ( gameLocal.GetMSec() );
 	newAxis   = oldAxis;
-	gameLocal.push.ClipPush( pushResults, this, 0, 
+	gameLocal.push.ClipPush( pushResults, this, 0,
 							 GetPhysics()->GetOrigin(), oldAxis, newOrigin, newAxis );
 
 	GetPhysics()->SetOrigin ( oldOrigin );
 	GetPhysics()->SetAxis ( oldAxis );
-	
-	idEntity::Think();	
+
+	idEntity::Think();
 }
 
 /*
@@ -5876,7 +5876,7 @@ void rvConveyor::Event_FindTargets ( void ) {
 	if ( !targets.Num ( ) || !targets[0] ) {
 		return;
 	}
-	
+
 	idEntity* path;
 	idEntity* next;
 	path = targets[0];
@@ -5928,22 +5928,22 @@ rvPusher::Think
 ================
 */
 void rvPusher::Think( void ) {
-	
+
 	// Total hack, but it gets the job done
 	BecomeActive( TH_ALL );
-	
+
 	if ( parent ) {
 		idAnimator *parentAnimator = parent->GetAnimator();
 		if ( parentAnimator ) {
-		
+
 			idStr jointName;
-			if ( spawnArgs.GetString( "attachedBone", "", jointName ) ) {	
+			if ( spawnArgs.GetString( "attachedBone", "", jointName ) ) {
 				bindJointHandle = parentAnimator->GetJointHandle( jointName );
-				
-				trace_t pushResults;	
+
+				trace_t pushResults;
 				idVec3	oldOrigin;
 				idMat3	oldAxis;
-				
+
 				oldOrigin = GetPhysics()->GetOrigin();
 				oldAxis = GetPhysics()->GetAxis();
 

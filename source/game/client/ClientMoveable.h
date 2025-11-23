@@ -14,17 +14,17 @@ public:
 
 	rvClientMoveable ( void );
 	virtual ~rvClientMoveable ( void );
-	
+
 	virtual void			Spawn			( void );
 	virtual void			Think			( void );
-	virtual idPhysics*		GetPhysics		( void ) const;	
+	virtual idPhysics*		GetPhysics		( void ) const;
 	virtual bool			Collide			( const trace_t &collision, const idVec3 &velocity );
-	
+
 	renderEntity_t*			GetRenderEntity	( void );
 
 	void					Save			( idSaveGame *savefile ) const;
 	void					Restore			( idRestoreGame *savefile );
-	
+
 	static void				SpawnClientMoveables ( idEntity* ent, const char *type, idList<rvClientMoveable *>* list );
 
 	virtual void			FreeEntityDef	( void );
@@ -39,18 +39,18 @@ protected:
 
 	rvClientEffectPtr		trailEffect;
 	float					trailAttenuateSpeed;
-		
+
 	idPhysics_RigidBody		physicsObj;
-	
+
 	int						bounceSoundTime;
 	const idSoundShader*	bounceSoundShader;
 	bool					mPlayBounceSoundOnce;
 	bool					mHasBounced;
 
 	idInterpolate<float>	scale;
-	
+
 private:
-	
+
 	void					Event_FadeOut			( int duration );
 	void					Event_ClearDepthHack	( void );
 };

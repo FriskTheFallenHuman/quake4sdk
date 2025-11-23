@@ -137,7 +137,7 @@ void idAASLocal::DrawAreaBounds( int areaNum ) const {
 	idVec3 points[8];
 	bool	drawn[8][8];
 	memset( drawn, false, sizeof( drawn ) );
-	
+
 	area->bounds.ToPoints( points );
 	for ( int p1 = 0; p1 < 8; p1++ ) {
 		for ( int p2 = 0; p2 < 8; p2++ ) {
@@ -228,7 +228,7 @@ void idAASLocal::ShowArea( const idVec3 &origin ) const {
 	if ( aas_goalArea.GetInteger() ) {
 		int travelTime;
 		idReachability *reach;
-		
+
 		RouteToGoalArea( areaNum, org, aas_goalArea.GetInteger(), TFL_WALK|TFL_AIR, travelTime, &reach );
 		gameLocal.Printf( "\rtt = %4d", travelTime );
 		if ( reach ) {
@@ -268,7 +268,7 @@ void idAASLocal::ShowArea( const idVec3 &origin ) const {
 	DrawArea( areaNum );
 }
 
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // rjohnson: added more debug drawing
 /*
 ============
@@ -325,7 +325,7 @@ void idAASLocal::DrawSimpleFace( int faceNum, bool visited ) const {
 		nextEdge = &file->GetEdge( abs( edgeNum ) );
 
 		// need to find the first common edge so that we go form the polygon in the right direction
-		if ( file->GetVertex( edge->vertexNum[0] ) == file->GetVertex( nextEdge->vertexNum[0] ) || 
+		if ( file->GetVertex( edge->vertexNum[0] ) == file->GetVertex( nextEdge->vertexNum[0] ) ||
 			file->GetVertex( edge->vertexNum[0] ) == file->GetVertex( nextEdge->vertexNum[1] ) ) {
 			sides[ 0 ] = file->GetVertex( edge->vertexNum[0] );
 		} else {
@@ -353,7 +353,7 @@ void idAASLocal::DrawSimpleFace( int faceNum, bool visited ) const {
 			color2[3] = 0.05f;
 		}
 		// RAVEN END
-		idWinding winding( sides, numEdges ); 
+		idWinding winding( sides, numEdges );
 		gameRenderWorld->DebugPolygon( color2, winding, 0, true );
 	}
 }
@@ -497,7 +497,7 @@ void idAASLocal::ShowProblemEdge( int edgeNum ) const {
 	forward.NormalVectors( left, down );
 
 	hullSize = ( ( file->GetSettings().boundingBoxes[0][1][0] - file->GetSettings().boundingBoxes[0][0][0] ) / 2.0f ) - 1.0f;	// assumption that x and y are the same size
-	hullHeight = ( file->GetSettings().boundingBoxes[0][1][2] - file->GetSettings().boundingBoxes[0][0][2] );	
+	hullHeight = ( file->GetSettings().boundingBoxes[0][1][2] - file->GetSettings().boundingBoxes[0][0][2] );
 
 	left *= hullSize;
 	forward *= hullSize;
@@ -585,7 +585,7 @@ void idAASLocal::ShowProblemArea( int areaNum ) const {
 // RAVEN END
 	for( i = 0; i < numListedEntities; i++) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( entityList[ i ]->IsType( idMoveable::GetClassType() )  ||
 			 entityList[ i ]->IsType( idMover::GetClassType() ) ||
 			 entityList[ i ]->IsType( idAI::GetClassType() ) ) {
@@ -885,7 +885,7 @@ void idAASLocal::Test( const idVec3 &origin ) {
 	if ( ( aas_showHideArea.GetInteger() > 0 ) && ( aas_showHideArea.GetInteger() < file->GetNumAreas() ) ) {
 		ShowHideArea( origin, aas_showHideArea.GetInteger() );
 	}
-// RAVEN BEGIN 
+// RAVEN BEGIN
 // rjohnson: added more debug drawing
 	if ( aas_showAreas.GetInteger() == 1 ) {
 		ShowArea( origin );

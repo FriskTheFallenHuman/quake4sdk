@@ -215,13 +215,13 @@ idAFConstraint::Save
 void idAFConstraint::Save( idSaveGame *saveFile ) const {
 	saveFile->WriteInt( type );
 	saveFile->WriteString ( name );		// cnicholson: Added unsaved var
-	// TOSAVE: idAFBody *				body1;		
-	// TOSAVE: idAFBody *				body2;		
-	// TOSAVE: idPhysics_AF *			physics;	
+	// TOSAVE: idAFBody *				body1;
+	// TOSAVE: idAFBody *				body2;
+	// TOSAVE: idPhysics_AF *			physics;
 
 	// TOSAVE: idMatX					J1, J2;
-	// TOSAVE: idVecX					c1, c2;		
-	// TOSAVE: idVecX					lo, hi, e;	
+	// TOSAVE: idVecX					c1, c2;
+	// TOSAVE: idVecX					lo, hi, e;
 	// TOSAVE: idAFConstraint *			boxConstraint;
 	for (int i=0; i<6; ++i) {			// cnicholson: Added unsaved var
         saveFile->WriteInt ( boxIndex[i] );
@@ -232,7 +232,7 @@ void idAFConstraint::Save( idSaveGame *saveFile ) const {
 	// TOSAVE: idVecX					s;
 	// TOSAVE: idVecX					lm;
 	saveFile->WriteInt ( firstIndex );  // cnicholson: Added unsaved var
-	
+
 	saveFile->Write( &fl, sizeof( fl ));// cnicholson: Added unsaved var
 }
 
@@ -4352,13 +4352,13 @@ void idAFBody::Save( idSaveGame *saveFile ) {
 	saveFile->WriteMat3( atRestAxis );
 
 	// TOSAVE: idMatX					inverseWorldSpatialInerti
-	// TOSAVE: idMatX					I, invI;				
-	// TOSAVE: idMatX					J;						
-	// TOSAVE: idVecX					s;						
-	// TOSAVE: idVecX					totalForce;				
-	// TOSAVE: idVecX					auxForce;				
-	// TOSAVE: idVecX					acceleration;			
-	// TOSAVE: float *					response;				
+	// TOSAVE: idMatX					I, invI;
+	// TOSAVE: idMatX					J;
+	// TOSAVE: idVecX					s;
+	// TOSAVE: idVecX					totalForce;
+	// TOSAVE: idVecX					auxForce;
+	// TOSAVE: idVecX					acceleration;
+	// TOSAVE: float *					response;
 	// TOSAVE: int *					responseIndex;
 	saveFile->WriteInt( numResponses );				// cnicholson: Added unsaved var
 	saveFile->WriteInt( maxAuxiliaryIndex );		// cnicholson: Added unsaved var
@@ -5324,7 +5324,7 @@ void idPhysics_AF::Evolve( float timeStep ) {
 	idVec6 force;
 	idRotation rotation;
 	float vSqr, maxLinearVelocity, maxAngularVelocity;
-	
+
 	maxLinearVelocity = af_maxLinearVelocity.GetFloat() / timeStep;
 	maxAngularVelocity = af_maxAngularVelocity.GetFloat() / timeStep;
 
@@ -6770,12 +6770,12 @@ void idPhysics_AF::Save( idSaveGame *saveFile ) const {
 		constraints[i]->Save( saveFile );
 	}
 
-	// TOSAVE: idList<idAFConstraint *>primaryConstraints;				
-	// TOSAVE: idList<idAFConstraint *>auxiliaryConstraints;			
-	// TOSAVE: idList<idAFConstraint *>frameConstraints;				
-	// TOSAVE: idList<idAFConstraint_Contact *>contactConstraints;		
-	// TOSAVE: idList<int>				contactBodies;					
-	// TOSAVE: idList<AFCollision_t>	collisions;						
+	// TOSAVE: idList<idAFConstraint *>primaryConstraints;
+	// TOSAVE: idList<idAFConstraint *>auxiliaryConstraints;
+	// TOSAVE: idList<idAFConstraint *>frameConstraints;
+	// TOSAVE: idList<idAFConstraint_Contact *>contactConstraints;
+	// TOSAVE: idList<int>				contactBodies;
+	// TOSAVE: idList<AFCollision_t>	collisions;
 
 	saveFile->WriteBool( changedAF );
 
@@ -6827,8 +6827,8 @@ void idPhysics_AF::Save( idSaveGame *saveFile ) const {
 	idPhysics_AF_SavePState( saveFile, current );
 	idPhysics_AF_SavePState( saveFile, saved );
 
-	// TOSAVE: idAFBody *				masterBody;		
-	// TOSAVE: idLCP *					lcp;			
+	// TOSAVE: idAFBody *				masterBody;
+	// TOSAVE: idLCP *					lcp;
 }
 
 /*

@@ -129,7 +129,7 @@ void idAI::Event_IsMoving ( void )															{ idThread::ReturnFloat ( move.
 CLASS_DECLARATION( idActor, idAI )
 	EVENT( EV_Activate,							idAI::Event_Activate )
 	EVENT( EV_Touch,							idAI::Event_Touch )
-	
+
 	// Enable / Disable
 	EVENT( AI_EnableClip,						idAI::Event_EnableClip )
 	EVENT( AI_DisableClip,						idAI::Event_DisableClip )
@@ -159,7 +159,7 @@ CLASS_DECLARATION( idActor, idAI )
 	EVENT( AI_ScriptedStop,						idAI::Event_ScriptedStop )
 	EVENT( AI_ScriptedJumpDown,					idAI::Event_ScriptedJumpDown )
 
-	// Get / Set 
+	// Get / Set
 	EVENT( AI_SetTalkState,						idAI::Event_SetTalkState )
 	EVENT( AI_SetLeader,						idAI::Event_SetLeader )
 	EVENT( AI_GetLeader,						idAI::Event_GetLeader )
@@ -170,7 +170,7 @@ CLASS_DECLARATION( idActor, idAI )
 	EVENT( AI_SetScript,						idAI::Event_SetScript )
 	EVENT( AI_SetMoveSpeed,						idAI::Event_SetMoveSpeed )
 	EVENT( AI_SetPassivePrefix,					idAI::Event_SetPassivePrefix )
-	
+
 	// Misc
 	EVENT( AI_Attack,							idAI::Event_Attack )
 	EVENT( AI_AttackMelee,						idAI::Event_AttackMelee )
@@ -243,7 +243,7 @@ void idAI::Event_TestAnimMoveTowardEnemy( const char *animname ) {
 	float			yaw;
 	idVec3			delta;
 	idEntity		*enemyEnt;
-	
+
 	enemyEnt = enemy.ent;
 	if ( !enemyEnt ) {
 		idThread::ReturnInt( false );
@@ -445,7 +445,7 @@ void idAI::Event_DisableAFPush( void ) {
 idAI::Event_EnableDamage
 =====================
 */
-void idAI::Event_EnableDamage ( void ) { 
+void idAI::Event_EnableDamage ( void ) {
 	OverrideFlag ( AIFLAGOVERRIDE_DAMAGE, true );
 }
 
@@ -454,7 +454,7 @@ void idAI::Event_EnableDamage ( void ) {
 idAI::Event_DisableDamage
 =====================
 */
-void idAI::Event_DisableDamage ( void ) { 
+void idAI::Event_DisableDamage ( void ) {
 	OverrideFlag ( AIFLAGOVERRIDE_DAMAGE, false );
 }
 
@@ -576,7 +576,7 @@ void idAI::Event_ThrowMoveable( void ) {
 
 	for ( ent = GetNextTeamEntity(); ent != NULL; ent = ent->GetNextTeamEntity() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->GetBindMaster() == this && ent->IsType( idMoveable::GetClassType() ) ) {
 // RAVEN END
 			moveable = ent;
@@ -600,7 +600,7 @@ void idAI::Event_ThrowAF( void ) {
 
 	for ( ent = GetNextTeamEntity(); ent != NULL; ent = ent->GetNextTeamEntity() ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->GetBindMaster() == this && ent->IsType( idAFEntity_Base::GetClassType() ) ) {
 // RAVEN END
 			af = ent;
@@ -692,7 +692,7 @@ void idAI::Event_FindActorsInBounds( const idVec3 &mins, const idVec3 &maxs ) {
 	for( i = 0; i < numListedEntities; i++ ) {
 		ent = entityList[ i ];
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent != this && !ent->IsHidden() && ( ent->health > 0 ) && ent->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 			idThread::ReturnEntity( ent );
@@ -718,9 +718,9 @@ void idAI::Event_ClosestReachableEnemyOfEntity( idEntity *team_mate ) {
 	int		areaNum;
 	int		enemyAreaNum;
 	aasPath_t path;
-	
+
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !team_mate->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 		gameLocal.Error( "Entity '%s' is not an AI character or player", team_mate->GetName() );
@@ -762,7 +762,7 @@ void idAI::Event_EntityInAttackCone( idEntity *ent ) {
 	idVec3	delta;
 	float	yaw;
 	float	relYaw;
-	
+
 	if ( !ent ) {
 		idThread::ReturnInt( false );
 		return;
@@ -829,7 +829,7 @@ void idAI::Event_CanReachEntity( idEntity *ent ) {
 			return;
 		}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->IsType( idActor::GetClassType() ) && static_cast<idActor *>( ent )->OnLadder() ) {
 // RAVEN END
 			idThread::ReturnInt( false );
@@ -915,7 +915,7 @@ void idAI::Event_GetReachableEntityPosition( idEntity *ent ) {
 			return;
 		}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->IsType( idActor::GetClassType() ) && static_cast<idActor *>( ent )->OnLadder() ) {
 // RAVEN END
 			idThread::ReturnInt( false );
@@ -1034,12 +1034,12 @@ void idAI::Event_SetMoveSpeed ( int speed ) {
 			move.fl.noRun = false;
 			move.fl.noWalk = false;
 			break;
-			
+
 		case AIMOVESPEED_RUN:
 			move.fl.noRun = false;
 			move.fl.noWalk = true;
 			break;
-			
+
 		case AIMOVESPEED_WALK:
 			move.fl.noRun = true;
 			move.fl.noWalk = false;
@@ -1061,8 +1061,8 @@ void idAI::Event_SetPassivePrefix ( const char* prefix ) {
 idAI::Event_Attack
 ================
 */
-void idAI::Event_Attack ( const char* attackName, const char* jointName ) { 
-	Attack ( attackName, animator.GetJointHandle ( jointName ), enemy.ent ); // , physicsObj.GetPushedLinearVelocity ( ) ); 
+void idAI::Event_Attack ( const char* attackName, const char* jointName ) {
+	Attack ( attackName, animator.GetJointHandle ( jointName ), enemy.ent ); // , physicsObj.GetPushedLinearVelocity ( ) );
 }
 
 /*
@@ -1070,13 +1070,13 @@ void idAI::Event_Attack ( const char* attackName, const char* jointName ) {
 idAI::Event_AttackMelee
 ================
 */
-void idAI::Event_AttackMelee( const char* meleeName ) { 
+void idAI::Event_AttackMelee( const char* meleeName ) {
 	const idDict* meleeDict;
 	meleeDict = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( va("def_attack_%s", meleeName ) ), false );
 	if ( !meleeDict ) {
 		gameLocal.Error ( "missing meleeDef '%s' for ai entity '%s'", meleeName, GetName() );
 	}
-	AttackMelee ( meleeName, meleeDict ); 
+	AttackMelee ( meleeName, meleeDict );
 }
 
 /*
@@ -1084,7 +1084,7 @@ void idAI::Event_AttackMelee( const char* meleeName ) {
 idAI::Event_ScriptedJumpDown
 ================
 */
-void idAI::Event_ScriptedJumpDown( float yaw ) { 
+void idAI::Event_ScriptedJumpDown( float yaw ) {
 	if ( animator.HasAnim( "jumpdown_start" ) )
 	{
 		aifl.scripted = true;
@@ -1107,9 +1107,9 @@ void idAI::Event_FindEnemy( float distSqr )	{
 idAI::Event_SetKey
 ================
 */
-void idAI::Event_SetKey( const char *key, const char *value ) {	
+void idAI::Event_SetKey( const char *key, const char *value ) {
 	spawnArgs.Set( key, value );
-	
+
 	OnSetKey ( key, value );
 }
 

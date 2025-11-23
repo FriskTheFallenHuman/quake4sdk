@@ -129,7 +129,7 @@ void rvAASFindGoalForAttack::Init ( void ) {
 	int	numPVSAreas;
 	numPVSAreas = gameLocal.pvs.GetPVSAreas( owner->enemy.ent->GetPhysics()->GetAbsBounds(), PVSAreas, idEntity::MAX_PVS_AREAS );
 	targetPVS	= gameLocal.pvs.SetupCurrentPVS( PVSAreas, numPVSAreas );
-	
+
 	cachedGoals.SetGranularity ( 1024 );
 }
 
@@ -172,7 +172,7 @@ rvAASFindGoalForAttack::TestPoint
 */
 bool rvAASFindGoalForAttack::TestPoint ( class idAAS *aas, const idVec3& point, const float zAllow ) {
 	float dist;
-	
+
 	idVec3 localPoint = point;
 	float bestZ = owner->enemy.ent->GetPhysics()->GetOrigin().z;
 	if ( bestZ > localPoint.z ) {
@@ -204,11 +204,11 @@ bool rvAASFindGoalForAttack::TestPoint ( class idAAS *aas, const idVec3& point, 
 			return false;
 		}
 	}
-	
+
 	aasGoal_t& goal = cachedGoals.Alloc ( );
 	goal.areaNum = cachedAreaNum;
 	goal.origin  = localPoint;
-	
+
 	return false;
 }
 
@@ -219,12 +219,12 @@ rvAASFindGoalForAttack::TestCachedGoal
 */
 bool rvAASFindGoalForAttack::TestCachedGoal ( int index ) {
 	const aasGoal_t& goal = cachedGoals[index];
-	
+
 	// Out of attack range?
 	float dist = (goal.origin - owner->enemy.ent->GetPhysics()->GetOrigin ( ) ).LengthFast ( );
 	if ( dist < owner->combat.attackRange[0] || dist > owner->combat.attackRange[1] ) {
 		return false;
-	}	
+	}
 
 	// Someone already there?
 	if ( !aiManager.ValidateDestination ( owner, goal.origin, true ) ) {
@@ -246,9 +246,9 @@ rvAASFindGoalForAttack::TestCachedPoints
 */
 bool rvAASFindGoalForAttack::TestCachedGoals ( int count, aasGoal_t& goal ) {
 	int i;
-	
+
 	goal.areaNum = 0;
-	
+
 	// Test as many points as we are allowed to test
 	for ( i = 0; i < count && cachedIndex < cachedGoals.Num(); cachedIndex ++, i ++ ) {
 		// Retest simple checks
@@ -257,7 +257,7 @@ bool rvAASFindGoalForAttack::TestCachedGoals ( int count, aasGoal_t& goal ) {
 			return true;
 		}
 	}
-	
+
 	return !(cachedIndex >= cachedGoals.Num());
 }
 
@@ -265,7 +265,7 @@ bool rvAASFindGoalForAttack::TestCachedGoals ( int count, aasGoal_t& goal ) {
 ===============================================================================
 
 rvAASFindGoalForTether
-	
+
 Find a goal to move to that is within the given tether.
 
 ===============================================================================
@@ -317,8 +317,8 @@ rvAASFindGoalForTether::TestPoint
 bool rvAASFindGoalForTether::TestPoint ( class idAAS* aas, const idVec3& point, const float zAllow ) {
 	if ( !tether ) {
 		return false;
-	}	
-	
+	}
+
 	idVec3 localPoint = point;
 	float bestZ = tether->GetPhysics()->GetOrigin().z;
 	if ( bestZ > localPoint.z )	{
@@ -331,10 +331,10 @@ bool rvAASFindGoalForTether::TestPoint ( class idAAS* aas, const idVec3& point, 
 	if ( !tether->ValidateDestination ( owner, localPoint ) ) {
 		return false;
 	}
-	
+
 	if ( !aiManager.ValidateDestination ( owner, localPoint ) ) {
 		return false;
 	}
-	
+
 	return true;
 }

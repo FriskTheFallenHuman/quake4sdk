@@ -28,18 +28,18 @@ public:
 	rvVehicle*		GetVehicle			( void ) const;
 	idActor*		GetDriver			( void ) const;
 	int				GetPosition			( void ) const;
-	
+
 	void			SetInput			( const usercmd_t& cmd, const idAngles &newAngles );
 	void			GetInput			( usercmd_t& cmd, idAngles &newAngles ) const;
-	
+
 	idUserInterface* GetHud				( void );
 	const idUserInterface* GetHud		( void ) const;
 	void			DrawHUD				( void );
 	void			UpdateCursorGUI		( idUserInterface* ui );
-	
+
 	void			StartRadioChatter	( void );
 	void			StopRadioChatter	( void );
-	
+
 	void			Give				( const char* statname, const char* value );
 	void			GetEyePosition		( idVec3& origin, idMat3& axis ) const;
 	void			GetDriverPosition	( idVec3& origin, idMat3& axis ) const;
@@ -48,7 +48,7 @@ public:
 
 	void			WriteToSnapshot		( idBitMsgDelta &msg ) const;
 	void			ReadFromSnapshot	( const idBitMsgDelta &msg );
-		
+
 	void			SelectWeapon		( int weapon );
 
 protected:

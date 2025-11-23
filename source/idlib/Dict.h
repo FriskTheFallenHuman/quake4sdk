@@ -79,7 +79,7 @@ public:
 	void				SetVec4( const char *key, const idVec4 &val );
 	void				SetAngles( const char *key, const idAngles &val );
 	void				SetMatrix( const char *key, const idMat3 &val );
-	
+
 						// these return default values of 0.0, 0 and false
 	const char *		GetString( const char *key, const char *defaultString = "" ) const;
 	float				GetFloat( const char *key, const char *defaultString = "0" ) const;

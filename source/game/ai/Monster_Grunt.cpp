@@ -10,11 +10,11 @@ public:
 	CLASS_PROTOTYPE( rvMonsterGrunt );
 
 	rvMonsterGrunt ( void );
-	
+
 	void				Spawn					( void );
 	void				Save					( idSaveGame *savefile ) const;
 	void				Restore					( idRestoreGame *savefile );
-	
+
 	virtual void		AdjustHealthByDamage	( int damage );
 
 protected:
@@ -34,7 +34,7 @@ private:
 
 	void				RageStart			( void );
 	void				RageStop			( void );
-	
+
 	// Torso States
 	stateResult_t		State_Torso_Enrage		( const stateParms_t& parms );
 	stateResult_t		State_Torso_Pain		( const stateParms_t& parms );
@@ -71,7 +71,7 @@ void rvMonsterGrunt::Spawn ( void ) {
 	// Enraged to start?
 	if ( spawnArgs.GetBool ( "preinject" ) ) {
 		RageStart ( );
-	}	
+	}
 }
 
 /*
@@ -111,7 +111,7 @@ void rvMonsterGrunt::RageStart ( void ) {
 	// Disable non-rage actions
 	actionEvadeLeft.fl.disabled = true;
 	actionEvadeRight.fl.disabled = true;
-	
+
 	// Speed up animations
 	animator.SetPlaybackRate ( 1.25f );
 
@@ -120,7 +120,7 @@ void rvMonsterGrunt::RageStart ( void ) {
 
 	// Start over with health when enraged
 	health = spawnArgs.GetInt ( "health" );
-	
+
 	// No more going to rage
 	rageThreshold = 0;
 }
@@ -141,7 +141,7 @@ rvMonsterGrunt::CheckActions
 */
 bool rvMonsterGrunt::CheckActions ( void ) {
 	// If our health is below the rage threshold then enrage
-	if ( health < rageThreshold ) { 
+	if ( health < rageThreshold ) {
 		PerformAction ( "Torso_Enrage", 4, true );
 		return true;
 	}
@@ -150,7 +150,7 @@ bool rvMonsterGrunt::CheckActions ( void ) {
 	if ( PerformAction ( &actionMeleeMoveAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack, NULL ) ) {
 		return true;
 	}
-	
+
 	// Default actions
 	if ( CheckPainActions ( ) ) {
 		return true;
@@ -224,8 +224,8 @@ rvMonsterGrunt::AdjustHealthByDamage
 =====================
 */
 void rvMonsterGrunt::AdjustHealthByDamage ( int damage ) {
-	// Take less damage during enrage process 
-	if ( rageThreshold && health < rageThreshold ) { 
+	// Take less damage during enrage process
+	if ( rageThreshold && health < rageThreshold ) {
 		health -= (damage * 0.25f);
 		return;
 	}
@@ -235,7 +235,7 @@ void rvMonsterGrunt::AdjustHealthByDamage ( int damage ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -274,7 +274,7 @@ stateResult_t rvMonsterGrunt::State_Torso_Enrage ( const stateParms_t& parms ) {
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "anger", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_ANIM_WAIT );
-		
+
 		case STAGE_ANIM_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				RageStart ( );
@@ -303,7 +303,7 @@ stateResult_t rvMonsterGrunt::State_Torso_LeapAttack ( const stateParms_t& parms
 			// Play the action animation
 			PlayAnim ( ANIMCHANNEL_TORSO, animator.GetAnim ( actionAnimNum )->FullName ( ), parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_ANIM_WAIT );
-		
+
 		case STAGE_ANIM_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				// If we missed our leap attack get angry

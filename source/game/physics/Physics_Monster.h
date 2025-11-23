@@ -31,7 +31,7 @@ typedef struct monsterPState_s {
 // RAVEN BEGIN
 // bdube: added
 	idVec3					lastPushVelocity;
-// RAVEN END	
+// RAVEN END
 } monsterPState_t;
 
 class idPhysics_Monster : public idPhysics_Actor {

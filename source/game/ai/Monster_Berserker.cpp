@@ -243,14 +243,14 @@ rvMonsterBerserker::FilterTactical
 int rvMonsterBerserker::FilterTactical ( int availableTactical ) {
 	if ( move.moveCommand == MOVE_TO_ENEMY && move.moveStatus == MOVE_STATUS_DEST_UNREACHABLE ) {
 		availableTactical |= AITACTICAL_RANGED_BIT;
-	} else if ( combat.tacticalCurrent != AITACTICAL_RANGED 
-		&& combat.tacticalCurrent != AITACTICAL_MELEE 
+	} else if ( combat.tacticalCurrent != AITACTICAL_RANGED
+		&& combat.tacticalCurrent != AITACTICAL_MELEE
 		&& (combat.tacticalMaskAvailable&AITACTICAL_RANGED_BIT) ) {
 		availableTactical |= AITACTICAL_RANGED_BIT;
 	} else {
 		availableTactical &= ~AITACTICAL_RANGED_BIT;
 	}
-	
+
 	return idAI::FilterTactical ( availableTactical );
 }
 
@@ -283,7 +283,7 @@ rvMonsterBerserker::GetDebugInfo
 void rvMonsterBerserker::GetDebugInfo ( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "action_popupAttack",		aiActionStatusString[actionPopupAttack.status], userData );
 	proc ( "idAI", "action_chargeAttack",		aiActionStatusString[actionChargeAttack.status], userData );
 }
@@ -311,7 +311,7 @@ bool rvMonsterBerserker::CheckPainActions ( void ) {
 	if ( !pain.takenThisFrame || !actionTimerPain.IsDone ( actionTime ) ) {
 		return false;
 	}
-	
+
 	if ( !pain.threshold || pain.takenThisFrame < pain.threshold ) {
 		if ( painConsecutive < 10 ) {
 			return false;
@@ -319,17 +319,17 @@ bool rvMonsterBerserker::CheckPainActions ( void ) {
 			painConsecutive = 0;
 		}
 	}
-	
+
 	PerformAction ( "Torso_Pain", 2, true );
 	actionTimerPain.Reset ( actionTime );
-	
-	return true;	
+
+	return true;
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -339,7 +339,7 @@ CLASS_STATES_DECLARATION ( rvMonsterBerserker )
 
 	STATE ( "Torso_ChargeAttack",			rvMonsterBerserker::State_Torso_ChargeAttack )
 	STATE ( "Torso_Pain",					rvMonsterBerserker::State_Torso_Pain )
-	
+
 	STATE ( "Frame_ChargeGroundImpact",		rvMonsterBerserker::Frame_ChargeGroundImpact )
 	STATE ( "Frame_DoBlastAttack",			rvMonsterBerserker::Frame_DoBlastAttack )
 END_CLASS_STATES
@@ -350,7 +350,7 @@ rvMonsterBerserker::State_Torso_ChargeAttack
 ================
 */
 stateResult_t rvMonsterBerserker::State_Torso_ChargeAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		TORSO_CHARGEATTACK_INIT,
 		TORSO_CHARGEATTACK_WAIT,
 		TORSO_CHARGEATTACK_RECOVER,
@@ -359,21 +359,21 @@ stateResult_t rvMonsterBerserker::State_Torso_ChargeAttack ( const stateParms_t&
 
 	switch ( parms.stage ) {
 		// Start the charge attack animation
-		case TORSO_CHARGEATTACK_INIT:			
+		case TORSO_CHARGEATTACK_INIT:
 			// Full body animations
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 
 			// Play the ground strike
-			PlayAnim ( ANIMCHANNEL_TORSO, "ground_strike", parms.blendFrames );	
+			PlayAnim ( ANIMCHANNEL_TORSO, "ground_strike", parms.blendFrames );
 			return SRESULT_STAGE ( TORSO_CHARGEATTACK_WAIT );
-			
+
 		// Wait for charge attack animation to finish
 		case TORSO_CHARGEATTACK_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_LEGS, 0 ) ) {
 				return SRESULT_STAGE ( TORSO_CHARGEATTACK_RECOVER );
 			}
 			return SRESULT_WAIT;
-	
+
 		// Play recover animation
 		case TORSO_CHARGEATTACK_RECOVER:
 			PlayAnim ( ANIMCHANNEL_TORSO, "ground_strike_recover", parms.blendFrames );
@@ -382,10 +382,10 @@ stateResult_t rvMonsterBerserker::State_Torso_ChargeAttack ( const stateParms_t&
 		// Wait for recover animation to finish
 		case TORSO_CHARGEATTACK_RECOVERWAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 2 ) ) {
-				return SRESULT_DONE;			
+				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}	
+	}
 	return SRESULT_ERROR;
 }
 
@@ -423,16 +423,16 @@ stateResult_t rvMonsterBerserker::Frame_ChargeGroundImpact ( const stateParms_t&
 	trace_t			tr;
 
 	GetJointWorldTransform ( animator.GetJointHandle ( "R_lowerArm_Real" ), gameLocal.time, start, axis );
-	
+
 	end    = start;
 	end.z -= 128;
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
 	gameLocal.TracePoint ( this, tr, start, end, MASK_SHOT_BOUNDINGBOX, this );
 // RAVEN END
-	
-	gameLocal.PlayEffect ( gameLocal.GetEffect( spawnArgs, "fx_ground_impact" ), tr.endpos, idVec3(0,0,1).ToMat3() ); 
-	
+
+	gameLocal.PlayEffect ( gameLocal.GetEffect( spawnArgs, "fx_ground_impact" ), tr.endpos, idVec3(0,0,1).ToMat3() );
+
 	return SRESULT_OK;
 }
 
@@ -460,6 +460,6 @@ stateResult_t rvMonsterBerserker::Frame_DoBlastAttack ( const stateParms_t& parm
 		angles.yaw += (360.0f / 32.0f);
 		AttackProjectile ( blastDict, start, angles );
 	}
-	
+
 	return SRESULT_OK;
 }

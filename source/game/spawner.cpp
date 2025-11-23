@@ -103,7 +103,7 @@ void rvSpawner::Restore ( idRestoreGame *savefile ){
 	savefile->ReadInt( maxToSpawn );
 	savefile->ReadFloat( nextSpawnTime );
 	savefile->ReadInt( maxActive );
-	
+
 	savefile->ReadInt( num );
 	currentActive.Clear ( );
 	currentActive.SetNum( num );
@@ -135,12 +135,12 @@ void rvSpawner::Restore ( idRestoreGame *savefile ){
 ==============
 rvSpawner::FindSpawnTypes
 
-Generate the list of classnames to spawn from the spawnArgs.  Anything matching the 
+Generate the list of classnames to spawn from the spawnArgs.  Anything matching the
 prefix "def_spawn" will be included in the list.
 ==============
 */
 void rvSpawner::FindSpawnTypes ( void ){
-	const idKeyValue *kv;	
+	const idKeyValue *kv;
 	for ( kv = spawnArgs.MatchPrefix( "def_spawn", NULL ); kv; kv = spawnArgs.MatchPrefix( "def_spawn", kv ) ) {
 		spawnTypes.Append ( kv->GetValue ( ) );
 
@@ -158,7 +158,7 @@ void rvSpawner::FindTargets ( void ) {
 	int i;
 	idBounds						bounds( idVec3( -16, -16, 0 ), idVec3( 16, 16, 72 ) );
 	trace_t tr;
-	
+
 	idEntity::FindTargets ( );
 
 	// Copy the relevant targets to the spawn point list (right now only target_null entities)
@@ -168,16 +168,16 @@ void rvSpawner::FindTargets ( void ) {
 		if ( idStr::Icmp ( ent->spawnArgs.GetString ( "classname" ), "target_null" ) ) {
 			continue;
 		}
-		
+
 		idEntityPtr<idEntity> &entityPtr = spawnPoints.Alloc();
-		entityPtr = ent;		
+		entityPtr = ent;
 
 		if( !spawnArgs.GetBool("ignoreSpawnPointValidation") ) {
 			gameLocal.TraceBounds( this, tr, ent->GetPhysics()->GetOrigin(), ent->GetPhysics()->GetOrigin(), bounds, MASK_MONSTERSOLID, NULL );
 			if ( gameLocal.entities[tr.c.entityNum] && !gameLocal.entities[tr.c.entityNum]->IsType ( idActor::GetClassType ( ) ) ) {
 				//drop a console warning here
-				gameLocal.Warning ( "Spawner '%s' can't spawn at point '%s', the monster won't fit.", GetName(), ent->GetName() );		
-			}	
+				gameLocal.Warning ( "Spawner '%s' can't spawn at point '%s', the monster won't fit.", GetName(), ent->GetName() );
+			}
 		}
 	}
 }
@@ -205,7 +205,7 @@ rvSpawner::AddSpawnPoint
 void rvSpawner::AddSpawnPoint ( idEntity* point ) {
 	idEntityPtr<idEntity> &entityPtr = spawnPoints.Alloc();
 	entityPtr = point;
-	
+
 	// If there were no spawnPoints then start with the delay
 	if ( spawnPoints.Num () == 1 ) {
 		nextSpawnTime = gameLocal.time + spawnDelay;
@@ -232,7 +232,7 @@ void rvSpawner::RemoveSpawnPoint ( idEntity* point ) {
 rvSpawner::GetSpawnPoint
 ==============
 */
-void rvSpawner::AddCallback ( idEntity* owner, const idEventDef* ev ) {	
+void rvSpawner::AddCallback ( idEntity* owner, const idEventDef* ev ) {
 	spawnerCallback_t& callback = callbacks.Alloc ( );
 	callback.event = ev->GetName ( );
 	callback.ent = owner;
@@ -251,19 +251,19 @@ idEntity *rvSpawner::GetSpawnPoint ( void ) {
 
 	// Run through all spawnPoints and choose a random one. Each time a spawn point is excluded
 	// it will be removed from the list until there are no more items in the list.
-	for ( spawns = spawnPoints ; spawns.Num(); spawns.RemoveIndex ( spawnIndex ) ) {		
+	for ( spawns = spawnPoints ; spawns.Num(); spawns.RemoveIndex ( spawnIndex ) ) {
 		spawnIndex = gameLocal.random.RandomInt ( spawns.Num() );
 		spawnEnt   = spawns[spawnIndex];
-		
+
 		if ( !spawnEnt || !spawnEnt->GetPhysics() ) {
 			continue;
 		}
-		
+
 		// Check to see if something is in the way at this spawn point
 		if ( !ValidateSpawnPoint ( spawnEnt->GetPhysics()->GetOrigin(), bounds ) ) {
 			continue;
 		}
-		
+
 		// Skip the spawn point because its currently visible?
 		if ( skipVisible && gameLocal.GetLocalPlayer()->CanSee ( spawnEnt, true ) ) {
 			continue;
@@ -272,7 +272,7 @@ idEntity *rvSpawner::GetSpawnPoint ( void ) {
 		// Found one!
 		return spawnEnt;
 	}
-		
+
 	return NULL;
 }
 
@@ -283,7 +283,7 @@ rvSpawner::GetSpawnType
 */
 const char* rvSpawner::GetSpawnType ( idEntity* spawnPoint ) {
 	const idKeyValue* kv;
-	
+
 	if ( spawnPoint ) {
 		// If the spawn point has any "def_spawn" keys then they override the normal spawn keys
 		kv = spawnPoint->spawnArgs.MatchPrefix ( "def_spawn", NULL );
@@ -291,21 +291,21 @@ const char* rvSpawner::GetSpawnType ( idEntity* spawnPoint ) {
 			const char* types [ MAX_SPAWN_TYPES ];
 			int			typeCount;
 
-			for ( typeCount = 0; 
-				  typeCount < MAX_SPAWN_TYPES && kv; 
+			for ( typeCount = 0;
+				  typeCount < MAX_SPAWN_TYPES && kv;
 				  kv = spawnPoint->spawnArgs.MatchPrefix ( "def_spawn", kv ) ) {
 				types [ typeCount++ ] = kv->GetValue ( ).c_str();
 			}
-			
+
 			return types[ gameLocal.random.RandomInt( typeCount ) ];
 		}
 	}
-	
+
 	// No spawn types?
 	if ( !spawnTypes.Num ( ) ) {
 		return "";
 	}
-	
+
 	// Return from the spawners list of types
 	return spawnTypes[ gameLocal.random.RandomInt( spawnTypes.Num() ) ];
 }
@@ -350,7 +350,7 @@ bool rvSpawner::SpawnEnt( void ){
 	// Build the spawn parameters for the entity about to be spawned
 	args.Set	   ( "origin",			spawnPoint->GetPhysics()->GetOrigin().ToString() );
 	args.SetFloat  ( "angle",			spawnPoint->GetPhysics()->GetAxis().ToAngles()[YAW] );
-	args.Set	   ( "classname",		temp );	
+	args.Set	   ( "classname",		temp );
 	args.SetBool   ( "forceEnemy",		spawnArgs.GetBool ( "auto_target", "1" ) );
 	args.SetBool   ( "faceEnemy",		spawnArgs.GetBool ( "faceEnemy", "0" ) );
 
@@ -393,7 +393,7 @@ bool rvSpawner::SpawnEnt( void ){
 	if( spawnPoint != this ){
 		spawnPoint->ProcessEvent( &EV_Activate, spawnPoint );
 		spawnPoint->ActivateTargets( spawnedEnt );
-		
+
 		// One time use on this target?
 		if ( spawnPoint->spawnArgs.GetBool ( "remove" ) ) {
 			spawnPoint->PostEventMS ( &EV_Remove, 0 );
@@ -537,7 +537,7 @@ rvSpawner::Event_Activate
 ==============
 */
 void rvSpawner::Event_Activate ( idEntity *activator ) {
-	
+
 	// "trigger_only" spawners will attempt to spawn when triggered
 	if ( spawnArgs.GetBool ( "trigger_only" ) ) {
 		// Update next spawn time to follo CheckSpawn into thinking its time to spawn again
@@ -545,21 +545,21 @@ void rvSpawner::Event_Activate ( idEntity *activator ) {
 		CheckSpawn ( );
 		return;
 	}
-	
+
 	// If nextSpawnTime is zero then the spawner is currently deactivated
 	if ( nextSpawnTime == 0 ) {
 		// Start thinking
 		BecomeActive( TH_THINK );
-		
+
 		// Allow immediate spawn
 		nextSpawnTime = gameLocal.time;
-		
+
 		// Spawn any ai targets and add them to the current count
 		ActivateTargets ( this );
 	} else {
 		nextSpawnTime = 0;
 		BecomeInactive( TH_THINK );
-		
+
 		// Remove the spawner if need be
 		if ( spawnArgs.GetBool ( "remove", "1" ) ) {
 			PostEventMS ( &EV_Remove, 0 );

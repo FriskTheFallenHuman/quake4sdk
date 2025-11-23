@@ -100,7 +100,7 @@ typedef struct glconfig_s {
 	bool				allowARB2Path;
 
 	bool				isInitialized;
-// INTEL BEGIN 
+// INTEL BEGIN
 // Anu adding support to toggle SMP
 #ifdef ENABLE_INTEL_SMP
 	bool				isSmpAvailable;
@@ -112,7 +112,7 @@ typedef struct glconfig_s {
 } glconfig_t;
 
 
-// font support 
+// font support
 #define GLYPH_COUNT			256
 
 typedef struct glyphInfo_s
@@ -121,7 +121,7 @@ typedef struct glyphInfo_s
 	float			height;					// number of scan lines
 	float			horiAdvance;			// number of pixels to advance to the next char
 	float			horiBearingX;			// x offset into space to render glyph
-	float			horiBearingY;			// y offset 
+	float			horiBearingY;			// y offset
 	float			s1;						// x start tex coord
 	float			t1;						// y start tex coord
 	float			s2;						// x end tex coord
@@ -215,7 +215,7 @@ public:
 	virtual void			ShutdownOpenGL( void ) = 0;
 
 	virtual bool			IsOpenGLRunning( void ) const = 0;
-	virtual void			GetValidModes( idStr &Mode4x3Text, idStr &Mode4x3Values, idStr &Mode16x9Text, idStr &Mode16x9Values, 
+	virtual void			GetValidModes( idStr &Mode4x3Text, idStr &Mode4x3Values, idStr &Mode16x9Text, idStr &Mode16x9Values,
 										   idStr &Mode16x10Text, idStr &Mode16x10Values ) = 0;
 
 	virtual bool			IsFullScreen( void ) const = 0;
@@ -256,7 +256,7 @@ public:
 
 // RAVEN BEGIN
 // dluetscher: added call to write out the MD5R models that have been converted at load,
-//			   also added call to retrieve idDrawVert geometry from a MD5R primitive batch 
+//			   also added call to retrieve idDrawVert geometry from a MD5R primitive batch
 //			   from the game DLL
 #if defined( _MD5R_WRITE_SUPPORT ) && defined( _MD5R_SUPPORT )
 	virtual	void			ExportMD5R( bool compressed ) = 0;

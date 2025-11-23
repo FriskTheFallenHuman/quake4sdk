@@ -10,7 +10,7 @@ public:
 	CLASS_PROTOTYPE( rvMonsterIronMaiden );
 
 	rvMonsterIronMaiden ( void );
-	
+
 	void				InitSpawnArgsVariables( void );
 	void				Spawn				( void );
 	void				Save				( idSaveGame *savefile ) const;
@@ -30,10 +30,10 @@ protected:
 	rvAIAction			actionBansheeAttack;
 
 	virtual bool		CheckActions		( void );
-	
+
 	void				PhaseOut			( void );
 	void				PhaseIn				( void );
-	
+
 	virtual void		OnDeath				( void );
 
 private:
@@ -42,10 +42,10 @@ private:
 	bool				CheckAction_BansheeAttack		( rvAIAction* action, int animNum );
 	bool				PerformAction_PhaseOut			( void );
 	bool				PerformAction_PhaseIn			( void );
-	
+
 	// Global States
 	stateResult_t		State_Phased					( const stateParms_t& parms );
-	
+
 	// Torso States
 	stateResult_t		State_Torso_PhaseIn				( const stateParms_t& parms );
 	stateResult_t		State_Torso_PhaseOut			( const stateParms_t& parms );
@@ -76,7 +76,7 @@ rvMonsterIronMaiden::rvMonsterIronMaiden ( void ) {
 
 void rvMonsterIronMaiden::InitSpawnArgsVariables ( void ) {
 	// Cache the mouth joint
-	jointBansheeAttack = animator.GetJointHandle ( spawnArgs.GetString ( "joint_bansheeAttack", "mouth_effect" ) );	
+	jointBansheeAttack = animator.GetJointHandle ( spawnArgs.GetString ( "joint_bansheeAttack", "mouth_effect" ) );
 }
 /*
 ================
@@ -86,7 +86,7 @@ rvMonsterIronMaiden::Spawn
 void rvMonsterIronMaiden::Spawn ( void ) {
 	// Custom actions
 	actionBansheeAttack.Init ( spawnArgs, "action_bansheeAttack", "Torso_BansheeAttack", AIACTIONF_ATTACK );
-		
+
 	InitSpawnArgsVariables();
 
 	PlayEffect ( "fx_dress", animator.GetJointHandle ( spawnArgs.GetString ( "joint_laser", "cog_bone" ) ), true );
@@ -100,7 +100,7 @@ rvMonsterIronMaiden::Save
 void rvMonsterIronMaiden::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt ( phaseTime );
 	savefile->WriteInt ( enemyStunTime );
-	
+
 	actionBansheeAttack.Save ( savefile );
 }
 
@@ -112,7 +112,7 @@ rvMonsterIronMaiden::Restore
 void rvMonsterIronMaiden::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt ( phaseTime );
 	savefile->ReadInt ( enemyStunTime );
-	
+
 	actionBansheeAttack.Restore ( savefile );
 
 	InitSpawnArgsVariables();
@@ -127,7 +127,7 @@ int rvMonsterIronMaiden::FilterTactical ( int availableTactical ) {
 	// When hidden the iron maiden only uses ranged tactical
 	if ( fl.hidden ) {
 		availableTactical &= (AITACTICAL_RANGED_BIT | AITACTICAL_TURRET_BIT);
-	}	
+	}
 	return idAI::FilterTactical( availableTactical );
 }
 
@@ -149,8 +149,8 @@ bool rvMonsterIronMaiden::PerformAction_PhaseIn ( void ) {
 	if ( !phaseTime ) {
 		return false;
 	}
-	
-	// Must be out for at least 3 seconds 
+
+	// Must be out for at least 3 seconds
 	if ( gameLocal.time - phaseTime < 3000  ) {
 		return false;
 	}
@@ -162,8 +162,8 @@ bool rvMonsterIronMaiden::PerformAction_PhaseIn ( void ) {
 			PerformAction ( "Torso_PhaseIn", 4, true );
 			return true;
 		}
-	}	
-	
+	}
+
 	return false;
 }
 
@@ -173,16 +173,16 @@ rvMonsterIronMaiden::PerformAction_PhaseOut
 ================
 */
 bool rvMonsterIronMaiden::PerformAction_PhaseOut ( void ) {
-	// Little randomization 
+	// Little randomization
 	if ( gameLocal.random.RandomFloat ( ) > 0.5f ) {
 		return false;
 	}
 	if ( !enemyStunTime || gameLocal.time - enemyStunTime > 1500 ) {
 		return false;
 	}
-	
+
 	PerformAction ( "Torso_PhaseOut", 4, true );
-	return true;		
+	return true;
 }
 
 /*
@@ -202,11 +202,11 @@ bool rvMonsterIronMaiden::CheckActions ( void ) {
 	if ( PerformAction ( &actionBansheeAttack, (checkAction_t)&rvMonsterIronMaiden::CheckAction_BansheeAttack, &actionTimerRangedAttack ) ) {
 		return true;
 	}
-	
+
 	if ( PerformAction_PhaseOut ( ) ) {
 		return true;
 	}
-	
+
 	return idAI::CheckActions ( );
 }
 
@@ -225,21 +225,21 @@ void rvMonsterIronMaiden::PhaseOut ( void ) {
 	if ( effect ) {
 		effect->Unbind ( );
 	}
-	
+
 	Hide ( );
-	
+
 	move.fl.allowHiddenMove = true;
 
 	ProcessEvent ( &EV_BecomeNonSolid );
-	
+
 	StopMove ( MOVE_STATUS_DONE );
 	SetState ( "State_Phased" );
-	
+
 	// Move away from here, to anywhere
 	MoveOutOfRange ( this, 500.0f, 150.0f );
 
 	SetShaderParm ( 5, MS2SEC ( gameLocal.time ) );
-		
+
 	phaseTime = gameLocal.time;
 }
 
@@ -258,7 +258,7 @@ void rvMonsterIronMaiden::PhaseIn ( void ) {
 	if ( effect ) {
 		effect->Unbind ( );
 	}
-	
+
 	if ( enemy.ent ) {
 		TurnToward ( enemy.lastKnownPosition );
 	}
@@ -273,7 +273,7 @@ void rvMonsterIronMaiden::PhaseIn ( void ) {
 	// Wait for the action that started the phase in to finish, then go back to combat
 	SetState ( "Wait_Action" );
 	PostState ( "State_Combat" );
-	
+
 	SetShaderParm ( 5, MS2SEC ( gameLocal.time ) );
 }
 
@@ -288,7 +288,7 @@ void rvMonsterIronMaiden::OnDeath ( void ) {
 	// Stop looping effects
 	StopEffect ( "fx_banshee" );
 	StopEffect ( "fx_dress" );
-	
+
 	idAI::OnDeath( );
 }
 
@@ -300,14 +300,14 @@ rvMonsterIronMaiden::GetDebugInfo
 void rvMonsterIronMaiden::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo( proc, userData );
-	
+
 	proc ( "idAI", "action_BansheeAttack",	aiActionStatusString[actionBansheeAttack.status], userData );
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -319,7 +319,7 @@ CLASS_STATES_DECLARATION ( rvMonsterIronMaiden )
 	STATE ( "Torso_PhaseIn",			rvMonsterIronMaiden::State_Torso_PhaseIn )
 	STATE ( "Torso_BansheeAttack",		rvMonsterIronMaiden::State_Torso_BansheeAttack )
 	STATE ( "Torso_BansheeAttackDone",	rvMonsterIronMaiden::State_Torso_BansheeAttackDone )
-	
+
 	STATE ( "Frame_PhaseIn",			rvMonsterIronMaiden::Frame_PhaseIn )
 	STATE ( "Frame_PhaseOut",			rvMonsterIronMaiden::Frame_PhaseOut )
 	STATE ( "Frame_BansheeAttack",		rvMonsterIronMaiden::Frame_BansheeAttack )
@@ -351,7 +351,7 @@ stateResult_t rvMonsterIronMaiden::State_Phased ( const stateParms_t& parms ) {
 
 	// Make sure we are checking actions if we have no tactical move
 	UpdateAction ( );
-	
+
 	return SRESULT_WAIT;
 }
 
@@ -374,13 +374,13 @@ stateResult_t rvMonsterIronMaiden::State_Torso_PhaseIn ( const stateParms_t& par
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "phase_in", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_ANIM_WAIT );
-	
+
 		case STAGE_ANIM_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;			
-	}						
+			return SRESULT_WAIT;
+	}
 	return SRESULT_ERROR;
 }
 
@@ -399,13 +399,13 @@ stateResult_t rvMonsterIronMaiden::State_Torso_PhaseOut ( const stateParms_t& pa
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "phase_out", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_ANIM_WAIT );
-	
+
 		case STAGE_ANIM_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}						
+	}
 	return SRESULT_ERROR;
 }
 
@@ -424,11 +424,11 @@ stateResult_t rvMonsterIronMaiden::State_Torso_BansheeAttack ( const stateParms_
 			PlayAnim ( ANIMCHANNEL_TORSO, "banshee", parms.blendFrames );
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_BansheeAttackDone", 0, 0, SFLAG_ONCLEAR );
 			return SRESULT_STAGE ( STAGE_ATTACK_WAIT );
-			
+
 		case STAGE_ATTACK_WAIT:
 			if ( enemy.ent ) {
 				TurnToward ( enemy.lastKnownPosition );
-			}			
+			}
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
 			}
@@ -483,40 +483,40 @@ stateResult_t rvMonsterIronMaiden::Frame_BansheeAttack ( const stateParms_t& par
 	idEntity*	entities[ 1024 ];
 	int			count;
 	int			i;
-	
+
 	// Get mouth origin
 	GetJointWorldTransform ( jointBansheeAttack, gameLocal.time, origin, axis );
-	
-	// Find all entities within the banshee attacks radius 
+
+	// Find all entities within the banshee attacks radius
 	count = gameLocal.EntitiesWithinRadius ( origin, actionBansheeAttack.maxRange, entities, 1024 );
 	for ( i = 0; i < count; i ++ ) {
-		idEntity* ent = entities[i];		
+		idEntity* ent = entities[i];
 		if ( !ent || ent == this ) {
 			continue;
 		}
 
-		// Must be an actor that takes damage to be affected		
+		// Must be an actor that takes damage to be affected
 		if ( !ent->fl.takedamage || !ent->IsType ( idActor::GetClassType() ) ) {
 			continue;
 		}
-				
+
 		// Has to be within fov
 		if ( !CheckFOV ( ent->GetEyePosition ( ) ) ) {
 			continue;
 		}
 
-		// Do some damage		
+		// Do some damage
 		idVec3 dir;
 		dir = origin = ent->GetEyePosition ( );
 		dir.NormalizeFast ( );
 		ent->Damage ( this, this, dir, spawnArgs.GetString ( "def_banshee_damage" ), 1.0f, 0 );
-		
+
 		// Cache the last time we stunned our own enemy for the phase out
 		if ( ent == enemy.ent ) {
 			enemyStunTime = gameLocal.time;
 		}
 	}
-	
+
 	return SRESULT_OK;
 }
 

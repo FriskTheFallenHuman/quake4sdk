@@ -38,7 +38,7 @@ rvClientEffect::rvClientEffect ( const idDecl *effect ) {
 
 void rvClientEffect::Init ( const idDecl *effect ) {
 	memset( &renderEffect, 0, sizeof( renderEffect ) );
-	
+
 	renderEffect.declEffect	= effect;
 	renderEffect.startTime	= -1.0f;
 	renderEffect.referenceSoundHandle = -1;
@@ -56,9 +56,9 @@ rvClientEffect::~rvClientEffect( void ) {
 	// Prevent a double free of a SoundEmitter resulting in broken in-game sounds, when
 	// the second free releases a emitter that was reallocated to another sound. rvBSE caches
 	// this referenceSoundHandle and rvBSE::Destroy also frees the sound. rvBSE::Destroy
-	// is triggered by FreeEffectDef. Disable this free and let rvBSE do the releasing 
-	
-	// Actually, the freeing should be done here and not in BSE. The client effect allocates and 
+	// is triggered by FreeEffectDef. Disable this free and let rvBSE do the releasing
+
+	// Actually, the freeing should be done here and not in BSE. The client effect allocates and
 	// maintains the handle. Handling this here also allows emitters to be recycled for sparse
 	// looping effects.
 	soundSystem->FreeSoundEmitter( SOUNDWORLD_GAME, renderEffect.referenceSoundHandle, true );
@@ -70,23 +70,23 @@ rvClientEffect::~rvClientEffect( void ) {
 rvClientEffect::GetEffectIndex
 ================
 */
-int rvClientEffect::GetEffectIndex( void ) 
-{ 
+int rvClientEffect::GetEffectIndex( void )
+{
 	if( renderEffect.declEffect ) {
-		return( renderEffect.declEffect->Index() ); 
+		return( renderEffect.declEffect->Index() );
 	}
 	return( -1 );
 }
-	
+
 /*
 ================
 rvClientEffect::GetEffectName
 ================
-*/	
-const char *rvClientEffect::GetEffectName( void ) 
-{ 
+*/
+const char *rvClientEffect::GetEffectName( void )
+{
 	if( renderEffect.declEffect ) {
-		return( renderEffect.declEffect->GetName() ); 
+		return( renderEffect.declEffect->GetName() );
 	}
 	return( "unknown" );
 }
@@ -112,22 +112,22 @@ void rvClientEffect::UpdateBind ( void ) {
 	rvClientEntity::UpdateBind ( );
 
 	renderEffect.origin = worldOrigin;
-	
+
 	if ( endOriginJoint != INVALID_JOINT && bindMaster ) {
 		idMat3 axis;
-		idVec3 endOrigin;		
+		idVec3 endOrigin;
 		idVec3 dir;
 
 		static_cast<idAnimatedEntity*>(bindMaster.GetEntity())->GetJointWorldTransform ( endOriginJoint, gameLocal.time, endOrigin, axis );
 		SetEndOrigin ( endOrigin );
-		
+
 		dir = (endOrigin - worldOrigin);
-		dir.Normalize ();		
+		dir.Normalize ();
 		renderEffect.axis = dir.ToMat3 ( );
 	} else {
 		renderEffect.axis = worldAxis;
 	}
-	
+
 	if ( bindMaster ) {
 		renderEffect.groupID = bindMaster->entityNumber + 1;
 	} else {
@@ -143,7 +143,7 @@ rvClientEffect::Think
 void rvClientEffect::Think ( void ) {
 	// If we are bound to an entity that is now hidden we can just not render if looping, otherwise stop the effect
 	if( bindMaster && (bindMaster->GetRenderEntity()->hModel && bindMaster->GetModelDefHandle() == -1) ) {
-		if ( renderEffect.loop ) {		
+		if ( renderEffect.loop ) {
 			return;
 		}
 		Stop ( );
@@ -160,9 +160,9 @@ void rvClientEffect::Think ( void ) {
 			// Make sure our origins are all straight before starting the effect
 			UpdateBind();
 			renderEffect.attenuation = 1.0f;
-			
+
 			// if the rendereffect needs sound give it an emitter.
-			if( renderEffect.referenceSoundHandle <= 0 )	{ 
+			if( renderEffect.referenceSoundHandle <= 0 )	{
 				if( gameRenderWorld->EffectDefHasSound( &renderEffect) )
 				{
 					renderEffect.referenceSoundHandle = soundSystem->AllocSoundEmitter( SOUNDWORLD_GAME );
@@ -176,9 +176,9 @@ void rvClientEffect::Think ( void ) {
 				PostEventMS( &EV_Remove, 0 );
 			}
 		}
-		
+
 		return;
-	} 
+	}
 
 	// If we lost our effect def handle then just remove ourself
 	if( effectDefHandle < 0 ) {
@@ -197,7 +197,7 @@ void rvClientEffect::Think ( void ) {
 		renderEffect.inConnectedArea = gameLocal.InPlayerConnectedArea( bindMaster );
 	}
 
-	// Update the bind	
+	// Update the bind
 	UpdateBind();
 
 	// Update the actual render effect now
@@ -222,7 +222,7 @@ bool rvClientEffect::Play ( int _startTime, bool _loop, const idVec3& endOrigin 
 	if ( bindMaster ) {
 		renderEntity_t* renderEnt = bindMaster->GetRenderEntity ( );
 		assert( renderEnt );
-		
+
 		// Copy suppress values from parent entity
 		renderEffect.allowSurfaceInViewID	 = renderEnt->allowSurfaceInViewID;
 		renderEffect.suppressSurfaceInViewID = renderEnt->suppressSurfaceInViewID;
@@ -233,17 +233,17 @@ bool rvClientEffect::Play ( int _startTime, bool _loop, const idVec3& endOrigin 
 	renderEffect.shaderParms[SHADERPARM_GREEN] = 1.0f;
 	renderEffect.shaderParms[SHADERPARM_BLUE] = 1.0f;
 	renderEffect.shaderParms[SHADERPARM_ALPHA] = 1.0f;
-	renderEffect.shaderParms[SHADERPARM_BRIGHTNESS] = 1.0f; 
-	renderEffect.shaderParms[SHADERPARM_TIMEOFFSET] = MS2SEC( gameLocal.time ); 
+	renderEffect.shaderParms[SHADERPARM_BRIGHTNESS] = 1.0f;
+	renderEffect.shaderParms[SHADERPARM_TIMEOFFSET] = MS2SEC( gameLocal.time );
 	renderEffect.hasEndOrigin = ( endOrigin != vec3_origin );
-	renderEffect.endOrigin	  = endOrigin;		
+	renderEffect.endOrigin	  = endOrigin;
 	renderEffect.loop		  = _loop;
 
 	assert( effectDefHandle < 0 );
 
 	renderEffect.startTime = MS2SEC( _startTime );
 
-	return true;	
+	return true;
 }
 
 /*
@@ -257,12 +257,12 @@ void rvClientEffect::Stop ( bool destroyParticles ) {
 		renderEffect.declEffect = NULL;
 		return;
 	}
-	
+
 	if ( destroyParticles ) {
-		// Clear the effect index to make sure the effect isnt started again.  This is 
+		// Clear the effect index to make sure the effect isnt started again.  This is
 		// an indirect way of making the effect not think
 		renderEffect.declEffect = NULL;
-		
+
 		FreeEffectDef ( );
 		PostEventMS( &EV_Remove, 0 );
 	} else {
@@ -280,7 +280,7 @@ rvClientEffect::Restart
 */
 void rvClientEffect::Restart ( void ) {
 	FreeEffectDef ( );
-	
+
 	if ( renderEffect.loop ) {
 		Play ( gameLocal.time, true, renderEffect.endOrigin );
 	}
@@ -304,7 +304,7 @@ float rvClientEffect::GetDuration( void ) const {
 	if( effectDefHandle < 0 ) {
 		return 0.0f;
 	}
-	
+
 	return bse->EffectDuration( gameRenderWorld->GetEffectDef( effectDefHandle ) );
 }
 
@@ -316,10 +316,10 @@ rvClientEffect::DrawDebugInfo
 void rvClientEffect::DrawDebugInfo ( void ) const {
 	rvClientEntity::DrawDebugInfo ( );
 
-	if ( !gameLocal.GetLocalPlayer() ) {	
+	if ( !gameLocal.GetLocalPlayer() ) {
 		return;
 	}
-		
+
 	if( !renderEffect.declEffect ) {
 		return;
 	}
@@ -381,13 +381,13 @@ rvClientCrawlEffect::rvClientCrawlEffect ( void ) {
 
 rvClientCrawlEffect::rvClientCrawlEffect ( const idDecl *effect, idEntity* ent, int _crawlTime, idList<jointHandle_t>* joints ) : rvClientEffect ( effect ) {
 	int i;
-	
+
 	// Crawl effects require an animated entity
 	crawlEnt = dynamic_cast<idAnimatedEntity*>(ent);
 	if ( !crawlEnt) {
 		return;
 	}
-	
+
 	// Specific joint list provided?
 	if ( joints && joints->Num () ) {
 		crawlJoints.Clear ( );
@@ -402,16 +402,16 @@ rvClientCrawlEffect::rvClientCrawlEffect ( const idDecl *effect, idEntity* ent, 
 			}
 		}
 	}
-	
+
 	//no joints?  abort!
 	if ( !crawlJoints.Num() ) {
 		return;
 	}
 
 	jointStart = gameLocal.random.RandomInt ( crawlJoints.Num() );
-	crawlDir   = gameLocal.random.RandomInt ( 2 ) > 0 ? 1 : -1;		
+	crawlDir   = gameLocal.random.RandomInt ( 2 ) > 0 ? 1 : -1;
 	jointEnd   = (jointStart + crawlDir + crawlJoints.Num() ) % crawlJoints.Num();
-	crawlTime  = _crawlTime;	
+	crawlTime  = _crawlTime;
 	nextCrawl  = gameLocal.time + crawlTime;
 }
 
@@ -421,13 +421,13 @@ rvClientCrawlEffect::Think
 ================
 */
 void rvClientCrawlEffect::Think ( void ) {
-	
+
 	// If there is no crawl entity or no crawl joints then just free ourself
 	if ( !crawlEnt || !crawlJoints.Num() ) {
 		PostEventMS ( &EV_Remove, 0 );
 		return;
 	}
-			
+
 	// Move to the next joint if its time
 	if ( gameLocal.time > nextCrawl ) {
 		jointStart = (jointStart + crawlDir + crawlJoints.Num() ) % crawlJoints.Num();
@@ -439,7 +439,7 @@ void rvClientCrawlEffect::Think ( void ) {
 	idVec3 offsetEnd;
 	idVec3 dir;
 	idMat3 axis;
-	
+
 	// Get the start origin
 	crawlEnt->GetJointWorldTransform ( crawlJoints[jointStart], gameLocal.time, offsetStart, axis );
 	SetOrigin ( offsetStart );
@@ -452,7 +452,7 @@ void rvClientCrawlEffect::Think ( void ) {
 	dir = offsetEnd - offsetStart;
 	dir.Normalize();
 	SetAxis ( dir.ToMat3( ) );
-		
+
 	rvClientEffect::Think ( );
 }
 
@@ -466,7 +466,7 @@ void rvClientCrawlEffect::Save( idSaveGame *savefile ) const {
 	for( int ix = 0; ix < crawlJoints.Num(); ++ix ) {
 		savefile->WriteJoint( crawlJoints[ix] );
 	}
-	
+
 	savefile->WriteInt( crawlTime );
 	savefile->WriteInt( nextCrawl );
 	savefile->WriteInt( jointStart );
@@ -487,7 +487,7 @@ void rvClientCrawlEffect::Restore( idRestoreGame *savefile ) {
 	for( int ix = 0; ix < numJoints; ++ix ) {
 		savefile->ReadJoint( crawlJoints[ix] );
 	}
-	
+
 	savefile->ReadInt( crawlTime );
 	savefile->ReadInt( nextCrawl );
 	savefile->ReadInt( jointStart );

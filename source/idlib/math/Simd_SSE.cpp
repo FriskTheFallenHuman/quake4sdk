@@ -2197,7 +2197,7 @@ void VPCALL idSIMD_SSE::Dot( float *dst, const idPlane &constant, const idPlane 
 		shl			ecx, 2
 		lea			eax, [eax+ecx*4]
 		add			edx, ecx
-		neg			ecx		
+		neg			ecx
 
 		movlps		xmm0, [eax+ecx*4]
 		movhps		xmm0, [eax+ecx*4+16]
@@ -8332,7 +8332,7 @@ void VPCALL idSIMD_SSE::MatX_MultiplyMatX( idMatX &dst, const idMatX &m1, const 
 						MUL_Nx6_6x4_ROW( 1 )
 						MUL_Nx6_6x4_ROW( 2 )
 						MUL_Nx6_6x4_ROW( 3 )
-	
+
 						return;
 					}
 					break;
@@ -12789,7 +12789,7 @@ void VPCALL idSIMD_SSE::DecalPointCull( byte *cullBits, const idPlane *planes, c
 
 		cmpnltps	xmm6, SIMD_SP_zero
 		movmskps	ecx, xmm6
-			
+
 		movaps		xmm6, p0
 		movss		xmm3, [esi+eax+1*DRAWVERT_SIZE+DRAWVERT_XYZ_OFFSET+0]
 		shufps		xmm3, xmm3, R_SHUFFLE_PS( 0, 0, 0, 0 )
@@ -18029,14 +18029,14 @@ void VPCALL idSIMD_SSE::MixedSoundToSamples( short *samples, const float *mixBuf
 idSIMD_SSE::TransformVertsMinMax4Bone
 ============
 */
-// dluetscher: added TransformVertsMinMax to transform an array of index-weighted vertices into 
+// dluetscher: added TransformVertsMinMax to transform an array of index-weighted vertices into
 //			   an array of idSilTraceVerts, while simulatenously calculating the bounds
 static ALIGN16( float packedOnes[4] ) = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVertOutputData, 
-												   idVec3 &min, idVec3 &max, 
-												   byte *vertexInputData, 
-												   int vertStride, int numVerts, 
+void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVertOutputData,
+												   idVec3 &min, idVec3 &max,
+												   byte *vertexInputData,
+												   int vertStride, int numVerts,
 												   float *skinToModelTransforms ) {
 	byte *vertexOutputData, *endVertexInputData;
 	ALIGN16( float minStore[4]; )
@@ -18055,7 +18055,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 
 	vertexOutputData = (byte*) silTraceVertOutputData;
 	endVertexInputData = vertexInputData + vertStride*numVerts;
-	do 
+	do
 	{
 		__asm
 		{
@@ -18068,7 +18068,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			mov edx, [eax+12]						; edx = i0, i1, i2, i3
 			shl edx, 6								; multiply i0 by 64
 			movaps xmm0, [eax+16]					; xmm0 = w0, w1, w2, w3
-			and edx, 0x3FC0						
+			and edx, 0x3FC0
 			add edx, ecx
 			movaps xmm7, xmm0
 
@@ -18083,7 +18083,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			mulps xmm1, xmm7						; scale first matrix by first weight
 			shr edx, 2								; multiply i1 by 64 (right shift by 8, left shift by 6)
 			mulps xmm2, xmm7
-			and edx, 0x3FC0						
+			and edx, 0x3FC0
 			mulps xmm3, xmm7
 			add edx, ecx
 			movaps xmm7, xmm0
@@ -18100,7 +18100,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			shr edx, 10								; multiply i2 by 64 (right shift by 16, left shift by 6)
 			mulps xmm5, xmm7
 			addps xmm1, xmm4
-			and edx, 0x3FC0						
+			and edx, 0x3FC0
 			mulps xmm6, xmm7
 			addps xmm2, xmm5
 			add edx, ecx
@@ -18119,7 +18119,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			shr edx, 18								; multiply i3 by 64 (right shift by 24, left shift by 6)
 			mulps xmm5, xmm7
 			addps xmm1, xmm4
-			and edx, 0x3FC0						
+			and edx, 0x3FC0
 			mulps xmm6, xmm7
 			addps xmm2, xmm5
 			add edx, ecx
@@ -18145,7 +18145,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			addps xmm2, xmm5
 			addps xmm3, xmm6
 			movss xmm4, xmm7
-			
+
 			;
 			; transform the position by the combined matrix
 			;
@@ -18189,8 +18189,8 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 			shufps xmm1, xmm2, 0
 			shufps xmm1, xmm3, 0x8
 
-			minps xmm0, xmm1 
-			maxps xmm7, xmm1 
+			minps xmm0, xmm1
+			maxps xmm7, xmm1
 
 			movaps [eax], xmm1
 			movaps [edx], xmm0
@@ -18199,7 +18199,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 
 		vertexInputData += vertStride;
 		vertexOutputData += sizeof(rvSilTraceVertT);
-	} 
+	}
 	while ( vertexInputData < endVertexInputData );
 
 	min.x = curMin[0];
@@ -18211,10 +18211,10 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax4Bone( rvSilTraceVertT *silTraceVert
 	max.z = curMax[2];
 }
 
-void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVertOutputData, 
-												   idVec3 &min, idVec3 &max, 
-												   byte *vertexInputData, 
-												   int vertStride, int numVerts, 
+void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVertOutputData,
+												   idVec3 &min, idVec3 &max,
+												   byte *vertexInputData,
+												   int vertStride, int numVerts,
 												   float *skinToModelTransforms ) {
 	byte *vertexOutputData, *endVertexInputData;
 	ALIGN16( float minStore[4]; )
@@ -18233,7 +18233,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVert
 
 	vertexOutputData = (byte*) silTraceVertOutputData;
 	endVertexInputData = vertexInputData + vertStride*numVerts;
-	do 
+	do
 	{
 		__asm
 		{
@@ -18247,7 +18247,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVert
 			movaps xmm0, [eax]						; xmm0 = x, y, z
 			shl edx, 6								; multiply i0 by 64
 			movaps xmm7, packedOnes
-			and edx, 0x3FC0						
+			and edx, 0x3FC0
 			movaps xmm4, xmm0
 			add edx, ecx
 			movss xmm4, xmm7
@@ -18302,8 +18302,8 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVert
 			shufps xmm1, xmm2, 0
 			shufps xmm1, xmm3, 0x8
 
-			minps xmm0, xmm1 
-			maxps xmm7, xmm1 
+			minps xmm0, xmm1
+			maxps xmm7, xmm1
 
 			movaps [eax], xmm1
 			movaps [edx], xmm0
@@ -18312,7 +18312,7 @@ void VPCALL idSIMD_SSE::TransformVertsMinMax1Bone( rvSilTraceVertT *silTraceVert
 
 		vertexInputData += vertStride;
 		vertexOutputData += sizeof(rvSilTraceVertT);
-	} 
+	}
 	while ( vertexInputData < endVertexInputData );
 
 	min.x = curMin[0];
@@ -18719,7 +18719,7 @@ void VPCALL idSIMD_SSE::DecalPointCull( byte *cullBits, const idPlane *planes, c
 
 		cmpnltps	xmm6, SIMD_SP_zero
 		movmskps	ecx, xmm6
-			
+
 		movaps		xmm6, p0
 		movss		xmm3, [esi+eax+1*SILTRACEVERT_SIZE+SILTRACEVERT_XYZW_OFFSET+0]
 		shufps		xmm3, xmm3, R_SHUFFLE_PS( 0, 0, 0, 0 )
@@ -19598,9 +19598,9 @@ void VPCALL idSIMD_SSE::MinMax( idVec3 &min, idVec3 &max, const rvSilTraceVertT 
 	loop1:
 		movaps xmm1, [eax]
 		add eax, SILTRACEVERT_SIZE
-		
-		minps xmm0, xmm1 
-		maxps xmm7, xmm1 
+
+		minps xmm0, xmm1
+		maxps xmm7, xmm1
 
 		cmp eax, esi
 		jne loop1
@@ -19671,8 +19671,8 @@ void VPCALL idSIMD_SSE::MinMax( idVec3 &min, idVec3 &max, const rvSilTraceVertT 
 		shl	eax, SILTRACEVERT_SIZE_SHIFT
 		add eax, esi
 
-		minps xmm0, xmm1 
-		maxps xmm7, xmm1 
+		minps xmm0, xmm1
+		maxps xmm7, xmm1
 
 		movaps xmm1, [eax]
 
@@ -19681,14 +19681,14 @@ void VPCALL idSIMD_SSE::MinMax( idVec3 &min, idVec3 &max, const rvSilTraceVertT 
 		shl	eax, SILTRACEVERT_SIZE_SHIFT
 		add eax, esi
 
-		minps xmm0, xmm1 
-		maxps xmm7, xmm1 
+		minps xmm0, xmm1
+		maxps xmm7, xmm1
 
 		movaps xmm1, [eax]
 		mov eax, endIndices
 
-		minps xmm0, xmm1 
-		maxps xmm7, xmm1 
+		minps xmm0, xmm1
+		maxps xmm7, xmm1
 
 		cmp edi, eax
 		jl loop1
@@ -19704,7 +19704,7 @@ void VPCALL idSIMD_SSE::MinMax( idVec3 &min, idVec3 &max, const rvSilTraceVertT 
 	max.x = curMax[0];
 	max.y = curMax[1];
 	max.z = curMax[2];
-#else	
+#else
 	assert( sizeof( rvSilTraceVertT ) == SILTRACEVERT_SIZE );
 	assert( (int)&((rvSilTraceVertT *)0)->xyzw == SILTRACEVERT_XYZW_OFFSET );
 

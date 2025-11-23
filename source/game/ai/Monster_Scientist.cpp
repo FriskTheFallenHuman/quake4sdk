@@ -10,11 +10,11 @@ public:
 	CLASS_PROTOTYPE( rvMonsterScientist );
 
 	rvMonsterScientist ( void );
-	
+
 	void				Spawn				( void );
-	
+
 	virtual void		OnDeath				( void );
-	
+
 	// Add some dynamic externals for debugging
 	virtual void		GetDebugInfo		( debugInfoProc_t proc, void* userData );
 
@@ -41,7 +41,7 @@ rvMonsterScientist::Spawn
 */
 void rvMonsterScientist::Spawn ( void ) {
 	PlayEffect ( "fx_fly", animator.GetJointHandle ( "effects_bone" ), true );
-} 
+}
 
 /*
 ================
@@ -50,7 +50,7 @@ rvMonsterScientist::OnDeath
 */
 void rvMonsterScientist::OnDeath ( void ) {
 	StopEffect ( "fx_fly" );
-	
+
 	idAI::OnDeath ( );
 }
 
@@ -67,7 +67,7 @@ void rvMonsterScientist::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */

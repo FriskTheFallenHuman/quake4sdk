@@ -9,25 +9,25 @@
 class CriticalSection
 {
 public:
-	ID_INLINE CriticalSection() 
-	{ 
-		InitializeCriticalSection(&mCrit); 
+	ID_INLINE CriticalSection()
+	{
+		InitializeCriticalSection(&mCrit);
 	}
-	ID_INLINE ~CriticalSection() 
-	{ 
-		DeleteCriticalSection(&mCrit); 
+	ID_INLINE ~CriticalSection()
+	{
+		DeleteCriticalSection(&mCrit);
 	}
 
-	ID_INLINE void Enter() 
-	{ 
+	ID_INLINE void Enter()
+	{
 		while(!Try())
 		{
 			Sleep(0);	// give another thread a chance to run to try to eliminate deadlock
 		}
 	}
-	ID_INLINE void Leave() 
-	{ 
-		LeaveCriticalSection(&mCrit); 
+	ID_INLINE void Leave()
+	{
+		LeaveCriticalSection(&mCrit);
 	}
 
 	ID_INLINE bool Try()
@@ -48,12 +48,12 @@ template <typename t>
 class AutoCrit
 {
 public:
-	ID_INLINE AutoCrit() 
-	{ 
+	ID_INLINE AutoCrit()
+	{
 		sCrit.Enter();
 	}
-	ID_INLINE ~AutoCrit() 
-	{ 
+	ID_INLINE ~AutoCrit()
+	{
 		sCrit.Leave();
 	}
 private:
@@ -172,8 +172,8 @@ public:
 		critPtr->crit.Enter();
 	}
 
-	ID_INLINE ~AutoInstanceCrit() 
-	{ 
+	ID_INLINE ~AutoInstanceCrit()
+	{
 		CritInfo *critPtr = NULL;
 		{
 			//AutoCrit<AutoInstanceCrit<t> > crit;			// protect access to the map

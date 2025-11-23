@@ -56,7 +56,7 @@ void rvGameDebug::Shutdown ( void ) {
 	overrideEntity	= NULL;
 
 	memset ( &hud, 0, sizeof(hud) );
-}	
+}
 
 /*
 ================
@@ -83,13 +83,13 @@ void rvGameDebug::BeginFrame ( void ) {
 			currentHud  = NULL;
 			return;
 		}
-	
+
 		g_showDebugHud.ClearModified( );
 
 		// If the debug hud hasnt been loaded yet then load it now
 		if ( !hud[hudIndex] ) {
 			hud[hudIndex] = uiManager->FindGui( va("guis/debug/hud%d.gui",hudIndex), true, true, true );
-			
+
 			// If the hud wasnt found auto-generate one
 			if ( !hud[hudIndex] ) {
 				hud[hudIndex] = uiManager->Alloc();
@@ -97,13 +97,13 @@ void rvGameDebug::BeginFrame ( void ) {
 		}
 
 		// Cache the debug hud state.
-		currentHud = hud[hudIndex];	
+		currentHud = hud[hudIndex];
 	}
-	
+
 	currentHud->ClearState ( );
-		
+
 	// IF there is an override entity just use that, otherwise find one that
-	// is in front of the players crosshair	
+	// is in front of the players crosshair
 	if ( overrideEntity ) {
 		focusEntity = overrideEntity;
 		overrideEntity = NULL;
@@ -116,10 +116,10 @@ void rvGameDebug::BeginFrame ( void ) {
 		player = gameLocal.GetLocalPlayer ( );
 		start  = player->GetEyePosition();
 		end    = start + player->viewAngles.ToForward() * 4096.0f;
-  			
+
 		gameLocal.TracePoint( player, tr, start, end, MASK_SHOT_BOUNDINGBOX, player );
   		if ( tr.fraction < 1.0 && tr.c.entityNum != ENTITYNUM_WORLD ) {
-  			focusEntity = static_cast<idEntity*>(gameLocal.entities[ tr.c.entityNum ]);		
+  			focusEntity = static_cast<idEntity*>(gameLocal.entities[ tr.c.entityNum ]);
   		} else {
   			focusEntity = NULL;
   		}
@@ -133,7 +133,7 @@ void rvGameDebug::BeginFrame ( void ) {
 		SetString ( "entityClass", focusEntity->GetClassname ( ) );
 	}
 
-	// General map information	
+	// General map information
 	SetString ( "mapname", gameLocal.GetMapName ( ) );
 	SetString ( "version", cvarSystem->GetCVarString ( "si_version" ) );
 	if ( gameLocal.GetLocalPlayer() ) {
@@ -165,13 +165,13 @@ void rvGameDebug::DrawHud ( void ) {
 	if ( IsHudActive ( DBGHUD_SCRATCH ) ) {
 		int		index;
 		idDict	tempState;
-		
+
 		tempState.Copy ( currentHud->State() );
 		currentHud->ClearState ( );
-		
+
 		for ( index = 0; index < tempState.GetNumKeyVals(); index ++ ) {
 			const idKeyValue* kv;
-		
+
 			kv = tempState.GetKeyVal ( index );
 			SetString ( va("scratchKey_item_%d", index ), kv->GetKey() );
 			SetString ( va("scratchValue_item_%d", index ), kv->GetValue() );
@@ -180,15 +180,15 @@ void rvGameDebug::DrawHud ( void ) {
 	else {
 		int index;
 		for ( index = 0; index < nonGameState.GetNumKeyVals(); index ++ ) {
-			const idKeyValue* kv;		
+			const idKeyValue* kv;
 			kv = nonGameState.GetKeyVal ( index );
-			currentHud->SetStateString ( kv->GetKey(), kv->GetValue() );			
+			currentHud->SetStateString ( kv->GetKey(), kv->GetValue() );
 		}
-	}	
-	
+	}
+
 	// Activate the hud to ensure lists get updated and redraw it
 	currentHud->StateChanged ( gameLocal.time );
-	currentHud->Redraw( gameLocal.time );			
+	currentHud->Redraw( gameLocal.time );
 }
 
 /*
@@ -200,7 +200,7 @@ void rvGameDebug::AppendList ( const char* listname, const char* value ) {
 	if ( !currentHud ) {
 		return;
 	}
-	
+
 	int		count;
 	char	countName[1024];
 	char	itemName[1024];
@@ -208,10 +208,10 @@ void rvGameDebug::AppendList ( const char* listname, const char* value ) {
 	idStr::snPrintf ( countName, 1023, "%sCount", listname );
 	count = GetInt ( countName );
 
-	idStr::snPrintf ( itemName, 1023, "%s_item_%d", listname, count );	
+	idStr::snPrintf ( itemName, 1023, "%s_item_%d", listname, count );
 	SetString ( va("%s_item_%d", listname, count ), value );
-	
-	SetInt ( countName, count + 1 );	
+
+	SetInt ( countName, count + 1 );
 }
 
 /*
@@ -236,7 +236,7 @@ void rvGameDebug::SetFloat ( const char* key, float value ) {
 		}
 	} else {
 		nonGameState.SetFloat ( key, value );
-	}	
+	}
 }
 
 void rvGameDebug::SetString ( const char* key, const char* value ) {
@@ -254,7 +254,7 @@ void rvGameDebug::SetString ( const char* key, const char* value ) {
 rvGameDebug::Get
 ================
 */
-int rvGameDebug::GetInt ( const char* key ) { 
+int rvGameDebug::GetInt ( const char* key ) {
 	return currentHud ? currentHud->State().GetInt ( key ) : 0;
 }
 
@@ -288,7 +288,7 @@ void rvGameDebug::SetStatString ( const char* key, const char* value ) {
 rvGameDebug::GetStat
 ================
 */
-int rvGameDebug::GetStatInt ( const char* key ) { 
+int rvGameDebug::GetStatInt ( const char* key ) {
 	return gameStats.GetInt ( key );
 }
 
@@ -335,7 +335,7 @@ rvGameDebug::JumpTo
 ================
 */
 void rvGameDebug::JumpTo ( int jumpIndex ) {
-	if ( jumpIndex >= jumpPoints.Num() ) { 
+	if ( jumpIndex >= jumpPoints.Num() ) {
 		return;
 	}
 
@@ -344,7 +344,7 @@ void rvGameDebug::JumpTo ( int jumpIndex ) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if( player ) {
 		player->Teleport( jumpPoints[jumpIndex].origin, jumpPoints[jumpIndex].angles, NULL );
-	}	
+	}
 }
 
 /*

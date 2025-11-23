@@ -3,8 +3,8 @@
 //
 // AAST Tactical Search Parameters Documentation
 // ---------------------------------------------
-// There are 10 tests at your disposal when creating search functions, 3 
-// sets of 3 and one special case test.  Each of these 10 tests can have 
+// There are 10 tests at your disposal when creating search functions, 3
+// sets of 3 and one special case test.  Each of these 10 tests can have
 // hard min and max limits, as well as a "soft" weight which will determine how
 // highly the feature is ranked against other features.  Let's examine a
 // diagram of what these 10 tests are:
@@ -14,7 +14,7 @@
 //         /      #########      [O] = Owner Test Set (actor who is doing the search)
 //       [P]      #########      [P] = Path Test Set (line between owner and focus)
 //        |       #########      <-> = Advance Test (In front / behind owner)
-//       /        x   #####       x  = Feature (feature being tested) 
+//       /        x   #####       x  = Feature (feature being tested)
 // <---[O]--->        #####      ### = Walls
 //     ####################
 //     ####################
@@ -30,7 +30,7 @@
 //
 // - FacingDot		RANGE=[-1, 1]		WEIGHT=(-1=Behind, 1=In Front)
 //		FacingDot is computed with the dotproduct of the subject's facing and
-//		the feature's normal.  This too will be a common test to compare with 
+//		the feature's normal.  This too will be a common test to compare with
 //		all three subjects.  With it you can prefer points in front or behind
 //		things.
 //
@@ -47,7 +47,7 @@
 //		This test will tell you how much the feature is between the owner and
 //		the focus, reguardless of what direction either is facing at the time.
 //		As a result, it approximates "advancing".
-//		
+//
 ///////////////////////////////////////////////////////////////////////////////////
 #include "../../idlib/precompiled.h"
 #pragma hdrstop
@@ -117,25 +117,25 @@ int aasFeature_s::GetLookPos( idVec3& lookPos,  const idVec3& aimAtOrigin, const
 	lookPos[2]	+= height - leanDistance;
 	direction	 = aimAtOrigin - lookPos;
 	distance	 = direction.NormalizeFast();
-	right		 = Normal().Cross(up);	
+	right		 = Normal().Cross(up);
 	rightDot	 = right * direction;
 
 
 	// Check For Optimal Conditions
 	//------------------------------
-	if (flags&FEATURE_LOOK_OVER && fabsf(rightDot)<0.2f) 
+	if (flags&FEATURE_LOOK_OVER && fabsf(rightDot)<0.2f)
 	{
 		lookPos[2] += leanDistance*2.0f;				// CDR_TODO: Hard coded numbers make me sad
 		return FEATURE_LOOK_OVER;
 	}
 
-	if (flags&FEATURE_LOOK_RIGHT && rightDot>0.0f) 
+	if (flags&FEATURE_LOOK_RIGHT && rightDot>0.0f)
 	{
 		lookPos += right * leanDistance;
 		return FEATURE_LOOK_RIGHT;
 	}
 
-	if (flags&FEATURE_LOOK_LEFT && rightDot<0.0f) 
+	if (flags&FEATURE_LOOK_LEFT && rightDot<0.0f)
 	{
 		lookPos -= right * leanDistance;
 		return FEATURE_LOOK_LEFT;
@@ -241,7 +241,7 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	// Test - Records the value out of the range and returns true if succeeded
 	///////////////////////////////////////////////////////////////////////////
-	bool			Test(float Value, float MaxScale=1.0f)	
+	bool			Test(float Value, float MaxScale=1.0f)
 	{
 		if (mMin>-1.0f || mMax<1.0f || mWeight!=0.0f)
 		{
@@ -337,7 +337,7 @@ struct rvTestSet
 		mDirectionDot.Reset();
 		mFacingDot.Reset();
 		mDistance.Reset();
-// bdube: Had to comment this out becaue it would break the test function which checks for non defaults 
+// bdube: Had to comment this out becaue it would break the test function which checks for non defaults
 //		mDistance.mMin = 0.0f;	// special case (default would be -1.0f because all others are dot products)
 	}
 
@@ -408,7 +408,7 @@ struct rvTestSet
 			return false;
 		}
 		return true;
-	}		
+	}
 
 	///////////////////////////////////////////////////////////////////////////
 	// SetupOriginAndFacing - Called For Each Test Set
@@ -419,15 +419,15 @@ struct rvTestSet
 		{
 			mOrigin		= (originOverride)?(*originOverride):(vec3_origin);
 			mFacing		= (facingOverride)?(*facingOverride):(vec3_origin);
-		} 
-		else 
+		}
+		else
 		{
 			const idActor* entActor = dynamic_cast<const idActor*>(ent);	// bleh.  Base entity class should properly return origin, angles, and forward vector
 
 			mOrigin		= (originOverride)?(*originOverride):(ent->GetPhysics()->GetOrigin());
 			mFacing		= (facingOverride)?(*facingOverride):(entActor?entActor->viewAxis[0]:ent->GetPhysics()->GetAxis(0)[0]);
 		}
-			
+
 		mFacing[2]	= 0;
 		mFacing.Normalize();
 	}
@@ -463,8 +463,8 @@ struct rvTestSet
 ///////////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal
 //
-// This is the local implimentation of the rvAASTacticalSensor interface.  It 
-// contains all the various local data and functions needed to execute a 
+// This is the local implimentation of the rvAASTacticalSensor interface.  It
+// contains all the various local data and functions needed to execute a
 // search of the tactical data in AAS.
 ///////////////////////////////////////////////////////////////////////////////////
 struct rvAASTacticalSensorLocal : rvAASTacticalSensor
@@ -769,7 +769,7 @@ void	rvAASTacticalSensorLocal::Update()
 			//---------------------------------------------------------
 			for (teammate = aiManager.GetAllyTeam ( (aiTeam_t)mOwner->team ); teammate; teammate = teammate->teamNode.Next())
 			{
-				if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0) 
+				if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0)
 				{
 					continue;
 				}
@@ -814,14 +814,14 @@ void	rvAASTacticalSensorLocal::Update()
 					{
 						// If On Left Of Me, Must Have A Right Lean, And Converse
 						//--------------------------------------------------------
-						if ((featureDotLeft>0.0f && mNear->flags&FEATURE_LOOK_RIGHT) || 
+						if ((featureDotLeft>0.0f && mNear->flags&FEATURE_LOOK_RIGHT) ||
 							(featureDotLeft<0.0f && mNear->flags&FEATURE_LOOK_LEFT))
 						{
 							// Check All Team Mates To See If This Look Points At Them
 							//---------------------------------------------------------
 							for (teammate = aiManager.GetAllyTeam ( (aiTeam_t)mOwner->team ); teammate; teammate = teammate->teamNode.Next())
 							{
-								if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0) 
+								if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0)
 								{
 									continue;
 								}
@@ -865,11 +865,11 @@ void rvAASTacticalSensorLocal::Reserve(aasFeature_t* f)
 	if (f!=mReserved && mOwner)
 	{
 		mReserved = f;
-		
-		if ( f ) 
+
+		if ( f )
 		{
 			mReservedOrigin = f->Origin ( );
-		}	
+		}
 	}
 }
 
@@ -979,8 +979,8 @@ bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFe
 
 	// Does It Match The Flags?
 	//--------------------------
-	if (!(f->flags&mFlagsMatchAny) || 
-		((f->flags&mFlagsMatchAll)!=mFlagsMatchAll) || 
+	if (!(f->flags&mFlagsMatchAny) ||
+		((f->flags&mFlagsMatchAll)!=mFlagsMatchAll) ||
  		 (f->flags&mFlagsMatchNone))
 	{
 		return false;
@@ -1030,7 +1030,7 @@ bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFe
 
 	// Is Anyone Else Going There?
 	//-----------------------------
-	if (mOwnerAI && !aiManager.ValidateDestination(mOwnerAI, f->Origin())) 
+	if (mOwnerAI && !aiManager.ValidateDestination(mOwnerAI, f->Origin()))
 	{
 		return false;
 	}
@@ -1130,14 +1130,14 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 	// Tether test set
 	//-------------------------------
 	mFromTether.Reset();
-	if (mOwnerAI && mOwnerAI->IsTethered ( ) ) 
+	if (mOwnerAI && mOwnerAI->IsTethered ( ) )
 	{
 		mFromTether.mFacingDot.mMin = 0.5f;
-		mFromTether.mFacingDot.mWeight = 0.3f; 
-		
+		mFromTether.mFacingDot.mWeight = 0.3f;
+
 		// Disable the owner distance test
-		mFromOwner.Reset();		
-	}	
+		mFromOwner.Reset();
+	}
 
 	// Other Test Sets
 	//-----------------
@@ -1145,7 +1145,7 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 	mAdvance.Reset();
 	mAssignment.Reset();
 
-	
+
 	// Default Test Values
 	//---------------------
 	TestSetupCurrentValues();
@@ -1154,9 +1154,9 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 ///////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal::SearchDebug
 //
-// TO RUN THIS FUNCTION, TYPE "extract_tactical" ON THE CONSOLE.  
+// TO RUN THIS FUNCTION, TYPE "extract_tactical" ON THE CONSOLE.
 //
-//    Feel free to modify this function to test whatever search or other 
+//    Feel free to modify this function to test whatever search or other
 //    operation you need.  The owner will be the player.
 ///////////////////////////////////////////////////////////////////////////////
 void rvAASTacticalSensorLocal::SearchDebug()
@@ -1172,7 +1172,7 @@ void rvAASTacticalSensorLocal::SearchRadius(const idVec3& origin, float rangeMin
 	SearchReset(0, rangeMin, rangeMax);
 	mSearchName							= "Radius";
 	mFromEnemy.Reset();								// Don't Care About Enemy At All
-	if ( origin != vec3_origin ) 
+	if ( origin != vec3_origin )
 	{
 		mFromOwner.mOrigin = origin;				// Override the owner origin
 	}
@@ -1262,7 +1262,7 @@ void rvAASTacticalSensorLocal::SearchAmbush()
 
 
 
-	
+
 
 
 
@@ -1284,27 +1284,27 @@ void rvAASTacticalSensorLocal::SearchAmbush()
 ///////////////////////////////////////////////////////////////////////////
 float rvAASTacticalSensorLocal::SearchComputeWeightRange(float& rangeNegative)
 {
-	return (mFromOwner.WeightRange(rangeNegative) + 
-			mFromEnemy.WeightRange(rangeNegative) + 
+	return (mFromOwner.WeightRange(rangeNegative) +
+			mFromEnemy.WeightRange(rangeNegative) +
 			mFromTether.WeightRange(rangeNegative) +
-			mFromPath.WeightRange(rangeNegative) + 
-			mAdvance.WeightRange(rangeNegative) + 
+			mFromPath.WeightRange(rangeNegative) +
+			mAdvance.WeightRange(rangeNegative) +
 			mLeanNormal.WeightRange(rangeNegative) +
 			mAssignment.WeightRange(rangeNegative));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Weight
-// 
+//
 // Add up the computed weight of all tests.
 ///////////////////////////////////////////////////////////////////////////////
 float rvAASTacticalSensorLocal::SearchComputeWeight()
 {
-	return (mFromOwner.Weight() + 
-			mFromEnemy.Weight() + 
+	return (mFromOwner.Weight() +
+			mFromEnemy.Weight() +
 			mFromTether.Weight() +
-			mFromPath.Weight() + 
-			mAdvance.Weight() + 
+			mFromPath.Weight() +
+			mAdvance.Weight() +
 			mLeanNormal.Weight() +
 			mAssignment.Weight());
 }
@@ -1378,11 +1378,11 @@ void rvAASTacticalSensorLocal::Search()
 //-----------------------------------------------------------------------------
 // PHASE I - POPULATE AREA QUEUE
 //-----------------------------------------------------------------------------
-	if ( mOwnerAI ) 
+	if ( mOwnerAI )
 	{
 		areaNumOwner = mOwnerAI->PointReachableAreaNum ( mFromOwner.mOrigin );
-	} 
-	else 
+	}
+	else
 	{
 		areaNumOwner = aas->PointReachableAreaNum(mFromOwner.mOrigin, mOwner->GetPhysics()->GetBounds(), AREA_REACHABLE_WALK);
 	}
@@ -1444,14 +1444,14 @@ void rvAASTacticalSensorLocal::Search()
 					continue;
 				}
 
-				// Compute The Weight 
+				// Compute The Weight
 				//--------------------
 				if (weightRangeTotal>0.0f)
 				{
 					weight		= SearchComputeWeight();			// Compute Weight Sum
 					weight		-= weightRangeNegative;				// Bring it into a positive range
 					weight		/= weightRangeTotal;				// Scale down to 0.0 - 1.0
-	
+
 					assert(weight>0.0f && weight<255.0f);
 					featurePtr->weight = (char)(weight*255);
 				}
@@ -1645,7 +1645,7 @@ void			rvTestSet::DrawDebugInfo(const idVec4& color, const idVec3& nonProjectedO
 ///////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal::DrawDebugInfo
 ///////////////////////////////////////////////////////////////////////////////
-void rvAASTacticalSensorLocal::DrawDebugInfo() 
+void rvAASTacticalSensorLocal::DrawDebugInfo()
 {
 	idAAS* aas = (mOwnerAI)?(mOwnerAI->aas):(gameLocal.GetAAS(0));
 	if (!aas || !aas->GetFile() || !aas->GetFile()->GetNumFeatures() || !mOwner || mOwner->IsHidden() || (ai_showTacticalFeatures.GetInteger()<2 && !mOwner->DebugFilter(ai_showTacticalFeatures) && !mOwner->DebugFilter(ai_debugTactical)))
@@ -1688,7 +1688,7 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 
 		// Draw Features
 		//---------------
-		for (int i=0; i<mFeatures.Num(); i++) 
+		for (int i=0; i<mFeatures.Num(); i++)
 		{
 			mFeatures[i]->DrawDebugInfo(i);
 			if (mFeatures[i]==mReserved)

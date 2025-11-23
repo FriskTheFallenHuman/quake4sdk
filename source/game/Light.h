@@ -93,7 +93,7 @@ private:
 	idEntityPtr<idEntity>	lightGUI;
 // abahr:
 	float			wait;
-	float			random;	
+	float			random;
 // RAVEN END
 
 private:
@@ -133,7 +133,7 @@ private:
 // RAVEN BEGIN
 // bdube: set light gui
 	void			Event_SetLightGUI( const char* gui );
-// RAVEN END	
+// RAVEN END
 };
 
 // RAVEN BEGIN

@@ -76,7 +76,7 @@ class ThreadedAlloc;		// class that is only used to expand the AutoCrit template
 	// Enables the batching of vertex cache request in SMP mode.
 	// Note (TTimo): is tied to ENABLE_INTEL_SMP
 	#define ENABLE_INTEL_VERTEXCACHE_OPT
-	
+
 	// Empty define for Xbox 360 compatibility
 	#define RESTRICT
 	#define TIME_THIS_SCOPE(x)

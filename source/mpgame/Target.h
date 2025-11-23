@@ -18,7 +18,7 @@ class idTarget : public idEntity {
 public:
 	CLASS_PROTOTYPE( idTarget );
 };
- 
+
 
 /*
 ===============================================================================

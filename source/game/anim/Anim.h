@@ -79,7 +79,7 @@ typedef struct {
 // bdube: added more features to programmer controlled joints
 	idInterpolateAccelDecelLinear<idAngles>	angularVelocity;
 	int										lastTime;
-	
+
 	jointHandle_t			collapseJoint;
 // RAVEN END
 
@@ -132,15 +132,15 @@ typedef enum {
 	FC_RECORDDEMO,
 	FC_AVIGAME,
 	FC_GUIEVENT,
-	
+
 	FC_AI_ENABLE_PAIN,
 	FC_AI_DISABLE_PAIN,
 	FC_AI_ENABLE_DAMAGE,
 	FC_AI_DISABLE_DAMAGE,
-	FC_AI_LOCKENEMYORIGIN,	
+	FC_AI_LOCKENEMYORIGIN,
 	FC_AI_ATTACK,
 	FC_AI_ATTACK_MELEE,
-	
+
 	FC_AI_SPEAK,
 	FC_AI_SPEAK_RANDOM,
 // MCG: for attachment managing
@@ -205,9 +205,9 @@ typedef struct {
 	bool					random_cycle_start			: 1;
 	bool					ai_no_turn					: 1;
 	bool					ai_no_look					: 1;
-	bool					ai_look_head_only			: 1;	
+	bool					ai_look_head_only			: 1;
 	bool					anim_turn					: 1;
-	bool					sync_cycle					: 1;	
+	bool					sync_cycle					: 1;
 } animFlags_t;
 
 
@@ -283,7 +283,7 @@ public:
 	void					IncreaseRefs( void ) const;
 	void					DecreaseRefs( void ) const;
 	int						NumRefs( void ) const;
-	
+
 	void					CheckModelHierarchy( const idRenderModel *model ) const;
 	void					GetInterpolatedFrame( const frameBlend_t &frame, idJointQuat *joints, const int *index, int numIndexes ) const;
 	void					GetSingleFrame( int framenum, idJointQuat *joints, const int *index, int numIndexes ) const;
@@ -445,7 +445,7 @@ public:
 	const int *					GetChannelJoints( int channel ) const;
 
 	const idVec3 &				GetVisualOffset( void ) const;
-		
+
 private:
 	void						CopyDecl( const idDeclModelDef *decl );
 	bool						ParseAnim( idLexer &src, int numDefaultAnims );
@@ -457,7 +457,7 @@ private:
 	idList<int>					channelJoints[ ANIM_NumAnimChannels ];
 	idRenderModel *				modelHandle;
 	idList<idAnim *>			anims;
-	const idDeclSkin *			skin;	
+	const idDeclSkin *			skin;
 };
 
 ID_INLINE const idAnim *idDeclModelDef::GetAnim( int index ) const {
@@ -699,11 +699,11 @@ class idAnimator{
 // RAVEN END
 	int							AnimLength( int animnum ) const;
 	const idVec3				&TotalMovementDelta( int animnum ) const;
-	
+
 // RAVEN BEGIN
 // nrausch: get the nearest joint to a segment - ignores joints behind the origin
 // you can pass it a null jointList in order to test against all joints ( use NumJoints() for the count )
-	jointHandle_t				GetNearestJoint( const idVec3 &start, const idVec3 &end, int time, jointHandle_t *jointList, int cnt ); 
+	jointHandle_t				GetNearestJoint( const idVec3 &start, const idVec3 &end, int time, jointHandle_t *jointList, int cnt );
 //MCG
 	jointMod_t *				FindExistingJointMod( jointHandle_t jointnum, int *index );
 // RAVEN END

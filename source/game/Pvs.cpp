@@ -231,7 +231,7 @@ void idPVS::FrontPortalPVS( void ) const {
 			}
 
 			for ( p = 0; p < area->numPortals; p++ ) {
-	
+
 				p2 = area->portals[p];
 
 				// if we the whole area is not at the front we need to check
@@ -432,7 +432,7 @@ void idPVS::AddPassageBoundaries( const idWinding &source, const idWinding &pass
 	idPlane		plane;
 
 
-	// check all combinations	
+	// check all combinations
 	for ( i = 0; i < source.GetNumPoints(); i++ ) {
 
 		l = (i + 1) % source.GetNumPoints();
@@ -599,7 +599,7 @@ void idPVS::CreatePassages( void ) const {
 					}
 
 					p = &pvsPortals[(byteNum << 3) + bitNum];
-	
+
 					if ( p->areaNum == source->areaNum ) {
 						continue;
 					}

@@ -283,7 +283,7 @@ public:
 	virtual const idVec3		GetCurrentGravity( const idVec3& origin, const idMat3& axis ) const = 0;
 	virtual void				Translation( trace_t &trace, idVec3 &source, idVec3 &dest, idTraceModel *trm, int clipMask ) = 0;
 	virtual void				SpawnClientMoveable ( const char* name, int lifetime, const idVec3& origin, const idMat3& axis, const idVec3& velocity, const idVec3& angular_velocity ) = 0;
-// bdube: debugging stuff	
+// bdube: debugging stuff
 	virtual void				DebugSetString ( const char* name, const char* value ) = 0;
 	virtual void				DebugSetFloat ( const char* name, float value ) = 0;
 	virtual void				DebugSetInt ( const char* name, int value ) = 0;
@@ -512,7 +512,7 @@ public:
 	virtual int					EntityPlayAnim ( idEntity* ent, int animNum, int time, int blendtime );
 	virtual void				EntitySetFrame ( idEntity* ent, int animNum, int frame, int time, int blendtime );
 	virtual void				EntityStopAllEffects ( idEntity* ent );
-	virtual void				EntityGetDelta ( idEntity* ent, int fromTime, int toTime, idVec3& delta ); 
+	virtual void				EntityGetDelta ( idEntity* ent, int fromTime, int toTime, idVec3& delta );
 	virtual void				EntityRemoveOriginOffset ( idEntity* ent, bool remove );
 	virtual const char*			EntityGetClassname ( idEntity* ent ) const;
 	virtual bool				EntityIsDerivedFrom ( idEntity* ent, const char* classname ) const;
@@ -550,14 +550,14 @@ public:
 // bdube: added
 	virtual int					GetGameEntityRegisterTime ( void ) const;
 	virtual idEntity*			GetFirstSpawnedEntity ( void ) const;
-	virtual idEntity*			GetNextSpawnedEntity ( idEntity* from ) const; 
+	virtual idEntity*			GetNextSpawnedEntity ( idEntity* from ) const;
 // jscott: added
 	virtual	void				DrawPlaybackDebugInfo( void );
 	virtual	void				RecordPlayback( const usercmd_t &cmd, idEntity *source );
 	virtual	bool				PlayPlayback( void );
 	virtual	void				ShutdownPlaybacks( void );
-// RAVEN END	
-	
+// RAVEN END
+
 	// Script methods
 	virtual int					ScriptGetStatementLineNumber ( idProgram* program, int instructionPointer ) const;
 	virtual const char*			ScriptGetStatementFileName ( idProgram* program, int instructionPointer ) const;
@@ -571,14 +571,14 @@ public:
 	virtual bool				ScriptIsReturnOperator ( int op ) const;
 	virtual const char*			ScriptGetRegisterValue ( idInterpreter* interpreter, const char* varname, int callstackDepth ) const;
 	virtual idThread*			ScriptGetThread ( idInterpreter* interpreter ) const;
-	
+
 	// Thread methods
 	virtual int					ThreadGetCount ( void );
 	virtual idThread*			ThreadGetThread ( int index );
 	virtual const char*			ThreadGetName ( idThread* thread );
 	virtual int					ThreadGetNumber ( idThread* thread );
 	virtual const char*			ThreadGetState ( idThread* thread );
-	
+
 	// Class externals for entity viewer
 	virtual void				GetClassDebugInfo ( const idEntity* entity, debugInfoProc_t proc, void* userdata );
 
@@ -632,7 +632,7 @@ public:
 	virtual void		Set			( const char* keyword, float value ) = 0;
 	virtual void		Set			( const char* keyword, const char* value ) = 0;
 	virtual void		Set			( const char* keyword, bool value ) = 0;
-	
+
 	virtual void		Add			( const char* keyword, int value ) = 0;
 	virtual void		Add			( const char* keyword, float value ) = 0;
 };
@@ -695,7 +695,7 @@ struct gameImport_t {
 // dluetscher: added the following members to exchange memory system data
 #ifdef _RV_MEM_SYS_SUPPORT
 	rvHeapArena *				heapArena;								// main heap arena that all other heaps use
-	rvHeap *					systemHeapArray[MAX_SYSTEM_HEAPS];		// array of pointers to rvHeaps that are common to idLib, Game, and executable 
+	rvHeap *					systemHeapArray[MAX_SYSTEM_HEAPS];		// array of pointers to rvHeaps that are common to idLib, Game, and executable
 #endif
 // RAVEN END
 };
@@ -708,7 +708,7 @@ struct gameExport_t {
 // RAVEN BEGIN
 // bdube: added
 	rvGameLog *					gameLog;				// interface for game logging
-// RAVEN END	
+// RAVEN END
 };
 
 extern "C" {

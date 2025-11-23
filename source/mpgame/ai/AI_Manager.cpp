@@ -35,7 +35,7 @@ bool rvAIManager::IsActive( void ){
 
 /*
 ================
-rvAIManager::RunFrame 
+rvAIManager::RunFrame
 ================
 */
 void rvAIManager::RunFrame ( void ){
@@ -49,9 +49,9 @@ void rvAIManager::RunFrame ( void ){
 	}
 
 	// Display current ai speeds
-	if ( ai_speeds.GetBool ( ) && thinkCount > 0 ) {		
-		gameLocal.Printf ( "ai:%6i  n:%2i s:%2i all:%5.2f t:%5.2f e:%5.2f m:%5.f\n", 
-			gameLocal.framenum, thinkCount, simpleThinkCount, 
+	if ( ai_speeds.GetBool ( ) && thinkCount > 0 ) {
+		gameLocal.Printf ( "ai:%6i  n:%2i s:%2i all:%5.2f t:%5.2f e:%5.2f m:%5.f\n",
+			gameLocal.framenum, thinkCount, simpleThinkCount,
 			timerThink.Milliseconds(),
 			timerTactical.Milliseconds(),
 			timerFindEnemy.Milliseconds(),
@@ -107,12 +107,12 @@ void rvAIManager::RunFrame ( void ){
 	timerTactical.Clear ( );
 	timerFindEnemy.Clear ( );
 	timerMove.Clear ( );
-	
+
 	gameDebug.SetStatInt( "ai_thinkCount", thinkCount );
 
 	thinkCount	= 0;
 	simpleThinkCount = 0;
-	
+
 	// Draw any debugging information
 	DebugDraw ( );
 }
@@ -134,7 +134,7 @@ void rvAIManager::Clear( void ) {
 	helpers.Clear ( );
 	simpleThink.Clear ( );
 	avoids.Clear ( );
-	
+
 	memset ( &teamTimers, 0, sizeof(teamTimers) );
 }
 
@@ -175,7 +175,7 @@ void rvAIManager::MarkReachBlocked(idAAS* aas, idReachability* reach, const idLi
 		blocked.aas = aas;
 		blocked.reach = reach;
 		blocked.time = gameLocal.GetTime() + 5000.0f;
-		
+
 		for (int i=0; i<blockers.Num(); i++) {
 			if (blockers[i] && blockers[i]->GetPhysics() && (blockers[i]->GetPhysics()->IsAtRest() || blockers[i]->GetPhysics()->GetLinearVelocity().LengthSqr()<2500.0f)) {
 				blocked.blockers.Append(blockers[i]);
@@ -198,13 +198,13 @@ rvAIManager::ReactToPlayerAttack
 void rvAIManager::ReactToPlayerAttack ( idPlayer* player, const idVec3 &origin, const idVec3 &dir ){
 	idActor* actor;
 	float expandSize;
-	
+
 	// Check all enemies and see if they need to react
 	for ( actor = GetEnemyTeam ( (aiTeam_t)player->team ); actor; actor = actor->teamNode.Next() ) {
 		// Skip non ai entities
 		if ( !actor->IsType ( idAI::Type ) ) {
 			continue;
-		}			
+		}
 
 		idAI *curAI = static_cast<idAI*>(actor);
 
@@ -213,7 +213,7 @@ void rvAIManager::ReactToPlayerAttack ( idPlayer* player, const idVec3 &origin, 
 		if ( !curAI->GetPhysics()->GetAbsBounds ( ).Expand(expandSize).LineIntersection ( origin, origin + dir * curAI->combat.visRange ) ) {
 			 continue;
 		}
-		 
+
 		curAI->ReactToShotAt ( player, origin, dir );
 	}
 }
@@ -274,7 +274,7 @@ void rvAIManager::Restore( idRestoreGame *savefile ){
 			}
 		}
 	}
-	
+
 	// Read team timers
 	memset ( teamTimers, 0, sizeof(teamTimers) );
 	for ( i = 0; i < AITEAM_NUM; i ++ ) {
@@ -324,9 +324,9 @@ rvAIManager::IsSimpleThink
 Determines whether or not the given AI entity should be simple thinking this frame
 =====================
 */
-bool rvAIManager::IsSimpleThink ( idAI* ai ) {	
+bool rvAIManager::IsSimpleThink ( idAI* ai ) {
 
-	// no simple think if simple thinking is disabled or we are the head node 
+	// no simple think if simple thinking is disabled or we are the head node
 	if ( ai_disableSimpleThink.GetBool() ) {
 		return false;
 	}
@@ -335,12 +335,12 @@ bool rvAIManager::IsSimpleThink ( idAI* ai ) {
 	if ( !ai->simpleThinkNode.InList ( ) ) {
 		ai->simpleThinkNode.AddToEnd ( simpleThink );
 	}
-	
+
 	// If head of list then its a complex think
 	if ( ai->simpleThinkNode.Prev() == NULL ) {
 		return false;
-	}	
-	
+	}
+
 	return true;
 }
 
@@ -356,7 +356,7 @@ idActor* rvAIManager::GetEnemyTeam ( aiTeam_t team ) {
 		case AITEAM_STROGG:
 			return teams[AITEAM_MARINE].Next();
 	}
-	return NULL;		
+	return NULL;
 }
 
 /*
@@ -371,7 +371,7 @@ idActor* rvAIManager::GetAllyTeam ( aiTeam_t team ) {
 		case AITEAM_STROGG:
 			return teams[AITEAM_STROGG].Next();
 	}
-	return NULL;		
+	return NULL;
 }
 
 /*
@@ -385,14 +385,14 @@ bool rvAIManager::ValidateDestination ( idAI* ai, const idVec3& dest, bool skipC
 	int			i;
 	idBounds	bounds;
 	idAI*		ignore;
-	
+
 	ignore = (!skipCurrent && ai && !ai->SkipCurrentDestination ( )) ? ai : NULL;
 
  	bounds = ai->GetPhysics()->GetBounds ( );
 	bounds.TranslateSelf ( dest );
 	bounds.ExpandSelf ( 16.0f );
 
-	// All teams and all actors on those teams		
+	// All teams and all actors on those teams
 	for ( i = 0; i < AITEAM_NUM; i ++ ) {
 		idActor* actor;
 		for ( actor = teams[i].Next(); actor; actor = actor->teamNode.Next() ) {
@@ -400,7 +400,7 @@ bool rvAIManager::ValidateDestination ( idAI* ai, const idVec3& dest, bool skipC
 			if ( actor == ignore || actor == skipActor || actor->IsHidden ( ) ) {
 				continue;
 			}
-			
+
 			// If the actor is AI that is moving we should check their destination rather than where they are now
 			if ( actor->IsType ( idAI::Type ) ) {
 				idAI* aiactor = static_cast<idAI*>(actor);
@@ -419,7 +419,7 @@ bool rvAIManager::ValidateDestination ( idAI* ai, const idVec3& dest, bool skipC
 		}
 	}
 
-	// Destinations inside an avoid area are invalid	
+	// Destinations inside an avoid area are invalid
 	for ( i = avoids.Num() - 1; i >= 0; i -- ) {
 		const aiAvoid_t& avoid = avoids[i];
 		// Skip all avoids that arent meant for this team
@@ -434,7 +434,7 @@ bool rvAIManager::ValidateDestination ( idAI* ai, const idVec3& dest, bool skipC
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -498,7 +498,7 @@ idActor* rvAIManager::NearestTeammateToPoint ( idActor* from, idVec3 point, bool
 ================
 rvAIManager::NearestTeammateEnemy
 
-Returns the closest enemy of an ally. 
+Returns the closest enemy of an ally.
 ================
 */
 idEntity* rvAIManager::NearestTeammateEnemy( idActor* from, float maxRange, bool checkFOV, bool checkLOS, idActor** closestAllyWithEnemy ) {
@@ -516,7 +516,7 @@ idEntity* rvAIManager::NearestTeammateEnemy( idActor* from, float maxRange, bool
 	if ( closestAllyWithEnemy ) {
 		*closestAllyWithEnemy = NULL;
 	}
-	
+
 	for( actor = aiManager.GetAllyTeam ( (aiTeam_t)from->team ); actor; actor = actor->teamNode.Next() ) 	{
 		//Hidden?
 		if ( actor->fl.hidden )	{
@@ -574,7 +574,7 @@ idEntity* rvAIManager::NearestTeammateEnemy( idActor* from, float maxRange, bool
 
 		bestDistSqr = distSqr;
 		closestAllyEnemy = allyEnemy;
-		
+
 		if ( closestAllyWithEnemy ) {
 			*closestAllyWithEnemy = actor;
 		}
@@ -617,7 +617,7 @@ bool rvAIManager::LocalTeamHasEnemies ( idAI* self, float maxBuddyRange, float m
 				// Setup our local variables used in the search
 				pvs	 = gameLocal.pvs.SetupCurrentPVS( actor->GetPVSAreas(), actor->GetNumPVSAreas() );
 				// If this enemy isnt in the same pvps then use them as a backup
-				if ( pvs.i > 0 
+				if ( pvs.i > 0
 					&& pvs.i < MAX_CURRENT_PVS
 					&& !gameLocal.pvs.InCurrentPVS( pvs, ((idAI*)actor)->GetEnemy()->GetPVSAreas(), ((idAI*)actor)->GetEnemy()->GetNumPVSAreas() ) ) {
 					gameLocal.pvs.FreeCurrentPVS( pvs );
@@ -694,7 +694,7 @@ rvAIHelper* rvAIManager::FindClosestHelper ( const idVec3& origin ) {
 	rvAIHelper*	bestHelper;
 	float		bestDist;
 	float		dist;
-	
+
 	bestDist   = idMath::INFINITY;
 	bestHelper = NULL;
 	for ( helper = helpers.Next(); helper; helper = helper->helperNode.Next( ) ) {
@@ -703,7 +703,7 @@ rvAIHelper* rvAIManager::FindClosestHelper ( const idVec3& origin ) {
 			bestDist = dist;
 			bestHelper = helper;
 		}
-	}	
+	}
 	return bestHelper;
 }
 
@@ -714,7 +714,7 @@ rvAIManager::UpdateHelpers
 */
 void rvAIManager::UpdateHelpers ( void ) {
 	int	i;
-	
+
 	for ( i = 0; i < AITEAM_NUM; i ++ ) {
 		idActor* actor;
 		for ( actor = teams[i].Next(); actor; actor = actor->teamNode.Next() ) {
@@ -743,15 +743,15 @@ void rvAIManager::DebugDraw ( void ) {
 	// Draw helpers?
 	if ( ai_debugHelpers.GetBool ( ) ) {
 		DebugDrawHelpers ( );
-		
+
 		int i;
 		for ( i = 0; i < avoids.Num(); i ++ ) {
 			const aiAvoid_t& avoid = avoids[i];
 			gameRenderWorld->DebugCircle ( colorOrange, avoid.origin, idVec3(0,0,1), avoid.radius, 10, 0 );
 		}
 	}
-	
-	
+
+
 }
 
 /*
@@ -761,7 +761,7 @@ rvAIManager::DebugDrawHelpers
 */
 void rvAIManager::DebugDrawHelpers ( void ) {
 	rvAIHelper* helper;
-	for ( helper = helpers.Next(); helper; helper = helper->helperNode.Next( ) ) {		
+	for ( helper = helpers.Next(); helper; helper = helper->helperNode.Next( ) ) {
 		helper->DrawDebugEntityInfo ( );
 	}
 }

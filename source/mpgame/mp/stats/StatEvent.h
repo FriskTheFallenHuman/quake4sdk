@@ -12,8 +12,8 @@
 
 Multiplayer statistics events
 
-This file contains statistic event definitions.  rvStatManager exposes 
-game-related functions (i.e. 'Kill', 'FlagCaptured') which create the 
+This file contains statistic event definitions.  rvStatManager exposes
+game-related functions (i.e. 'Kill', 'FlagCaptured') which create the
 appropriate statistic event and add it to the statQueue in rvStatManager.
 
 The statQueue contains a complete picture of an MP game.  It can be parsed to
@@ -31,7 +31,7 @@ class rvPlayerStat;
 ================
 statType_t
 
-Type identifiers for RTTI of stat events, rvStatTeam-derived events must go 
+Type identifiers for RTTI of stat events, rvStatTeam-derived events must go
 after ST_STAT_TEAM
 ================
 */
@@ -133,7 +133,7 @@ private:
 
 rvStat/rvStatTeam-derived classes
 
-These are the individual events that get stored in the 
+These are the individual events that get stored in the
 statManager's stat queue
 
 ===============================================================================

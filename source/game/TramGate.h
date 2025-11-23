@@ -32,7 +32,7 @@ protected:
 
 	idDoor*				GetDoorMaster() const;
 	bool				IsDoorMasterValid() const;
-	
+
 protected:
 	void				Event_Touch( idEntity* other, trace_t* trace );
 	void				Event_Activate( idEntity* activator );

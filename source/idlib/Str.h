@@ -205,7 +205,7 @@ public:
 // RAVEN BEGIN
 // bdube: escapes
 	int					IsEscape( int* type = NULL ) const;
-	int					LengthWithoutEscapes ( void ) const;	
+	int					LengthWithoutEscapes ( void ) const;
 	idStr &				RemoveEscapes ( int escapes = S_ESCAPE_ALL );
 // RAVEN END
 	void				CapLength( int );
@@ -287,7 +287,7 @@ public:
 // RAVEN BEGIN
 // bdube: escape codes
 	static int			IsEscape( const char *s, int* type = NULL );
-	static int			LengthWithoutEscapes( const char *s );	
+	static int			LengthWithoutEscapes( const char *s );
 	static char *		RemoveEscapes( char *s, int escapes = S_ESCAPE_ALL );
 // RAVEN END
 	static int			Cmp( const char *s1, const char *s2 );

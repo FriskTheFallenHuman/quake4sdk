@@ -31,7 +31,7 @@ protected:
 	bool				flagAutopilot;
 
 	int					battleStage;
-	
+
 	enum	{
 		FLY_NONE = 0,
 		FLY_TRANSITION,
@@ -53,9 +53,9 @@ private:
 	stateResult_t		State_Wait_Flying		( const stateParms_t& parms );
 
 //	stateResult_t		State_Dead				( const stateParms_t& parms );
-	
+
 	// walking melee attacks
-	
+
 	// walking ranged attacks
 	stateResult_t		State_Torso_ShotgunRocket		( const stateParms_t& parms );
 	stateResult_t		State_Torso_BlasterSweepGround	( const stateParms_t& parms );
@@ -65,7 +65,7 @@ private:
 	//flying evades
 	stateResult_t		State_Torso_EvadeLeft			( const stateParms_t& parms );
 	stateResult_t		State_Torso_EvadeRight			( const stateParms_t& parms );
-	
+
 	//flying ranged attacks
 	stateResult_t		State_Torso_FlyingRanged		( const stateParms_t& parms );
 	stateResult_t		State_Torso_FlyingSweep			( const stateParms_t& parms );
@@ -80,7 +80,7 @@ private:
 
 	//force the NG into walking mode. This does not play the landing anim, and will make him fall from the sky.
 	void				Event_ForceWalkMode( void );
-	
+
 	//These commands change the NG's state, but do so through states and animations.
 	void				Event_ForceLanding( void );
 	void				Event_ForceTakeoff( void );
@@ -174,7 +174,7 @@ void rvMonsterNetworkGuardian::Save ( idSaveGame *savefile ) const {
 rvMonsterNetworkGuardian::Restore
 ================
 */
-void rvMonsterNetworkGuardian::Restore ( idRestoreGame *savefile ) 
+void rvMonsterNetworkGuardian::Restore ( idRestoreGame *savefile )
 {
 	savefile->ReadInt( shots );
 	savefile->ReadInt( landTime );
@@ -199,15 +199,15 @@ rvMonsterNetworkGuardian::CheckActions
 */
 bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 	// If not moving, try turning in place
-	if ( !move.fl.moving && gameLocal.time > combat.investigateTime ) 
+	if ( !move.fl.moving && gameLocal.time > combat.investigateTime )
 	{
 		float turnYaw = idMath::AngleNormalize180 ( move.ideal_yaw - move.current_yaw ) ;
-		if ( turnYaw > lookMax[YAW] * 0.75f ) 
+		if ( turnYaw > lookMax[YAW] * 0.75f )
 		{
 			PerformAction ( "Torso_TurnRight90", 4, true );
 			return true;
-		} 
-		else if ( turnYaw < -lookMax[YAW] * 0.75f ) 
+		}
+		else if ( turnYaw < -lookMax[YAW] * 0.75f )
 		{
 			PerformAction ( "Torso_TurnLeft90", 4, true );
 			return true;
@@ -222,7 +222,7 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 	//this is the autopilot section.
 	if( flagAutopilot )	{
 		// If he's been on the ground long enough, fly...
-		if ( move.moveType == MOVETYPE_ANIM && move.fl.onGround && !flagFlying && gameLocal.time > landTime ) 
+		if ( move.moveType == MOVETYPE_ANIM && move.fl.onGround && !flagFlying && gameLocal.time > landTime )
 		{
 			PostState ( "Wait_Flying" );
 			SetAnimState ( ANIMCHANNEL_TORSO, "Torso_LiftOff", 4 );
@@ -230,8 +230,8 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 			actionMeleeAttack.fl.disabled = true;
 			flagFlying = FLY_TRANSITION;
 			return true;
-		} 
-		else if ( move.moveType == MOVETYPE_FLY && gameLocal.time > landTime ) 
+		}
+		else if ( move.moveType == MOVETYPE_FLY && gameLocal.time > landTime )
 		{
 			SetMoveType ( MOVETYPE_ANIM );
 			animPrefix = "";
@@ -243,7 +243,7 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 			SetAnimState ( ANIMCHANNEL_TORSO, "Torso_Fall", 4 );
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishAction", 0, SFLAG_ONCLEAR );
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", 4 );
-			
+
 			return true;
 		}
 	}
@@ -258,12 +258,12 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 	}
 
 	//check for ranged attacks on the ground
-	if( flagFlying == FLY_NONE )	{ 
-		  
+	if( flagFlying == FLY_NONE )	{
+
 		 switch (battleStage)	{
-		
+
 			case 1:
-				if( PerformAction ( &actionShotgunRocketAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )	||		
+				if( PerformAction ( &actionShotgunRocketAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )	||
 					PerformAction ( &actionBlasterAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack )		||
 					PerformAction ( &actionBlasterSweepGround, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ) {
 					return true;
@@ -281,7 +281,7 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 				gameLocal.Error("Bad battleStage '%d' set for Network Guardian.", battleStage);
 			break;
 		}
-	
+
 	}
 	//airborne attack actions
 	if( (flagFlying == FLY_FLYING) )	{
@@ -293,7 +293,7 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 				return true;
 		}
 	}
-	
+
 	//No.
 	//return idAI::CheckActions ( );
 	return false;
@@ -302,7 +302,7 @@ bool rvMonsterNetworkGuardian::CheckActions ( void ) {
 /*
 ===============================================================================
 
-	Events 
+	Events
 
 ===============================================================================
 */
@@ -314,7 +314,7 @@ rvMonsterNetworkGuardian::Event_ForceWalkMode
 */
 // forces NG to obey gravity and immediately switch to walking mode.
 void rvMonsterNetworkGuardian::Event_ForceWalkMode( void )	{
-	
+
 	SetMoveType ( MOVETYPE_ANIM );
 	animPrefix = "";
 	move.fl.noGravity = false;
@@ -352,7 +352,7 @@ void rvMonsterNetworkGuardian::Event_ForceLanding( void )	{
 rvMonsterNetworkGuardian::Event_ForceTakeoff
 ================
 */
-// forces NG to take off and fly. 
+// forces NG to take off and fly.
 void rvMonsterNetworkGuardian::Event_ForceTakeoff( void )	{
 
 	disablePain = true;
@@ -369,9 +369,9 @@ void rvMonsterNetworkGuardian::Event_ForceTakeoff( void )	{
 rvMonsterNetworkGuardian::Event_AllowAutoPilot
 ================
 */
-// toggles the AI autoPilot for deciding when to fly and land. 
+// toggles the AI autoPilot for deciding when to fly and land.
 void rvMonsterNetworkGuardian::Event_AllowAutopilot( float f )	{
-	
+
 	flagAutopilot = f ? true : false;
 
 }
@@ -383,14 +383,14 @@ rvMonsterNetworkGuardian::Event_SetBattleStage
 */
 // sets the current battle stage. Each stage has different behaviors.
 void rvMonsterNetworkGuardian::Event_SetBattleStage( float f )	{
-	
+
 	battleStage = f;
 
 }
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -420,7 +420,7 @@ END_CLASS_STATES
 
 
 stateResult_t rvMonsterNetworkGuardian::State_Torso_EvadeLeft ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -445,7 +445,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_EvadeLeft ( const stateParms
 }
 
 stateResult_t rvMonsterNetworkGuardian::State_Torso_EvadeRight ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -486,12 +486,12 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_ShotgunRocket ( const stateP
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "shotgunRocket_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -515,12 +515,12 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_BlasterSweepGround ( const s
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_spray_grd", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -543,12 +543,12 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_FlyingSweep ( const statePar
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_spray_air", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -572,12 +572,12 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_FlyingRanged ( const statePa
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "flyingRanged_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -601,12 +601,12 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_MIRVAttack ( const stateParm
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_vert", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -624,7 +624,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Wait_Flying ( const stateParms_t& 
 	if ( move.moveType == MOVETYPE_ANIM ) {
 		return SRESULT_WAIT;
 	}
-	return SRESULT_DONE; 
+	return SRESULT_DONE;
 }
 
 /*
@@ -653,7 +653,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_LiftOff ( const stateParms_t
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "liftoff", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				SetMoveType ( MOVETYPE_FLY );
@@ -664,7 +664,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_LiftOff ( const stateParms_t
 				flagFlying = FLY_FLYING;
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
 }
@@ -686,7 +686,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_Fall ( const stateParms_t& p
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "fly_descend_start", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_FALLSTARTWAIT );
-			
+
 		case STAGE_FALLSTARTWAIT:
 			if ( move.fl.onGround ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "fly_descend_end", 4 );
@@ -697,14 +697,14 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_Fall ( const stateParms_t& p
 				return SRESULT_STAGE ( STAGE_FALLLOOPWAIT );
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_FALLLOOPWAIT:
 			if ( move.fl.onGround ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "fly_descend_end", 0 );
 				return SRESULT_STAGE ( STAGE_FALLENDWAIT );
 			}
-			return SRESULT_WAIT;			
-					
+			return SRESULT_WAIT;
+
 		case STAGE_FALLENDWAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				// we've landed! determine the next fly time
@@ -713,15 +713,15 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_Fall ( const stateParms_t& p
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}	
+	}
 	return SRESULT_ERROR;
 }
 
 //================
 //rvMonsterNetworkGuardian::State_Torso_TurnRight90
 //================
-stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -731,7 +731,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnRight90 ( const statePar
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_left", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -740,14 +740,14 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnRight90 ( const statePar
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 //================
 //rvMonsterNetworkGuardian::State_Torso_TurnLeft90
 //================
-stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -757,7 +757,7 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnLeft90 ( const stateParm
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_right", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -766,15 +766,15 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_TurnLeft90 ( const stateParm
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 //================
 //rvMonsterNetworkGuardian::State_Torso_BlasterAttack
 //================
-stateResult_t rvMonsterNetworkGuardian::State_Torso_BlasterAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterNetworkGuardian::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
 
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -790,17 +790,17 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_BlasterAttack ( const stateP
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_blaster_start", parms.blendFrames );
 			shots = (gameLocal.random.RandomInt ( 12 ) + 8) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "attack_blaster_loop", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (IsEnemyVisible() && !enemy.fl.inFov)  ) {
@@ -810,13 +810,13 @@ stateResult_t rvMonsterNetworkGuardian::State_Torso_BlasterAttack ( const stateP
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 
 }

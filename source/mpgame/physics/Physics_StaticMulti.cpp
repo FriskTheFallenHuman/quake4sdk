@@ -468,7 +468,7 @@ idPhysics_StaticMulti::IsInWater
 bool idPhysics_StaticMulti::IsInWater ( void ) const {
 	return false;
 }
-// RAVEN END	
+// RAVEN END
 
 /*
 ================
@@ -727,8 +727,8 @@ idPhysics_StaticMulti::GetGravity
 const idVec3 &idPhysics_StaticMulti::GetGravity( void ) const {
 	static idVec3 gravity( 0, 0, -g_gravity.GetFloat() );
 	if( gameLocal.isMultiplayer ) {
-		gravity = idVec3( 0, 0, -g_mp_gravity.GetFloat() );	
-	} 
+		gravity = idVec3( 0, 0, -g_mp_gravity.GetFloat() );
+	}
 
 	return gravity;
 }

@@ -15,7 +15,7 @@
 rvVehiclePosition::rvVehiclePosition
 ================
 */
-rvVehiclePosition::rvVehiclePosition ( void ) {	
+rvVehiclePosition::rvVehiclePosition ( void ) {
 	memset ( &mInputCmd, 0, sizeof(mInputCmd) );
 	mInputAngles.Zero ( );
 
@@ -23,16 +23,16 @@ rvVehiclePosition::rvVehiclePosition ( void ) {
 
 	mCurrentWeapon  = -1;
 	mSoundPart		= -1;
-	
+
 	mDriver			= NULL;
 	mParent			= NULL;
-	
+
 	mEyeOrigin.Zero();
 	mEyeAxis.Identity();
 
 	mEyeOffset.Zero();
 	mEyeJoint = INVALID_JOINT;
-	
+
 	mDriverOffset.Zero ( );
 	mDriverJoint = INVALID_JOINT;
 }
@@ -101,7 +101,7 @@ void rvVehiclePosition::Init ( rvVehicle* parent, const idDict& args ) {
 	fl.bindDriver		= args.GetBool ( "bindDriver", "1" );
 
   	args.GetString ( "internalSurface", "", mInternalSurface );
-	
+
 	SetParts ( args );
 
 	mSoundMaxSpeed = args.GetFloat ( "maxsoundspeed", "0" );
@@ -113,7 +113,7 @@ void rvVehiclePosition::Init ( rvVehicle* parent, const idDict& args ) {
 	}
 
 	SelectWeapon ( 0 );
-	
+
 	UpdateInternalView ( true );
 }
 
@@ -124,25 +124,25 @@ rvVehiclePosition::SetParts
 */
 void rvVehiclePosition::SetParts ( const idDict& args ) {
 	const idKeyValue* kv;
-	
+
 	// Spawn all parts
 	kv = args.MatchPrefix( "def_part", NULL );
 	while ( kv ) {
 		const idDict*	dict;
 		idTypeInfo*		typeInfo;
-		
+
 		// Skip empty strings
 		if ( !kv->GetValue().Length() ) {
 			kv = args.MatchPrefix( "def_part", kv );
 			continue;
 		}
-		
+
 		// Get the dictionary for the part
 		dict = gameLocal.FindEntityDefDict ( kv->GetValue() );
 		if ( !dict ) {
 			gameLocal.Error ( "Invalid vehicle part definition '%'", kv->GetValue().c_str() );
 		}
-		
+
 		// Determine the part type
 		typeInfo = idClass::GetClass ( dict->GetString ( "spawnclass" ) );
 		if ( !typeInfo || !typeInfo->IsType ( rvVehiclePart::GetClassType() ) ) {
@@ -151,7 +151,7 @@ void rvVehiclePosition::SetParts ( const idDict& args ) {
 
 		// Add the new part
 		AddPart ( *typeInfo, *dict );
-		
+
 		kv = args.MatchPrefix( "def_part", kv );
 	}
 }
@@ -164,14 +164,14 @@ rvVehiclePosition::AddPart
 int rvVehiclePosition::AddPart ( const idTypeInfo &classdef, const idDict& args ) {
 	rvVehiclePart*	part;
 	int				soundChannel;
-	
+
 	// Get a sound channel
 	soundChannel = SND_CHANNEL_CUSTOM;
 	soundChannel += mParts.Num();
-	
-	// Allocate the new part	
+
+	// Allocate the new part
 	part = static_cast<rvVehiclePart*>(classdef.CreateInstance ( ));
-	part->Init ( this, args, (s_channelType)soundChannel );					
+	part->Init ( this, args, (s_channelType)soundChannel );
 	part->CallSpawn ( );
 
 	// Weapons go into their own list since only one can be active
@@ -180,7 +180,7 @@ int rvVehiclePosition::AddPart ( const idTypeInfo &classdef, const idDict& args 
 		return mWeapons.Append ( part );
 	}
 
-	return mParts.Append ( part );	
+	return mParts.Append ( part );
 }
 
 /*
@@ -193,7 +193,7 @@ bool rvVehiclePosition::SetDriver ( idActor* driver ) {
 		return false;
 	}
 
-	fl.inputValid = false;	
+	fl.inputValid = false;
 
 	if ( driver ) {
 		mDriver = driver;
@@ -203,15 +203,15 @@ bool rvVehiclePosition::SetDriver ( idActor* driver ) {
 			mDriver->Show ( );
 		} else {
 			mDriver->Hide ( );
-		
+
 			// Dont let the player take damage when inside the if not visible
 			mDriver->fl.takedamage = false;
-		}		
+		}
 
 		if ( mSoundPart != -1 ) {
 			static_cast<rvVehicleSound*>(mParts[mSoundPart])->Play ( );
 		}
-		
+
 		// Bind the driver to a joint or to the vehicles origin?
 		if( fl.bindDriver ) {
 			if ( INVALID_JOINT != mDriverJoint ) {
@@ -226,7 +226,7 @@ bool rvVehiclePosition::SetDriver ( idActor* driver ) {
 			mParent->activeNode.Remove();
 			mParent->activeNode.AddToFront( gameLocal.activeEntities );
 		}
-		
+
 		// Play a certain animation on the driver
 		if ( mDriverAnim.Length() ) {
 			mDriver->GetAnimator()->CycleAnim( ANIMCHANNEL_ALL, mDriver->GetAnimator()->GetAnim( mDriverAnim ), gameLocal.time, 0 );
@@ -237,23 +237,23 @@ bool rvVehiclePosition::SetDriver ( idActor* driver ) {
 
 			// Take damage again
 			mDriver->fl.takedamage = true;
-		}		
+		}
 
 		// Driver is no longer bound to the vehicle
 		mDriver->Unbind();
-		
+
 		mDriver = driver;
 
 		if ( mSoundPart != -1 ) {
 			static_cast<rvVehicleSound*>(mParts[mSoundPart])->Stop ( );
 		}
-		
+
 		// Clear out the input commands so the guns dont keep firing and what not when
 		// the player gets out
 		memset ( &mInputCmd, 0, sizeof(mInputCmd) );
 		mInputAngles.Zero ( );
 	}
-	
+
 	return true;
 }
 
@@ -282,8 +282,8 @@ rvVehiclePosition::ActivateParts
 */
 void rvVehiclePosition::ActivateParts ( bool active ) {
 	int i;
-	
-	// Activate or deactive the parts based on whether there is a driver	
+
+	// Activate or deactive the parts based on whether there is a driver
 	for ( i = mParts.Num() - 1; i >= 0; i -- ) {
 		mParts[i]->Activate ( active );
 	}
@@ -308,7 +308,7 @@ bool rvVehiclePosition::EjectDriver ( bool force ) {
 		mParent->IssueLockedWarning ( );
 		return false;
 	}
-	
+
 	// Remove the driver and if successful disable all parts for
 	// this position
 	if ( SetDriver ( NULL ) ) {
@@ -338,13 +338,13 @@ void rvVehiclePosition::SetInput ( const usercmd_t& cmd, const idAngles& newAngl
 		mOldInputCmd = cmd;
 		mInputCmd = cmd;
 		mInputAngles = newAngles;
-		
+
 		// We have valid input now and there is a driver so activate all of the parts
 		if ( !fl.inputValid && mDriver ) {
 			ActivateParts ( true );
 		}
 	}
-	
+
 	fl.inputValid = true;
 	mInputCmd = cmd;
 	mInputAngles = newAngles;
@@ -385,9 +385,9 @@ void rvVehiclePosition::UpdateHUD ( idUserInterface* gui ) {
 		weapon = static_cast<rvVehicleWeapon*>(mWeapons[mCurrentWeapon]);
 		gui->SetStateFloat ( "vehicle_weaponcharge", weapon->GetCurrentCharge() );
 		gui->SetStateInt ( "vehicle_weaponammo", weapon->GetCurrentAmmo() );
-	}	
+	}
 
-	// Calculate the rotation of the view in relation to the vehicle itself			
+	// Calculate the rotation of the view in relation to the vehicle itself
 	gui->SetStateFloat ( "vehicle_rotate", -idMath::AngleDelta ( mEyeAxis.ToAngles()[YAW], mParent->GetAxis ( ).ToAngles()[YAW] ) );
 
 	if( GetParent() ) {
@@ -404,7 +404,7 @@ void rvVehiclePosition::UpdateCursorGUI ( idUserInterface* gui ) {
 	if ( mCurrentWeapon < 0 || mCurrentWeapon >= mWeapons.Num() ) {
 		return;
 	}
-	
+
 	rvVehicleWeapon* weapon;
 	weapon = static_cast<rvVehicleWeapon*>(mWeapons[mCurrentWeapon]);
 	assert ( weapon );
@@ -426,13 +426,13 @@ void rvVehiclePosition::UpdateInternalView ( bool force ) {
 	if ( !force && internal == fl.internalView ) {
 		return;
 	}
-	
+
 	fl.internalView = internal;
 
 	if ( fl.depthHack ) {
 		mParent->GetRenderEntity()->weaponDepthHackInViewID = (IsOccupied() && fl.internalView) ? GetDriver()->entityNumber + 1 : 0;
 	}
-	
+
 	// Show and hide the internal surface
 	if ( mInternalSurface.Length() ) {
 		mParent->ProcessEvent ( fl.internalView ? &EV_ShowSurface : &EV_HideSurface, mInternalSurface.c_str() );
@@ -447,7 +447,7 @@ rvVehiclePosition::RunPrePhysics
 void rvVehiclePosition::RunPrePhysics ( void ) {
 	int i;
 
-	UpdateInternalView ( );	
+	UpdateInternalView ( );
 
 	if ( mParent->IsStalled() ) {
 		if ( !fl.stalled ) {
@@ -471,7 +471,7 @@ void rvVehiclePosition::RunPrePhysics ( void ) {
 	if ( mCurrentWeapon >= 0 ) {
 		mWeapons[mCurrentWeapon]->RunPrePhysics ( );
 	}
-	
+
 	// Run physics for each part
 	for ( i =  mParts.Num() - 1; i >= 0; i -- ) {
 		assert ( mParts[i] );
@@ -484,15 +484,15 @@ void rvVehiclePosition::RunPrePhysics ( void ) {
 		float	f;
 		float	speed;
 		idVec3	vel;
-		
-		// Only interested in forward or backward velocity	
+
+		// Only interested in forward or backward velocity
 		vel   = mParent->GetPhysics()->GetLinearVelocity ( ) * mParent->GetPhysics()->GetAxis ( );
-		speed = idMath::ClampFloat ( 0.0f, mSoundMaxSpeed, vel.Normalize ( ) );		
+		speed = idMath::ClampFloat ( 0.0f, mSoundMaxSpeed, vel.Normalize ( ) );
 		f     = speed / mSoundMaxSpeed;
-		
+
 		static_cast<rvVehicleSound*>(mParts[mSoundPart])->Attenuate ( f, f );
 	}
-	
+
 	if ( mCurrentWeapon >= 0 ) {
 		mWeapons[mCurrentWeapon]->RunPhysics ( );
 	}
@@ -509,7 +509,7 @@ void rvVehiclePosition::RunPostPhysics ( void ) {
 		assert ( mParts[i] );
 		mParts[i]->RunPostPhysics ( );
 	}
-	
+
 	if ( mCurrentWeapon >= 0 ) {
 		mWeapons[mCurrentWeapon]->RunPostPhysics ( );
 	}
@@ -517,14 +517,14 @@ void rvVehiclePosition::RunPostPhysics ( void ) {
 	if ( !IsOccupied ( ) ) {
 		return;
 	}
-	
+
 	if ( fl.inputValid ) {
 		if ( mInputCmd.upmove > 0 && !mParent->IsLocked() ) {
 			// inform the driver that its time to get out of the vehicle.
 			if( !mDriver->EventIsPosted(&AI_ExitVehicle) ) {
 				mDriver->PostEventMS( &AI_ExitVehicle, 250, false );// To remove jump when exiting
 			}
-			
+
 			// If the position isnt occupied anymore then the vehicle exit was successful and there
 			// is nothing else to do
 			if ( !IsOccupied ( ) ) {
@@ -532,12 +532,12 @@ void rvVehiclePosition::RunPostPhysics ( void ) {
 			}
 		} else if ( (mInputCmd.flags & UCF_IMPULSE_SEQUENCE) != (mOldInputFlags & UCF_IMPULSE_SEQUENCE) ) {
 			int i;
-		
+
 			if ( mInputCmd.impulse >= IMPULSE_0 && mInputCmd.impulse <= IMPULSE_12 ) {
 				SelectWeapon( mInputCmd.impulse - IMPULSE_0 );
 			}
 
-			if ( mWeapons.Num () ) {				
+			if ( mWeapons.Num () ) {
 				switch ( mInputCmd.impulse ) {
 					case IMPULSE_14:
 						SelectWeapon ( (mCurrentWeapon + mWeapons.Num() + 1) % mWeapons.Num() );
@@ -548,11 +548,11 @@ void rvVehiclePosition::RunPostPhysics ( void ) {
 						break;
 				}
 			}
-				
+
 			for( i = 0; i < mParts.Num(); i++ ) {
 				mParts[ i ]->Impulse ( mInputCmd.impulse );
-			}		
-							
+			}
+
 			mOldInputFlags = mInputCmd.flags;
 		}
 	}
@@ -562,7 +562,7 @@ void rvVehiclePosition::RunPostPhysics ( void ) {
 
 	if ( g_debugVehicle.GetInteger() == 2 ) {
 		gameRenderWorld->DebugArrow( colorMagenta, mEyeOrigin, mEyeOrigin + mEyeAxis[0] * 30.0f, 3 );
-	}		
+	}
 }
 
 /*
@@ -599,7 +599,7 @@ void rvVehiclePosition::GetPosition( const jointHandle_t jointHandle, const idVe
 		axis *= jointTransform;
 		idAngles ang( axis.ToAngles().Remap(axisMap, dirMap).Scale(scale) );
 		axis = ang.Normalize360().ToMat3() * mAxisOffset;
-		
+
 		origin = GetParent()->GetOrigin() + (origin + offset * axis) * GetParent()->GetAxis();
 	} else {
 		origin = GetOrigin( mEyeOffset );
@@ -632,7 +632,7 @@ void rvVehiclePosition::SelectWeapon ( int weapon ) {
 	if ( mCurrentWeapon != -1 ) {
 		static_cast<rvVehicleWeapon*> ( mWeapons[ mCurrentWeapon ] )->StopTargetEffect( );
 	}
-	
+
 	mCurrentWeapon = weapon;
 }
 
@@ -667,12 +667,12 @@ void rvVehiclePosition::Save ( idSaveGame* savefile ) const {
 	savefile->WriteUsercmd ( mOldInputCmd );
 	savefile->WriteAngles ( mOldInputAngles );
 	savefile->WriteInt ( mOldInputFlags );
-	
+
 	savefile->WriteInt ( mCurrentWeapon );
-	
+
 	mDriver.Save ( savefile );
 	mParent.Save ( savefile );
-	
+
 	savefile->WriteInt ( mParts.Num ( ) );
 	for ( i = 0; i < mParts.Num(); i ++ ) {
 		savefile->WriteString ( mParts[i]->GetClassname() );
@@ -684,7 +684,7 @@ void rvVehiclePosition::Save ( idSaveGame* savefile ) const {
 		savefile->WriteString ( mWeapons[i]->GetClassname() );
 		savefile->WriteStaticObject ( *mWeapons[i] );
 	}
-	
+
 	savefile->WriteVec3 ( mEyeOrigin );
 	savefile->WriteMat3 ( mEyeAxis );
 
@@ -731,20 +731,20 @@ void rvVehiclePosition::Restore ( idRestoreGame* savefile ) {
 	savefile->ReadUsercmd ( mOldInputCmd );
 	savefile->ReadAngles ( mOldInputAngles );
 	savefile->ReadInt ( mOldInputFlags );
-	
+
 	savefile->ReadInt ( mCurrentWeapon );
-	
+
 	mDriver.Restore ( savefile );
 	mParent.Restore ( savefile );
 
 	savefile->ReadInt ( num );
 	mParts.Clear ( );
-	mParts.SetNum ( num );	
+	mParts.SetNum ( num );
 	for ( i = 0; i < num; i ++ ) {
 		idStr			spawnclass;
 		rvVehiclePart*	part;
-		idTypeInfo*		typeInfo;		
-		
+		idTypeInfo*		typeInfo;
+
 		savefile->ReadString ( spawnclass );
 
 		// Determine the part type
@@ -753,7 +753,7 @@ void rvVehiclePosition::Restore ( idRestoreGame* savefile ) {
 		{
 			gameLocal.Error ( "Class '%s' is not a vehicle part", spawnclass.c_str() );
 		}
-		
+
 		part = static_cast<rvVehiclePart*>(typeInfo->CreateInstance ( ));
 		savefile->ReadStaticObject ( *part );
 		mParts[i] = part;
@@ -761,12 +761,12 @@ void rvVehiclePosition::Restore ( idRestoreGame* savefile ) {
 
 	savefile->ReadInt ( num );
 	mWeapons.Clear ( );
-	mWeapons.SetNum ( num );	
+	mWeapons.SetNum ( num );
 	for ( i = 0; i < num; i ++ ) {
 		idStr			spawnclass;
 		rvVehiclePart*	part;
-		idTypeInfo*		typeInfo;		
-		
+		idTypeInfo*		typeInfo;
+
 		savefile->ReadString ( spawnclass );
 
 		// Determine the part type
@@ -775,12 +775,12 @@ void rvVehiclePosition::Restore ( idRestoreGame* savefile ) {
 		{
 			gameLocal.Error ( "Class '%s' is not a vehicle part", spawnclass.c_str() );
 		}
-		
+
 		part = static_cast<rvVehiclePart*>(typeInfo->CreateInstance ( ));
 		savefile->ReadStaticObject ( *part );
 		mWeapons[i] = part;
 	}
-	
+
 	savefile->ReadVec3 ( mEyeOrigin );
 	savefile->ReadMat3 ( mEyeAxis );
 

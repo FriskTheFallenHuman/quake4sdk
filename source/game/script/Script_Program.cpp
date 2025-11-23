@@ -121,7 +121,7 @@ idTypeDef::idTypeDef( etype_t etype, idVarDef *edef, const char *ename, int esiz
 	def			= edef;
 	size		= esize;
 	auxType		= aux;
-	
+
 	parmTypes.SetGranularity( 1 );
 	parmNames.SetGranularity( 1 );
 	functions.SetGranularity( 1 );
@@ -982,7 +982,7 @@ void idVarDef::SetString( const char *string, bool constant ) {
 	} else {
 		initialized = initializedVariable;
 	}
-	
+
 	assert( typeDef && ( typeDef->Type() == ev_string ) );
 	idStr::Copynz( value.stringPtr, string, MAX_STRING_LEN );
 }
@@ -1212,7 +1212,7 @@ bool idScriptObject::SetType( const char *typeName ) {
 	newtype = gameLocal.program.FindType( typeName );
 
 	// only allocate memory if the object type changes
-	if ( newtype != type ) {	
+	if ( newtype != type ) {
 		Free();
 		if ( !newtype ) {
 			gameLocal.Warning( "idScriptObject::SetType: Unknown type '%s'", typeName );
@@ -1382,7 +1382,7 @@ idProgram::AllocType
 idTypeDef *idProgram::AllocType( idTypeDef &type ) {
 	idTypeDef *newtype;
 
-	newtype	= new idTypeDef( type ); 
+	newtype	= new idTypeDef( type );
 	types.Append( newtype );
 
 	return newtype;
@@ -1679,7 +1679,7 @@ idProgram::FindFreeResultDef
 */
 idVarDef *idProgram::FindFreeResultDef( idTypeDef *type, const char *name, idVarDef *scope, const idVarDef *a, const idVarDef *b ) {
 	idVarDef *def;
-	
+
 	for( def = GetDefList( name ); def != NULL; def = def->Next() ) {
 		if ( def == a || def == b ) {
 			continue;
@@ -1765,9 +1765,9 @@ void idProgram::ListStates( void )
 {
 	gameLocal.Printf( "Script States: \n");
 	// function 0 is a NULL function
-	for( int i = 1; i < functions.Num(); i++ ) 
-	{		
-		gameLocal.Printf( "%s \n", functions[ i ].Name() );		
+	for( int i = 1; i < functions.Num(); i++ )
+	{
+		gameLocal.Printf( "%s \n", functions[ i ].Name() );
 	}
 
 }
@@ -1957,7 +1957,7 @@ void idProgram::Disassemble( void ) const {
 		for( instructionPointer = 0; instructionPointer < func->numStatements; instructionPointer++ ) {
 			DisassembleStatement( file, func->firstStatement + instructionPointer );
 		}
-	
+
 		file->Printf( "}\n" );
 	}
 
@@ -2123,7 +2123,7 @@ bool idProgram::CompileText( const char *source, const char *text, bool console 
 			}
 		}
 	}
-	
+
 	catch( idCompileError &err ) {
 		if ( console ) {
 			gameLocal.Printf( "%s\n", err.error );
@@ -2433,7 +2433,7 @@ void idProgram::Restart( void ) {
 	statements.SetNum( top_statements );
 	fileList.SetNum( top_files, false );
 	filename.Clear();
-	
+
 	// reset the variables to their default values
 	numVariables = variableDefaults.Num();
 	for( i = 0; i < numVariables; i++ ) {
@@ -2491,7 +2491,7 @@ idProgram::~idProgram() {
 idProgram::Shutdown
 ================
 */
-void idProgram::Shutdown( void ) 
+void idProgram::Shutdown( void )
 {
 	FreeData();
 }

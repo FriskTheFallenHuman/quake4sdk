@@ -99,7 +99,7 @@ typedef struct {
 	float					frequencyShift;
 	float					wetLevel;
 	float					dryLevel;
-// RAVEN END	
+// RAVEN END
 } soundShaderParms_t;
 
 const int		SOUND_MAX_LIST_WAVS		= 32;
@@ -237,7 +237,7 @@ private:
 
 // RAVEN BEGIN
 // bdube: frequency shift code from splash
-	float					minFrequencyShift;	
+	float					minFrequencyShift;
 	float					maxFrequencyShift;
 
 	int						playCount;					// For profiling
@@ -475,8 +475,8 @@ public:
 	// under the assumption that we are rendering out screenshots and the gameTime is going
 	// much slower than real time.
 	// path should not include an extension, and the generated filenames will be:
-	// <path>_left.raw, <path>_right.raw, or <path>_51left.raw, <path>_51right.raw, 
-	// <path>_51center.raw, <path>_51lfe.raw, <path>_51backleft.raw, <path>_51backright.raw, 
+	// <path>_left.raw, <path>_right.raw, or <path>_51left.raw, <path>_51right.raw,
+	// <path>_51center.raw, <path>_51lfe.raw, <path>_51backleft.raw, <path>_51backright.raw,
 	// If only two channel mixing is enabled, the left and right .raw files will also be
 	// combined into a stereo .wav file.
 	virtual void			AVIOpen( int worldId, const char *path, const char *name ) = 0;
@@ -520,9 +520,9 @@ public:
 	virtual	int				GetNumAreas( void ) = 0;
 	virtual	int				GetReverb( int area ) = 0;
 	virtual	bool			SetReverb( int area, const char *reverbName, const char *fileName ) = 0;
-	
+
 	virtual void			EndCinematic() = 0;
-	
+
 // RAVEN END
 };
 

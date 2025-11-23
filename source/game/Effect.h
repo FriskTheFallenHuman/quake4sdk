@@ -24,15 +24,15 @@ public:
 	void			Restore						( idRestoreGame *savefile );
 
 	bool			Play						( void );
-	void			Stop						( bool destroyParticles = false );			
+	void			Stop						( bool destroyParticles = false );
 	void			Restart						( void );
-			
+
 	void			Attenuate					( float attenuation );
-			
+
 	float			GetBrightness				( void ) const;
-		
+
 	bool			IsLooping					( void ) { return( loop ); }
-		
+
 	virtual void	UpdateChangeableSpawnArgs	( const idDict *source );
 	virtual void	ShowEditingDialog			( void );
 
@@ -41,7 +41,7 @@ public:
 	void			ClientPredictionThink		( void );
 	virtual void	InstanceLeave				( void );
 	virtual void	InstanceJoin				( void );
-						
+
 protected:
 
 	bool								loop;
@@ -49,13 +49,13 @@ protected:
 	const idDecl						*effect;
 	idVec3								endOrigin;
 	rvClientEntityPtr<rvClientEffect>	clientEffect;
-			
+
 private:
 
 	void			Event_Activate		( idEntity *activator );
 	void			Event_LookAtTarget	( void );
 	void			Event_EarthQuake	( float requiresLOS );
-	
+
 	void			Event_Start			( void );
 	void			Event_Stop			( void );
 

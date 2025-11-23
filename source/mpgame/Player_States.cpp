@@ -72,12 +72,12 @@ stateResult_t idPlayer::State_Torso_IdleThink ( const stateParms_t& parms ) {
 		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Fire", 0 );
 		return SRESULT_DONE;
 	}
-	
+
 	if( pfl.attackHeld && weapon && weapon->wfl.hasWindupAnim)	{
 		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Fire_Windup", 0 );
 		return SRESULT_DONE;
 	}
-	
+
 	if ( pfl.attackHeld && HasAnim ( ANIMCHANNEL_TORSO, "startfire" ) ) {
    		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Fire_StartFire", 2 );
    		return SRESULT_DONE;
@@ -91,7 +91,7 @@ stateResult_t idPlayer::State_Torso_IdleThink ( const stateParms_t& parms ) {
 		return SRESULT_DONE;
 	}
 
-   	
+
    	return SRESULT_WAIT;
 }
 
@@ -106,11 +106,11 @@ stateResult_t idPlayer::State_Torso_Teleport ( const stateParms_t& parms ) {
 		STAGE_WAIT
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT:		
+		case STAGE_INIT:
 			pfl.teleport = false;
 			PlayAnim ( ANIMCHANNEL_TORSO, "teleport", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", 4 );
@@ -138,7 +138,7 @@ stateResult_t idPlayer::State_Torso_RaiseWeapon ( const stateParms_t& parms ) {
 idPlayer::State_Torso_LowerWeapon
 ================
 */
-stateResult_t idPlayer::State_Torso_LowerWeapon ( const stateParms_t& parms ) {	
+stateResult_t idPlayer::State_Torso_LowerWeapon ( const stateParms_t& parms ) {
 	PlayAnim( ANIMCHANNEL_TORSO, "lower", parms.blendFrames );
 	PostAnimState ( ANIMCHANNEL_TORSO, "Wait_TorsoAnim", 3 );
 	return SRESULT_DONE;
@@ -163,24 +163,24 @@ stateResult_t idPlayer::State_Torso_Fire ( const stateParms_t& parms ) {
  			PlayAnim ( ANIMCHANNEL_TORSO, "fire", parms.blendFrames );
 			pfl.weaponFired = false;
 			return SRESULT_STAGE(TORSO_FIRE_WAIT);
-		
+
 		// Wait for the firing animation to be finished
 		case TORSO_FIRE_WAIT:
 			if ( pfl.weaponFired ) {
 				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Fire", parms.blendFrames );
 				return SRESULT_DONE;
 			}
-			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {	
+			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", parms.blendFrames );
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-			
+
 		// Keep the gun aimed but dont shoot
 		case TORSO_FIRE_AIM:
 			PlayAnim ( ANIMCHANNEL_TORSO, "aim", 3 );
 			return SRESULT_STAGE(TORSO_FIRE_AIMWAIT);
-			
+
 		// Keep the gun aimed as long as the attack button is held and nothing is firing
 		case TORSO_FIRE_AIMWAIT:
 			if ( pfl.weaponFired ) {
@@ -193,7 +193,7 @@ stateResult_t idPlayer::State_Torso_Fire ( const stateParms_t& parms ) {
 			return SRESULT_WAIT;
 	}
 	return SRESULT_DONE;
-}		
+}
 
 /*
 ================
@@ -226,10 +226,10 @@ stateResult_t idPlayer::State_Torso_Fire_Windup ( const stateParms_t& parms ) {
 				return SRESULT_STAGE( TORSO_WINDDOWN_START );
 			}
 			if( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames )) {
-				return SRESULT_STAGE( TORSO_FIRE_LOOP );								
+				return SRESULT_STAGE( TORSO_FIRE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		// play the firing loop
 		case TORSO_FIRE_LOOP:
 			if( !pfl.attackHeld )	{
@@ -237,14 +237,14 @@ stateResult_t idPlayer::State_Torso_Fire_Windup ( const stateParms_t& parms ) {
 			}
 			PlayAnim ( ANIMCHANNEL_TORSO, "fire", parms.blendFrames );
 			return SRESULT_STAGE( TORSO_FIRE_WAIT );
-			
+
 		// loop the fire anim
 		case TORSO_FIRE_WAIT:
 			if( !pfl.attackHeld )	{
 				return SRESULT_STAGE( TORSO_WINDDOWN_START );
 			}
 			//loop the attack anim
-			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {	
+			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "fire", parms.blendFrames );
 				return SRESULT_STAGE( TORSO_FIRE_WAIT );
 			}
@@ -256,10 +256,10 @@ stateResult_t idPlayer::State_Torso_Fire_Windup ( const stateParms_t& parms ) {
 			PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", 4 );
 			pfl.weaponFired = false;
 			return SRESULT_DONE;
-		
+
 	}
 	return SRESULT_DONE;
-}		
+}
 /*
 ================
 idPlayer::State_Torso_Reload
@@ -281,10 +281,10 @@ stateResult_t idPlayer::State_Torso_Reload ( const stateParms_t& parms ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "reload_start", parms.blendFrames );
 				return SRESULT_STAGE(TORSO_RELOAD_STARTWAIT);
 			}
-			
+
 			PlayAnim( ANIMCHANNEL_TORSO, "reload", parms.blendFrames );
 			return SRESULT_STAGE(TORSO_RELOAD_WAIT);
-			
+
 		// Wait for the reload_start animation to finish and transition to reload_loop
 		case TORSO_RELOAD_STARTWAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
@@ -294,7 +294,7 @@ stateResult_t idPlayer::State_Torso_Reload ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-			
+
 		// Play a single reload from the reload loop
 		case TORSO_RELOAD_LOOP:
 			if ( !pfl.reload ) {
@@ -322,7 +322,7 @@ stateResult_t idPlayer::State_Torso_Reload ( const stateParms_t& parms ) {
 
 			PlayAnim( ANIMCHANNEL_TORSO, "reload_end", 3 );
 			return SRESULT_STAGE(TORSO_RELOAD_WAIT);
-		
+
 		// Wait for reload to finish (called by both reload_end and reload)
 		case TORSO_RELOAD_WAIT:
 			if ( pfl.weaponFired || AnimDone ( ANIMCHANNEL_TORSO, 3 ) ) {
@@ -331,7 +331,7 @@ stateResult_t idPlayer::State_Torso_Reload ( const stateParms_t& parms ) {
 			}
 			return SRESULT_WAIT;
 	}
-	
+
 	return SRESULT_DONE;
 }
 
@@ -383,7 +383,7 @@ stateResult_t idPlayer::State_Torso_Emote ( const stateParms_t& parms ) {
 			}
 
 			emote = PE_NONE;
-			
+
 			return SRESULT_STAGE ( STAGE_WAIT );
 
 		case STAGE_WAIT:
@@ -431,7 +431,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 			}
 			IdleAnim( ANIMCHANNEL_LEGS, "idle", parms.blendFrames );
 			return SRESULT_STAGE( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			// #34 - have a delay while idle before going to something else if a ground flag change happens
 			// this makes the legs animation stay in idle state when the ground flag value flip-flops fast
@@ -447,7 +447,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 				return SRESULT_WAIT;
 			}
 
-			// If now crouching go back to idle so we can transition to crouch 
+			// If now crouching go back to idle so we can transition to crouch
 			if ( pfl.crouch ) {
  				PostAnimState( ANIMCHANNEL_LEGS, "Legs_Crouch", 4 );
 				return SRESULT_DONE;
@@ -465,7 +465,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 					PlayCycle( ANIMCHANNEL_LEGS, "walk_forward", parms.blendFrames );
 					PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Forward", parms.blendFrames );
 				}
-				
+
 				return SRESULT_DONE;
 			} else if ( pfl.backward && !pfl.forward ) {
 				if ( usercmd.buttons & BUTTON_RUN ) {
@@ -475,7 +475,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 					PlayCycle( ANIMCHANNEL_LEGS, "walk_backwards", parms.blendFrames );
 					PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Backward", parms.blendFrames );
 				}
-			
+
 				return SRESULT_DONE;
 			} else if ( pfl.strafeLeft && !pfl.strafeRight ) {
 				if ( usercmd.buttons & BUTTON_RUN ) {
@@ -485,7 +485,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 					PlayCycle( ANIMCHANNEL_LEGS, "walk_left", parms.blendFrames );
 					PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Walk_Left", parms.blendFrames );
 				}
-				
+
 				return SRESULT_DONE;
 			} else if ( pfl.strafeRight && !pfl.strafeLeft ) {
 				if ( usercmd.buttons & BUTTON_RUN ) {
@@ -499,7 +499,7 @@ stateResult_t idPlayer::State_Legs_Idle( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-		
+
 	}
 	return SRESULT_ERROR;
 }
@@ -515,19 +515,19 @@ stateResult_t idPlayer::State_Legs_Crouch_Idle( const stateParms_t& parms ) {
 		STAGE_WAIT
 	};
 	switch ( parms.stage ) {
-		case STAGE_INIT:			
+		case STAGE_INIT:
 			if ( !pfl.crouch ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Uncrouch", parms.blendFrames );
 				return SRESULT_DONE;
 			}
 			PlayCycle ( ANIMCHANNEL_LEGS, "crouch", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( !pfl.crouch || pfl.jump ) {
  				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Uncrouch", 4 );
 				return SRESULT_DONE;
-			} else if ( (pfl.forward && !pfl.backward) || (pfl.strafeLeft != pfl.strafeRight) ) {				
+			} else if ( (pfl.forward && !pfl.backward) || (pfl.strafeLeft != pfl.strafeRight) ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Crouch_Forward", parms.blendFrames );
 				return SRESULT_DONE;
 			} else if ( pfl.backward && !pfl.forward ) {
@@ -553,7 +553,7 @@ stateResult_t idPlayer::State_Legs_Crouch ( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			PlayAnim ( ANIMCHANNEL_LEGS, "crouch_down", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( !IsLegsIdle ( true ) || AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Crouch_Idle", parms.blendFrames );
@@ -578,7 +578,7 @@ stateResult_t idPlayer::State_Legs_Uncrouch ( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			PlayAnim ( ANIMCHANNEL_LEGS, "crouch_up", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( !IsLegsIdle ( false ) || AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 4 );
@@ -755,7 +755,7 @@ stateResult_t idPlayer::State_Legs_Crouch_Forward ( const stateParms_t& parms ) 
 		case STAGE_INIT:
 			PlayCycle( ANIMCHANNEL_LEGS, "crouch_walk", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( !pfl.jump && pfl.onGround && pfl.crouch && ((!pfl.backward && pfl.forward) || (pfl.strafeLeft != pfl.strafeRight)) ) {
 				return SRESULT_WAIT;
@@ -780,7 +780,7 @@ stateResult_t idPlayer::State_Legs_Crouch_Backward ( const stateParms_t& parms )
 		case STAGE_INIT:
 			PlayCycle( ANIMCHANNEL_LEGS, "crouch_walk_backward", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( !pfl.jump && pfl.onGround && pfl.crouch && !pfl.forward && pfl.backward ) {
 				return SRESULT_WAIT;
@@ -811,7 +811,7 @@ stateResult_t idPlayer::State_Legs_Jump ( const stateParms_t& parms ) {
 				PlayAnim ( ANIMCHANNEL_LEGS, "jump", parms.blendFrames );
 			}
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:
 			if ( pfl.onGround ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Land", 4 );
@@ -824,7 +824,7 @@ stateResult_t idPlayer::State_Legs_Jump ( const stateParms_t& parms ) {
 					PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Fall", 4 );
 				}
 				return SRESULT_DONE;
-			}			
+			}
 			return SRESULT_WAIT;
 	}
  	return SRESULT_ERROR;
@@ -847,7 +847,7 @@ stateResult_t idPlayer::State_Legs_Fall ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 			PlayCycle ( ANIMCHANNEL_LEGS, "fall", parms.blendFrames );
-			return SRESULT_STAGE ( STAGE_WAIT );			
+			return SRESULT_STAGE ( STAGE_WAIT );
 		case STAGE_WAIT:
 			if ( pfl.onGround ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Land", 2 );
@@ -874,7 +874,7 @@ stateResult_t idPlayer::State_Legs_Land ( const stateParms_t& parms ) {
 	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			if ( IsLegsIdle ( false ) && ( pfl.hardLanding || pfl.softLanding ) ) {					
+			if ( IsLegsIdle ( false ) && ( pfl.hardLanding || pfl.softLanding ) ) {
 				if ( pfl.hardLanding ) {
 					PlayAnim ( ANIMCHANNEL_LEGS, "hard_land", parms.blendFrames );
 				} else {
@@ -884,7 +884,7 @@ stateResult_t idPlayer::State_Legs_Land ( const stateParms_t& parms ) {
 			}
 			PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 4 );
 			return SRESULT_DONE;
-			
+
 		case STAGE_WAIT:
 			if ( !IsLegsIdle ( false ) || AnimDone ( ANIMCHANNEL_LEGS, parms.blendFrames ) ) {
 				PostAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", parms.blendFrames );
@@ -927,15 +927,15 @@ idPlayer::State_Wait_ReloadAnim
 */
 stateResult_t idPlayer::State_Wait_ReloadAnim ( const stateParms_t& parms ) {
 	// The gun firing can cancel any of the relod animations
-	if ( pfl.weaponFired ) {		
+	if ( pfl.weaponFired ) {
 		SetAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", parms.blendFrames );
 		return SRESULT_DONE;
 	}
-	
+
 	// wait for the animation to finish
 	if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 		return SRESULT_DONE;
 	}
-	
+
 	return SRESULT_WAIT;
 }

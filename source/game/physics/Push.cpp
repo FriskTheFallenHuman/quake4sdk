@@ -45,7 +45,7 @@ void idPush::SaveEntityPosition( idEntity *ent ) {
 
 	// if the entity is an actor
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( ent->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 		// save the delta view angles
@@ -70,7 +70,7 @@ void idPush::RestorePushedEntityPositions( void ) {
 
 		// if the entity is an actor
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( pushed[i].ent->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 			// set back the delta view angles
@@ -830,7 +830,7 @@ int idPush::TryRotatePushEntity( trace_t &results, idEntity *check, idClipModel 
 
 	// if the entity uses actor physics
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( physics->IsType( idPhysics_Actor::GetClassType() ) ) {
 // RAVEN END
 
@@ -851,7 +851,7 @@ int idPush::TryRotatePushEntity( trace_t &results, idEntity *check, idClipModel 
 
 	// if the entity is an actor using actor physics
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( check->IsType( idActor::GetClassType() ) && physics->IsType( idPhysics_Actor::GetClassType() ) ) {
 // RAVEN END
 
@@ -1024,7 +1024,7 @@ int idPush::DiscardEntities( idEntity *entityList[], int numEntities, int flags,
 
 		// don't push players in noclip mode
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idPlayer::GetClassType() ) && static_cast<idPlayer *>(check)->noclip ) {
 // RAVEN END
 			continue;
@@ -1032,7 +1032,7 @@ int idPush::DiscardEntities( idEntity *entityList[], int numEntities, int flags,
 
 		// if we should only push idMoveable entities
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ( flags & PUSHFL_ONLYMOVEABLE ) && !check->IsType( idMoveable::GetClassType() ) ) {
 // RAVEN END
 			continue;
@@ -1198,7 +1198,7 @@ float idPush::ClipTranslationalPush( trace_t &results, idEntity *pusher, const i
 
 		// if the blocking entity is a projectile
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idProjectile::GetClassType() ) ) {
 // RAVEN END
 			check->ProcessEvent( &EV_Explode );
@@ -1213,7 +1213,7 @@ float idPush::ClipTranslationalPush( trace_t &results, idEntity *pusher, const i
 
 		// if the entity is an active articulated figure and gibs
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idAFEntity_Base::GetClassType() ) && check->spawnArgs.GetBool( "gib" ) ) {
 // RAVEN END
 			if ( static_cast<idAFEntity_Base *>(check)->IsActiveAF() ) {
@@ -1223,7 +1223,7 @@ float idPush::ClipTranslationalPush( trace_t &results, idEntity *pusher, const i
 
 		// if the entity is a moveable item and gibs
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idMoveableItem::GetClassType() ) && check->spawnArgs.GetBool( "gib" ) ) {
 // RAVEN END
 			check->ProcessEvent( &EV_Gib, "damage_Gib" );
@@ -1387,7 +1387,7 @@ float idPush::ClipRotationalPush( trace_t &results, idEntity *pusher, const int 
 
 		// if the blocking entity is a projectile
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idProjectile::GetClassType() ) ) {
 // RAVEN END
 			check->ProcessEvent( &EV_Explode );
@@ -1402,7 +1402,7 @@ float idPush::ClipRotationalPush( trace_t &results, idEntity *pusher, const int 
 
 		// if the entity is an active articulated figure and gibs
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( check->IsType( idAFEntity_Base::GetClassType() ) && check->spawnArgs.GetBool( "gib" ) ) {
 // RAVEN END
 			if ( static_cast<idAFEntity_Base *>(check)->IsActiveAF() ) {

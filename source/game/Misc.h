@@ -73,7 +73,7 @@ private:
   Bind to a mover to have the mover activate a trigger as it moves.
   When target by triggers, activating the trigger will toggle the
   activator on and off. Check "start_off" to have it spawn disabled.
-	
+
 ===============================================================================
 */
 
@@ -171,7 +171,7 @@ protected:
 	bool				stageEndOnGround;
 //jshepard: we want to activate certain objects when triggered-- falling blocks yes, barrels no.
 	bool				activateStageOnTrigger;
-		
+
 	virtual void		ExecuteStage	( void );
 	void				UpdateStage		( void );
 	idVec3				GetStageVector	( const char* key, const char* defaultString = "" ) const;
@@ -267,7 +267,7 @@ public:
 protected:
 
 	idForce_Field		forceField;
-	
+
 private:
 // RAVEN END
 	void				Toggle( void );
@@ -336,9 +336,9 @@ public:
 	virtual bool			GetPhysicsToSoundTransform( idVec3 &origin, idMat3 &axis );
 
 // RAVEN BEGIN
-// bdube: script 
+// bdube: script
 	void					Think ( void );
-	
+
 	virtual	void			Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
  	virtual bool			ShouldConstructScriptObjectAtSpawn( void ) const;
 // RAVEN END
@@ -368,7 +368,7 @@ private:
 
 	void					PlayNextAnim( void );
 
-	void					Event_Activate( idEntity *activator );	
+	void					Event_Activate( idEntity *activator );
 	void					Event_Start( void );
 	void					Event_StartRagdoll( void );
 	void					Event_AnimDone( int animIndex );
@@ -382,7 +382,7 @@ private:
 	void					Event_PlayAnim( int channel, const char *animname );
 	void					Event_PlayCycle( int channel, const char *animname );
 	void					Event_AnimDone2( int channel, int blendFrames );
-// RAVEN END	
+// RAVEN END
 };
 
 /*
@@ -579,7 +579,7 @@ public:
 	void				Save( idSaveGame *savefile ) const;
 	void				Restore( idRestoreGame *savefile );
 
-	void				Event_Activate( idEntity *activator );	
+	void				Event_Activate( idEntity *activator );
 
 private:
 	qhandle_t			portal;
@@ -607,7 +607,7 @@ public:
 	void				Save( idSaveGame *savefile ) const;
 	void				Restore( idRestoreGame *savefile );
 
-	void				Event_Activate( idEntity *activator );	
+	void				Event_Activate( idEntity *activator );
 
 private:
 	qhandle_t			portal;
@@ -772,7 +772,7 @@ private:
 class idEarthQuake : public idEntity {
 public:
 	CLASS_PROTOTYPE( idEarthQuake );
-			
+
 						idEarthQuake();
 
 	void				Spawn( void );
@@ -813,7 +813,7 @@ private:
 class idFuncPortal : public idEntity {
 public:
 	CLASS_PROTOTYPE( idFuncPortal );
-			
+
 						idFuncPortal();
 
 	void				Spawn( void );
@@ -839,7 +839,7 @@ private:
 class idFuncAASPortal : public idEntity {
 public:
 	CLASS_PROTOTYPE( idFuncAASPortal );
-			
+
 						idFuncAASPortal();
 
 	void				Spawn( void );
@@ -864,7 +864,7 @@ private:
 class idFuncAASObstacle : public idEntity {
 public:
 	CLASS_PROTOTYPE( idFuncAASObstacle );
-			
+
 						idFuncAASObstacle();
 
 	void				Spawn( void );
@@ -923,7 +923,7 @@ private:
 class idPhantomObjects : public idEntity {
 public:
 	CLASS_PROTOTYPE( idPhantomObjects );
-			
+
 						idPhantomObjects();
 
 	void				Spawn( void );

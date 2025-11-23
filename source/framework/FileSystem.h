@@ -97,7 +97,7 @@ typedef struct proxyDownload_s {
 // RAVEN BEGIN
 // mwhitlock: changes for Xenon to enable us to use texture resources from .xpr
 // bundles.
-#if defined(_XENON)	
+#if defined(_XENON)
 #include "Xtl.h"
 #endif
 // RAVEN END
@@ -360,7 +360,7 @@ public:
 
 // RAVEN BEGIN
 // nrausch: explicit pak add/removal
-#ifdef _XENON	
+#ifdef _XENON
 	virtual bool			AddDownloadedPak( const char *path ) = 0;
 	virtual void			RemoveDownloadedPak( const char *path ) = 0;
 
@@ -388,7 +388,7 @@ public:
 	virtual bool			OSpathToImportPath( const char *osPath, idStr &iPath, bool stripTemp = false ) = 0;
 							// Opens a file for reading from the fs_importpath directory
 	virtual idFile *		OpenImportFileRead( const char *filename ) = 0;
-							// Copy a file 
+							// Copy a file
 	virtual void			CopyOSFile( const char *fromOSPath, const char *toOSPath ) = 0;
 	virtual void			CopyOSFile( idFile *src, const char *toOSPath ) = 0;
 // RAVEN END

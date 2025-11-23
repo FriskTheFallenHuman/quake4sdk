@@ -5,7 +5,7 @@
 
 Model viewing can begin with either "testmodel <modelname>"
 
-The names must be the full pathname after the basedir, like 
+The names must be the full pathname after the basedir, like
 "models/weapons/v_launch/tris.md3" or "players/male/tris.md3"
 
 Extension will default to ".ase" if not specified.
@@ -28,7 +28,7 @@ move around it to view it from different angles.
 
 CLASS_DECLARATION( idAnimatedEntity, idTestModel )
 	EVENT( EV_FootstepLeft,			idTestModel::Event_Footstep )
-	EVENT( EV_FootstepRight,		idTestModel::Event_Footstep )	
+	EVENT( EV_FootstepRight,		idTestModel::Event_Footstep )
 END_CLASS
 
 /*
@@ -97,7 +97,7 @@ void idTestModel::Spawn( void ) {
 	physicsObj.SetSelf( this );
 	physicsObj.SetOrigin( GetPhysics()->GetOrigin() );
 	physicsObj.SetAxis( GetPhysics()->GetAxis() );
-	
+
 	if ( spawnArgs.GetVector( "mins", NULL, bounds[0] ) ) {
 		spawnArgs.GetVector( "maxs", NULL, bounds[1] );
 		physicsObj.SetClipBox( bounds, 1.0f );
@@ -140,13 +140,13 @@ void idTestModel::Spawn( void ) {
 			headEnt->SetBody ( this, headEnt->spawnArgs.GetString ( "model" ), joint );
 
 			headEnt->BindToJoint( this, joint, true );
-			headEnt->SetOrigin( vec3_origin );		
+			headEnt->SetOrigin( vec3_origin );
 			headEnt->SetAxis( mat3_identity );
 			headEnt->InitCopyJoints ( );
 
 			head = headEnt;
-// RAVEN END			
-		
+// RAVEN END
+
 			headAnimator = head.GetEntity()->GetAnimator();
 
 			// set up the list of joints to copy to the head
@@ -213,7 +213,7 @@ idTestModel::~idTestModel() {
 		head.GetEntity()->StopSound( SND_CHANNEL_ANY, false );
 		head.GetEntity()->PostEventMS( &EV_Remove, 0 );
 	}
-	
+
 	SetPhysics( NULL );
 }
 
@@ -334,7 +334,7 @@ void idTestModel::Think( void ) {
 // RAVEN END
 				break;
 			}
-			
+
 			mode = g_testModelAnimate.GetInteger();
 		}
 
@@ -779,8 +779,8 @@ void idTestModel::TestModel_f( const idCmdArgs &args ) {
 			// without appending an ase
 			if ( name[ 0 ] != '_' ) {
 				name.DefaultFileExtension( ".ase" );
-			} 
-			
+			}
+
 			if ( strstr( name, ".ma" ) || strstr( name, ".mb" ) ) {
 				idModelExport exporter;
 				exporter.ExportModel( name );
@@ -800,7 +800,7 @@ void idTestModel::TestModel_f( const idCmdArgs &args ) {
 	dict.Set( "origin", offset.ToString() );
 	dict.Set( "angle", va( "%f", player->viewAngles.yaw + 180.0f ) );
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	gameLocal.testmodel = ( idTestModel * )gameLocal.SpawnEntityType( idTestModel::GetClassType(), &dict );
 // RAVEN END
 	gameLocal.testmodel->renderEntity.shaderParms[SHADERPARM_TIMEOFFSET] = -MS2SEC( gameLocal.time );

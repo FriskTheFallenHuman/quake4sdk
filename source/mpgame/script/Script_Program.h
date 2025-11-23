@@ -17,7 +17,7 @@ class idRestoreGame;
 // jshepard: ... then 393216
 #define MAX_GLOBALS			589824			// in bytes
 
-// jshepard: raise the limits. Formerly 1024, 3072 and 81920. 
+// jshepard: raise the limits. Formerly 1024, 3072 and 81920.
 #define MAX_STRINGS			2048
 #define MAX_FUNCS			6144
 #define MAX_STATEMENTS		163840			// statement_t - 18 bytes last I checked
@@ -100,7 +100,7 @@ public:
 	int					Size( void ) const;
 
 	idTypeDef			*SuperClass( void ) const;
-	
+
 	idTypeDef			*ReturnType( void ) const;
 	void				SetReturnType( idTypeDef *type );
 
@@ -257,7 +257,7 @@ In-game representation of objects in scripts.  Use the idScriptVariable template
 class idScriptObject {
 private:
 	idTypeDef					*type;
-	
+
 public:
 	byte						*data;
 
@@ -642,9 +642,9 @@ public:
 // abahr: added const
 	void										ReturnEntity( const idEntity *ent );
 // RAVEN END
-	
+
 	int											NumFilenames( void ) { return fileList.Num( ); }
-	
+
 // RAVEN BEGIN
 // bdube: added
 	void										ListStates( void );

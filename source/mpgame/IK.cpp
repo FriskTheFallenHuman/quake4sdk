@@ -126,7 +126,7 @@ bool idIK::Init( idEntity *self, const char *anim, const idVec3 &modelOffset ) {
 								self->name.c_str(), self->GetPhysics()->GetOrigin().ToString(0) );
 		return false;
 	}
-	
+
 	this->modelOffset = modelOffset;
 
 	return true;
@@ -596,7 +596,7 @@ void idIK_Walk::Evaluate( void ) {
 	for ( i = 0; i < phys->GetNumContacts(); i++ ) {
 		idEntity *ent = gameLocal.entities[ phys->GetContact( i ).entityNum ];
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent != NULL && ent->IsType( idPlat::GetClassType() ) ) {
 // RAVEN END
 			onPlat = true;

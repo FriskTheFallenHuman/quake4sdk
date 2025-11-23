@@ -199,7 +199,7 @@ ID_INLINE bool idAngles::Compare( const idAngles &a, const float epsilon ) const
 	if ( idMath::Fabs( pitch - a.pitch ) > epsilon ) {
 		return false;
 	}
-			
+
 	if ( idMath::Fabs( yaw - a.yaw ) > epsilon ) {
 		return false;
 	}

@@ -15,7 +15,7 @@
 /***********************************************************************
 
   idSecurityCamera
-	
+
 ***********************************************************************/
 
 const idEventDef EV_SecurityCam_ReverseSweep( "<reverseSweep>" );
@@ -49,7 +49,7 @@ void idSecurityCamera::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool( flipAxis );
 	savefile->WriteFloat( scanDist );
 	savefile->WriteFloat( scanFov );
-							
+
 	savefile->WriteFloat( sweepStart );
 	savefile->WriteFloat( sweepEnd );
 	savefile->WriteBool( negativeSweep );
@@ -59,7 +59,7 @@ void idSecurityCamera::Save( idSaveGame *savefile ) const {
 	savefile->WriteFloat( scanFovCos );
 
 	savefile->WriteVec3( viewOffset );
-							
+
 	savefile->WriteInt( pvsArea );
 	savefile->WriteStaticObject( physicsObj );
 	savefile->Write( &trm, sizeof( trm ) );
@@ -77,7 +77,7 @@ void idSecurityCamera::Restore( idRestoreGame *savefile ) {
 	savefile->ReadBool( flipAxis );
 	savefile->ReadFloat( scanDist );
 	savefile->ReadFloat( scanFov );
-							
+
 	savefile->ReadFloat( sweepStart );
 	savefile->ReadFloat( sweepEnd );
 	savefile->ReadBool( negativeSweep );
@@ -87,7 +87,7 @@ void idSecurityCamera::Restore( idRestoreGame *savefile ) {
 	savefile->ReadFloat( scanFovCos );
 
 	savefile->ReadVec3( viewOffset );
-							
+
 	savefile->ReadInt( pvsArea );
 	savefile->ReadStaticObject( physicsObj );
 	savefile->Read( &trm, sizeof( trm ) );
@@ -168,24 +168,24 @@ void idSecurityCamera::Event_AddLight( void ) {
 	float	radius;
 	idVec3	lightOffset;
 	idLight	*spotLight;
-	
+
 	dir = GetAxis();
 	dir.NormalVectors( right, up );
 	target = GetPhysics()->GetOrigin() + dir * scanDist;
-		
+
 	radius = idMath::Tan( scanFov * idMath::PI / 360.0f );
 	up = dir + up * radius;
 	up.Normalize();
 	up = GetPhysics()->GetOrigin() + up * scanDist;
 	up -= target;
-	
+
 	right = dir + right * radius;
 	right.Normalize();
 	right = GetPhysics()->GetOrigin() + right * scanDist;
 	right -= target;
 
 	spawnArgs.GetVector( "lightOffset", "0 0 0", lightOffset );
-	
+
 	args.Set( "origin", ( GetPhysics()->GetOrigin() + lightOffset ).ToString() );
 	args.Set( "light_target", target.ToString() );
 	args.Set( "light_right", right.ToString() );
@@ -193,7 +193,7 @@ void idSecurityCamera::Event_AddLight( void ) {
 	args.SetFloat( "angle", GetPhysics()->GetAxis()[0].ToYaw() );
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	spotLight = static_cast<idLight *>( gameLocal.SpawnEntityType( idLight::GetClassType(), &args ) );
 // RAVEN END
 	spotLight->Bind( this, true );
@@ -373,7 +373,7 @@ void idSecurityCamera::Think( void ) {
 
 				SetAlertMode(LOSINGINTEREST);
 				CancelEvents( &EV_SecurityCam_Alert );
-				
+
 				sightResume = spawnArgs.GetFloat( "sightResume", "1.5" );
 				PostEventSec( &EV_SecurityCam_ContinueSweep, sightResume );
 			}

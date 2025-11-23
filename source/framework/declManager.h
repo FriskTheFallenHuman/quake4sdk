@@ -428,7 +428,7 @@ public:
 
 	virtual	idStr					GetNewName( declType_t type, const char *base ) = 0;
 	virtual	const char *			GetDeclTypeName( declType_t type ) = 0;
-	virtual size_t					ListDeclSummary( const idCmdArgs &args ) = 0; 
+	virtual size_t					ListDeclSummary( const idCmdArgs &args ) = 0;
 	virtual void					RemoveDeclFile( const char *file ) = 0;
 // scork: Validation call for detailed error-reporting
 	virtual bool					Validate( declType_t type, int iIndex, idStr &strReportTo ) = 0;

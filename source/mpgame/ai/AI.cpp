@@ -102,11 +102,11 @@ idAI::idAI ( void ) {
 	passive.fidgetTime				= 0;
 	passive.talkTime				= 0;
 	memset ( &passive.fl, 0, sizeof(passive.fl) );
-			
+
 	pain.lastTakenTime				= 0;
 	pain.takenThisFrame				= 0;
 	pain.loopEndTime				= 0;
-		
+
 	enemy.range = 0;
 	enemy.range2d = 0;
 	enemy.smoothedLinearVelocity.Zero ( );
@@ -130,7 +130,7 @@ idAI::idAI ( void ) {
 
 	eyeMin.Zero();
 	eyeMax.Zero();
-	
+
 	helperCurrent	= NULL;
 	helperIdeal		= NULL;
 
@@ -176,7 +176,7 @@ void idAI::Save( idSaveGame *savefile ) const {
 	// Movement
 	move.Save( savefile );
 	savedMove.Save( savefile );
-	
+
 	savefile->WriteStaticObject( physicsObj );
 	savefile->WriteBool( GetPhysics() == static_cast<const idPhysics *>(&physicsObj) );
 
@@ -190,7 +190,7 @@ void idAI::Save( idSaveGame *savefile ) const {
 		savefile->WriteVec3( attackAnimInfo[ i ].attackOffset );
 		savefile->WriteVec3( attackAnimInfo[ i ].eyeOffset );
 	}
-	
+
 	// TOSAVE: mutable idClipModel*	projectileClipModel;
 	projectile.Save ( savefile );
 
@@ -241,7 +241,7 @@ void idAI::Save( idSaveGame *savefile ) const {
 
 	pusher.Save( savefile );			// cnicholson: Added unsaved var
 	scriptedActionEnt.Save( savefile ); // cnicholson: Added unsaved var
-    
+
 	savefile->Write( &aifl, sizeof( aifl ) );
 
 	// Misc
@@ -261,19 +261,19 @@ void idAI::Save( idSaveGame *savefile ) const {
 	savefile->WriteFloat ( combat.meleeRange );
 	savefile->WriteFloat ( combat.aggressiveRange );
 	savefile->WriteFloat ( combat.aggressiveScale );
-	savefile->WriteInt ( combat.investigateTime );	
+	savefile->WriteInt ( combat.investigateTime );
 	savefile->WriteFloat ( combat.visStandHeight );
 	savefile->WriteFloat ( combat.visCrouchHeight );
 	savefile->WriteFloat ( combat.visRange );
 	savefile->WriteFloat ( combat.earRange );
 	savefile->WriteFloat ( combat.awareRange );
 	savefile->WriteInt ( combat.tacticalMaskAvailable );
-	savefile->WriteInt ( (int&)combat.tacticalCurrent );	
-	savefile->WriteInt ( combat.tacticalUpdateTime );	
-	savefile->WriteInt ( combat.tacticalPainTaken );	
-	savefile->WriteInt ( combat.tacticalPainThreshold );	
-	savefile->WriteInt ( combat.tacticalFlinches );	
-	savefile->WriteInt ( combat.maxLostVisTime );	
+	savefile->WriteInt ( (int&)combat.tacticalCurrent );
+	savefile->WriteInt ( combat.tacticalUpdateTime );
+	savefile->WriteInt ( combat.tacticalPainTaken );
+	savefile->WriteInt ( combat.tacticalPainThreshold );
+	savefile->WriteInt ( combat.tacticalFlinches );
+	savefile->WriteInt ( combat.maxLostVisTime );
 	savefile->WriteFloat ( combat.threatBase );
 	savefile->WriteFloat ( combat.threatCurrent );
 	savefile->WriteInt	 ( combat.coverValidTime );
@@ -290,7 +290,7 @@ void idAI::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt	  ( passive.talkTime );
 	savefile->Write ( &passive.fl, sizeof(passive.fl) );
 
-	// Enemy 
+	// Enemy
 	enemy.ent.Save ( savefile );
 	savefile->Write ( &enemy.fl, sizeof(enemy.fl) );
 	savefile->WriteInt ( enemy.lastVisibleChangeTime );
@@ -343,7 +343,7 @@ void idAI::Save( idSaveGame *savefile ) const {
 	actionTimerEvade.Save ( savefile );
 	actionTimerSpecialAttack.Save ( savefile );
 	actionTimerPain.Save ( savefile );
-	
+
 	// Actions
 	actionEvadeLeft.Save ( savefile );
 	actionEvadeRight.Save ( savefile );
@@ -417,7 +417,7 @@ void idAI::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt ( focusAlignTime );
 	savefile->ReadInt ( focusTime );
 	savefile->ReadVec3( currentFocusPos );
-	
+
 	// Looking
 	savefile->ReadBool( allowJointMod );
 	savefile->ReadInt( alignHeadTime );
@@ -470,19 +470,19 @@ void idAI::Restore( idRestoreGame *savefile ) {
 	savefile->ReadFloat ( combat.meleeRange );
 	savefile->ReadFloat ( combat.aggressiveRange );
 	savefile->ReadFloat ( combat.aggressiveScale );
-	savefile->ReadInt ( combat.investigateTime );	
+	savefile->ReadInt ( combat.investigateTime );
 	savefile->ReadFloat ( combat.visStandHeight );
 	savefile->ReadFloat ( combat.visCrouchHeight );
 	savefile->ReadFloat ( combat.visRange );
 	savefile->ReadFloat ( combat.earRange );
 	savefile->ReadFloat ( combat.awareRange );
-	savefile->ReadInt ( combat.tacticalMaskAvailable );	
-	savefile->ReadInt ( (int&)combat.tacticalCurrent );	
-	savefile->ReadInt ( combat.tacticalUpdateTime );	
-	savefile->ReadInt ( combat.tacticalPainTaken );	
-	savefile->ReadInt ( combat.tacticalPainThreshold );	
-	savefile->ReadInt ( combat.tacticalFlinches );	
-	savefile->ReadInt ( combat.maxLostVisTime );	
+	savefile->ReadInt ( combat.tacticalMaskAvailable );
+	savefile->ReadInt ( (int&)combat.tacticalCurrent );
+	savefile->ReadInt ( combat.tacticalUpdateTime );
+	savefile->ReadInt ( combat.tacticalPainTaken );
+	savefile->ReadInt ( combat.tacticalPainThreshold );
+	savefile->ReadInt ( combat.tacticalFlinches );
+	savefile->ReadInt ( combat.maxLostVisTime );
 	savefile->ReadFloat ( combat.threatBase );
 	savefile->ReadFloat ( combat.threatCurrent );
 	savefile->ReadInt	 ( combat.coverValidTime );
@@ -499,7 +499,7 @@ void idAI::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt	 ( passive.talkTime );
 	savefile->Read ( &passive.fl, sizeof(passive.fl) );
 
-	// Enemy 
+	// Enemy
 	enemy.ent.Restore ( savefile );
 	savefile->Read ( &enemy.fl, sizeof(enemy.fl) );
 	savefile->ReadInt ( enemy.lastVisibleChangeTime );
@@ -552,7 +552,7 @@ void idAI::Restore( idRestoreGame *savefile ) {
 	actionTimerEvade.Restore ( savefile );
 	actionTimerSpecialAttack.Restore ( savefile );
 	actionTimerPain.Restore ( savefile );
-	
+
 	// Actions
 	actionEvadeLeft.Restore ( savefile );
 	actionEvadeRight.Restore ( savefile );
@@ -567,7 +567,7 @@ void idAI::Restore( idRestoreGame *savefile ) {
 	if ( gravity == gameLocal.GetGravity() ) {
 		SetAAS();
 	}
-	
+
 	// create combat collision hull for exact collision detection, do initial set un-hidden
 	SetCombatModel();
 	LinkCombat();
@@ -584,13 +584,13 @@ void idAI::InitNonPersistentSpawnArgs ( void ) {
 
 	simpleThinkNode.Remove ( );
 	simpleThinkNode.SetOwner ( this );
-	
+
 	chatterRateIdle	  = SEC2MS ( spawnArgs.GetFloat ( "chatter_rate_idle", "0" ) );
 	chatterRateCombat = SEC2MS ( spawnArgs.GetFloat ( "chatter_rate_combat", "0" ) );
-	chatterTime		  = 0;	
-	
+	chatterTime		  = 0;
+
 	combat.tacticalMaskUpdate = 0;
-		
+
 	enemy.smoothVelocityRate = spawnArgs.GetFloat ( "smoothVelocityRate", "0.1" );
 }
 
@@ -614,7 +614,7 @@ void idAI::Spawn( void ) {
 	}
 
 	// Initialize the non saved spawn args
-	InitNonPersistentSpawnArgs ( );	
+	InitNonPersistentSpawnArgs ( );
 
 	spawnArgs.GetInt(	"team",					"1",		team );
 	spawnArgs.GetInt(	"rank",					"0",		rank );
@@ -639,8 +639,8 @@ void idAI::Spawn( void ) {
 	move.Spawn( spawnArgs );
 
 	pain.threshold		= spawnArgs.GetInt ( "painThreshold", "0" );
-	pain.takenThisFrame	= 0;		
-	
+	pain.takenThisFrame	= 0;
+
 	// Initialize combat variables
  	combat.fl.aware					= spawnArgs.GetBool ( "ambush", "0" );
  	combat.fl.tetherNoBreak			= spawnArgs.GetBool ( "tetherNoBreak", "0" );
@@ -667,7 +667,7 @@ void idAI::Spawn( void ) {
 
 	spawnArgs.GetFloat( "melee_range",			"64",		combat.meleeRange );
 	spawnArgs.GetFloat( "projectile_height_to_distance_ratio",	"1", projectile_height_to_distance_ratio );
-	
+
 	//melee superhero -- take far reduced damage from melee.
 	if ( spawnArgs.GetString( "objectivetitle_failed", NULL ) && spawnArgs.GetBool( "meleeSuperhero", "1")   )  {
 		aifl.meleeSuperhero = true;
@@ -760,7 +760,7 @@ void idAI::Spawn( void ) {
 
 	// move up to make sure the monster is at least an epsilon above the floor
 	physicsObj.SetOrigin( GetPhysics()->GetOrigin() + idVec3( 0, 0, CM_CLIP_EPSILON ) );
-	
+
 	idVec3 gravity = spawnArgs.GetVector( "gravityDir", "0 0 -1" );
 	gravity *= g_gravity.GetFloat();
 	physicsObj.SetGravity( gravity );
@@ -770,7 +770,7 @@ void idAI::Spawn( void ) {
 	physicsObj.GetGravityAxis().ProjectVector( viewAxis[ 0 ], local_dir );
 	move.current_yaw		= local_dir.ToYaw();
 	move.ideal_yaw			= idMath::AngleNormalize180( move.current_yaw );
-	
+
 	lookAng.Zero ( );
 	lookAng.yaw		= move.current_yaw;
 
@@ -804,7 +804,7 @@ void idAI::Spawn( void ) {
 
 	// init the move variables
 	StopMove( MOVE_STATUS_DONE );
-	
+
 	// Initialize any scripts
 	idStr prefix = "script_";
 	for ( kv = spawnArgs.MatchPrefix ( prefix.c_str(), NULL );
@@ -812,33 +812,33 @@ void idAI::Spawn( void ) {
 		  kv = spawnArgs.MatchPrefix ( prefix.c_str(), kv ) ) {
 			  SetScript ( kv->GetKey().c_str() + prefix.Length(), kv->GetValue() );
 	}
-	
-	// Initialize actions	
+
+	// Initialize actions
 	actionEvadeLeft.Init		( spawnArgs, "action_evadeLeft",		NULL,					0 );
 	actionEvadeRight.Init		( spawnArgs, "action_evadeRight",		NULL, 					0 );
 	actionRangedAttack.Init		( spawnArgs, "action_rangedAttack",		NULL, 					AIACTIONF_ATTACK );
 	actionMeleeAttack.Init		( spawnArgs, "action_meleeAttack",		NULL, 					AIACTIONF_ATTACK|AIACTIONF_MELEE );
 	actionLeapAttack.Init		( spawnArgs, "action_leapAttack",		NULL, 					AIACTIONF_ATTACK );
 	actionJumpBack.Init			( spawnArgs, "action_jumpBack",			NULL, 					0 );
-			
+
 	// Global action timers
 	actionTimerRangedAttack.Init	( spawnArgs, "actionTimer_RangedAttack" );
 	actionTimerEvade.Init			( spawnArgs, "actionTimer_Evade" );
 	actionTimerSpecialAttack.Init	( spawnArgs, "actionTimer_SpecialAttack" );
 	actionTimerPain.Init			( spawnArgs, "actionTimer_pain" );
 
-	// Available tactical options	
+	// Available tactical options
 	combat.tacticalUpdateTime = 0;
 	combat.tacticalCurrent    = AITACTICAL_NONE;
 	combat.tacticalMaskUpdate = 0;
 	combat.tacticalMaskAvailable  = AITACTICAL_TURRET_BIT|AITACTICAL_MOVE_FOLLOW_BIT|AITACTICAL_MOVE_TETHER_BIT;
 	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_cover",   "0" )		? AITACTICAL_COVER_BITS				: 0);
 	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_ranged",  "0" ) 		? AITACTICAL_RANGED_BITS			: 0);
-	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_hide",    "0" ) 		? AITACTICAL_HIDE_BIT				: 0);	
+	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_hide",    "0" ) 		? AITACTICAL_HIDE_BIT				: 0);
 	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_rush",    "0" ) 		? AITACTICAL_MELEE_BIT				: 0);
 	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "tactical_passive", "0" ) 		? AITACTICAL_PASSIVE_BIT			: 0);
 	combat.tacticalMaskAvailable |= (spawnArgs.GetBool ( "allowPlayerPush",  "0" )		? AITACTICAL_MOVE_PLAYERPUSH_BIT	: 0);
-	
+
 	// Talking?
 	const char* npc;
 	if ( spawnArgs.GetString( "npc_name", NULL, &npc ) != NULL && *npc ) {
@@ -866,12 +866,12 @@ void idAI::Spawn( void ) {
 	// Passive or aggressive ai?
 	if ( spawnArgs.GetBool ( "passive" ) ) {
 		Event_BecomePassive ( true );
-		
+
 		if ( spawnArgs.GetInt ( "passive" ) > 1 ) {
 			aifl.disableLook = true;
 		}
 	}
-	
+
 	// Print out a warning about any AI that is spawned unhidden since they will be all thinking
 	if( gameLocal.GameState ( ) == GAMESTATE_STARTUP && !spawnArgs.GetInt( "hide" ) && !spawnArgs.GetInt( "trigger_anim" ) && !spawnArgs.GetInt( "trigger_cover" ) && !spawnArgs.GetInt( "trigger_move" ) ){
 		gameLocal.Warning( "Unhidden AI placed in map (will be constantly active): %s (%s)", name.c_str(), GetPhysics()->GetOrigin().ToString() );
@@ -905,7 +905,7 @@ void idAI::Begin ( void ) {
 	}
 
 	// If a trigger anim or hide is specified then wait until activated before waking up
-	if ( spawnArgs.GetString ( "trigger_anim", "", &temp ) || spawnArgs.GetBool ( "hide" ) ) {	
+	if ( spawnArgs.GetString ( "trigger_anim", "", &temp ) || spawnArgs.GetBool ( "hide" ) ) {
 		Hide();
 		PostState ( "Wait_Activated" );
 		PostState ( "State_WakeUp", SEC2MS(spawnArgs.GetFloat ( "wait" ) ) );
@@ -926,14 +926,14 @@ void idAI::WakeUp ( void ) {
 	// Already awake?
 	if ( aifl.awake ) {
 		return;
-	}	
+	}
 
 	// Find the closest helper
 	UpdateHelper ( );
 
 	aifl.awake = true;
 
-	// If the monster is flying then start them with the flying movement type	
+	// If the monster is flying then start them with the flying movement type
 	if ( spawnArgs.GetBool ( "static" ) ) {
 		SetMoveType ( MOVETYPE_STATIC );
 	} else if ( spawnArgs.GetBool ( "flying" ) ) {
@@ -942,14 +942,14 @@ void idAI::WakeUp ( void ) {
 		move.moveDest.z += move.fly_offset;
 	} else {
 		SetMoveType ( MOVETYPE_ANIM );
-	}	
-	
+	}
+
 	// Wake up any linked entities
 	WakeUpTargets ( );
 
 	// Default enemy?
 	if ( !combat.fl.ignoreEnemies ) {
-		if ( spawnArgs.GetString ( "enemy", "", &temp ) && *temp ) {	
+		if ( spawnArgs.GetString ( "enemy", "", &temp ) && *temp ) {
 			SetEnemy ( gameLocal.FindEntity ( temp ) );
 		} else if ( spawnArgs.GetBool ( "forceEnemy", "0" ) ) {
 			SetEnemy ( FindEnemy ( false, true ) );
@@ -960,13 +960,13 @@ void idAI::WakeUp ( void ) {
  	if ( spawnArgs.GetString ( "leader", "", &temp ) && *temp ) {
 		SetLeader ( gameLocal.FindEntity ( temp ) );
  	}
- 	
+
  	// If hidden and face enemy is specified we should orient ourselves toward our enemy immediately
  	if ( enemy.ent && IsHidden ( ) && spawnArgs.GetBool ( "faceEnemy" ) ) {
 		TurnToward ( enemy.ent->GetPhysics()->GetOrigin() );
 		move.current_yaw = move.ideal_yaw;
 		viewAxis = idAngles( 0, move.current_yaw, 0 ).ToMat3();
-	} 
+	}
 
 	Show ( );
 
@@ -974,7 +974,7 @@ void idAI::WakeUp ( void ) {
 
 	// External script functions
 	ExecScriptFunction( funcs.init, this );
-	
+
 	OnWakeUp ( );
 }
 
@@ -995,12 +995,12 @@ void idAI::List_f( const idCmdArgs &args ) {
 
 	gameLocal.Printf( "%-4s  %-20s %s\n", " Num", "EntityDef", "Name" );
 	gameLocal.Printf( "------------------------------------------------\n" );
-	for( e = 0; e < MAX_GENTITIES; e++ ) {		
+	for( e = 0; e < MAX_GENTITIES; e++ ) {
 		check = gameLocal.entities[ e ];
 		if ( !check ) {
 			continue;
 		}
-		
+
 		if ( check->IsType ( idAI::Type ) ) {
 			idAI* checkAI = static_cast<idAI*>(check);
 
@@ -1012,8 +1012,8 @@ void idAI::List_f( const idCmdArgs &args ) {
 
 			gameLocal.Printf( "%4i: %-20s %-20s move: %d\n", e, check->GetEntityDefName(), check->name.c_str(), checkAI->move.fl.allowAnimMove );
 			count++;
-		} else if ( check->IsType ( rvSpawner::GetClassType() ) ) {			
-			const idKeyValue*	kv;	
+		} else if ( check->IsType ( rvSpawner::GetClassType() ) ) {
+			const idKeyValue*	kv;
 			rvSpawner*			checkSpawner = static_cast<rvSpawner*>(check);
 			for ( kv = check->spawnArgs.MatchPrefix( "def_spawn", NULL ); kv; kv = check->spawnArgs.MatchPrefix( "def_spawn", kv ) ) {
 				countsSpawned.SetInt ( kv->GetValue(), countsSpawned.GetInt ( kv->GetValue(), "0" ) + 1 );
@@ -1033,10 +1033,10 @@ void idAI::List_f( const idCmdArgs &args ) {
 	// Combine the two lists
 	for ( e = 0; e < countsSpawned.GetNumKeyVals(); e ++ ) {
 		const char* keyName = countsSpawned.GetKeyVal ( e )->GetKey();
-		countsFixed.Set ( keyName, va("(%s) %3d", 
+		countsFixed.Set ( keyName, va("(%s) %3d",
 						  countsSpawned.GetKeyVal ( e )->GetValue().c_str(),
 						  countsFixed.GetInt ( keyName, "0" ) + atoi(countsSpawned.GetKeyVal ( e )->GetValue()) ) );
-	}	
+	}
 
 	// Print out total counts
 	if ( countsFixed.GetNumKeyVals() ) {
@@ -1046,7 +1046,7 @@ void idAI::List_f( const idCmdArgs &args ) {
 			gameLocal.Printf( "%10s: %-20s\n", kv->GetValue().c_str(), kv->GetKey().c_str() );
 		}
 	}
-	
+
 	gameLocal.Printf( "------------------------------------------------\n" );
 	gameLocal.Printf( "...%d monsters (%d unique types)\n", count, countsFixed.GetNumKeyVals() );
 }
@@ -1098,7 +1098,7 @@ bool idAI::ValidateCover( ) {
 	if ( !InCoverMode( ) ) {
 		return false;
 	}
-	
+
 	if ( aasSensor->TestValidWithCurrentState() && (!enemy.ent || enemy.range > combat.awareRange ) ) {
 		combat.coverValidTime = gameLocal.time;
 	} else if ( combat.coverValidTime && !IsCoverValid ( ) ) {
@@ -1152,11 +1152,11 @@ void idAI::Think( void ) {
 		aiManager.timerThink.Start ( );
 	}
 
-	if ( thinkFlags & TH_THINK ) {	
+	if ( thinkFlags & TH_THINK ) {
 		// clear out the enemy when he dies or is hidden
 		idEntity* enemyEnt = enemy.ent;
 		idActor*  enemyAct = dynamic_cast<idActor*>( enemyEnt );
-		
+
 		// Clear our enemy if necessary
 		if ( enemyEnt ) {
 			if (enemyAct && enemyAct->IsInVehicle()) {
@@ -1188,7 +1188,7 @@ void idAI::Think( void ) {
 			// hidden monsters
 			UpdateStates ();
 		} else if( !ai_freeze.GetBool() ) {
-			Prethink(); 
+			Prethink();
 
 			// clear the ik before we do anything else so the skeleton doesn't get updated twice
 			walkIK.ClearJointMods();
@@ -1250,8 +1250,8 @@ void idAI::Think( void ) {
 idAI::UpdateFocus
 ============
 */
-void idAI::UpdateFocus ( const idMat3& orientationAxis ) {	
-	// Alwasy look at enemy	
+void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
+	// Alwasy look at enemy
 	if ( !allowJointMod || !allowEyeFocus ) {
 		SetFocus ( AIFOCUS_NONE, 0 );
 	} else if ( IsBehindCover() && !aifl.action && !IsSpeaking() ) {
@@ -1273,11 +1273,11 @@ void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
 		//tethered and at cover or moving - don't look at leader or player
 		SetFocus ( AIFOCUS_NONE, 0 );
 	} else if ( helperCurrent && helperCurrent->IsCombat ( ) ) {
-		SetFocus ( AIFOCUS_HELPER, 100 );		
+		SetFocus ( AIFOCUS_HELPER, 100 );
 	} else if ( !aifl.scripted && !move.fl.moving ) {
 		idEntity*	lookat   = NULL;
 		aiFocus_t	newfocus = AIFOCUS_NONE;
-		
+
 		if ( leader ) {
 			idVec3 dir2Leader = leader->GetPhysics()->GetOrigin()-GetPhysics()->GetOrigin();
 			if ( (viewAxis[0] * dir2Leader) > 0.0f ) {
@@ -1292,15 +1292,15 @@ void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
 			newfocus  = AIFOCUS_PLAYER;
 			lookat	  = gameLocal.GetLocalPlayer();
 		}
-		
+
 		if ( newfocus != AIFOCUS_NONE && lookat ) {
 			if ( DistanceTo ( lookat ) < focusRange * (move.fl.moving?2.0f:1.0f) && CheckFOV ( lookat->GetPhysics()->GetOrigin() ) ) {
 				SetFocus ( newfocus, 1000 );
-			}		
+			}
 		}
-	}	
-	
-	// Make sure cover look wasnt invalidated	
+	}
+
+	// Make sure cover look wasnt invalidated
 	if ( focusType == AIFOCUS_COVERLOOK && !aasSensor->Look() ) {
 		focusType = AIFOCUS_NONE;
 	} else if ( focusType == AIFOCUS_COVER && !aasSensor->Reserved ( ) ) {
@@ -1310,12 +1310,12 @@ void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
 	} else if ( focusType == AIFOCUS_TETHER && !tether ) {
 		focusType = AIFOCUS_NONE;
 	}
-	
+
 	// Update focus type to none when the focus time runs out
 	if ( focusType != AIFOCUS_NONE ) {
 		if ( gameLocal.time > focusTime ) {
 			focusType = AIFOCUS_NONE;
-		}	
+		}
 	}
 
 	// Calculate the focus position
@@ -1331,7 +1331,7 @@ void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
 		currentFocusPos = helperCurrent->GetPhysics()->GetOrigin() + helperCurrent->GetDirection ( this );
 	} else if ( focusType == AIFOCUS_TETHER ) {
 		currentFocusPos = GetEyePosition() + tether->GetPhysics()->GetAxis()[0] * 64.0f;
-	} else { 
+	} else {
 		idEntity* focusEnt = NULL;
 		switch ( focusType ) {
 			case AIFOCUS_LEADER:		focusEnt = leader;						break;
@@ -1345,7 +1345,7 @@ void idAI::UpdateFocus ( const idMat3& orientationAxis ) {
 			} else {
 				currentFocusPos = focusEnt->GetPhysics()->GetOrigin();
 			}
-		} else { 
+		} else {
 			currentFocusPos = GetEyePosition() + orientationAxis[ 0 ] * 64.0f;
 		}
 	}
@@ -1368,7 +1368,7 @@ idAI::UpdateStates
 void idAI::UpdateStates ( void ) {
 	MEM_SCOPED_TAG(tag,MA_DEFAULT);
 
-	// Continue updating tactical state if for some reason we dont have one 
+	// Continue updating tactical state if for some reason we dont have one
 	if ( !aifl.dead && !aifl.scripted && !aifl.action && stateThread.IsIdle ( ) && aifl.scriptedEndWithIdle ) {
 		UpdateTactical ( 0 );
 	} else {
@@ -1399,7 +1399,7 @@ idAI::OverrideFlag
 */
 void idAI::OverrideFlag ( aiFlagOverride_t flag, bool value ) {
 	bool oldValue;
-	
+
 	switch ( flag ) {
 		case AIFLAGOVERRIDE_DISABLEPAIN:	oldValue = disablePain;				break;
 		case AIFLAGOVERRIDE_DAMAGE:			oldValue = fl.takedamage;			break;
@@ -1412,10 +1412,10 @@ void idAI::OverrideFlag ( aiFlagOverride_t flag, bool value ) {
 	if ( oldValue == value ) {
 		return;
 	}
-	
+
 	int flagOverride		= 1 << (flag * 2);
 	int flagOverrideValue	= 1 << ((flag * 2) + 1);
-	
+
 	if ( (flagOverrides & flagOverride) && !!(flagOverrides & flagOverrideValue) == value ) {
 		flagOverrides &= ~flagOverride;
 	} else {
@@ -1426,7 +1426,7 @@ void idAI::OverrideFlag ( aiFlagOverride_t flag, bool value ) {
 		}
 		flagOverrides |= flagOverride;
 	}
-	
+
 	switch ( flag ) {
 		case AIFLAGOVERRIDE_DISABLEPAIN:	disablePain = value;			break;
 		case AIFLAGOVERRIDE_DAMAGE:			fl.takedamage = value;			break;
@@ -1444,11 +1444,11 @@ void idAI::RestoreFlag ( aiFlagOverride_t flag ) {
 	int flagOverride		= 1 << (flag * 2);
 	int flagOverrideValue	= 1 << ((flag * 2) + 1);
 	bool value;
-	
+
 	if ( !(flagOverrides&flagOverride) ) {
 		return;
 	}
-	
+
 	value = !!(flagOverrides & flagOverrideValue);
 
 	switch ( flag ) {
@@ -1457,7 +1457,7 @@ void idAI::RestoreFlag ( aiFlagOverride_t flag ) {
 		case AIFLAGOVERRIDE_NOTURN:			move.fl.noTurn = value;		break;
 		case AIFLAGOVERRIDE_NOGRAVITY:		move.fl.noGravity = value;	break;
 	}
-}	
+}
 
 /***********************************************************************
 
@@ -1519,7 +1519,7 @@ idAI::AdjustHealthByDamage
 void idAI::AdjustHealthByDamage	( int damage ) {
 	if ( aifl.undying ) {
 		return;
-	}	
+	}
 	idActor::AdjustHealthByDamage ( damage );
 
 	if ( g_perfTest_aiUndying.GetBool() && health <= 0 ) {
@@ -1563,10 +1563,10 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 
 		// If taken too much pain where we then skip the current destination
 		if ( combat.tacticalPainThreshold && combat.tacticalPainTaken > combat.tacticalPainThreshold ) {
-			if (team==AITEAM_STROGG && 
+			if (team==AITEAM_STROGG &&
 				(combat.tacticalMaskAvailable&AITACTICAL_COVER_BITS) &&
-				IsType(rvAITactical::GetClassType()) && 
-				ai_allowTacticalRush.GetBool() && 
+				IsType(rvAITactical::GetClassType()) &&
+				ai_allowTacticalRush.GetBool() &&
 				spawnArgs.GetBool("rushOnPain", "1")) {
 
 				// clear any tether
@@ -1595,11 +1595,11 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 		ExecScriptFunction( funcs.damage );
 	}
 
-	// If we were hit by our enemy and our enemy isnt visible then 
+	// If we were hit by our enemy and our enemy isnt visible then
 	// force the enemy visiblity to be updated as if we saw him momentarily
 	if ( enemy.ent == attacker && !enemy.fl.visible ) {
 		UpdateEnemyPosition ( true );
-	}	
+	}
 
 	return aifl.pain;
 }
@@ -1613,9 +1613,9 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	idAngles			ang;
 	const char*			modelDeath;
 	const idKeyValue*	kv;
-	
+
 	if ( g_debugDamage.GetBool() ) {
-		gameLocal.Printf( "Damage: joint: '%s', zone '%s'\n", animator.GetJointName( ( jointHandle_t )location ), 
+		gameLocal.Printf( "Damage: joint: '%s', zone '%s'\n", animator.GetJointName( ( jointHandle_t )location ),
 			GetDamageGroup( location ) );
 	}
 
@@ -1643,7 +1643,7 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 		HideSurface ( kv->GetValue() );
 	}
 
-	// stop all voice sounds 
+	// stop all voice sounds
 	StopSpeaking( true );
 
 	SetMoveType ( MOVETYPE_DEAD );
@@ -1794,7 +1794,7 @@ void idAI::Activate( idEntity *activator ) {
 	if ( ReactionTo( player ) & ATTACK_ON_ACTIVATE ) {
 		SetEnemy( player );
 	}
-	
+
 	// If being activated by a spawner we need to attach to it
 	if ( activator && activator->IsType ( rvSpawner::GetClassType() ) ) {
 		rvSpawner* spawn = static_cast<rvSpawner*>( activator );
@@ -1828,14 +1828,14 @@ void idAI::TalkTo( idActor *actor ) {
 				//MCG: requested change: stop responding after one loop
 				return;
 			}
-			// at least one second between talking to people 
+			// at least one second between talking to people
 			aiManager.SetTeamTimer ( team, AITEAMTIMER_ACTION_TALK, 2000 );
-		
+
 			talkTarget = actor;
 
 			// Move to the next talk message
 			talkMessage = (talkMessage_t)((int)talkMessage + 1);
-			
+
 			// Loop until we find a valid talk message
 			while ( 1 ) {
 				idStr postfix;
@@ -1862,14 +1862,14 @@ void idAI::TalkTo( idActor *actor ) {
 					talkMessage = (talkMessage_t)((int)talkMessage + 1);
 				}
 			}
-			
+
 			// Start talking anim if we have one
 			if ( IsSpeaking ( ) ) {
 				passive.talkTime = speakTime;
 			}
-			
+
 			break;
-		
+
 		case TALK_FOLLOW:
 			if ( actor == leader ) {
 				leader = NULL;
@@ -1879,7 +1879,7 @@ void idAI::TalkTo( idActor *actor ) {
 				Speak ( "lipsync_follow", true );
 			}
 			break;
-			
+
 		case TALK_BUSY:
 			if ( talkBusyCount > 3 )
 			{//only say a max of 4 lines
@@ -1956,9 +1956,9 @@ void idAI::ClearEnemy( bool dead ) {
 
 	enemyNode.Remove();
 	enemy.ent			= NULL;
-	enemy.fl.dead		= dead;	
+	enemy.fl.dead		= dead;
 	combat.fl.seenEnemyDirectly = false;
-	
+
 	UpdateHelper ( );
 }
 
@@ -1981,14 +1981,14 @@ void idAI::UpdateEnemyPosition ( bool forceUpdate ) {
 	if ( !enemy.fl.lockOrigin ) {
 		enemy.lastKnownPosition	= enemyEnt->GetPhysics()->GetOrigin();
 
-		if ( enemyActor ) {				
+		if ( enemyActor ) {
 			enemy.lastVisibleEyePosition	= enemyActor->GetEyePosition();
 			enemy.lastVisibleChestPosition	= enemyActor->GetChestPosition();
 		} else {
 			enemy.lastVisibleEyePosition	= enemy.ent->GetPhysics()->GetOrigin ( );
 			enemy.lastVisibleChestPosition	= enemy.ent->GetPhysics()->GetOrigin ( );
-		}		
-	}	
+		}
+	}
 }
 
 /*
@@ -1998,7 +1998,7 @@ idAI::UpdateEnemy
 */
 void idAI::UpdateEnemy ( void ) {
 	predictedPath_t predictedPath;
-	
+
 	// If we lost our enemy then clear it out to be sure
 	if( !enemy.ent ) {
 		return;
@@ -2010,15 +2010,15 @@ void idAI::UpdateEnemy ( void ) {
 	// Bail out if we arent queued to do a complex think
 	if ( aifl.simpleThink ) {
 		// Keep the fov flag up to date
-		if ( IsEnemyVisible ( ) ) { 
+		if ( IsEnemyVisible ( ) ) {
 			enemy.fl.inFov = CheckFOV( enemy.lastKnownPosition );
 		}
-	} else { 		
+	} else {
 		bool oldVisible;
-	
+
 		// Cache current enemy visiblity so we can see if it changes
 		oldVisible = IsEnemyVisible ( );
-	
+
 		// See if enemy still visible
 		UpdateEnemyVisibility  ( );
 
@@ -2026,7 +2026,7 @@ void idAI::UpdateEnemy ( void ) {
 		if ( !IsEnemyVisible ( ) && DistanceTo ( enemy.ent ) < combat.awareRange ) {
 			UpdateEnemyPosition( true );
 		} else {
-/*		
+/*
 			// check if we heard any sounds in the last frame
 			if ( enemyEnt == gameLocal.GetAlertActor() ) {
 				float dist = ( enemyEnt->GetPhysics()->GetOrigin() - physicsObj.GetOrigin() ).LengthSqr();
@@ -2059,14 +2059,14 @@ void idAI::UpdateEnemy ( void ) {
 				}
 				// Add to the special attack timer providing its not already running a timer
 				if ( actionTimerSpecialAttack.IsDone ( actionTime ) ) {
-					actionTimerSpecialAttack.Clear ( actionTime );		
+					actionTimerSpecialAttack.Clear ( actionTime );
 					actionTimerSpecialAttack.Add ( combat.attackSightDelay * delay, 0.5f );
 				}
 			}
 
 			enemy.lastVisibleChangeTime = gameLocal.time;
 		}
-		
+
 		// Handler for visibility change
 		if ( oldVisible != IsEnemyVisible ( ) ) {
 			OnEnemyVisiblityChange ( oldVisible );
@@ -2080,8 +2080,8 @@ void idAI::UpdateEnemy ( void ) {
  	} else {
 		enemy.smoothedLinearVelocity -= (enemy.smoothedLinearVelocity * enemy.smoothVelocityRate );
  		enemy.smoothedPushedVelocity -= (enemy.smoothedPushedVelocity * enemy.smoothVelocityRate );
-	} 	
-	
+	}
+
 	// Update enemy range
 	enemy.range	  = DistanceTo ( enemy.lastKnownPosition );
 	enemy.range2d = DistanceTo2d ( enemy.lastKnownPosition );
@@ -2129,15 +2129,15 @@ void idAI::UpdateEnemyVisibility ( void ) {
 	if ( !enemy.fl.visible ) {
 		return;
 	}
-	
+
 	// If we are seeing our enemy for the first time after changing enemies, call him out
 	if ( enemy.lastVisibleTime < enemy.changeTime ) {
 		AnnounceNewEnemy( );
 	}
-	
+
 	combat.fl.seenEnemyDirectly = true;
 	enemy.lastVisibleTime		= gameLocal.time;
-	
+
 	// Update our known locations of the enemy since we just saw him
 	UpdateEnemyPosition ( );
 }
@@ -2170,7 +2170,7 @@ bool idAI::SetEnemy( idEntity *newEnemy ) {
 
 	// Look for obvious early out
 	if ( enemy.ent == newEnemy ) {
-		return true; 
+		return true;
 	}
 
 	// Cant set enemy if dead
@@ -2202,12 +2202,12 @@ bool idAI::SetEnemy( idEntity *newEnemy ) {
 			enemyNode.AddToEnd( enemyActor->enemyList );
 		}
 	}
-	
+
 	// Allow custom handling of enemy change
 	if ( enemy.ent != oldEnemy ) {
 		OnEnemyChange ( oldEnemy );
 	}
-	
+
 	return true;
 }
 
@@ -2234,7 +2234,7 @@ void idAI::CalculateAttackOffsets ( void ) {
 		return;
 	}
 	num = modelDef->NumAnims();
-	
+
 	// needs to be off while getting the offsets so that we account for the distance the monster moves in the attack anim
 	animator.RemoveOriginOffset( false );
 
@@ -2252,7 +2252,7 @@ void idAI::CalculateAttackOffsets ( void ) {
 		if ( !anim ) {
 			continue;
 		}
-		
+
 		frame = anim->FindFrameForFrameCommand( FC_AI_ATTACK, &command );
 		if ( frame >= 0 ) {
 			joint = animator.GetJointHandle( command->joint->c_str() );
@@ -2260,7 +2260,7 @@ void idAI::CalculateAttackOffsets ( void ) {
 				gameLocal.Error( "Invalid joint '%s' on 'ai_attack' frame command on frame %d of model '%s'", command->joint->c_str(), frame, modelDef->GetName() );
 			}
 			GetJointTransformForAnim( joint, i, FRAME2MS( frame ), attackAnimInfo[ i ].attackOffset, axis );
-			
+
 			if ( chestOffsetJoint!= INVALID_JOINT ) {
 				GetJointTransformForAnim( chestOffsetJoint, i, FRAME2MS( frame ), attackAnimInfo[ i ].eyeOffset, axis );
 			}
@@ -2295,22 +2295,22 @@ void idAI::GetPredictedAimDirOffset ( const idVec3& source, const idVec3& target
 	float  d;
 	float  t;
 	idVec3 r;
-	
+
 	// Make sure there is something to predict
 	if ( targetVelocity.LengthSqr ( ) == 0.0f ) {
 		offset.Zero ( );
 		return;
 	}
-	
-	// Solve for (t):  magnitude(targetVelocity * t + target - source) = projectileSpeed * t	
-	
+
+	// Solve for (t):  magnitude(targetVelocity * t + target - source) = projectileSpeed * t
+
 	r = (target-source);
 	a = (targetVelocity * targetVelocity) - Square(projectileSpeed);
 	b = (targetVelocity * 2.0f) * r;
 	c = r*r;
-	d = b*b - 4*a*c; 
+	d = b*b - 4*a*c;
 	t = 0.0f;
-	
+
 	if ( d >= 0.0f ) {
 		float  t1;
 		float  t2;
@@ -2338,15 +2338,15 @@ void idAI::GetPredictedAimDirOffset ( const idVec3& source, const idVec3& target
 idAI::GetAimDir
 =====================
 */
-bool idAI::GetAimDir( 
-	const idVec3&	firePos, 
-	const idEntity*	target, 
-	const idDict*	projectileDef, 
-	idEntity*		ignore, 
-	idVec3&			aimDir, 
+bool idAI::GetAimDir(
+	const idVec3&	firePos,
+	const idEntity*	target,
+	const idDict*	projectileDef,
+	idEntity*		ignore,
+	idVec3&			aimDir,
 	float			aimOffset,
 	float			predict
-	) const 
+	) const
 {
 	idVec3		targetPos1;
 	idVec3		targetPos2;
@@ -2386,7 +2386,7 @@ bool idAI::GetAimDir(
 		targetPushedVel.Zero ( );
 		targetLinearVel.Zero ( );
 	}
-	
+
 	// Target prediction
 	if ( projectileSpeed == 0.0f ) {
 		// Hitscan prediction actually causes the hitscan to miss unless it is predicted.
@@ -2399,10 +2399,10 @@ bool idAI::GetAimDir(
 	targetPos2 += delta;
 
 	result = false;
-	
+
 	// try aiming for chest
 	delta = targetPos1 - firePos;
-	max_height = (delta.NormalizeFast ( ) + aimOffset) * projectile_height_to_distance_ratio;	
+	max_height = (delta.NormalizeFast ( ) + aimOffset) * projectile_height_to_distance_ratio;
 	if ( max_height > 0.0f ) {
 		result = PredictTrajectory( firePos, targetPos1 + delta * aimOffset, projectileSpeed, projectileGravity, projectileClipModel, MASK_SHOT_RENDERMODEL, max_height, ignore, targetEnt, ai_debugTrajectory.GetBool() ? 1000 : 0, aimDir );
 		if ( result || !targetEnt->IsType( idActor::GetClassType() ) ) {
@@ -2435,7 +2435,7 @@ idProjectile *idAI::CreateProjectile ( const idDict* projectileDict, const idVec
 			clsname = projectileDict->GetString( "classname" );
 			gameLocal.Error( "Could not spawn entityDef '%s'", clsname );
 		}
-		
+
 		if ( !ent->IsType( idProjectile::GetClassType() ) ) {
 			clsname = ent->GetClassname();
 			gameLocal.Error( "'%s' is not an idProjectile", clsname );
@@ -2487,13 +2487,13 @@ bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* targe
 idAI::AttackRanged
 =====================
 */
-idProjectile* idAI::AttackRanged ( 
-	const char*		attackName, 
-	const idDict*	attackDict, 
-	jointHandle_t	joint, 
-	idEntity*		target, 
-	const idVec3&	pushVelocity 
-	)	 
+idProjectile* idAI::AttackRanged (
+	const char*		attackName,
+	const idDict*	attackDict,
+	jointHandle_t	joint,
+	idEntity*		target,
+	const idVec3&	pushVelocity
+	)
 {
 	float				attack_accuracy;
 	float				attack_cone;
@@ -2509,9 +2509,9 @@ idProjectile* idAI::AttackRanged (
 	idAngles			ang;
 	idMat3				axis;
 	idProjectile*		lastProjectile;
-	
+
 	lastProjectile		= NULL;
-	
+
 	// Generic attack properties
 	attack_accuracy		= spawnArgs.GetFloat ( va("attack_%s_accuracy", attackName ), "7" );
 	attack_cone			= spawnArgs.GetFloat ( va("attack_%s_cone", attackName ), "75" );
@@ -2538,7 +2538,7 @@ idProjectile* idAI::AttackRanged (
 			idVec3 targetPos = enemy.lastVisibleEyePosition;
 			idVec3 eFacing;
 			idVec3 left, up;
-			
+
 			up.Set( 0, 0, 1 );
 			left = viewAxis[0].Cross(up);
 
@@ -2569,7 +2569,7 @@ idProjectile* idAI::AttackRanged (
 	}
 	if ( calcAim ) {
 		if ( target && !spawnArgs.GetBool ( va("attack_%s_lockToJoint",attackName), "0" ) ) {
-			GetAimDir( muzzleOrigin, target, attackDict, this, dir, 
+			GetAimDir( muzzleOrigin, target, attackDict, this, dir,
 					spawnArgs.GetFloat ( va("attack_%s_aimoffset", attackName )),
 					attack_predict );
 		} else {
@@ -2593,7 +2593,7 @@ idProjectile* idAI::AttackRanged (
 			}
 		}
 	}
-	
+
 	// random accuracy
 	ang = dir.ToAngles();
 	ang.pitch += gameLocal.random.CRandomFloat ( ) * attack_accuracy;
@@ -2618,7 +2618,7 @@ idProjectile* idAI::AttackRanged (
 	for( i = 0; i < attack_count; i++ ) {
 		float angle;
 		float spin;
-		
+
 		// spread the projectiles out
 		angle = idMath::Sin( attack_spread * gameLocal.random.RandomFloat() );
 		spin = (float)DEG2RAD( 360.0f ) * gameLocal.random.RandomFloat();
@@ -2626,7 +2626,7 @@ idProjectile* idAI::AttackRanged (
 		dir.Normalize();
 
 		if ( attack_hitscan ) {
-			gameLocal.HitScan( *attackDict, muzzleOrigin, dir, muzzleOrigin, this, false, combat.aggressiveScale );		
+			gameLocal.HitScan( *attackDict, muzzleOrigin, dir, muzzleOrigin, this, false, combat.aggressiveScale );
 		} else {
 			// launch the projectile
 			if ( !projectile.GetEntity() ) {
@@ -2634,10 +2634,10 @@ idProjectile* idAI::AttackRanged (
 			}
 			lastProjectile = projectile.GetEntity();
 			lastProjectile->Launch( muzzleOrigin, dir, pushVelocity, 0.0f, combat.aggressiveScale );
-		
+
 			// Let the script manage projectiles if need be
 			ExecScriptFunction ( funcs.launch_projectile, lastProjectile );
-		
+
 			projectile = NULL;
 		}
 	}
@@ -2848,7 +2848,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 			damageScale = 6;
 		}
 	}
-	
+
 	//if the defender is a melee superhero, damageScale is way decreased
 	if( enemyAI->aifl.meleeSuperhero)	{
 		damageScale = 0.5f;
@@ -3027,7 +3027,7 @@ bool idAI::CanPlayChatterSounds( void ) const {
 idAI::UpdateChatter
 =====================
 */
-void idAI::UpdateChatter ( void ) {	
+void idAI::UpdateChatter ( void ) {
 	int			chatterRate;
 	const char* chatter;
 
@@ -3040,7 +3040,7 @@ void idAI::UpdateChatter ( void ) {
 	if ( IsHidden() || !aifl.awake || aifl.dead || ( chatterTime > gameLocal.time ) ) {
 		return;
 	}
-	
+
 	// Skip first chatter
 	if ( enemy.ent ) {
 		chatter		= "lipsync_chatter_combat";
@@ -3076,10 +3076,10 @@ idEntity *idAI::HeardSound( int ignore_team ){
 		idVec3 pos = actor->GetPhysics()->GetOrigin();
 		idVec3 org = physicsObj.GetOrigin();
 		float dist = ( pos - org ).LengthSqr();
-		
+
 		if ( dist < Square( combat.earRange ) ) {
 			//really close?
-			if ( dist < Square( combat.earRange/4.0f ) ) {		
+			if ( dist < Square( combat.earRange/4.0f ) ) {
 				return actor;
 			//possible LOS
 			} else if ( dist < Square( combat.visRange * 2.0f ) && CanSee( actor, false ) ) {
@@ -3108,15 +3108,15 @@ idAI::SetLeader
 */
 void idAI::SetLeader ( idEntity *newLeader ) {
 	idEntity* oldLeader = leader;
-	
+
 	if( !newLeader ){
 		leader = NULL;
 	} else if ( !newLeader->IsType( idActor::GetClassType() ) ) {
 		gameLocal.Error( "'%s' is not an idActor (player or ai controlled character)", newLeader->name.c_str() );
 	} else {
-		leader = static_cast<idActor *>( newLeader );	
+		leader = static_cast<idActor *>( newLeader );
 	}
-	
+
 	if ( oldLeader != leader ) {
 		OnLeaderChange ( oldLeader );
 	}
@@ -3165,7 +3165,7 @@ bool idAI::UpdateAnimationControllers( void ) {
 		orientationJointYaw = orientationJointAxis[ 2 ].ToYaw();
 		orientationJointAxis = idAngles( 0.0f, orientationJointYaw, 0.0f ).ToMat3();
 	}
-	
+
 	// Update the IK after we've gotten all the joint positions we need, but before we set any joint positions.
 	// Getting the joint positions causes the joints to be updated.  The IK gets joint positions itself (which
 	// are already up to date because of getting the joints in this function) and then sets their positions, which
@@ -3181,7 +3181,7 @@ bool idAI::UpdateAnimationControllers( void ) {
 	//MCG NOTE: don't know why Dube added this extra check for the torsoAnim (5/09/05), but it was causing popping, so I took it out... :/
 	//bool canLook = ( !torsoAnim.AnimDone(0) || !torsoAnim.GetAnimator()->CurrentAnim(ANIMCHANNEL_TORSO)->IsDone(gameLocal.GetTime()) || torsoAnim.Disabled() ) && !torsoAnim.GetAnimFlags().ai_no_look && !aifl.disableLook;
 	//bool canLook = (!torsoAnim.GetAnimFlags().ai_no_look && !aifl.disableLook);
-	
+
 	bool canLook = (!animator.GetAnimFlags(animator.CurrentAnim(ANIMCHANNEL_TORSO)->AnimNum()).ai_no_look && !aifl.disableLook);
 	if ( !canLook ) {
 		//actually, do the looking, but bring it back forward...
@@ -3198,7 +3198,7 @@ bool idAI::UpdateAnimationControllers( void ) {
 	orientationJointAxis.ProjectVector( dir, localDir );
 	newLookAng.pitch = -idMath::AngleNormalize180( localDir.ToPitch() );
 	newLookAng.roll	= 0.0f;
-	
+
 	if ( !canLook ) {
 		//actually, do the looking, but bring it back forward...
 		newLookAng.yaw = orientationJointAxis[0].ToYaw();
@@ -3229,15 +3229,15 @@ bool idAI::UpdateAnimationControllers( void ) {
 	// Calcuate the eye angles
 	f = eyeAng.yaw;
 	eyeAng.yaw    = idMath::AngleNormalize180( f - orientationJointYaw );
-	eyeAng.yaw   += (idMath::AngleNormalize180( newLookAng.yaw - f ) * eyeFocusRate);	
+	eyeAng.yaw   += (idMath::AngleNormalize180( newLookAng.yaw - f ) * eyeFocusRate);
 	eyeAng.pitch += (idMath::AngleNormalize180( newLookAng.pitch - eyeAng.pitch ) * eyeFocusRate);
 
 	// Clamp eye angles relative to the look angles
 	jointAng = eyeAng - lookAng;
-	jointAng.Normalize180( );	
+	jointAng.Normalize180( );
 	jointAng.Clamp( eyeMin, eyeMax );
 	eyeAng = lookAng + jointAng;
-	eyeAng.Normalize180( );	
+	eyeAng.Normalize180( );
 
 	if ( canLook ) {
 		// Apply the look angles to the look joints
@@ -3256,7 +3256,7 @@ bool idAI::UpdateAnimationControllers( void ) {
 					animator.SetJointAxis( headJoint, JOINTMOD_WORLD, jointAng.ToMat3() );
 				}
 			}
-			//what if we have a previous joint mod on the rest of the lookJoints 
+			//what if we have a previous joint mod on the rest of the lookJoints
 			//from an anim that *wasn't* ai_look_head_only...?
 			//just clear them?  Or move them towards 0?
 			//FIXME: move them towards zero...
@@ -3284,7 +3284,7 @@ bool idAI::UpdateAnimationControllers( void ) {
 						{
 							curJointAngleMod = curJointMod->mat.ToAngles();
 							curJointAngleMod *= 0.75f;
-							if ( fabs(curJointAngleMod.pitch) < 1.0f 
+							if ( fabs(curJointAngleMod.pitch) < 1.0f
 								&& fabs(curJointAngleMod.yaw) < 1.0f
 								&& fabs(curJointAngleMod.roll) < 1.0f )
 							{
@@ -3323,13 +3323,13 @@ bool idAI::UpdateAnimationControllers( void ) {
 				animator.SetJointAxis( lookJoints[ i ], JOINTMOD_WORLD, jointAng.ToMat3() );
 			}
 		}
-	}	
+	}
 
 	// Convert the look angles back to world angles.  This is done to prevent dramatic orietation changes
 	// from changing the look direction abruptly (unless of course the minimums are not met)
 	lookAng.yaw = idMath::AngleNormalize180( lookAng.yaw + orientationJointYaw );
 	eyeAng.yaw = idMath::AngleNormalize180( eyeAng.yaw + orientationJointYaw );
-	
+
 	if ( move.moveType == MOVETYPE_FLY || move.fl.flyTurning ) {
 		// lean into turns
 		AdjustFlyingAngles();
@@ -3344,19 +3344,19 @@ bool idAI::UpdateAnimationControllers( void ) {
 				//tweak these since it's looking at the wrong spot and not calculating from each eye and I don't have time to bother rewriting all of this properly
 				eyeAng.yaw -= 0.5f;
 				eyeAng.pitch += 3.25f;
-				idMat3 eyeAxis = ( eyeAng ).ToMat3() * head->GetPhysics()->GetAxis().Transpose ( );  
+				idMat3 eyeAxis = ( eyeAng ).ToMat3() * head->GetPhysics()->GetAxis().Transpose ( );
 
-				headAnimator->SetJointAxis ( leftEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );	
+				headAnimator->SetJointAxis ( leftEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );
 
 				eyeAng.yaw += 3.0f;
-				eyeAxis = ( eyeAng ).ToMat3() * head->GetPhysics()->GetAxis().Transpose ( );  
+				eyeAxis = ( eyeAng ).ToMat3() * head->GetPhysics()->GetAxis().Transpose ( );
 
 				headAnimator->SetJointAxis ( rightEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );
 
 				if ( ai_debugEyeFocus.GetBool() ) {
 					idVec3 eyeOrigin;
 					idMat3 axis;
-					
+
 					head->GetJointWorldTransform ( rightEyeJoint, gameLocal.time, eyeOrigin, axis );
 					gameRenderWorld->DebugArrow ( colorGreen, eyeOrigin, ( eyeOrigin + (32.0f*axis[0])), 1, 0 );
 
@@ -3369,23 +3369,23 @@ bool idAI::UpdateAnimationControllers( void ) {
 			}
 		} else {
 			if ( allowEyeFocus && focusType != AIFOCUS_NONE && !torsoAnim.GetAnimFlags().ai_no_look && !aifl.disableLook ) {
-				idMat3 eyeAxis = ( eyeAng ).ToMat3() * GetPhysics()->GetAxis().Transpose ( );  
+				idMat3 eyeAxis = ( eyeAng ).ToMat3() * GetPhysics()->GetAxis().Transpose ( );
 				animator.SetJointAxis ( rightEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );
-				animator.SetJointAxis ( leftEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );			
+				animator.SetJointAxis ( leftEyeJoint, JOINTMOD_WORLD_OVERRIDE, eyeAxis );
 			} else {
 				animator.ClearJoint( leftEyeJoint );
 				animator.ClearJoint( rightEyeJoint );
 			}
 		}
 	}
-	
+
 	return true;
 }
 
 void idAI::OnTouch( idEntity *other, trace_t *trace ) {
-	// if we dont have an enemy or had one for at least a second that is a potential enemy the set the enemy	
+	// if we dont have an enemy or had one for at least a second that is a potential enemy the set the enemy
 	if ( other->IsType( idActor::GetClassType() )
-		&& !other->fl.notarget 
+		&& !other->fl.notarget
 		&& ( ReactionTo( other )&ATTACK_ON_SIGHT)
 		&& (!enemy.ent || gameLocal.time - enemy.changeTime > 1000 ) ) {
 		SetEnemy( other );
@@ -3396,11 +3396,11 @@ void idAI::OnTouch( idEntity *other, trace_t *trace ) {
 	}
 	pusher = other;
 	aifl.pushed = true;
-	
+
 	// If pushed by the player update tactical
 	if ( pusher && pusher->IsType ( idPlayer::GetClassType() ) && (combat.tacticalMaskAvailable & AITACTICAL_MOVE_PLAYERPUSH_BIT) ) {
 		ForceTacticalUpdate ( );
-	}		
+	}
 }
 
 idProjectile* idAI::AttackProjectile ( const idDict* projectileDict, const idVec3 &org, const idAngles &ang ) {
@@ -3452,7 +3452,7 @@ idProjectile* idAI::AttackProjectile ( const idDict* projectileDict, const idVec
 	projectile = NULL;
 
 	lastAttackTime = gameLocal.time;
-	
+
 	return result;
 }
 
@@ -3592,11 +3592,11 @@ void idAI::Prethink ( void ) {
 	if ( move.fl.moving ) {
 		UpdateHelper ( );
 	}
-	
+
 	if ( leader ) {
 		idEntity* groundEnt	= leader->GetGroundEntity ( );
 		if ( !(tether && !aifl.tetherMover) && groundEnt ) {
-			if ( groundEnt->IsType ( idMover::GetClassType ( ) ) ) {			
+			if ( groundEnt->IsType ( idMover::GetClassType ( ) ) ) {
 				idEntity* ent;
 				idEntity* next;
 				for( ent = groundEnt->GetNextTeamEntity(); ent != NULL; ent = next ) {
@@ -3610,7 +3610,7 @@ void idAI::Prethink ( void ) {
 			} else {
 				SetTether ( NULL );
 			}
-		}					
+		}
 	} else if ( tether && aifl.tetherMover ) {
 		SetTether ( NULL );
 	}
@@ -3626,9 +3626,9 @@ void idAI::Postthink( void ){
 		pain.takenThisFrame = 0;
 	}
 
-	// Draw debug tactical information 
+	// Draw debug tactical information
 	DrawTactical ( );
-				
+
 	if( vehicleController.IsDriving() ){	// Generate some sort of command?
 		usercmd_t				usercmd;
 
@@ -3642,7 +3642,7 @@ void idAI::Postthink( void ){
 			toEnemy = enemy.ent->GetPhysics()->GetOrigin();
 			toEnemy -= GetPhysics()->GetOrigin();
 			toEnemy.Normalize();
-			
+
 			idAngles enemyAng;
 
 			enemyAng = toEnemy.ToAngles();
@@ -3655,7 +3655,7 @@ void idAI::Postthink( void ){
 			vehicleController.SetInput ( usercmd, enemyAng );
 		}
 	}
-	
+
 	// Keep our threat value up to date
 	UpdateThreat ( );
 }
@@ -3743,18 +3743,18 @@ void idAI::OnEnemyChange ( idEntity* oldEnemy ) {
 		enemy.changeTime = gameLocal.time;
 
 		enemy.lastKnownPosition = enemy.ent->GetPhysics()->GetOrigin ( );
-		
+
 		UpdateEnemyVisibility ( );
 		UpdateEnemyPosition ( true );
-		UpdateEnemy ( );		
+		UpdateEnemy ( );
 	} else {
 		enemy.range		 = 0;
 		enemy.range2d 	 = 0;
 		enemy.changeTime = 0;
 		enemy.smoothedLinearVelocity.Zero ( );
 		enemy.smoothedPushedVelocity.Zero ( );
-	}	
-	
+	}
+
 	enemy.fl.visible = false;
 }
 
@@ -3777,7 +3777,7 @@ idAI::OnFriendlyFire
 */
 void idAI::OnFriendlyFire ( idActor* attacker ) {
 	AnnounceFriendlyFire( static_cast<idActor*>(attacker) );
-}	
+}
 
 /*
 ============
@@ -3830,7 +3830,7 @@ void idAI::OnSetKey	( const char* key, const char* value ) {
 	if ( !idStr::Icmp ( key, "noCombatChatter" ) ) {
 		combat.fl.noChatter = spawnArgs.GetBool ( key );
 	} else if ( !idStr::Icmp ( key, "allowPlayerPush" ) ) {
-		combat.tacticalMaskAvailable &= ~(AITACTICAL_MOVE_PLAYERPUSH_BIT);		
+		combat.tacticalMaskAvailable &= ~(AITACTICAL_MOVE_PLAYERPUSH_BIT);
 		if ( spawnArgs.GetBool ( key ) ) {
 			combat.tacticalMaskAvailable |= AITACTICAL_MOVE_PLAYERPUSH_BIT;
 		}
@@ -3899,8 +3899,8 @@ bool idAI::SkipImpulse( idEntity *ent, int id ){
 	}
 	if( move.moveCommand == MOVE_RV_PLAYBACK ){
 		return true;
-	}	
-	
+	}
+
 	return skip;
 }
 
@@ -3945,7 +3945,7 @@ bool idAI::CanHitEnemy ( void ) {
 // RAVEN END
 	if ( tr.fraction >= 1.0f || ( hit == enemyEnt ) ) {
 		lastHitCheckResult = true;
-	} else if ( ( tr.fraction < 1.0f ) && ( hit->IsType( idAI::Type ) ) && 
+	} else if ( ( tr.fraction < 1.0f ) && ( hit->IsType( idAI::Type ) ) &&
 		( static_cast<idAI *>( hit )->team != team ) ) {
 		lastHitCheckResult = true;
 	} else {
@@ -4020,7 +4020,7 @@ int idAI::TestTrajectory( const idVec3 &firePos, const idVec3 &target, const cha
 	float	delta_x;
 	float	delta_z;
 
-	projectileDef	= gameLocal.FindEntityDefDict ( projectileName );	
+	projectileDef	= gameLocal.FindEntityDefDict ( projectileName );
 	projVelocity	= idProjectile::GetVelocity( projectileDef );
 	projGravity		= idProjectile::GetGravity( projectileDef ).z * GetPhysics()->GetGravity();
 	pitch			= DEG2RAD( gameLocal.random.RandomFloat() * 50 + 20 );	// Random pitch range between 20 and 70.  Should this be customizeable?
@@ -4067,7 +4067,7 @@ int idAI::TestTrajectory( const idVec3 &firePos, const idVec3 &target, const cha
 		return 0;
 	}
 
-	if ( idAI::TestTrajectory ( firePos, target, zVel, projGravity[2], testTime, height * 2, NULL, 
+	if ( idAI::TestTrajectory ( firePos, target, zVel, projGravity[2], testTime, height * 2, NULL,
 								MASK_SHOT_RENDERMODEL, this, enemy.GetEntity(), ai_debugTrajectory.GetBool() ? 4000 : 0 ) ) {
 
 		if ( ai_debugTrajectory.GetBool() ) {
@@ -4120,16 +4120,16 @@ idAI::GetIdleAnimName
 */
 const char* idAI::GetIdleAnimName ( void ) {
 	const char* animName = NULL;
-	
+
 	// Start idle animation
 	if ( enemy.ent ) {
 		animName = "idle_alert";
 	}
-	
+
 	if ( animName && HasAnim ( ANIMCHANNEL_ALL, animName ) ) {
 		return animName;
 	}
-	
+
 	return "idle";
 }
 
@@ -4158,7 +4158,7 @@ idEntity *idAI::FindEnemy ( bool inFov, bool forceNearest, float maxDistSqr ){
 	idVec3		origin;
 	idVec3		delta;
 	pvsHandle_t pvs;
-	
+
 	// Setup our local variables used in the search
 	pvs				 = gameLocal.pvs.SetupCurrentPVS( GetPVSAreas(), GetNumPVSAreas() );
 	bestThreat		 = 0.0f;
@@ -4180,7 +4180,7 @@ idEntity *idAI::FindEnemy ( bool inFov, bool forceNearest, float maxDistSqr ){
 		delta   = physicsObj.GetOrigin() - actor->GetPhysics()->GetOrigin();
 		distSqr = delta.LengthSqr();
 
-		// Calculate the adjusted threat for this actor		
+		// Calculate the adjusted threat for this actor
 		float threat = CalculateEnemyThreat ( actor );
 
 		// Save the highest threat enemy as a backup in case we cannot find one we can see
@@ -4193,7 +4193,7 @@ idEntity *idAI::FindEnemy ( bool inFov, bool forceNearest, float maxDistSqr ){
 		if ( threat < bestThreat ) {
 			continue;
 		}
-		
+
 		// If this enemy isnt in the same pvps then use them as a backup
 		if ( !gameLocal.pvs.InCurrentPVS( pvs, actor->GetPVSAreas(), actor->GetNumPVSAreas() ) ) {
 			continue;
@@ -4222,7 +4222,7 @@ idEntity *idAI::FindEnemy ( bool inFov, bool forceNearest, float maxDistSqr ){
 	}
 
 	gameLocal.pvs.FreeCurrentPVS( pvs );
-		
+
 	return bestEnemy;
 }
 
@@ -4250,13 +4250,13 @@ bool idAI::CheckForEnemy ( bool useFov, bool force ) {
 
 	// Dont use fov check when behind cover because you are up against a wall
 	newEnemy = FindEnemy ( !IsBehindCover ( ), 0, 0.0f );
- 	
+
  	// Havent found an enemy yet, see if we heard something that can be our enemy
 	if ( !newEnemy ) {
 		newEnemy = HeardSound( true );
 	}
 
-	// If we still havent found an enemy, see if a teammate can give us one	
+	// If we still havent found an enemy, see if a teammate can give us one
 	if ( !newEnemy ) {
 		return CheckForTeammateEnemy ( );
 	}
@@ -4278,20 +4278,20 @@ bool idAI::CheckForTeammateEnemy( void ) {
 	if ( combat.fl.ignoreEnemies ) {
 		return false;
 	}
-	
+
 	// Find an enemy from a nearby ally
 	teammateEnemy = aiManager.NearestTeammateEnemy ( this, 1000.0f, false, false, &teammate );
 	if ( !teammateEnemy || teammateEnemy == enemy.ent ) {
 		return false;
 	}
-	
+
 	assert ( teammate );
-	
+
 	// Attempt to set the new enemy
 	if ( !SetEnemy ( teammateEnemy ) ) {
 		return false;
 	}
-	
+
 	// If the ally is another AI entity we can use their enemy visibility information
 	if ( teammate->IsType ( idAI::Type ) ) {
 		idAI* teammateAI = static_cast<idAI*>(teammate);
@@ -4303,7 +4303,7 @@ bool idAI::CheckForTeammateEnemy( void ) {
 		enemy.lastVisibleChestPosition		= teammateAI->enemy.lastVisibleChestPosition;
 		enemy.lastVisibleTime				= 0;
 	}
-	
+
 	return true;
 }
 
@@ -4321,12 +4321,12 @@ bool idAI::CheckForCloserEnemy ( void ) {
 		return false;
 	}
 
-	// See if we happen to have heard someone this frame that we can use 
+	// See if we happen to have heard someone this frame that we can use
 	newEnemy = HeardSound( true );
 	if ( newEnemy && newEnemy != enemy.ent && newEnemy->IsType( idActor::GetClassType() ) ) {
 		//heard someone else!
 		float newDist = DistanceTo ( newEnemy->GetPhysics()->GetOrigin() );
-		
+
 		// Are they closer than the enemy we are fighting?
 		if ( newDist < enemy.range ) {
 			//new enemy is closer than current one, take them!
@@ -4361,7 +4361,7 @@ TODO: Call CalculateThreat ( ent ) and compare to current entity
 bool idAI::CheckForReplaceEnemy ( idEntity* replacement ) {
 	bool replace;
 
-	// If our replacement is a driver a vehicle and they are hidden we will 
+	// If our replacement is a driver a vehicle and they are hidden we will
 	// want to shoot back at their vehicle not them.
 	idActor* actor;
 	actor = dynamic_cast<idActor*>(replacement);
@@ -4382,12 +4382,12 @@ bool idAI::CheckForReplaceEnemy ( idEntity* replacement ) {
 	if ( replacement == enemy.ent ) {
 		return false;
 	}
-	 
+
 	// Dont want to set our enemy to a friendly target
 	if ( replacement->IsType( idActor::GetClassType() ) && (static_cast<idActor*>(replacement))->team == team ) {
 		return false;
 	}
-	
+
 	// Not having an enemy will set it immediately
 	if ( !enemy.ent ) {
 		SetEnemy ( replacement );
@@ -4408,12 +4408,12 @@ bool idAI::CheckForReplaceEnemy ( idEntity* replacement ) {
 	} else if ( !IsEnemyRecentlyVisible ( 0.25f ) ) {
 		replace = true;
 	}
-	
+
 	// Replace enemy?
 	if ( replace ) {
 		SetEnemy ( replacement );
 	}
-	
+
 	return replace;
 }
 
@@ -4425,13 +4425,13 @@ idAI::UpdateThreat
 void idAI::UpdateThreat ( void ) {
 	// Start threat at base threat level
 	combat.threatCurrent = combat.threatBase;
-	
+
 	// Adjust threat using current tactical state
 	switch ( combat.tacticalCurrent ) {
 		case AITACTICAL_HIDE:	combat.threatCurrent *= 0.5f;	break;
 		case AITACTICAL_MELEE:	combat.threatCurrent *= 2.0f;	break;
-	}		
-	
+	}
+
 	// Signifigantly reduced threat when in undying mode
 	if ( aifl.undying ) {
 		combat.threatCurrent *= 0.25f;
@@ -4444,32 +4444,32 @@ idAI::CalculateEnemyThreat
 ============
 */
 float idAI::CalculateEnemyThreat ( idEntity* enemyEnt ) {
-	// Calculate the adjusted threat for this actor		
+	// Calculate the adjusted threat for this actor
 	float threat = 1.0f;
 	if ( enemyEnt->IsType ( idAI::GetClassType ( ) ) ) {
 		idAI* enemyAI = static_cast<idAI*>(enemyEnt);
 		threat = enemyAI->combat.threatCurrent;
-		
+
 		// Increase threat for enemies that are targetting us
 		if ( enemyAI->enemy.ent == this && enemyAI->combat.tacticalCurrent == AITACTICAL_MELEE ) {
 			threat *= 2.0f;
 		}
 	} else if ( enemyEnt->IsType ( idPlayer::GetClassType ( ) ) ) {
-		threat = 2.0f; 
+		threat = 2.0f;
 	} else {
 		threat = 1.0f;
-	}				
+	}
 
 	float enemyRangeSqr;
-	float distSqr;	
-	
+	float distSqr;
+
 	enemyRangeSqr = (enemy.ent) ? Square ( enemy.range ) : Square ( combat.attackRange[1] );
 	distSqr		  = (physicsObj.GetOrigin ( ) - enemyEnt->GetPhysics()->GetOrigin ( )).LengthSqr ( );
-	
+
 	if ( distSqr > 0 ) {
 		return threat * (enemyRangeSqr / distSqr);
 	}
-	
+
 	return threat;
 }
 
@@ -4492,31 +4492,31 @@ idAI::Speak
 */
 bool idAI::Speak( const char *lipsync, bool random ){
 	assert( idStr::Icmpn( lipsync, "lipsync_", 7 ) == 0 );
-	
+
 	if ( random ) {
 		// If there is no lipsync then skip it
 		if ( spawnArgs.MatchPrefix ( lipsync ) ) {
 			lipsync = spawnArgs.RandomPrefix ( lipsync, gameLocal.random );
-		} else { 
+		} else {
 			lipsync = NULL;
 		}
 	} else {
 		lipsync = spawnArgs.GetString ( lipsync );
 	}
-	
+
 	if ( !lipsync || !*lipsync ) {
 		return false;
 	}
-	
+
 	if ( head ) {
 		speakTime = head->StartLipSyncing( lipsync );
 	} else {
-		speakTime = 0;		
+		speakTime = 0;
 		StartSoundShader (declManager->FindSound ( lipsync ), SND_CHANNEL_VOICE, SSF_IS_VO, false, &speakTime );
 	}
 
 	speakTime += gameLocal.time;
-	return true;	
+	return true;
 }
 
 /*
@@ -4589,7 +4589,7 @@ bool idAI::CanHitEnemyFromAnim( int animNum, idVec3 offset ) {
 				return false;
 			}
 		}
-	}		
+	}
 
 	return CanSeeFrom ( from, enemy.lastVisibleEyePosition, true );
 }
@@ -4603,10 +4603,10 @@ bool idAI::ScriptedBegin ( bool endWithIdle, bool allowDormant ) {
 	if ( aifl.dead ) {
 		return false;
 	}
-	
+
 	// Wakeup if not awake already
 	WakeUp ( );
-		
+
 	aifl.scriptedEndWithIdle = endWithIdle;
 	aifl.scripted			 = true;
 //	combat.fl.aware			 = false;
@@ -4617,16 +4617,16 @@ bool idAI::ScriptedBegin ( bool endWithIdle, bool allowDormant ) {
 	aifl.scriptedNeverDormant = !allowDormant;
 	dormantStart = 0;
 
-/*		
+/*
 	// actors will ignore enemies during scripted events
 	ClearEnemy ( );
 */
-	
+
 	// Cancel any current movement
 	StopMove ( MOVE_STATUS_DONE );
-	
+
 	move.fl.allowAnimMove = true;
-	
+
 	return true;
 }
 
@@ -4672,10 +4672,10 @@ void idAI::ScriptedMove ( idEntity* destEnt, float minDist, bool endWithIdle ) {
 	aiManager.ReMarkAllReachBlocked();
 
 	// Move the torso to the idle state if its not already there
-	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 4 ); 
+	SetAnimState( ANIMCHANNEL_TORSO, "Torso_Idle", 4 );
 
 	// Move the legs into the idle state so he will start moving
-	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 4 ); 
+	SetAnimState( ANIMCHANNEL_LEGS, "Legs_Idle", 4 );
 
 	// Set up state loop for moving
 	SetState ( "State_ScriptedMove" );
@@ -4693,8 +4693,8 @@ void idAI::ScriptedFace ( idEntity* faceEnt, bool endWithIdle ) {
 	}
 
 	// Force idle while facing
-	SetAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 4 ); 
-	SetAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", 4 ); 
+	SetAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle", 4 );
+	SetAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", 4 );
 
 	// Start facing the entity
 	FaceEntity ( faceEnt );
@@ -4717,17 +4717,17 @@ void idAI::ScriptedAnim ( const char* animname, int blendFrames, bool loop, bool
 	if ( !ScriptedBegin ( endWithIdle, true ) ) {
 		return;
 	}
-	
+
 	TurnToward ( move.current_yaw );
 
 	if ( loop ) {
 		// Loop the given animation
-		PlayCycle ( ANIMCHANNEL_TORSO, animname, blendFrames );		
+		PlayCycle ( ANIMCHANNEL_TORSO, animname, blendFrames );
 	} else {
 		// Play the given animation
 		PlayAnim ( ANIMCHANNEL_TORSO, animname, blendFrames );
 	}
-	
+
 	SetAnimState ( ANIMCHANNEL_LEGS, "Wait_Frame" );
 	SetAnimState ( ANIMCHANNEL_TORSO, "Torso_ScriptedAnim" );
 
@@ -4754,7 +4754,7 @@ void idAI::ScriptedPlaybackAim ( const char* playback, int flags, int numFrames 
 	// Wait till its done and mark it finished
 	SetState ( "State_ScriptedPlaybackAim" );
 	PostState ( "State_ScriptedStop" );
-}		
+}
 
 /*
 ============
@@ -4763,11 +4763,11 @@ idAI::ScriptedAction
 */
 void idAI::ScriptedAction ( idEntity* actionEnt, bool endWithIdle ) {
 	const char* actionName;
-	
+
 	if ( !actionEnt ) {
 		return;
 	}
-	
+
 	// Get the action name
 	actionName = actionEnt->spawnArgs.GetString ( "action" );
 	if ( !*actionName ) {
@@ -4783,7 +4783,7 @@ void idAI::ScriptedAction ( idEntity* actionEnt, bool endWithIdle ) {
 	}
 
 	scriptedActionEnt = actionEnt;
-	
+
 	SetState ( "State_ScriptedStop" );
 	PerformAction ( va("TorsoAction_%s", actionName ), 4, true );
 }
@@ -4795,8 +4795,8 @@ idAI::FootStep
 */
 void idAI::FootStep ( void ) {
 	idActor::FootStep ( );
-	
-	ExecScriptFunction( funcs.footstep );	
+
+	ExecScriptFunction( funcs.footstep );
 }
 
 /*
@@ -4807,7 +4807,7 @@ idAI::SetScript
 void idAI::SetScript( const char* scriptName, const char* funcName ) {
 	if ( !funcName || !funcName[0] ) {
 		return;
-	} 
+	}
 
 	// Set the associated script
 	if ( !idStr::Icmp ( scriptName, "first_sight" ) ) {
@@ -4866,13 +4866,13 @@ void idAI::ReactToShotAt ( idEntity* attacker, const idVec3 &origOrigin, const i
 	diff = diff - GetPhysics()->GetOrigin();
 	diff.NormalizeFast ( );
 	diff.z = 0;
-			
+
 	idAngles angles = diff.ToAngles ( );
 	float angleDelta = idMath::AngleDelta ( angles[YAW], move.current_yaw );
 
 	combat.shotAtTime	= gameLocal.time;
 	combat.shotAtAngle  = angleDelta;
-			
+
 	// Someone is attacking us so give them a chance to be our new enemy
 	CheckForReplaceEnemy ( attacker );
 }
@@ -4885,7 +4885,7 @@ idAI::ReactToPain
 void idAI::ReactToPain ( idEntity* attacker, int damage ) {
 	CheckForReplaceEnemy ( attacker );
 }
-	
+
 /*
 ===============================================================================
 
@@ -4901,11 +4901,11 @@ idAI::UpdateHelper
 */
 void idAI::UpdateHelper ( void ) {
 	rvAIHelper* oldhelper;
-			
+
 	// Link ourselves to the closest helper
 	oldhelper     = helperCurrent;
 	helperCurrent = aiManager.FindClosestHelper ( physicsObj.GetOrigin() );
-	
+
 	// Ideal stays the same as current as long as it was the same when we started
 	if ( oldhelper == helperIdeal ) {
 		helperIdeal = helperCurrent;
@@ -4916,7 +4916,7 @@ void idAI::UpdateHelper ( void ) {
 ============
 idAI::GetActiveHelper
 
-When we have an enemy our current helper becomes the active helper, when we dont have an 
+When we have an enemy our current helper becomes the active helper, when we dont have an
 enemy we instead use our ideal.
 ============
 */
@@ -4939,7 +4939,7 @@ idAI::SetTether
 */
 void idAI::SetTether ( rvAITether* newTether ) {
 	aifl.tetherMover = false;
-	
+
 	// Clear our current tether?
 	if ( !newTether ) {
 		if ( tether ) {
@@ -4954,11 +4954,11 @@ void idAI::SetTether ( rvAITether* newTether ) {
 			if ( aas ) {
 				gameLocal.Error ( "tether entity '%s' does no link into the aas for ai '%s'. (try moving it closer to the floor where the aas is)",
 								   newTether->GetName(), GetName ()  );
-			// If we dont have aas, just warn								   
+			// If we dont have aas, just warn
 			} else {
 				gameLocal.Warning ( "tether entity '%s' does no link into the aas for ai '%s'. (there is no aas available)",
 								   newTether->GetName(), GetName ()  );
-			}				
+			}
 			SetTether ( NULL );
 		} else if ( newTether != tether ) {
 			tether = newTether;
@@ -5026,14 +5026,14 @@ idAI::SetTalkState
 void idAI::SetTalkState ( talkState_t state ) {
 	// Make sure state is valid
 	if ( ( state < 0 ) || ( state >= NUM_TALK_STATES ) ) {
-		gameLocal.Error( "Invalid talk state (%d)", (int)state ); 
+		gameLocal.Error( "Invalid talk state (%d)", (int)state );
 	}
-	
+
 	// Same state we are already in?
 	if ( talkState == state ) {
 		return;
 	}
-	
+
 	// Set new talk state
 	talkState = state;
 
@@ -5051,12 +5051,12 @@ void idAI::SetPassivePrefix ( const char* prefix ) {
 	}
 
 	// Force an idle change
-	passive.idleAnimChangeTime = 0;	
+	passive.idleAnimChangeTime = 0;
 	passive.fidgetTime		   = 0;
 	passive.talkTime		   = 0;
-	
+
 	// Get animation prefixs
-	passive.fl.multipleIdles = GetPassiveAnimPrefix ( "idle",		passive.animIdlePrefix );	
+	passive.fl.multipleIdles = GetPassiveAnimPrefix ( "idle",		passive.animIdlePrefix );
 							   GetPassiveAnimPrefix ( "fidget",		passive.animFidgetPrefix );
 							   GetPassiveAnimPrefix ( "talk",		passive.animTalkPrefix );
 }
@@ -5068,25 +5068,25 @@ idAI::GetPassiveAnimPrefix
 */
 bool idAI::GetPassiveAnimPrefix ( const char* animName, idStr& animPrefix ) {
 	const idKeyValue* key;
-	
+
 	// First see if we have custom idle animations for the passive prefix
 	key = NULL;
 	if ( passive.prefix.Length ( ) ) {
 		animPrefix = va("anim_%s%s", passive.prefix.c_str(), animName );
 		key		   = spawnArgs.MatchPrefix ( animPrefix );
 	}
-	
+
 	// If there are no custom idle animations for the prefix then see if there are any custom anims at all
 	if ( !key ) {
 		animPrefix = va("anim_%s", animName );
 		key		   = spawnArgs.MatchPrefix ( animPrefix );
 	}
-	
+
 	if ( !key ) {
 		animPrefix = "";
 		return false;
 	}
-	
+
 	return spawnArgs.MatchPrefix ( animPrefix, key ) ? true : false;
 }
 
@@ -5098,17 +5098,17 @@ idAI::IsMeleeNeeded
 bool idAI::IsMeleeNeeded( void )	{
 
 	if( enemy.ent && enemy.ent->IsType ( idAI::Type ))	{
-		
+
 		idAI* enemyAI = static_cast<idAI*>(enemy.ent.GetEntity());
 
 		//if our enemy is closing in on us and demands melee, we'll meet him.
 		if ( enemyAI->combat.tacticalCurrent == AITACTICAL_MELEE && enemy.range < combat.meleeRange ) {
 			return true;
 		}
-	
+
 		//other checks...
 	}
-	
+
 	return false;
 }
 

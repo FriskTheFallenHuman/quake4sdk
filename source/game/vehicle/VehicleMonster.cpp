@@ -58,7 +58,7 @@ void rvVehicleMonster::Spawn( void ) {
 rvVehicleMonster::SetClipModel
 ================
 */
-void rvVehicleMonster::SetClipModel ( idPhysics & physicsObj ) {	
+void rvVehicleMonster::SetClipModel ( idPhysics & physicsObj ) {
 	idStr			clipModelName;
 	idTraceModel	trm;
 	float			mass;

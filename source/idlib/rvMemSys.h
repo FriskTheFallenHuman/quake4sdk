@@ -16,17 +16,17 @@
 #ifndef __RV_MEM_SYS_H__
 #define __RV_MEM_SYS_H__
 
-typedef enum 
+typedef enum
 {
 	RV_HEAP_ID_DEFAULT,			// heap that exists on application startup
 	RV_HEAP_ID_PERMANENT,		// heap for allocations that have permanent (application scope) lifetime
 	RV_HEAP_ID_LEVEL,			// heap for allocations that have a level lifetime
-	RV_HEAP_ID_MULTIPLE_FRAME,	// heap for run-time allocations that have a lifetime of multiple draw frames 
+	RV_HEAP_ID_MULTIPLE_FRAME,	// heap for run-time allocations that have a lifetime of multiple draw frames
 	RV_HEAP_ID_SINGLE_FRAME,	// heap for run-time allocations that have a lifetime of a single draw frame
 	RV_HEAP_ID_TEMPORARY,		// heap for objects that have a short lifetime (temporaries generally used for level loading)
 	RV_HEAP_ID_IO_TEMP,			// heap for allocations that are temporaries used in I/O operations like level loading or writing out data
 	rv_heap_ID_max_count		// just a count, not a valid type
-} 
+}
 Rv_Sys_Heap_ID_t;
 
 static const uint MAX_SYSTEM_HEAPS	= (uint) rv_heap_ID_max_count;
@@ -37,7 +37,7 @@ static const uint MAX_SYSTEM_HEAPS	= (uint) rv_heap_ID_max_count;
 //	_RV_MEM_SYS_SUPPORT is defined
 //
 
-extern rvHeapArena *currentHeapArena;	
+extern rvHeapArena *currentHeapArena;
 
 // Functions for getting and setting the system heaps.
 void	rvSetSysHeap( Rv_Sys_Heap_ID_t sysHeapID, rvHeap *heapPtr );					// associates a heap with the given system heap ID value
@@ -133,11 +133,11 @@ public:
 #define RV_PUSH_HEAP_MEM(memPtr)
 #define RV_PUSH_HEAP_MEM_AUTO(varName,memPtr)
 #define RV_PUSH_HEAP_PTR(heapPtr)
-#define RV_POP_HEAP()	
+#define RV_POP_HEAP()
 
 #define RV_PUSH_SYS_HEAP_ENTER_CRIT_SECT(sysHeapID)
-#define RV_PUSH_HEAP_ENTER_CRIT_SECT(heapPtr)	
-#define RV_POP_HEAP_EXIT_CRIT_SECT()			
+#define RV_PUSH_HEAP_ENTER_CRIT_SECT(heapPtr)
+#define RV_POP_HEAP_EXIT_CRIT_SECT()
 
 #endif	// #else not #ifdef _RV_MEM_SYS_SUPPORT
 

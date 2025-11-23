@@ -25,12 +25,12 @@ const char *si_gameTypeArgs[]		= { "singleplayer", "DM", "Tourney", "Team DM", "
 const int si_numGameTypeArgs = sizeof( si_gameTypeArgs ) / sizeof( si_gameTypeArgs[0] );
 // RITUAL END
 // RAVEN END
-const char *si_readyArgs[]			= { "Not Ready", "Ready", NULL }; 
+const char *si_readyArgs[]			= { "Not Ready", "Ready", NULL };
 const char *si_spectateArgs[]		= { "Play", "Spectate", NULL };
 
 // RAVEN BEGIN
 // ddynerman: our teams
-const char *ui_teamArgs[]			= { "Marine", "Strogg", NULL }; 
+const char *ui_teamArgs[]			= { "Marine", "Strogg", NULL };
 // RAVEN END
 
 struct gameVersion_s {
@@ -128,7 +128,7 @@ idCVar g_noTVChat(					"g_noTVChat",					"0",			CVAR_GAME | CVAR_ARCHIVE | CVAR_
 
 // user info
 idCVar ui_name(						"ui_name",					"Player",		CVAR_GAME | CVAR_USERINFO | PC_CVAR_ARCHIVE | CVAR_CASE_SENSITIVE | CVAR_SPECIAL_CONCAT, "player name" );
-idCVar ui_team(						"ui_team",				ui_teamArgs[ 0 ],	CVAR_GAME | CVAR_USERINFO | CVAR_ARCHIVE, "player team", ui_teamArgs, idCmdSystem::ArgCompletion_String<ui_teamArgs> ); 
+idCVar ui_team(						"ui_team",				ui_teamArgs[ 0 ],	CVAR_GAME | CVAR_USERINFO | CVAR_ARCHIVE, "player team", ui_teamArgs, idCmdSystem::ArgCompletion_String<ui_teamArgs> );
 // RAVEN BEGIN
 // ddynerman: new UI cvars
 idCVar ui_model(					"ui_model",					"",	CVAR_GAME | CVAR_USERINFO | CVAR_ARCHIVE, "player model, blank uses default model" );
@@ -150,7 +150,7 @@ idCVar hud_showSpeed(				"hud_showSpeed",			"0",			CVAR_GAME | CVAR_ARCHIVE | CV
 idCVar hud_showInput(				"hud_showInput",			"0",			CVAR_GAME | CVAR_BOOL | CVAR_ARCHIVE, "When set to 1, shows the players movement controls on the HUD");
 idCVar hud_inputPosition(			"hud_inputPosition",		"580 90",		CVAR_GAME | CVAR_ARCHIVE, "Input display position (x y)");
 idCVar hud_inputColor(				"hud_inputColor",			"1 0 0",		CVAR_GAME | CVAR_ARCHIVE, "Input display color (r g b, range 0 to 1)");
-	
+
 // change anytime vars
 idCVar developer(					"developer",				"0",			CVAR_GAME | CVAR_BOOL, "" );
 
@@ -200,7 +200,7 @@ idCVar g_debugCinematic(			"g_debugCinematic",			"0",			CVAR_GAME, "set to the n
 idCVar g_debugState(				"g_debugState",				"0",			CVAR_GAME, "" );
 idCVar g_stopTime(					"g_stopTime",				"0",			CVAR_GAME | CVAR_BOOL, "" );
 //idCVar g_damageScale(				"g_damageScale",			"1",			CVAR_GAME | CVAR_FLOAT | CVAR_ARCHIVE, "scale final damage on player by this factor" );
-// RAVEN END									   
+// RAVEN END
 idCVar g_armorProtection(			"g_armorProtection",		"0.66667",			CVAR_GAME | CVAR_FLOAT | PC_CVAR_ARCHIVE, "armor takes this percentage of damage" );
 idCVar g_armorProtectionMP(			"g_armorProtectionMP",		"0.66667",		CVAR_GAME | CVAR_FLOAT | PC_CVAR_ARCHIVE, "armor takes this percentage of damage in mp" );
 idCVar g_useDynamicProtection(		"g_useDynamicProtection",	"1",			CVAR_GAME | CVAR_BOOL | PC_CVAR_ARCHIVE, "scale damage and armor dynamically to keep the player alive more often" );
@@ -285,7 +285,7 @@ idCVar ai_debugEyeFocus(			"ai_debugEyeFocus",			"0",			CVAR_GAME | CVAR_BOOL, "
 //mcg: always allow player to push buddies, unless scripted
 idCVar ai_playerPushAlways(			"ai_playerPushAlways",		"1",			CVAR_GAME | CVAR_BOOL, "always allow player to push buddies, unless scripted" );
 // RAVEN END
-	
+
 idCVar g_dvTime(					"g_dvTime",					"1",			CVAR_GAME | CVAR_FLOAT, "" );
 idCVar g_dvAmplitude(				"g_dvAmplitude",			"0.001",		CVAR_GAME | CVAR_FLOAT, "" );
 idCVar g_dvFrequency(				"g_dvFrequency",			"0.5",			CVAR_GAME | CVAR_FLOAT, "" );

@@ -35,17 +35,17 @@ typedef struct playerPState_s {
 	idVec3					origin;
 	idVec3					velocity;
 	idVec3					localOrigin;
-	idVec3					pushVelocity;	
+	idVec3					pushVelocity;
 // RAVEN BEGIN
 // bdube: added
 	idVec3					lastPushVelocity;
-// RAVEN END	
+// RAVEN END
 	float					stepUp;
 	int						movementType;
 	int						movementFlags;
 	int						movementTime;
 // RAVEN BEGIN
-// bdube: crouch slide 
+// bdube: crouch slide
 	int						crouchSlideTime;
 // RAVEN END
 } playerPState_t;

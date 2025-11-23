@@ -381,7 +381,7 @@ public:
 // bdube: overloaded operators
 							idEntityPtr( type* ent ) { *this = ent; }
 	idEntityPtr<type>&		operator=( idEntityPtr<type>& ent ) { *this = ent.GetEntity(); return *this; }
-	type *					operator->( void ) const;				
+	type *					operator->( void ) const;
 	operator				type *( void ) const;
 // RAVEN END
 
@@ -429,7 +429,7 @@ public:
 	idLinkList<rvClientEntity>	clientSpawnedEntities;			// all client side entities
 	int							num_clientEntities;				// current number of client entities
 	int							firstFreeClientIndex;			// first free index in the client entities array
-	
+
 	int							entityRegisterTime;
 // RAVEN END
 
@@ -439,7 +439,7 @@ public:
 	viewer_t				(*viewers);
 
 	// can be used to automatically effect every material in the world that references globalParms
-	float					globalShaderParms[ MAX_GLOBAL_SHADER_PARMS ];	
+	float					globalShaderParms[ MAX_GLOBAL_SHADER_PARMS ];
 
 	idRandom				random;					// random number generator used throughout the game
 
@@ -457,9 +457,9 @@ public:
 // RAVEN END
 
 	// only set when an end level is activated, which will take over camera positioning
-	// and draw end-level guis, then 
+	// and draw end-level guis, then
 
-	idStr					sessionCommand;			// a target_sessionCommand can set this to return something to the session 
+	idStr					sessionCommand;			// a target_sessionCommand can set this to return something to the session
 
 	idMultiplayerGame		mpGame;					// handles rules for standard dm
 
@@ -493,7 +493,7 @@ public:
 													// discriminates between the RunFrame path and the ClientPrediction path
 													// NOTE: on a listen server, isClient is false
 	bool					isRepeater;				// set if the game is repeating
-	bool					isListenServer;			
+	bool					isListenServer;
 	bool					isTVClient;
 	int						localClientNum;			// number of the local client. MP: -1 on a dedicated, MAX_CLIENTS when playing a server demo
 	idLinkList<idEntity>	snapshotEntities;		// entities from the last snapshot
@@ -596,7 +596,7 @@ public:
 	virtual void			ProcessRconReturn( bool success );
 	virtual void			ResetRconGuiStatus( void );
 // RAVEN END
-	
+
 	virtual void			GetClientStats( int clientNum, char *data, const int len );
 	virtual void			SwitchTeam( int clientNum, int team );
 
@@ -809,7 +809,7 @@ public:
 // bdube: added script object frame commands
 	void					CallFrameCommand( idScriptObject* obj, const function_t* frameCommand );
 	void					CallFrameCommand( idEntity* ent, const char* frameCommand );
-// RAVEN END	
+// RAVEN END
 
 	void					CallObjectFrameCommand( idEntity *ent, const char *frameCommand );
 
@@ -828,7 +828,7 @@ public:
 	int						GetClientNumByName( const char *name ) const;
 
 	idPlayer *				GetLocalPlayer() const;
-	
+
 // RAVEN BEGIN
 // jshepard: update player data after main menu close
 	void					UpdatePlayerPostMainMenu();
@@ -838,8 +838,8 @@ public:
 	void					SetSpawnCount ( int newSpawnCount ) { spawnCount = newSpawnCount; }
 // ddynerman: team type
 	bool					IsTeamGame ( void ) const;
-// RAVEN END	
-	
+// RAVEN END
+
 	void					SpreadLocations();
 	idLocationEntity *		LocationForPoint( const idVec3 &point );	// May return NULL
 // RAVEN BEGIN
@@ -889,8 +889,8 @@ public:
 // ddynerman:	multiple collision world - game collision wrapper functions to
 //				use the correct idClip
 //				---------------------------------------------------------------
-//				These are wrapper functions around idClip collision detection 
-//				functions.  They expose the collision detection engine to the 
+//				These are wrapper functions around idClip collision detection
+//				functions.  They expose the collision detection engine to the
 //				game code, but do collision world determination in one spot.
 //              'ent' refers to the entity we want collision information about
 	bool					Translation	( const idEntity* ent, trace_t &results, const idVec3 &start, const idVec3 &end, const idClipModel *mdl, const idMat3 &trmAxis, int contentMask, const idEntity *passEntity, const idEntity *passEntity2 = 0 );
@@ -959,7 +959,7 @@ public:
 // RAVEN END
 
 	void					ServerSendInstanceReliableMessageExcluding( const idEntity* owner, int excludeClient, const idBitMsg& msg );
-	void					ServerSendInstanceReliableMessage( const idEntity* owner, int clientNum, const idBitMsg& msg );	
+	void					ServerSendInstanceReliableMessage( const idEntity* owner, int clientNum, const idBitMsg& msg );
 
 	void					SendUnreliableMessage( const idBitMsg &msg, const int clientNum );
 	// note: listen server client is always excluded
@@ -1015,7 +1015,7 @@ private:
 	int						spawnCount;
 	bool					isMapEntity[ MAX_GENTITIES ]; // it's handy to know which entities are part of the map
 // RAVEN BEGIN
-// bdube: client entities	
+// bdube: client entities
 	int						clientSpawnCount;
 // RAVEN END
 
@@ -1084,7 +1084,7 @@ private:
 	idList<idPlayerStart*>	spawnSpots;
 // RAVEN BEGIN
 // ddynerman: two lists to hold team spawn points for team based games
-	idList<idPlayerStart*>	teamSpawnSpots[TEAM_MAX];	
+	idList<idPlayerStart*>	teamSpawnSpots[TEAM_MAX];
 	idList<idPlayerStart*>	teamForwardSpawnSpots[TEAM_MAX]; // forward spawn positions, used in CTF
 // RAVEN END
 
@@ -1416,12 +1416,12 @@ type* idGameLocal::SpawnSafeEntityDef( const char* entityDefName, const idDict* 
 	if( !entity ) {
 		return NULL;
 	}
-	
+
 	if( !entity->IsType(type::GetClassType()) ) {
 		entity->PostEventMS( &EV_Remove, 0 );
 		return NULL;
 	}
-	
+
 	return static_cast<type*>( entity );
 }
 
@@ -1486,8 +1486,8 @@ ID_INLINE type * idEntityPtr<type>::operator->( void ) const {
 }
 
 template< class type >
-ID_INLINE idEntityPtr<type>::operator type * ( void ) const { 
-	return GetEntity(); 
+ID_INLINE idEntityPtr<type>::operator type * ( void ) const {
+	return GetEntity();
 }
 // RAVEN END
 

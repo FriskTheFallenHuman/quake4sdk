@@ -39,7 +39,7 @@ public:
 	int				ReadToken( idToken *token ) { return( mLexer.ReadToken( token ) ); }
 	int				ExpectTokenString( const char *str ) { return( mLexer.ExpectTokenString( str ) ); }
 	void			SetNextTokenTime( int time ) { mNextTokenTime += time; }
-	
+
 	void			ClearFlags( void ) { mFlags = 0; }
 	void			SetFlags( int flags ) { mFlags |= flags; }
 	bool			HasNewPhoneme( void ) const { return( !!( mFlags & FAS_NEW_VISEME ) ); }

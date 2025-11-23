@@ -11,27 +11,27 @@
 #include "StatManager.h"
 
 
-rvStatHit::rvStatHit( int t, int p, int v, int w, bool countForAccuracy ) : rvStat( t ) { 
+rvStatHit::rvStatHit( int t, int p, int v, int w, bool countForAccuracy ) : rvStat( t ) {
 	playerClientNum = p;
 	victimClientNum = v;
 	weapon = w;
 	trackAccuracy = countForAccuracy;
-	type = ST_HIT; 
+	type = ST_HIT;
 	RegisterInGame( statManager->GetPlayerStats() );
 }
 
 void rvStatHit::RegisterInGame( rvPlayerStat* stats ) {
 	if( playerClientNum >= 0 && playerClientNum < MAX_CLIENTS && weapon >= 0 && weapon < MAX_WEAPONS && trackAccuracy ) {
-		stats[ playerClientNum ].weaponHits[ weapon ]++;	
+		stats[ playerClientNum ].weaponHits[ weapon ]++;
 	}
 	idPlayer* player = (idPlayer*)gameLocal.entities[ playerClientNum ];
 	if( !idStr::Icmp( player->spawnArgs.GetString( va( "def_weapon%d", weapon ) ), "weapon_railgun" ) ) {
-	
+
 		// Apparently it does the rail hit event before the rail fired event, so this is backwards for a reason
 		if ( rvStatManager::comboKillState[ playerClientNum ] == CKS_ROCKET_HIT ) {
 			rvStatManager::comboKillState[ playerClientNum ] = CKS_RAIL_HIT;
 		}
-		
+
 		if ( rvStatManager::lastRailShot[ playerClientNum ] < stats[ playerClientNum ].weaponShots[ weapon ] - 1 ) {
 			rvStatManager::lastRailShot[ playerClientNum ] = stats[ playerClientNum ].weaponShots[ weapon ];
 		} else {
@@ -44,19 +44,19 @@ void rvStatHit::RegisterInGame( rvPlayerStat* stats ) {
 				rvStatManager::lastRailShot[ playerClientNum ] = stats[ playerClientNum ].weaponShots[ weapon ];
 			}
 		}
-		
-/*		
+
+/*
 		rvStatHit* lastHits[ 2 ] = { NULL, NULL };
 		statManager->GetLastClientStats( playerClientNum, ST_HIT, gameLocal.time - 8000, 2, (rvStat**)lastHits );
 		if( lastHits[0] ) {
 			if(  !idStr::Icmp(player->spawnArgs.GetString( va( "def_weapon%d", ((rvStatHit*)lastHits[0])->weapon ) ), "weapon_railgun" ) ) {
 
 				//Check to make sure we don't chain impressive awards.
-				if(lastHits[1] 
+				if(lastHits[1]
 				&& !idStr::Icmp(player->spawnArgs.GetString( va( "def_weapon%d", ((rvStatHit*)lastHits[1])->weapon ) ), "weapon_railgun" )
 					&& (lastHits[1]->GetTimeStamp() - lastHits[0]->GetTimeStamp()) < 4000) {
 						return;
-				
+
 				}
 
 				if(gameLocal.time - lastHits[0]->GetTimeStamp() < 4000){
@@ -64,18 +64,18 @@ void rvStatHit::RegisterInGame( rvPlayerStat* stats ) {
 				}
 			}
 		}
-*/	
+*/
 	} else if( !idStr::Icmp( player->spawnArgs.GetString( va( "def_weapon%d", weapon ) ), "weapon_rocketlauncher" ) ) {
-		
+
 		if ( rvStatManager::comboKillState[ playerClientNum ] == CKS_ROCKET_FIRED ) {
 			rvStatManager::comboKillState[ playerClientNum ] = CKS_ROCKET_HIT;
 		}
-		
+
 	}
 }
 
-rvStatKill::rvStatKill( int t, int p, int v, bool g, int mod ) : rvStat( t ) { 
-	type = ST_KILL; 
+rvStatKill::rvStatKill( int t, int p, int v, bool g, int mod ) : rvStat( t ) {
+	type = ST_KILL;
 	playerClientNum = p;
 	victimClientNum = v;
 	gibbed = g;
@@ -93,7 +93,7 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 
 	// no award processing for suicides
 	if( victimClientNum == playerClientNum ) {
-		stats[ playerClientNum ].suicides++;		
+		stats[ playerClientNum ].suicides++;
 		return;
 	}
 
@@ -128,8 +128,8 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 	}
 
 	// check for rampage award
-	if( !teamKill && ( gibbed && victimClientNum != playerClientNum ) && 
-		( lastKills[ 0 ] && lastKills[ 0 ]->gibbed && lastKills[ 0 ]->victimClientNum != playerClientNum ) && 
+	if( !teamKill && ( gibbed && victimClientNum != playerClientNum ) &&
+		( lastKills[ 0 ] && lastKills[ 0 ]->gibbed && lastKills[ 0 ]->victimClientNum != playerClientNum ) &&
 		( lastKills[ 1 ] && lastKills[ 1 ]->gibbed && lastKills[ 1 ]->victimClientNum != playerClientNum ) ) {
 			statManager->GiveInGameAward( IGA_RAMPAGE, playerClientNum );
 	}
@@ -148,7 +148,7 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 			}
 		}
 	}
-	
+
 	rvStatManager::comboKillState[ playerClientNum ] = CKS_NONE;
 
 
@@ -159,7 +159,7 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 		assert( player->team >= 0 && player->team < TEAM_MAX );
 		assert( gameLocal.mpGame.GetGameState()->IsType( rvCTFGameState::GetClassType() ) );
 
-		if ( gameLocal.mpGame.GetFlagEntity( player->team ) ) {		
+		if ( gameLocal.mpGame.GetFlagEntity( player->team ) ) {
 			// defending your flag
 			if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( player->team ) == FS_AT_BASE || ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( player->team ) == FS_DROPPED ) {
 				if( ( gameLocal.mpGame.GetFlagEntity( player->team )->GetPhysics()->GetOrigin() - player->GetPhysics()->GetOrigin() ).LengthSqr() < 250000 ) {
@@ -169,9 +169,9 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 					// give award if enemy is close to flag and you kill them
 					statManager->GiveInGameAward( IGA_DEFENSE, playerClientNum );
 				}
-			} 
+			}
 		}
-		
+
 		// defending your teammate carrying the enemy flag
 		if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( gameLocal.mpGame.OpposingTeam( player->team ) ) == FS_TAKEN ) {
 			int clientNum = ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagCarrier( gameLocal.mpGame.OpposingTeam( player->team ) );
@@ -199,11 +199,11 @@ void rvStatKill::RegisterInGame( rvPlayerStat* stats ) {
 		if( (player->team == TEAM_MARINE && victim->PowerUpActive( POWERUP_CTF_MARINEFLAG )) ||
 			(player->team == TEAM_STROGG && victim->PowerUpActive( POWERUP_CTF_STROGGFLAG )) ) {
 			if( ((rvCTFGameState*)gameLocal.mpGame.GetGameState())->GetFlagState( victim->team ) == FS_AT_BASE ) {
-				
+
 				// fixme: something is broken with the mpgame state
 				if ( gameLocal.mpGame.GetFlagEntity( victim->team ) ) {
 					if( (gameLocal.mpGame.GetFlagEntity( victim->team )->GetPhysics()->GetOrigin() - victim->GetPhysics()->GetOrigin()).LengthSqr() < 40000 ) {
-						statManager->GiveInGameAward( IGA_HOLY_SHIT, playerClientNum );					
+						statManager->GiveInGameAward( IGA_HOLY_SHIT, playerClientNum );
 					}
 				}
 			}
@@ -219,13 +219,13 @@ A player died
 ================
 */
 rvStatDeath::rvStatDeath( int t, int p, int mod ) : rvStat( t ) {
-	type = ST_DEATH; 
+	type = ST_DEATH;
 	playerClientNum = p;
 	RegisterInGame( statManager->GetPlayerStats() );
 }
 
 void rvStatDeath::RegisterInGame( rvPlayerStat* stats ) {
-	stats[ playerClientNum ].deaths++;	
+	stats[ playerClientNum ].deaths++;
 }
 
 /*
@@ -235,17 +235,17 @@ rvStatDamageDealt
 A player damaged another player
 ================
 */
-rvStatDamageDealt::rvStatDamageDealt( int t, int p, int w, int d ) : rvStat( t ) { 
+rvStatDamageDealt::rvStatDamageDealt( int t, int p, int w, int d ) : rvStat( t ) {
 	playerClientNum = p;
 	weapon = w;
 	damage = d;
-	type = ST_DAMAGE_DEALT; 
+	type = ST_DAMAGE_DEALT;
 	RegisterInGame( statManager->GetPlayerStats() );
 }
 
 void rvStatDamageDealt::RegisterInGame( rvPlayerStat* stats ) {
 	if( playerClientNum >= 0 && playerClientNum < MAX_CLIENTS ) {
-		stats[ playerClientNum ].damageGiven += damage;	
+		stats[ playerClientNum ].damageGiven += damage;
 	}
 }
 
@@ -256,17 +256,17 @@ rvStatDamageTaken
 A player took damage from another player
 ================
 */
-rvStatDamageTaken::rvStatDamageTaken( int t, int p, int w, int d ) : rvStat( t ) { 
+rvStatDamageTaken::rvStatDamageTaken( int t, int p, int w, int d ) : rvStat( t ) {
 	playerClientNum = p;
 	weapon = w;
 	damage = d;
-	type = ST_DAMAGE_TAKEN; 
+	type = ST_DAMAGE_TAKEN;
 	RegisterInGame( statManager->GetPlayerStats() );
 }
 
 void rvStatDamageTaken::RegisterInGame( rvPlayerStat* stats ) {
 	if( playerClientNum >= 0 && playerClientNum < MAX_CLIENTS ) {
-		stats[ playerClientNum ].damageTaken += damage;	
+		stats[ playerClientNum ].damageTaken += damage;
 	}
 }
 
@@ -277,10 +277,10 @@ rvStatFlagDrop
 A player dropped the flag (CTF)
 ================
 */
-rvStatFlagDrop::rvStatFlagDrop( int t, int p, int a, int tm ) : rvStatTeam( t, tm ) { 
+rvStatFlagDrop::rvStatFlagDrop( int t, int p, int a, int tm ) : rvStatTeam( t, tm ) {
 	playerClientNum = p;
 	attacker = a;
-	type = ST_CTF_FLAG_DROP; 
+	type = ST_CTF_FLAG_DROP;
 }
 
 /*
@@ -290,9 +290,9 @@ rvStatFlagReturn
 A player returned his teams flag
 ================
 */
-rvStatFlagReturn::rvStatFlagReturn( int t, int p, int tm ) : rvStatTeam( t, tm ) { 
+rvStatFlagReturn::rvStatFlagReturn( int t, int p, int tm ) : rvStatTeam( t, tm ) {
 	playerClientNum = p;
-	type = ST_CTF_FLAG_RETURN; 
+	type = ST_CTF_FLAG_RETURN;
 }
 
 /*
@@ -302,10 +302,10 @@ rvStatFlagCapture
 A player captured a flag (CTF)
 ================
 */
-rvStatFlagCapture::rvStatFlagCapture( int t, int p, int f, int tm ) : rvStatTeam( t, tm ) { 
+rvStatFlagCapture::rvStatFlagCapture( int t, int p, int f, int tm ) : rvStatTeam( t, tm ) {
 	playerClientNum = p;
 	flagTeam = f;
-	type = ST_CTF_FLAG_CAPTURE; 
+	type = ST_CTF_FLAG_CAPTURE;
 	RegisterInGame( statManager->GetPlayerStats() );
 }
 

@@ -52,7 +52,7 @@ private:
 
 	// Global States
 	stateResult_t		State_Killed					( const stateParms_t& parms );
-	
+
 	// Torso States
 	stateResult_t		State_Torso_FlameThrower		( const stateParms_t& parms );
 	stateResult_t		State_Torso_FlameThrowerThink	( const stateParms_t& parms );
@@ -87,13 +87,13 @@ void rvMonsterLightTank::Spawn ( void ) {
 //	damagedThreshold = spawnArgs.GetInt ( "health_damagedThreshold" );
 	flamethrowerHealth	= spawnArgs.GetInt ( "flamethrowerHealth", "160" );
 	chargeDebounce = 0;
-	
+
 	actionFlameThrower.Init ( spawnArgs, "action_flameThrower", "Torso_FlameThrower", AIACTIONF_ATTACK );
 	actionPowerUp.Init ( spawnArgs, "action_powerup", "Torso_PowerUp", 0 );
 	actionChargeAttack.Init ( spawnArgs, "action_chargeAttack", NULL, AIACTIONF_ATTACK );
 
 	const char  *func;
-	if ( spawnArgs.GetString( "script_postWeaponDestroyed", "", &func ) ) 
+	if ( spawnArgs.GetString( "script_postWeaponDestroyed", "", &func ) )
 	{
 		mPostWeaponDestroyed.Init( func );
 	}
@@ -107,7 +107,7 @@ rvMonsterLightTank::Save
 void rvMonsterLightTank::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt( flamethrowerHealth );
 	savefile->WriteInt( chargeDebounce );
-	
+
 	savefile->WriteBool( damaged );
 //	savefile->WriteBool( damagedMove );
 	savefile->WriteInt( powerUpStartTime );
@@ -145,7 +145,7 @@ rvMonsterLightTank::FilterTactical
 ================
 */
 int rvMonsterLightTank::FilterTactical ( int availableTactical ) {
-	if ( flamethrowerHealth > 0 ) { 
+	if ( flamethrowerHealth > 0 ) {
 		// Only let the light tank use ranged tactical when he is really far from his enemy
 		if ( !enemy.range || enemy.range < combat.attackRange[1] ) {
 			availableTactical &= ~(AITACTICAL_RANGED_BITS);
@@ -155,7 +155,7 @@ int rvMonsterLightTank::FilterTactical ( int availableTactical ) {
 	{//don't charge again any time soon
 		availableTactical &= ~(AITACTICAL_MELEE_BIT);
 	}
-	
+
 	return idAI::FilterTactical( availableTactical );
 }
 
@@ -187,7 +187,7 @@ rvMonsterLightTank::UpdateRunStatus
 */
 bool rvMonsterLightTank::UpdateRunStatus ( void ) {
 	// If rushing, run
-	if ( combat.tacticalCurrent == AITACTICAL_MELEE ) 
+	if ( combat.tacticalCurrent == AITACTICAL_MELEE )
 	{
 		move.fl.idealRunning = true;
 	}
@@ -213,14 +213,14 @@ void rvMonsterLightTank::DestroyFlamethrower ( void ) {
 	animator.CollapseJoint( animator.GetJointHandle( "r_bigShield_nadeLauncher" ), animator.GetJointHandle( "r_elbo" ) );
 	animator.CollapseJoint( animator.GetJointHandle( "r_gun_effect" ), animator.GetJointHandle( "r_elbo" ) );
 	flamethrowerHealth = -1;
-	
-	
+
+
 	pain.takenThisFrame = pain.threshold;
 	pain.lastTakenTime = gameLocal.time;
 //	flamethrowerDestroyedTime = gameLocal.GetTime();
 
 	// Tweak-out the AI to be more aggressive and more likely to charge?
-	
+
 	PlayEffect ( "fx_destroy_arm", animator.GetJointHandle("r_elbo") );
 	PlayEffect ( "fx_destroy_arm_trail", animator.GetJointHandle("r_elbo"), true );
 
@@ -238,7 +238,7 @@ void rvMonsterLightTank::DestroyFlamethrower ( void ) {
 
 	combat.attackRange[1] = 200;
 	combat.aggressiveRange = 400;
-	
+
 	spawnArgs.SetFloat( "action_meleeAttack_rate", 0.3f );
 	actionMeleeAttack.Init( spawnArgs, "action_meleeAttack", NULL, AIACTIONF_ATTACK );
 	actionMeleeAttack.failRate = 200;
@@ -272,7 +272,7 @@ rvMonsterLightTank::GetDamageForLocation
 */
 int rvMonsterLightTank::GetDamageForLocation( int damage, int location ) {
 	// If the flamethrower was hit only do damage to it
-	if( !damaged && !aifl.dead ) 
+	if( !damaged && !aifl.dead )
 	{
 		if ( idStr::Icmp ( GetDamageGroup ( location ), "flamethrower" ) == 0 ) {
 //			pain.takenThisFrame = damage;
@@ -285,7 +285,7 @@ int rvMonsterLightTank::GetDamageForLocation( int damage, int location ) {
 			return 0;
 		}
 	}
-	 
+
 	return idAI::GetDamageForLocation ( damage, location );
 }
 
@@ -453,20 +453,20 @@ bool rvMonsterLightTank::CheckActions ( void ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
 
 CLASS_STATES_DECLARATION ( rvMonsterLightTank )
 	STATE ( "State_Killed",				rvMonsterLightTank::State_Killed )
-		
+
 	STATE ( "Torso_FlameThrower",		rvMonsterLightTank::State_Torso_FlameThrower )
 	STATE ( "Torso_FlameThrowerThink",	rvMonsterLightTank::State_Torso_FlameThrowerThink )
 	STATE ( "Torso_Pain",				rvMonsterLightTank::State_Torso_Pain )
 	STATE ( "Torso_RangedAttack",		rvMonsterLightTank::State_Torso_RangedAttack )
 	STATE ( "Torso_PowerUp",			rvMonsterLightTank::State_Torso_PowerUp )
-	
+
 END_CLASS_STATES
 
 /*
@@ -485,17 +485,17 @@ stateResult_t rvMonsterLightTank::State_Killed	( const stateParms_t& parms ) {
 rvMonsterLightTank::State_Torso_FlameThrower
 ================
 */
-stateResult_t rvMonsterLightTank::State_Torso_FlameThrower ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterLightTank::State_Torso_FlameThrower ( const stateParms_t& parms ) {
 	DisableAnimState ( ANIMCHANNEL_LEGS );
 
 	// Flame effect
 	PlayEffect ( "fx_flame_muzzle", animator.GetJointHandle ( "gun_effect" ), true );
-	
+
 	// Loop the flame animation
 	PlayAnim( ANIMCHANNEL_TORSO, "flamethrower", parms.blendFrames );
 
 	// Delay start the flame thrower think to ensure he flames for a minimum time
-	PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FlameThrowerThink", 0, 500 );	
+	PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FlameThrowerThink", 0, 500 );
 
 	return SRESULT_DONE;
 }
@@ -510,7 +510,7 @@ stateResult_t rvMonsterLightTank::State_Torso_FlameThrowerThink ( const statePar
 		StopEffect ( "fx_flame_muzzle" );
 		return SRESULT_DONE;
 	}
-	
+
 	return SRESULT_WAIT;
 }
 
@@ -533,7 +533,7 @@ rvMonsterLightTank::State_Torso_RangedAttack
 ================
 */
 stateResult_t rvMonsterLightTank::State_Torso_RangedAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_FINISH,
 	};
@@ -541,7 +541,7 @@ stateResult_t rvMonsterLightTank::State_Torso_RangedAttack ( const stateParms_t&
 		case STAGE_START:
 			// If moving switch to the moving ranged attack (torso only)
 			if ( !move.fl.moving || !FacingIdeal() ) {
-				// Full body animations						
+				// Full body animations
 				DisableAnimState ( ANIMCHANNEL_LEGS );
 				PlayAnim ( ANIMCHANNEL_TORSO, "range_megaattack", parms.blendFrames );
 			}
@@ -558,7 +558,7 @@ stateResult_t rvMonsterLightTank::State_Torso_RangedAttack ( const stateParms_t&
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -567,7 +567,7 @@ rvMonsterLightTank::State_Torso_PowerUp
 ================
 */
 stateResult_t rvMonsterLightTank::State_Torso_PowerUp ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_START,
 		STAGE_START_WAIT,
 		STAGE_LOOP,
@@ -585,7 +585,7 @@ stateResult_t rvMonsterLightTank::State_Torso_PowerUp ( const stateParms_t& parm
 
 		case STAGE_START_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
-				PlayCycle( ANIMCHANNEL_TORSO, "powerup_loop", parms.blendFrames ); 
+				PlayCycle( ANIMCHANNEL_TORSO, "powerup_loop", parms.blendFrames );
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
@@ -606,5 +606,5 @@ stateResult_t rvMonsterLightTank::State_Torso_PowerUp ( const stateParms_t& parm
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }

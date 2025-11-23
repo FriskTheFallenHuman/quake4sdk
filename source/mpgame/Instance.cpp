@@ -35,7 +35,7 @@ rvInstance::~rvInstance() {
 
 void rvInstance::Populate( int serverChecksum ) {
 	gameState_t currentState = gameLocal.GameState();
-	
+
 	// disable the minSpawnIndex lock out
 	int latchMinSpawnIndex = gameLocal.minSpawnIndex;
 	gameLocal.minSpawnIndex = MAX_CLIENTS;
@@ -45,7 +45,7 @@ void rvInstance::Populate( int serverChecksum ) {
 	}
 
 	if ( gameLocal.isServer ) {
-		// When populating on a server, record the entity numbers	
+		// When populating on a server, record the entity numbers
 		numMapEntities = gameLocal.GetNumMapEntities();
 
 		// mwhitlock: Dynamic memory consolidation
@@ -189,7 +189,7 @@ void rvInstance::PrintMapNumbers( void ) {
 /*
 ================
 rvInstance::SetSpawnInstanceID
-Sets the spawn instance ID for this instance.  On the client, only instance 0 is ever 
+Sets the spawn instance ID for this instance.  On the client, only instance 0 is ever
 used, but it spawns in map entities for other instances.  spawnInstanceID is used to
 spawn map entities with the correct instance number on the client.
 ================

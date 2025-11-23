@@ -140,7 +140,7 @@ void idPlayerView::Restore( idRestoreGame *savefile ) {
 	savefile->ReadFloat( dvScale );
 
 	savefile->ReadInt( kickFinishTime );
-	savefile->ReadAngles( kickAngles );			
+	savefile->ReadAngles( kickAngles );
 
 	savefile->ReadBool( bfgVision );
 
@@ -179,7 +179,7 @@ void idPlayerView::SetPlayerEntity( idPlayer *playerEnt ) {
 	if( !playerEnt ) {
 		return;
 	}
-		
+
 	dict = gameLocal.FindEntityDefDict( playerEnt->spawnArgs.GetString("def_playerView"), false );
 
 	if( dict ) {
@@ -204,7 +204,7 @@ void idPlayerView::ClearEffects() {
 	tvFinishTime = ( gameLocal.time - 99999 );
 	tvStartTime = ( gameLocal.time - 99999 );
 	kickFinishTime = ( gameLocal.time - 99999 );
-	shakeFinishTime = gameLocal.time; 
+	shakeFinishTime = gameLocal.time;
 
 	for ( int i = 0 ; i < MAX_SCREEN_BLOBS ; i++ ) {
 		screenBlobs[i].finishTime = gameLocal.time;
@@ -247,7 +247,7 @@ void idPlayerView::DamageImpulse( idVec3 localKickDir, const idDict *damageDef, 
 	float tvTime = damageDef->GetFloat( "tv_time" );
 	if ( tvTime ) {
 		tvStartTime = gameLocal.time;
-		tvFinishTime = gameLocal.time + tvTime;		
+		tvFinishTime = gameLocal.time + tvTime;
 		damageDef->GetFloat ( "tv_scale", "1", tvScale );
 	}
 
@@ -317,7 +317,7 @@ void idPlayerView::DamageImpulse( idVec3 localKickDir, const idDict *damageDef, 
 		blob->x += ( gameLocal.random.RandomInt()&63 ) - 32;
 		blob->y = damageDef->GetFloat( "blob_y" );
 		blob->y += ( gameLocal.random.RandomInt()&63 ) - 32;
-		
+
 		float scale = ( 256 + ( ( gameLocal.random.RandomInt()&63 ) - 32 ) ) / 256.0f;
 		blob->w = damageDef->GetFloat( "blob_width" ) * g_blobSize.GetFloat() * scale;
 		blob->h = damageDef->GetFloat( "blob_height" ) * g_blobSize.GetFloat() * scale;
@@ -399,7 +399,7 @@ void idPlayerView::WeaponFireFeedback( const idDict *weaponDef ) {
 		kickAngles = angles;
 		int	finish = gameLocal.time + g_kickTime.GetFloat() * recoilTime;
 		kickFinishTime = finish;
-	}	
+	}
 
 }
 
@@ -432,7 +432,7 @@ float idPlayerView::CalculateShake( idAngles &shakeAngleOffset ) const {
 ===================
 idPlayerView::AngleOffset
 
-  kickVector, a world space direction that the attack should 
+  kickVector, a world space direction that the attack should
 ===================
 */
 idAngles idPlayerView::AngleOffset() const {
@@ -521,7 +521,7 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 			if ( blob->finishTime <= gameLocal.time ) {
 				continue;
 			}
-			
+
 			blob->y += blob->driftAmount;
 
 			float	fade = (float)( blob->finishTime - gameLocal.time ) / ( blob->finishTime - blob->startFadeTime );
@@ -542,7 +542,7 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 
 		player->DrawHUD( hud );
 
-			
+
 /*
 		// tunnel vision
 		float	health = 0.0f;
@@ -563,16 +563,16 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 			renderSystem->SetColor4( ( player->health <= 0.0f ) ? MS2SEC( gameLocal.time ) : lastDamageTime, 1.0f, 1.0f, ( player->health <= 0.0f ) ? 0.0f : alpha );
 			renderSystem->DrawStretchPic( 0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 0.0f, 1.0f, 1.0f, tunnelMaterial );
 		}
-*/		
+*/
 
-		
+
 
 		// Render the object system
 		// RAVEN BEGIN
 		// twhitaker: always draw objective system
 		if ( player->objectiveSystem ) {
 			player->objectiveSystem->Redraw( gameLocal.time );
-		}		
+		}
 		// RAVEN END
 	}
 
@@ -747,7 +747,7 @@ void idPlayerView::RenderPlayerView( idUserInterface *hud ) {
 	if ( !view ) {
 		return;
 	}
-	
+
 	bool guiRendered = false;
 
 	// place the sound origin for the player

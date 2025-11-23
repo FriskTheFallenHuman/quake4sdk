@@ -13,7 +13,7 @@
 /*
 Save game related helper classes.
 
-Save games are implemented in two classes, idSaveGame and idRestoreGame, that implement write/read functions for 
+Save games are implemented in two classes, idSaveGame and idRestoreGame, that implement write/read functions for
 common types.  They're passed in to each entity and object for them to archive themselves.  Each class
 implements save/restore functions for it's own data.  When restoring, all the objects are instantiated,
 then the restore function is called on each, superclass first, then subclasses.
@@ -570,7 +570,7 @@ void idSaveGame::WriteInterpolate( const idInterpolateAccelDecelLinear<int>& ler
 	WriteFloat( lerp.GetDuration() );
 	WriteFloat( lerp.GetAcceleration() );
 	WriteFloat( lerp.GetDeceleration() );
-	
+
 	WriteInt( lerp.GetStartValue() );
 	WriteInt( lerp.GetEndValue() );
 }
@@ -585,7 +585,7 @@ void idSaveGame::WriteInterpolate( const idInterpolateAccelDecelLinear<float>& l
 	WriteFloat( lerp.GetDuration() );
 	WriteFloat( lerp.GetAcceleration() );
 	WriteFloat( lerp.GetDeceleration() );
-	
+
 	WriteFloat( lerp.GetStartValue() );
 	WriteFloat( lerp.GetEndValue() );
 }
@@ -600,7 +600,7 @@ void idSaveGame::WriteInterpolate( const idInterpolateAccelDecelLinear<idVec3>& 
 	WriteFloat( lerp.GetDuration() );
 	WriteFloat( lerp.GetAcceleration() );
 	WriteFloat( lerp.GetDeceleration() );
-	
+
 	WriteVec3( lerp.GetStartValue() );
 	WriteVec3( lerp.GetEndValue() );
 }
@@ -716,7 +716,7 @@ void idSaveGame::WriteRenderEntity( const renderEntity_t &renderEntity ) {
 	WriteInt( renderEntity.entityNum );
 	WriteInt( renderEntity.bodyId );
 
-	assert( renderEntity.bounds[0][0] <= renderEntity.bounds[1][0] ); 
+	assert( renderEntity.bounds[0][0] <= renderEntity.bounds[1][0] );
 	assert( renderEntity.bounds[0][1] <= renderEntity.bounds[1][1] );
 	assert( renderEntity.bounds[0][2] <= renderEntity.bounds[1][2] );
 
@@ -983,7 +983,7 @@ void idSaveGame::WriteBuildNumber( const int value ) {
 /***********************************************************************
 
 	idRestoreGame
-	
+
 ***********************************************************************/
 
 /*
@@ -1110,7 +1110,7 @@ void idRestoreGame::CallRestore_r( const idTypeInfo *cls, idClass *obj ) {
 			return;
 		}
 	}
-	
+
 	file->ReadSyncId( "Callrestore_r start ", cls->classname );
 	( obj->*cls->Restore )( this );
 	file->ReadSyncId( "Callrestore_r end ", cls->classname );
@@ -1589,10 +1589,10 @@ void idRestoreGame::ReadInterpolate( idInterpolateAccelDecelLinear<int>& lerp ) 
 	float	duration;
 	float	accelTime;
 	float	decelTime;
-	
+
 	int		startValue;
 	int		endValue;
-	
+
 	ReadFloat( startTime );
 	ReadFloat( duration );
 	ReadFloat( accelTime );
@@ -1614,10 +1614,10 @@ void idRestoreGame::ReadInterpolate( idInterpolateAccelDecelLinear<float>& lerp 
 	float	duration;
 	float	accelTime;
 	float	decelTime;
-	
+
 	float	startValue;
 	float	endValue;
-	
+
 	ReadFloat( startTime );
 	ReadFloat( duration );
 	ReadFloat( accelTime );
@@ -1639,10 +1639,10 @@ void idRestoreGame::ReadInterpolate( idInterpolateAccelDecelLinear<idVec3>& lerp
 	float	duration;
 	float	accelTime;
 	float	decelTime;
-	
+
 	idVec3	startValue;
 	idVec3	endValue;
-	
+
 	ReadFloat( startTime );
 	ReadFloat( duration );
 	ReadFloat( accelTime );
@@ -1781,7 +1781,7 @@ void idRestoreGame::ReadFrustum( idFrustum& frustum ) {
 	ReadFloat( dFar );
 	ReadFloat( dLeft );
 	ReadFloat( dUp );
-	frustum.SetSize( dNear, dFar, dLeft, dUp ); 
+	frustum.SetSize( dNear, dFar, dLeft, dUp );
 }
 
 /*
@@ -1803,7 +1803,7 @@ void idRestoreGame::ReadRenderEntity( renderEntity_t &renderEntity, const idDict
 
 	ReadBounds( renderEntity.bounds );
 
-	assert( renderEntity.bounds[0][0] <= renderEntity.bounds[1][0] ); 
+	assert( renderEntity.bounds[0][0] <= renderEntity.bounds[1][0] );
 	assert( renderEntity.bounds[0][1] <= renderEntity.bounds[1][1] );
 	assert( renderEntity.bounds[0][2] <= renderEntity.bounds[1][2] );
 

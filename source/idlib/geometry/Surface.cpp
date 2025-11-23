@@ -59,7 +59,7 @@ int idSurface::Split( const idPlane &plane, const float epsilon, idSurface **fro
 		}
 		counts[sides[i]]++;
 	}
-	
+
 	*front = *back = NULL;
 
 	// if coplanar, put on the front side if the normals match
@@ -374,7 +374,7 @@ bool idSurface::ClipInPlace( const idPlane &plane, const float epsilon, const bo
 		}
 		counts[sides[i]]++;
 	}
-	
+
 	// if coplanar, put on the front side if the normals match
 	if ( !counts[SIDE_FRONT] && !counts[SIDE_BACK] ) {
 

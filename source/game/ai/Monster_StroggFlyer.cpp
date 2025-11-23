@@ -29,7 +29,7 @@ protected:
 
 	rvAIAction			actionBombAttack;
 	rvAIAction			actionBlasterAttack;
-	
+
 	idVec3				velocity;
 
 	int					shotCount;
@@ -43,7 +43,7 @@ protected:
 	int					blasterAttackRate;
 	int					bombAttackDuration;
 	int					bombAttackRate;
-	
+
 private:
 
 	stateResult_t		State_ScriptedPlaybackMove	( const stateParms_t& parms );
@@ -76,7 +76,7 @@ void rvMonsterStroggFlyer::InitSpawnArgsVariables( void )
 {
 	jointGunRight	= animator.GetJointHandle ( spawnArgs.GetString ( "joint_gun_right" ) );
 	jointGunLeft	= animator.GetJointHandle ( spawnArgs.GetString ( "joint_gun_left" ) );
-	
+
 	blasterAttackDuration	= SEC2MS ( spawnArgs.GetFloat ( "blasterAttackDuration", "1" ) );
 	blasterAttackRate		= SEC2MS ( spawnArgs.GetFloat ( "blasterAttackRate", ".25" ) );
 	bombAttackDuration		= SEC2MS ( spawnArgs.GetFloat ( "bombAttackDuration", "1" ) );
@@ -91,7 +91,7 @@ rvMonsterStroggFlyer::Spawn
 void rvMonsterStroggFlyer::Spawn ( void ) {
 	actionBombAttack.Init	 ( spawnArgs, "action_bombAttack",		"Torso_BombAttack",		AIACTIONF_ATTACK );
 	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack",	"Torso_BlasterAttack",	AIACTIONF_ATTACK );
-	
+
 	InitSpawnArgsVariables();
 }
 
@@ -124,7 +124,7 @@ void rvMonsterStroggFlyer::OnUpdatePlayback ( const rvDeclPlaybackData& pbd ) {
 		case 40:
 			aifl.disableAttacks = true;
 			break;
-		
+
 		case 41:
 			aifl.disableAttacks = false;
 			break;
@@ -147,7 +147,7 @@ void rvMonsterStroggFlyer::OnWakeUp ( void ) {
 		PlayEffect ( "fx_exhaust", joint, true );
 	}
 	StartSound ( "snd_flyloop", SND_CHANNEL_ANY, 0, false, NULL );
-	
+
 	return idAI::OnWakeUp ( );
 }
 
@@ -158,9 +158,9 @@ rvMonsterStroggFlyer::AttackBlaster
 ================
 */
 void rvMonsterStroggFlyer::AttackBlaster ( void ) {
-	jointHandle_t joint;	
+	jointHandle_t joint;
 	joint = ((shotCount++)%2) ? jointGunRight : jointGunLeft;
-	
+
 	if ( joint != INVALID_JOINT ) {
 		PlayEffect ( "fx_muzzleflash", joint );
 		Attack ( "blaster", joint, enemy.ent );
@@ -173,9 +173,9 @@ rvMonsterStroggFlyer::AttackBomb
 ================
 */
 void rvMonsterStroggFlyer::AttackBomb ( void ) {
-	jointHandle_t joint;	
+	jointHandle_t joint;
 	joint = ((shotCount++)%2) ? jointGunRight : jointGunLeft;
-	
+
 	if ( joint != INVALID_JOINT ) {
 		StartSound ( "snd_bombrun", SND_CHANNEL_ANY, 0, false, NULL );
 		PlayEffect ( "fx_bombflash", joint );
@@ -202,9 +202,9 @@ rvMonsterStroggFlyer::Save
 ================
 */
 void rvMonsterStroggFlyer::Save( idSaveGame *savefile ) const {
-	actionBombAttack.Save ( savefile ) ;	
+	actionBombAttack.Save ( savefile ) ;
 	actionBlasterAttack.Save ( savefile );
-	
+
 	savefile->WriteVec3 ( velocity );
 
 	savefile->WriteInt ( shotCount );
@@ -219,9 +219,9 @@ rvMonsterStroggFlyer::Restore
 ================
 */
 void rvMonsterStroggFlyer::Restore( idRestoreGame *savefile ) {
-	actionBombAttack.Restore ( savefile ) ;	
+	actionBombAttack.Restore ( savefile ) ;
 	actionBlasterAttack.Restore ( savefile );
-	
+
 	savefile->ReadVec3 ( velocity );
 
 	savefile->ReadInt ( shotCount );
@@ -240,7 +240,7 @@ rvMonsterStroggFlyer::GetDebugInfo
 void rvMonsterStroggFlyer::GetDebugInfo	( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	idAI::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "idAI", "action_blasterAttack",	aiActionStatusString[actionBlasterAttack.status], userData );
 	proc ( "idAI", "action_bombAttack",		aiActionStatusString[actionBombAttack.status], userData );
 }
@@ -248,7 +248,7 @@ void rvMonsterStroggFlyer::GetDebugInfo	( debugInfoProc_t proc, void* userData )
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -274,15 +274,15 @@ stateResult_t rvMonsterStroggFlyer::State_ScriptedPlaybackMove ( const stateParm
  		StopAnimState ( ANIMCHANNEL_LEGS );
 		return SRESULT_DONE;
 	}
-	
+
 	// Keep the enemy status up to date
 	if ( !enemy.ent ) {
 		CheckForEnemy ( true );
 	}
-	
+
 	// Perform actions
 	UpdateAction ( );
-	
+
 	return SRESULT_WAIT;
 }
 
@@ -301,7 +301,7 @@ stateResult_t rvMonsterStroggFlyer::State_Killed ( const stateParms_t& parms ) {
 rvMonsterStroggFlyer::State_Torso_BlasterAttack
 ================
 */
-stateResult_t rvMonsterStroggFlyer::State_Torso_BlasterAttack ( const stateParms_t& parms ) {	
+stateResult_t rvMonsterStroggFlyer::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_BLASTER,
@@ -311,12 +311,12 @@ stateResult_t rvMonsterStroggFlyer::State_Torso_BlasterAttack ( const stateParms
 		case STAGE_INIT:
 			attackStartTime = gameLocal.time;
 			return SRESULT_STAGE ( STAGE_BLASTER );
-		
+
 		case STAGE_BLASTER:
 			lastAttackTime = gameLocal.time;
 			AttackBlaster ( );
 			return SRESULT_STAGE ( STAGE_BLASTERWAIT );
-		
+
 		case STAGE_BLASTERWAIT:
 			if ( !enemy.fl.inFov || gameLocal.time - attackStartTime > blasterAttackDuration ) {
 				return SRESULT_DONE;
@@ -344,12 +344,12 @@ stateResult_t rvMonsterStroggFlyer::State_Torso_BombAttack ( const stateParms_t&
 		case STAGE_INIT:
 			attackStartTime = gameLocal.time;
 			return SRESULT_STAGE ( STAGE_BOMB );
-		
+
 		case STAGE_BOMB:
 			lastAttackTime = gameLocal.time;
 			AttackBomb ( );
 			return SRESULT_STAGE ( STAGE_BOMBWAIT );
-		
+
 		case STAGE_BOMBWAIT:
 			if ( !enemy.fl.inFov || gameLocal.time - attackStartTime > bombAttackDuration ) {
 				return SRESULT_DONE;

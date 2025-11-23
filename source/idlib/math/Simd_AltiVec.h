@@ -15,7 +15,7 @@
 // Defines for enabling parts of the library
 
 // Turns on/off the simple math routines (add, sub, div, etc)
-#define ENABLE_SIMPLE_MATH	
+#define ENABLE_SIMPLE_MATH
 
 // Disable dot routines since they introduce artifacts with the shadows. I can't measure
 // a performance improvement with sampling tools with DOT enabled, so disable for now
@@ -44,7 +44,7 @@
 // Turns on/off TracePointCull, DecalPointCull, and OverlayPoint
 // The Enable_Cull routines breaks the g_decals functionality, DecalPointCull is
 // the likely suspect. Bullet holes do not appear on the walls when this optimization
-// is enabled. 
+// is enabled.
 //#define ENABLE_CULL
 
 // Turns on/off DeriveTriPlanes, DeriveTangents, DeriveUnsmoothedTangents, NormalizeTangents
@@ -73,7 +73,7 @@
 // then we take a big performance hit from unaligned stores.
 //#define VERTEXCACHE_ALIGNED
 
-// This turns on support for PPC intrinsics in the SIMD_AltiVec.cpp file. Right now it's only used for frsqrte. GCC 
+// This turns on support for PPC intrinsics in the SIMD_AltiVec.cpp file. Right now it's only used for frsqrte. GCC
 // supports these intrinsics but XLC does not.
 #define PPC_INTRINSICS
 
@@ -99,11 +99,11 @@ public:
  	virtual void VPCALL Mul( float *dst, const float constant, const float *src, const int count);
 	virtual void VPCALL Mul( float *dst, const float *src0, const float *src1, const int count );
 	virtual void VPCALL Div( float *dst, const float constant, const float *divisor, const int count );
-	virtual void VPCALL Div( float *dst, const float *src0, const float *src1, const int count ); 
+	virtual void VPCALL Div( float *dst, const float *src0, const float *src1, const int count );
 	virtual void VPCALL MulAdd( float *dst, const float constant, const float *src, const int count );
 	virtual void VPCALL MulAdd( float *dst, const float *src0, const float *src1, const int count );
 	virtual void VPCALL MulSub( float *dst, const float constant, const float *src, const int count );
-	virtual void VPCALL MulSub( float *dst, const float *src0, const float *src1, const int count ); 
+	virtual void VPCALL MulSub( float *dst, const float *src0, const float *src1, const int count );
 #endif
 
 #ifdef ENABLE_DOT
@@ -130,7 +130,7 @@ public:
 	virtual void VPCALL CmpLE( byte *dst,			const byte bitNum,		const float *src0,		const float constant,	const int count );
 #endif
 
-#ifdef ENABLE_MINMAX	
+#ifdef ENABLE_MINMAX
 	// Min/Max. Expects data structures in contiguous memory
 	virtual void VPCALL MinMax( float &min,			float &max,				const float *src,		const int count );
 	virtual	void VPCALL MinMax( idVec2 &min,		idVec2 &max,			const idVec2 *src,		const int count );
@@ -206,7 +206,7 @@ public:
 	virtual void VPCALL DeriveTangents( idPlane *planes, idDrawVert *verts, const int numVerts, const int *indexes, const int numIndexes );
 	virtual void VPCALL DeriveUnsmoothedTangents( idDrawVert *verts, const dominantTri_s *dominantTris, const int numVerts );
 	virtual void VPCALL NormalizeTangents( idDrawVert *verts, const int numVerts );
-#endif	
+#endif
 
 #ifdef ENABLE_CREATE
 	virtual void VPCALL CreateTextureSpaceLightVectors( idVec3 *lightVectors, const idVec3 &lightOrigin, const idDrawVert *verts, const int numVerts, const int *indexes, const int numIndexes );

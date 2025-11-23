@@ -585,7 +585,7 @@ bool idAF::LoadBody( const idDeclAF_Body *fb, const idJointMat *joints ) {
 
 // RAVEN BEGIN
 // kfuller: better load time warning for joints contained by multiple bodies
-			gameLocal.Warning( "%s: body '%s': joint '%s' is already contained by body '%s'", 
+			gameLocal.Warning( "%s: body '%s': joint '%s' is already contained by body '%s'",
 						name.c_str(), fb->name.c_str(),
 						animator->GetJointName( (jointHandle_t)jointList[i] ),
 						physicsObj.GetBody( jointBody[ jointList[ i ] ] )->GetName().c_str() );
@@ -934,7 +934,7 @@ bool idAF::Load( idEntity *ent, const char *fileName, bool purgeAF /* = false */
 	physicsObj.DisableClip();
 
 	isLoaded = true;
-	
+
 	poseTime = -1;
 
 	return true;
@@ -1153,7 +1153,7 @@ void idAF::LoadState( const idDict &args ) {
 			body->SetWorldOrigin( origin );
 			body->SetWorldAxis( angles.ToMat3() );
 		} else {
-			gameLocal.Warning("Unknown body part %s in articulated figure %s", name.c_str(), this->name.c_str()); 
+			gameLocal.Warning("Unknown body part %s in articulated figure %s", name.c_str(), this->name.c_str());
 		}
 
 		kv = args.MatchPrefix( "body ", kv );

@@ -84,7 +84,7 @@ bool rvClientAFEntity::LoadAF( const char* keyname ) {
 	}
 
 	af.SetAnimator( GetAnimator() );
-	
+
 	idDict args = gameLocal.entities[ ENTITYNUM_CLIENT ]->spawnArgs;
 	gameLocal.entities[ ENTITYNUM_CLIENT ]->spawnArgs = spawnArgs;
 
@@ -437,7 +437,7 @@ void rvClientAFAttachment::InitCopyJoints ( void ) {
 	if ( !body ) {
 		return;
 	}
-	
+
 	bodyAnimator = body->GetAnimator ( );
 
 	// set up the list of joints to copy to the head
@@ -448,12 +448,12 @@ void rvClientAFAttachment::InitCopyJoints ( void ) {
 		}
 
 		if ( !body->spawnArgs.GetString ( va("copy_joint_world %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName ) ) {
-			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;			
+			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;
 			body->spawnArgs.GetString ( va("copy_joint %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName );
 		} else {
 			copyJoint.mod = JOINTMOD_WORLD_OVERRIDE;
 		}
-		
+
 		copyJoint.from = bodyAnimator->GetJointHandle ( jointName );
 		if ( copyJoint.from == INVALID_JOINT ) {
 			gameLocal.Warning( "Unknown copy_joint '%s' on client entity %d", jointName, entityNumber );
@@ -483,7 +483,7 @@ void rvClientAFAttachment::CopyJointsFromBody ( void ) {
 	idMat3		mat;
 	idMat3		axis;
 	idVec3		pos;
-	
+
 	if ( !body ) {
 		return;
 	}
@@ -502,7 +502,7 @@ void rvClientAFAttachment::CopyJointsFromBody ( void ) {
 			animator.SetJointPos( copyJoints[ i ].to, copyJoints[ i ].mod, pos );
 			animator.SetJointAxis( copyJoints[ i ].to, copyJoints[ i ].mod, axis );
 		}
-	}	
+	}
 }
 
 /*

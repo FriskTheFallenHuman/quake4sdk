@@ -4,8 +4,8 @@
 namespace TextCompiler
 {
 	// Write an indirect value
-	template <typename type> inline void WriteValue(type const * const ptr, idFile *out, bool byteSwap=false) 
-	{ 
+	template <typename type> inline void WriteValue(type const * const ptr, idFile *out, bool byteSwap=false)
+	{
 		if(out != NULL)
 		{
 			if(!byteSwap)
@@ -26,8 +26,8 @@ namespace TextCompiler
 	}
 
 	// Write a direct value
-	template <typename type> inline void WriteValue(type const val, idFile *out, bool byteSwap=false) 
-	{ 
+	template <typename type> inline void WriteValue(type const val, idFile *out, bool byteSwap=false)
+	{
 		if(out != NULL)
 		{
 			if(!byteSwap)
@@ -46,17 +46,17 @@ namespace TextCompiler
  		}
 	}
 
-	template <typename type> inline type ReadValue(idFile *in) 
-	{ 
-		type ret; 
-		
+	template <typename type> inline type ReadValue(idFile *in)
+	{
+		type ret;
+
 		in->Read(&ret, sizeof(type));
 		return ret;
 	}
 
 	// specialization write for idStr's
-	template <> inline void WriteValue(idStr const * const ptr, idFile *out, bool byteSwap) 
-	{ 
+	template <> inline void WriteValue(idStr const * const ptr, idFile *out, bool byteSwap)
+	{
 		if(out != NULL)
 		{
 			// if less than 32, then we don't need a trailing null
@@ -74,8 +74,8 @@ namespace TextCompiler
 	}
 
 	// specialization read for idStr's
-	template <> inline idStr ReadValue(idFile *in) 
-	{ 
+	template <> inline idStr ReadValue(idFile *in)
+	{
 		char c;
 		idStr str;
 
@@ -100,11 +100,11 @@ namespace TextCompiler
 		}
 	}
 
-	template <typename type> inline type *ReadArray(idFile *in, unsigned int *count=NULL) 
-	{ 
-		unsigned int len; 
+	template <typename type> inline type *ReadArray(idFile *in, unsigned int *count=NULL)
+	{
+		unsigned int len;
 		len = ReadValue<unsigned int>(in);
-		type *buffer = (type *)malloc(len*sizeof(type)); 
+		type *buffer = (type *)malloc(len*sizeof(type));
 		type *ptr = buffer;
 		for(unsigned int i=0;i<len;i++)
 		{

@@ -114,7 +114,7 @@ ID_INLINE float Linear( float frac ) {
 }
 
 ID_INLINE float SinusoidalMidPoint( float frac ) {
-	return idMath::Sin( DEG2RAD(idMath::MidPointLerp(0.0f, 60.0f, 90.0f, frac)) ); 
+	return idMath::Sin( DEG2RAD(idMath::MidPointLerp(0.0f, 60.0f, 90.0f, frac)) );
 }
 
 /*

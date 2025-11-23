@@ -31,7 +31,7 @@ namespace {
 	void SetPendingJob(idFile *f, int size) {
 		gIOJobData.mFile = f;
 		gIOJobData.mAmtToRead = size;
-		
+
 		if ( mThreadHandle ) {
 			SetEvent( mIOJobs[IOJobPending] );
 		}
@@ -42,7 +42,7 @@ namespace {
 	}
 
 	void GetPendingJobResults(byte *dest, int &size) {
-		if ( mThreadHandle ) {		
+		if ( mThreadHandle ) {
 			if ( WAIT_OBJECT_0 == WaitForSingleObject( mIOJobs[IOJobComplete], INFINITE ) ) {
 				//ResetEvent( mIOJobs[IOJobComplete] );
 				size = gIOJobData.mAmtToRead;
@@ -58,7 +58,7 @@ namespace {
 
 	static LONG IOThread( void * ) {
 		while ( 1 ) {
-			DWORD res = WaitForMultipleObjects( 2, mIOJobs, FALSE, INFINITE );		
+			DWORD res = WaitForMultipleObjects( 2, mIOJobs, FALSE, INFINITE );
 			if ( res == WAIT_OBJECT_0 ) {
 				//ResetEvent( mIOJobs[IOJobPending] );
 				IOJobData *j = GetPendingJob();
@@ -66,7 +66,7 @@ namespace {
 				SetEvent( mIOJobs[IOJobComplete] );
 			} else if ( res == (WAIT_OBJECT_0 + 1) ) {
 				ExitThread(0);
-			} else { 
+			} else {
 				assert( 0 );
 			}
 		}
@@ -83,9 +83,9 @@ namespace {
 	}
 
 	void ShutdownIO() {
-		
+
 		SetEvent( mIOJobs[IOJobQuit] );
-		
+
 		DWORD ecode = 0;
 		while ( !GetExitCodeThread( mThreadHandle, &ecode ) ) {
 			Sleep( 1 );
@@ -95,7 +95,7 @@ namespace {
 		for ( int i = 0; i < IOJobCount; ++i ) {
 			CloseHandle( mIOJobs[i] );
 		}
-		
+
 		mThreadHandle = 0;
 	}
 
@@ -106,13 +106,13 @@ namespace ChunkBuffer {
 	idFile *mFile;
 	int mFileSize;
 	int mBytesRead;
-	
+
 	int mFileBytesRead;
-	
+
 	byte mChunkMem[IO_BUFFER_CHUNK_SIZE];
 	int mCurrentChunkBytes;
 	int mCurrentChunkBytesRead = 0;
-	
+
 	/*
 	================
 	ChunkBuffer::Length
@@ -121,7 +121,7 @@ namespace ChunkBuffer {
 	int Length() {
 		return mFileSize;
 	}
-	
+
 	/*
 	================
 	ChunkBuffer::BytesRead
@@ -130,7 +130,7 @@ namespace ChunkBuffer {
 	int BytesRead() {
 		return mBytesRead;
 	}
-	
+
 	/*
 	================
 	ChunkBuffer::Begin
@@ -140,27 +140,27 @@ namespace ChunkBuffer {
 		mFile = f;
 		mFileSize = f->Length();
 		mBytesRead = 0;
-		
+
 		int initialRead = (mFileSize < IO_BUFFER_CHUNK_SIZE) ? mFileSize : IO_BUFFER_CHUNK_SIZE;
 		mFile->Read( mChunkMem, initialRead );
 		mFileBytesRead = initialRead;
 		mCurrentChunkBytesRead = 0;
 		mCurrentChunkBytes = initialRead;
-		
+
 		int bytesRemaining = mFileSize - mFileBytesRead;
 		if ( bytesRemaining > 0 ) {
 			SetPendingJob( mFile, (bytesRemaining > IO_BUFFER_CHUNK_SIZE) ? IO_BUFFER_CHUNK_SIZE : bytesRemaining );
 		}
 	}
-	
+
 	/*
 	================
 	ChunkBuffer::End
 	================
 	*/
-	void End() { 
+	void End() {
 	}
-	
+
 	/*
 	================
 	ChunkBuffer::Advance
@@ -170,15 +170,15 @@ namespace ChunkBuffer {
 		int readAmt = 0;
 		GetPendingJobResults( chunkMem, readAmt );
 		mFileBytesRead+=readAmt;
-		
+
 		int bytesRemaining = mFileSize - mFileBytesRead;
 		if ( bytesRemaining > 0 ) {
 			SetPendingJob( mFile, (bytesRemaining > IO_BUFFER_CHUNK_SIZE) ? IO_BUFFER_CHUNK_SIZE : bytesRemaining );
 		}
-		
+
 		return readAmt;
 	}
-	
+
 	/*
 	================
 	ChunkBuffer::Read
@@ -186,37 +186,37 @@ namespace ChunkBuffer {
 	*/
 	int Read( byte *dest, int size ) {
 		int bytesRem = mFileSize - mBytesRead;
-		
+
 		if ( size > bytesRem ) {
 			size = bytesRem;
 		}
-		
+
 		if ( !size ) {
 			return 0;
 		}
 
 		byte *writePos = dest;
 		int cnt = size;
-		
+
 		while ( cnt ) {
 			if ( mCurrentChunkBytesRead >= mCurrentChunkBytes ) {
 				mCurrentChunkBytes = Advance( mChunkMem );
 				mCurrentChunkBytesRead = 0;
 			}
-			
+
 			int chunkBytesRemaining = mCurrentChunkBytes - mCurrentChunkBytesRead;
 			int toRead = (cnt > chunkBytesRemaining) ? chunkBytesRemaining : cnt;
-			
+
 			byte *readPos = &mChunkMem[mCurrentChunkBytesRead];
-			
+
 			memcpy( writePos, readPos, toRead );
-			
+
 			cnt-=toRead;
 			mCurrentChunkBytesRead+=toRead;
 			writePos+=toRead;
 		}
-		
-		mBytesRead+=size;		
+
+		mBytesRead+=size;
 		return size;
 	}
 }
@@ -227,7 +227,7 @@ LexerIOWrapper::LexerIOWrapper
 ================
 */
 LexerIOWrapper::LexerIOWrapper() {
-	file = 0;	
+	file = 0;
 	offset = 0;
 	size = 0;
 	memory = 0;
@@ -239,7 +239,7 @@ LexerIOWrapper::InitFromMemory
 ================
 */
 void LexerIOWrapper::InitFromMemory(char const * const ptr, int length) {
-	file = 0;	
+	file = 0;
 	offset = 0;
 	size = length;
 	memory = (char *)ptr;
@@ -256,13 +256,13 @@ bool LexerIOWrapper::OpenFile(char const *filename, bool OSPath) {
 	} else {
 		file = idLib::fileSystem->OpenFileRead( filename );
 	}
-	
+
 	if ( !file ) {
 		return false;
 	}
-	
+
 	ChunkBuffer::Begin( file );
-	
+
 	return true;
 }
 
@@ -295,7 +295,7 @@ int LexerIOWrapper::Tell() {
 LexerIOWrapper::Seek
 ================
 */
-void LexerIOWrapper::Seek( int loc, int mode ) { 
+void LexerIOWrapper::Seek( int loc, int mode ) {
 	if ( file ) {
 		if ( loc != 0 || mode != FS_SEEK_SET ) {
 			common->Error( "lol\n" );
@@ -378,10 +378,10 @@ void Lexer::EndLevelLoad() {
 ReadValue
 ================
 */
-template <typename type> inline type ReadValue(LexerIOWrapper *in) 
-{ 
-	type ret; 
-	
+template <typename type> inline type ReadValue(LexerIOWrapper *in)
+{
+	type ret;
+
 	in->Read(&ret, sizeof(type));
 	return ret;
 }
@@ -392,8 +392,8 @@ ReadValue
 specialization read for idStr's
 ================
 */
-template <> inline idStr ReadValue(LexerIOWrapper *in) 
-{ 
+template <> inline idStr ReadValue(LexerIOWrapper *in)
+{
 	char c;
 	idStr str;
 
@@ -1817,7 +1817,7 @@ const char *idLexer::ParseBracedSectionExact( idStr &out, int tabs ) {
 	}
 
 	out = "{";
-	depth = 1;	
+	depth = 1;
 	skipWhite = false;
 	doTabs = tabs >= 0;
 
@@ -1852,7 +1852,7 @@ const char *idLexer::ParseBracedSectionExact( idStr &out, int tabs ) {
 			case '}': {
 				depth--;
 				tabs--;
-				break;				
+				break;
 			}
 		}
 
@@ -2034,7 +2034,7 @@ int idLexer::LoadFile( const char *filename, bool OSPath ) {
 		idLib::common->Error("idLexer::LoadFile: another script already loaded");
 		return false;
 	}
-	
+
 	if ( !OSPath && ( baseFolder[0] != '\0' ) ) {
 		pathname = va( "%s/%s", baseFolder, filename );
 	} else {
@@ -2310,7 +2310,7 @@ void idLexer::WriteBinaryToken(idToken *tok)
 					unsigned long val = tok->GetUnsignedLongValue();
 					unsigned char byteVal = (unsigned char)val;
 					unsigned short shortVal = (unsigned short)val;
-				
+
 					if(byteVal == val)
 					{
 						prefix = BTT_MAKENUMBER_PREFIX(BTT_NUMBER, BTT_SUBTYPE_UNSIGNEDINT, BTT_STORED_1BYTE);
@@ -2335,7 +2335,7 @@ void idLexer::WriteBinaryToken(idToken *tok)
 					long val = tok->GetIntValue();
 					char byteVal = (char)val;
 					short shortVal = (short)val;
-				
+
 					if(byteVal == val)
 					{
 						prefix = BTT_MAKENUMBER_PREFIX(BTT_NUMBER, BTT_SUBTYPE_INT, BTT_STORED_1BYTE);
@@ -2359,14 +2359,14 @@ void idLexer::WriteBinaryToken(idToken *tok)
 			else if(tok->subtype & TT_FLOAT)
 			{
 				if(tok->subtype & TT_SINGLE_PRECISION)
-				{				
+				{
 					float val = tok->GetFloatValue();
 					int intval = tok->GetIntValue();
 					if(((float)intval) == val)		// integral check
 					{
 						char byteVal = (char)intval;
 						short shortVal = (short)intval;
-					
+
 						if(byteVal == intval)
 						{
 							prefix = BTT_MAKENUMBER_PREFIX(BTT_NUMBER, BTT_SUBTYPE_FLOAT, BTT_STORED_1BYTE);
@@ -2402,7 +2402,7 @@ void idLexer::WriteBinaryToken(idToken *tok)
 					{
 						char byteVal = (char)intval;
 						short shortVal = (short)intval;
-					
+
 						if(byteVal == intval)
 						{
 							prefix = BTT_MAKENUMBER_PREFIX(BTT_NUMBER, BTT_SUBTYPE_FLOAT, BTT_STORED_1BYTE);
@@ -2611,7 +2611,7 @@ void idLexer::WriteBinaryToken(idToken *tok)
 			else
 			{
 				common->Warning("Unsupported punctuation: '%s'", tok->c_str());
-				
+
 				TextCompiler::WriteValue<unsigned char>(BTT_MAKEPUNCTUATION_PREFIX(BTT_PUNC_ASNULLTERMINATED), mBinaryFile, swapBytes);
 				TextCompiler::WriteValue<idStr>(tok, mBinaryFile, swapBytes);
 			}
@@ -3190,7 +3190,7 @@ void Lexer::UnreadToken(idToken const *token)
 	}
 	else
 	{
-		if ( tokenAvailable ) 
+		if ( tokenAvailable )
 		{
 			idLib::common->FatalError( "Lexer::unreadToken, unread token twice\n" );
 		}
@@ -3409,7 +3409,7 @@ int Lexer::ReadToken(idToken *token)
 #else
 #define OBJ mFile
 #endif
-	
+
 	if(mDelegate)
 	{
 		return mDelegate->ReadToken(token);
@@ -3443,7 +3443,7 @@ int Lexer::ReadToken(idToken *token)
 
 			switch(token->type)
 			{
-			case TT_STRING: 
+			case TT_STRING:
 			case TT_NAME:
 			case TT_LITERAL:
 				if(BTT_GET_STRING_LENGTH(prefix) != 0)
@@ -3651,7 +3651,7 @@ int Lexer::ReadToken(idToken *token)
 							*token = buffer;
 							token->subtype = TT_INTEGER | TT_DECIMAL | TT_VALUESVALID;
 						break;
-						
+
 						case BTT_SUBTYPE_UNSIGNEDINT:
 							switch(size)
 							{
@@ -3877,13 +3877,13 @@ void Lexer::WriteBinaryToken(idToken *tok)
 bool Lexer::OpenFile(char const *filename, bool OSPath)
 {
 	idStr pathname;
-	
+
 	if ( !OSPath && ( baseFolder[0] != '\0' ) ) {
 		pathname = va( "%s/%s", baseFolder, filename );
 	} else {
 		pathname = filename;
 	}
-	
+
 #ifdef LEXER_READ_AHEAD
 	if ( !mLexerIOWrapper.OpenFile( pathname, OSPath ) ) {
 		return false;

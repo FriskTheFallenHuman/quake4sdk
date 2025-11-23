@@ -428,7 +428,7 @@ void idPhysics_RigidBody::DebugDraw( void ) {
 	if ( rb_showVelocity.GetBool() ) {
 		DrawVelocity( clipModel->GetId(), 0.1f, 4.0f );
 	}
-	
+
 // RAVEN BEGIN
 // bdube: added more debug info
 	if ( rb_showContacts.GetBool() ) {
@@ -439,8 +439,8 @@ void idPhysics_RigidBody::DebugDraw( void ) {
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point, contacts[i].point + 6.0f * contacts[i].normal );
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point - 2.0f * x, contacts[i].point + 2.0f * x );
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point - 2.0f * y, contacts[i].point + 2.0f * y );
-		}		
-	}	
+		}
+	}
 // RAVEN END
 }
 
@@ -716,7 +716,7 @@ float idPhysics_RigidBody::GetMass( int id ) const {
 idPhysics_RigidBody::GetCenterMass
 ================
 */
-idVec3 idPhysics_RigidBody::GetCenterMass( int id ) const 
+idVec3 idPhysics_RigidBody::GetCenterMass( int id ) const
 {
 	return (current.i.position + centerOfMass * current.i.orientation);
 }
@@ -954,7 +954,7 @@ bool idPhysics_RigidBody::Evaluate( int timeStepMSec, int endTimeMSec ) {
 //	trace_t					pushResults;
 //	gameLocal.push.ClipPush( pushResults, self, PUSHFL_CRUSH | PUSHFL_CLIP, saved.localOrigin, saved.localAxis, current.localOrigin, current.localAxis );
 
-	if ( collided ) {	
+	if ( collided ) {
 		// apply collision impulse
 		if ( CollisionImpulse( collision, impulse ) ) {
 			current.atRest = gameLocal.time;

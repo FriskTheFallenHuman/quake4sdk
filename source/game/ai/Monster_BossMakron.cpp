@@ -31,7 +31,7 @@ protected:
 
 	void				Damage							( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
 
-	//The Makron behaves differently, and we don't always need him sinking back into an idle after every attack	
+	//The Makron behaves differently, and we don't always need him sinking back into an idle after every attack
 	//This version is actually overridden
 	void				PerformAction					( const char* stateName, int blendFrames, bool noPain );
 
@@ -67,7 +67,7 @@ protected:
 	//tallies up the number of consecutive actions the Makron has taken in the corner of the map.
 	//If the tally gets too high, teleport him to the map center.
 	int					cornerCount;
-	
+
 	//in the state of teleporting
 	bool				flagTeleporting;
 
@@ -78,7 +78,7 @@ protected:
 	bool				flagFlyingMode;
 	bool				flagFakeDeath;
 	int					flagUndying;
-	
+
 	rvClientEffectPtr	effectHover;
 	jointHandle_t		jointHoverEffect;
 
@@ -118,7 +118,7 @@ protected:
 	float				boltSweepStartTime;
 	float				boltTime;
 	float				boltNextStateTime;
-	
+
 	int					stateBoltSweep;
 
 	jointHandle_t		jointLightningBolt;
@@ -126,7 +126,7 @@ protected:
 	//end lightning bolt sweep attacks -------------------------------------------------------------------
 	//changed by script event, allows for grenades to spawn baddies.
 	bool				flagAllowSpawns;
-	
+
 	enum {	MAKRON_ACTION_DMG,
 			MAKRON_ACTION_MELEE,
 			MAKRON_ACTION_CANNON,
@@ -302,7 +302,7 @@ void rvMonsterBossMakron::Save ( idSaveGame *savefile ) const {
 	savefile->WriteVec3( rightBoltVector);
 	savefile->WriteVec3( boltVectorMin);
 	savefile->WriteVec3( boltVectorMax);
-	savefile->WriteMat3( boltAimMatrix);	
+	savefile->WriteMat3( boltAimMatrix);
 
 	savefile->WriteBool( flagSweepDone);
 
@@ -445,7 +445,7 @@ rvMonsterBossMakron::StopAllBoltEffects
 ================
 */
 void rvMonsterBossMakron::StopAllBoltEffects ( void ) {
-	
+
 	if( leftBoltEffect )	{
 		leftBoltEffect.GetEntity()->Stop();
 		leftBoltEffect = 0;
@@ -455,7 +455,7 @@ void rvMonsterBossMakron::StopAllBoltEffects ( void ) {
 		rightBoltEffect.GetEntity()->Stop();
 		rightBoltEffect = 0;
 	}
-	
+
 	if( leftBoltImpact )	{
 		leftBoltImpact.GetEntity()->Stop();
 		leftBoltImpact = 0;
@@ -498,12 +498,12 @@ void rvMonsterBossMakron::Spawn ( void ) {
 		flagFakeDeath = true;
 	} else {
 		flagFakeDeath = false;
-	}	
+	}
 
 	if( spawnArgs.GetBool("furniture") ) {
 		fl.takedamage = false;
 	}
-	
+
 	if( spawnArgs.GetBool("junior")	)	{
 		flagUndying = 1;
 	} else {
@@ -518,7 +518,7 @@ void rvMonsterBossMakron::Spawn ( void ) {
 	flagCornerState = false;
 	cornerCount = 0;
 	flagTeleporting = false;
-	
+
 	//start clean
 	actionPatterned = -1;
 
@@ -541,11 +541,11 @@ void rvMonsterBossMakron::Spawn ( void ) {
 	actionMeleeAttack.Init ( spawnArgs,		"action_meleeAttack",			"Torso_MeleeAttack",						AIACTIONF_ATTACK );
 
 	const char  *func;
-	if ( spawnArgs.GetString( "script_recharge", "", &func ) ) 
+	if ( spawnArgs.GetString( "script_recharge", "", &func ) )
 	{
 		scriptRecharge.Init( func );
 	}
-	if ( spawnArgs.GetString( "script_teleport", "", &func ) ) 
+	if ( spawnArgs.GetString( "script_teleport", "", &func ) )
 	{
 		scriptTeleport.Init( func );
 	}
@@ -593,10 +593,10 @@ bool rvMonsterBossMakron::CheckActions ( void ) {
 		return true;
 	}
 
-	//gameLocal.Printf("Begin CheckActions \n");		
+	//gameLocal.Printf("Begin CheckActions \n");
 
 	if( CheckTurnActions() )	{
-		//gameLocal.Printf("---CheckActions: TurnActions was true \n");		
+		//gameLocal.Printf("---CheckActions: TurnActions was true \n");
 		return true;
 	}
 
@@ -604,40 +604,40 @@ bool rvMonsterBossMakron::CheckActions ( void ) {
 	//If we need more baddies, do it right now regardless of range or player FOV
 	if ( flagAllowSpawns )	{
 		PerformAction ( actionGrenadeAttack.state,actionGrenadeAttack.blendFrames, actionGrenadeAttack.fl.noPain );
-		//gameLocal.Printf("---CheckActions: Spawned in more fellas \n");		
+		//gameLocal.Printf("---CheckActions: Spawned in more fellas \n");
 		return true;
 	}
 
 	//melee attacks
-	if ( PerformAction ( &actionMeleeAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack, NULL )  || 
+	if ( PerformAction ( &actionMeleeAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack, NULL )  ||
 		 PerformAction ( &actionStompAttack, (checkAction_t)&idAI::CheckAction_MeleeAttack, NULL ) 	) {
-			 //gameLocal.Printf("---CheckActions: Melee attacks \n");		
+			 //gameLocal.Printf("---CheckActions: Melee attacks \n");
 		return true;
 	}
 
-	//cannon sweep is good to check if we're up close. 
+	//cannon sweep is good to check if we're up close.
 	//if ( PerformAction ( &actionCannonSweepAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) )	{
 	//	return true;
 	//}
 
-	//If we're in total patterned mode, then don't relay on timers or ranges to perform actions. 
+	//If we're in total patterned mode, then don't relay on timers or ranges to perform actions.
 	if ( patternedMode && !flagFakeDeath	)	{
-		//gameLocal.Printf("**CheckActions: PerformPatternedAction called \n");		
+		//gameLocal.Printf("**CheckActions: PerformPatternedAction called \n");
 		PerformPatternedAction ( );
 		return true;
 	}
-	//gameLocal.Printf("---CheckActions: FlagFakeDeath: %d \n", flagFakeDeath );		
-	//gameLocal.Printf("---CheckActions: PatternedMode: %d \n", patternedMode );		
+	//gameLocal.Printf("---CheckActions: FlagFakeDeath: %d \n", flagFakeDeath );
+	//gameLocal.Printf("---CheckActions: PatternedMode: %d \n", patternedMode );
 
 	//ranged attacks
 	if ( PerformAction ( &actionDMGAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ||
 		 PerformAction ( &actionLightningPattern1Attack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ||
 		 PerformAction ( &actionGrenadeAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ||
 		 PerformAction ( &actionCannonAttack, (checkAction_t)&idAI::CheckAction_RangedAttack, &actionTimerRangedAttack ) ) {
-			 //gameLocal.Printf("---CheckActions: Ranged attack called \n");		
+			 //gameLocal.Printf("---CheckActions: Ranged attack called \n");
 		return true;
 	}
-		 //gameLocal.Printf("---CheckActions: Defaulting to AI CheckActions \n");		
+		 //gameLocal.Printf("---CheckActions: Defaulting to AI CheckActions \n");
 	return idAI::CheckActions ( );
 }
 
@@ -655,7 +655,7 @@ void rvMonsterBossMakron::PerformPatternedAction( )	{
 		//gameLocal.Printf("actionPatterned = -1\n");
 		//gameLocal.Printf("PerformPatternedAction::End--\n");
 		return;
-	}	
+	}
 
 	//if we're in a corner, right now, then add to the corner tally.
 	if( flagCornerState )	{
@@ -663,7 +663,7 @@ void rvMonsterBossMakron::PerformPatternedAction( )	{
 	} else	{
 		cornerCount = 0;
 	}
-	
+
 	//if this is our third consecutive action in the corner, maybe we should teleport?
 	if( cornerCount == 3 )	{
 		gameLocal.Warning("Makron is stuck in a corner!");
@@ -674,7 +674,7 @@ void rvMonsterBossMakron::PerformPatternedAction( )	{
 		PostAnimState ( ANIMCHANNEL_LEGS, "Torso_Idle", 0, 0 );
 		PostState( "State_Combat" );
 		return;
-	
+
 	}
 
 	rvAIAction* action;
@@ -719,7 +719,7 @@ bool rvMonsterBossMakron::CanTurn ( void ) const {
 		}
 		return move.anim_turn_angles != 0.0f || move.fl.moving;
 	} else {
-		return idAI::CanTurn ( ); 
+		return idAI::CanTurn ( );
 	}
 }
 
@@ -734,7 +734,7 @@ void rvMonsterBossMakron::InitBoltSweep ( idVec3 idealTarget )	{
 	idVec3		origin;
 	idMat3		axis;
 	trace_t		tr;
-	
+
 	idVec3		fwd;
 	idVec3		right;
 	idVec3		worldup(0,0,1);
@@ -766,12 +766,12 @@ void rvMonsterBossMakron::InitBoltSweep ( idVec3 idealTarget )	{
 	boltVectorMin = targetPoint - origin;
 	boltVectorMin.Normalize();
 	leftBoltVector = boltVectorMin;
-	
+
 	//right
 	targetPoint = targetPoint + (right * 1800 * 2);
 	boltVectorMax = targetPoint - origin;
 	boltVectorMax.Normalize();
-	rightBoltVector = boltVectorMax;			
+	rightBoltVector = boltVectorMax;
 
 }
 
@@ -793,7 +793,7 @@ void rvMonsterBossMakron::MaintainBoltSweep	( void )	{
 	//advance the state when time is up.
 
 	switch( stateBoltSweep )	{
-	
+
 		//init vars
 		case STATE_START:
 			flagSweepDone = false;
@@ -810,26 +810,26 @@ void rvMonsterBossMakron::MaintainBoltSweep	( void )	{
 			//check for state advance
 			if( gameLocal.time > boltNextStateTime)	{
 				stateBoltSweep++;
-				boltNextStateTime = gameLocal.time + SEC2MS( boltSweepTime); 
+				boltNextStateTime = gameLocal.time + SEC2MS( boltSweepTime);
 				boltTime = 0;
 				boltSweepStartTime = gameLocal.time;
 			}
 		return;
-		
+
 		case STATE_SWEEP1:
 			//lerp the lightning bolt vectors
 			boltTime = gameLocal.time - boltSweepStartTime;
 			leftBoltVector.Lerp( boltVectorMin, boltVectorMax, boltTime / SEC2MS(boltSweepTime));
 			rightBoltVector.Lerp( boltVectorMax, boltVectorMin, boltTime / SEC2MS(boltSweepTime));
 
-			//sweep			
+			//sweep
 			LightningSweep( leftBoltVector, leftBoltEffect, leftBoltImpact);
 			LightningSweep( rightBoltVector, rightBoltEffect, rightBoltImpact );
 
 			//check for state advance
 			if( gameLocal.time > boltNextStateTime)	{
 				stateBoltSweep++;
-				boltNextStateTime = gameLocal.time + SEC2MS( boltWaitTime); 
+				boltNextStateTime = gameLocal.time + SEC2MS( boltWaitTime);
 			}
 
 		return;
@@ -840,7 +840,7 @@ void rvMonsterBossMakron::MaintainBoltSweep	( void )	{
 			//check for state advance
 			if( gameLocal.time > boltNextStateTime)	{
 				stateBoltSweep++;
-				boltNextStateTime = gameLocal.time + SEC2MS( boltSweepTime); 
+				boltNextStateTime = gameLocal.time + SEC2MS( boltSweepTime);
 				boltTime = 0;
 				boltSweepStartTime = gameLocal.time;
 			}
@@ -852,7 +852,7 @@ void rvMonsterBossMakron::MaintainBoltSweep	( void )	{
 			leftBoltVector.Lerp( boltVectorMax, boltVectorMin, boltTime / SEC2MS(boltSweepTime));
 			rightBoltVector.Lerp( boltVectorMin, boltVectorMax, boltTime / SEC2MS(boltSweepTime));
 
-			//sweep			
+			//sweep
 			LightningSweep( leftBoltVector, leftBoltEffect, leftBoltImpact);
 			LightningSweep( rightBoltVector, rightBoltEffect, rightBoltImpact );
 
@@ -881,19 +881,19 @@ void rvMonsterBossMakron::LightningSweep ( idVec3 attackVector, rvClientEffectPt
 	trace_t	tr;
 
 	GetJointWorldTransform( jointLightningBolt, gameLocal.time, origin, axis);
-	
+
 	//trace out from origin along attackVector
 	attackVector.Normalize();
 	gameLocal.TracePoint( this, tr, origin, origin + (attackVector * 25600), MASK_SHOT_RENDERMODEL, this);
 	//gameRenderWorld->DebugLine( colorRed, origin, tr.c.point, 100, true);
-	
+
 	if ( !boltEffect ) {
 		boltEffect =  gameLocal.PlayEffect ( gameLocal.GetEffect ( this->spawnArgs, "fx_sweep_fly" ), origin, attackVector.ToMat3(), true, tr.c.point);
 	} else {
 		boltEffect->SetOrigin ( origin );
 		boltEffect->SetAxis ( attackVector.ToMat3() );
 		boltEffect->SetEndOrigin ( tr.c.point );
-	}	
+	}
 
 	if ( !impactEffect ) {
 		impactEffect =  gameLocal.PlayEffect ( gameLocal.GetEffect ( this->spawnArgs, "fx_sweep_impact" ), tr.c.point, tr.c.normal.ToMat3(), true, tr.c.point);
@@ -901,7 +901,7 @@ void rvMonsterBossMakron::LightningSweep ( idVec3 attackVector, rvClientEffectPt
 		impactEffect->SetOrigin ( tr.c.point );
 		impactEffect->SetAxis (  tr.c.normal.ToMat3() );
 		impactEffect->SetEndOrigin ( tr.c.point );
-	}	
+	}
 
 	if ( !boltMuzzleFlash )	{
 		boltMuzzleFlash =  gameLocal.PlayEffect ( gameLocal.GetEffect ( this->spawnArgs, "fx_sweep_muzzle" ), origin, attackVector.ToMat3(), true, origin);
@@ -909,7 +909,7 @@ void rvMonsterBossMakron::LightningSweep ( idVec3 attackVector, rvClientEffectPt
 		boltMuzzleFlash->SetOrigin ( origin );
 		boltMuzzleFlash->SetAxis ( attackVector.ToMat3() );
 		boltMuzzleFlash->SetEndOrigin ( origin );
-	}	
+	}
 
 	//hurt anything in the way
 	idEntity* ent = gameLocal.entities[tr.c.entityNum];
@@ -917,7 +917,7 @@ void rvMonsterBossMakron::LightningSweep ( idVec3 attackVector, rvClientEffectPt
 	if( ent)	{
 		ent->Damage ( this, this, attackVector, spawnArgs.GetString ( "def_makron_sweep_damage" ), 1.0f, 0 );
 	}
-	
+
 }
 
 /*
@@ -937,7 +937,7 @@ void rvMonsterBossMakron::PerformAction ( const char* stateName, int blendFrames
 	PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishAction", 0, 0, SFLAG_ONCLEAR );
 
 	// Go back to idle when done-- sometimes.
-	if ( !noIdle )	{	
+	if ( !noIdle )	{
 		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_Idle", blendFrames );
 	}
 
@@ -970,9 +970,9 @@ void rvMonsterBossMakron::OnStopAction( void )	{
 rvMonsterBossMakron::Damage
 ================
 */
-void rvMonsterBossMakron::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
+void rvMonsterBossMakron::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 								const char *damageDefName, const float damageScale, const int location ) {
-	
+
 	//Deal damage here,
 	idAI::Damage( inflictor, attacker, dir, damageDefName, damageScale, location );
 
@@ -1015,7 +1015,7 @@ void rvMonsterBossMakron::Killed( idEntity *inflictor, idEntity *attacker, int d
 		idAI::Killed( inflictor, attacker, damage, dir, location);
 		return;
 	}
-	
+
 	//the Makron is in undying mode until he finishes getting up.
 	//gameLocal.Warning("First form defeated!");
 
@@ -1024,7 +1024,7 @@ void rvMonsterBossMakron::Killed( idEntity *inflictor, idEntity *attacker, int d
 	fl.takedamage = false;
 	SetMoveType ( MOVETYPE_DEAD );
 	StopMove( MOVE_STATUS_DONE );
-	//gameLocal.Printf("************\n************\n************\n************\n---flagFakeDeath set to TRUE! ************\n************\n************\n************\n" );		
+	//gameLocal.Printf("************\n************\n************\n************\n---flagFakeDeath set to TRUE! ************\n************\n************\n************\n" );
 	flagFakeDeath = true;
 
 
@@ -1036,7 +1036,7 @@ void rvMonsterBossMakron::Killed( idEntity *inflictor, idEntity *attacker, int d
 		StopAnimState ( ANIMCHANNEL_HEAD );
 	}
 
-	//Call this anyway-- hopefully the script is prepared to handle multiple Makron deaths... 
+	//Call this anyway-- hopefully the script is prepared to handle multiple Makron deaths...
 	ExecScriptFunction( funcs.death );
 
 	//make sure he goes through deadness, but we need to post FinishAction afterwards
@@ -1056,7 +1056,7 @@ rvMonsterBossMakron::BeginSeparation( void )
 */
 void rvMonsterBossMakron::BeginSeparation( void )	{
 
-	//spawn in a new Makron leg,			
+	//spawn in a new Makron leg,
 	idDict	  args;
 	idEntity*  newLegs;
 
@@ -1089,10 +1089,10 @@ void rvMonsterBossMakron::CompleteSeparation( void )	{
 
 		//is there a cooler way to do this? Heal over time?
 		//health = spawnArgs.GetFloat("health_flying", "5000" );
-		
+
 		ExecScriptFunction( funcs.init);
 
-		//makron is once again pwnable.		
+		//makron is once again pwnable.
 		aifl.undying = false;
 		fl.takedamage = true;
 		flagFakeDeath = false;
@@ -1103,7 +1103,7 @@ void rvMonsterBossMakron::CompleteSeparation( void )	{
 //		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishAction", 0, 0, SFLAG_ONCLEAR );
 //		PostAnimState ( ANIMCHANNEL_LEGS, "Torso_FinishAction", 0, 0, SFLAG_ONCLEAR );
 		//gameLocal.Printf("*****\n*****\n*****\nPast 'PostAnimState' flagFakeDeath is: %d \n*****\n*****\n*****\n", flagFakeDeath);
-		
+
 
 //		These four lines work!
 		PostAnimState ( ANIMCHANNEL_TORSO, "Torso_FinishAction", 0, 0, SFLAG_ONCLEAR );
@@ -1121,7 +1121,7 @@ rvMonsterBossMakron::ScriptedFace( idEntity* faceEnt, bool endWithIdle )
 */
 /*
 void rvMonsterBossMakron::ScriptedFace ( idEntity* faceEnt, bool endWithIdle ) {
-	
+
 	//set the ideal yaw, the change to the facing state.
 	FaceEntity( faceEnt );
 
@@ -1140,7 +1140,7 @@ void rvMonsterBossMakron::ScriptedFace ( idEntity* faceEnt, bool endWithIdle ) {
 /*
 ===============================================================================
 
-	Events 
+	Events
 
 ===============================================================================
 */
@@ -1199,7 +1199,7 @@ void rvMonsterBossMakron::Event_FlyingRotate( idVec3& vecOrg )	{
 
 	//set move.ideal_yaw
 	TurnToward( vecOrg );
-	
+
 	//copy it over
 	facingIdealYaw = move.ideal_yaw;
 	aifl.scripted = true;
@@ -1215,7 +1215,7 @@ rvMonsterBossMakron::Event_SetNextAction
 ================
 */
 void rvMonsterBossMakron::Event_SetNextAction( const char * actionString)	{
-	
+
 	//if the next action is occupied, return false
 	if( actionPatterned != -1)	{
 		idThread::ReturnFloat(0);
@@ -1273,7 +1273,7 @@ void rvMonsterBossMakron::Event_SetNextAction( const char * actionString)	{
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -1304,7 +1304,7 @@ CLASS_STATES_DECLARATION ( rvMonsterBossMakron )
 	STATE ( "Frame_EndLightningSweep2",	rvMonsterBossMakron::Frame_EndLightningSweep2 )
 	STATE ( "Frame_StompAttack",		rvMonsterBossMakron::Frame_StompAttack )
 	STATE ( "Frame_Teleport",			rvMonsterBossMakron::Frame_Teleport )
-	
+
 	STATE ( "State_ScriptedFace",		rvMonsterBossMakron::State_ScriptedFace )
 
 
@@ -1329,12 +1329,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_DMGAttack ( const stateParms_t& p
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack_dmg", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1358,12 +1358,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_Charge ( const stateParms_t& parm
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "run", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1379,12 +1379,12 @@ rvBossMakron::State_ScriptedFace
 
 stateResult_t rvMonsterBossMakron::State_ScriptedFace ( const stateParms_t& parms ) {
 
-	//note this uses the Makron's version of FacingIdeal, 
+	//note this uses the Makron's version of FacingIdeal,
 	if( !flagFlyingMode)	{
 		if ( !aifl.scripted || (!CheckTurnActions( ) && (!move.anim_turn_angles))) {
 			return SRESULT_DONE;
 		}
-		
+
 		return SRESULT_WAIT;
 
 	} else {
@@ -1419,12 +1419,12 @@ stateResult_t rvMonsterBossMakron::State_ScriptedFace ( const stateParms_t& parm
 			} else	{
 				//guess we don't need to turn? We're done.
 				aifl.scripted = false;
-				return SRESULT_DONE;	
+				return SRESULT_DONE;
 			}
 			PlayAnim ( ANIMCHANNEL_TORSO, turnAnim, 4 );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_WAIT;
-	
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -1434,8 +1434,8 @@ stateResult_t rvMonsterBossMakron::State_ScriptedFace ( const stateParms_t& parm
 			}
 			return SRESULT_WAIT;
 	}
-	
-	return SRESULT_ERROR; 
+
+	return SRESULT_ERROR;
 
 }
 */
@@ -1447,7 +1447,7 @@ rvBossMakron::State_Torso_FirstDeath
 ================
 */
 stateResult_t rvMonsterBossMakron::State_Torso_FirstDeath ( const stateParms_t& parms ) {
-	
+
 
 	enum {
 		STAGE_INIT,
@@ -1460,12 +1460,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_FirstDeath ( const stateParms_t& 
 			//force a long blend on this anim since it will be sudden
 			PlayAnim ( ANIMCHANNEL_TORSO, "separation_start", 30 );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1491,7 +1491,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_Resurrection ( const stateParms_t
 			//force a long blend on this anim since it will be sudden
 			PlayAnim ( ANIMCHANNEL_TORSO, "separation_start", 30 );
 			return SRESULT_STAGE ( STAGE_WAIT_FIRST);
-		
+
 		case STAGE_WAIT_FIRST:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_STAGE ( STAGE_RISE);
@@ -1503,11 +1503,11 @@ stateResult_t rvMonsterBossMakron::State_Torso_Resurrection ( const stateParms_t
 			const idKeyValue* kv;
 			kv = spawnArgs.MatchPrefix ( "surface_legs" );
 			HideSurface ( kv->GetValue() );
-			
+
 			//start the effect
 			jointHoverEffect = animator.GetJointHandle ( spawnArgs.GetString("joint_hover","thruster") );
 			effectHover = PlayEffect ( "fx_hover", jointHoverEffect, true );
-	
+
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "separation_rise", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT_SECOND);
@@ -1532,11 +1532,11 @@ stateResult_t rvMonsterBossMakron::State_Torso_Resurrection ( const stateParms_t
 			const idKeyValue* kv;
 			kv = spawnArgs.MatchPrefix ( "surface_legs" );
 			HideSurface ( kv->GetValue() );
-			
+
 			//start the effect
 			jointHoverEffect = animator.GetJointHandle ( spawnArgs.GetString("joint_hover","thruster") );
 			effectHover = PlayEffect ( "fx_hover", jointHoverEffect, true );
-	
+
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "separation_rise", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
@@ -1561,14 +1561,14 @@ rvBossMakron::State_Lightning2Attack
 ================
 */
 stateResult_t rvMonsterBossMakron::State_Torso_Lightning2Attack ( const stateParms_t& parms ) {
-	
+
 	idVec3	boltVector;
 
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};
-	
+
 	switch( parms.stage )	{
 		case STAGE_INIT:
 
@@ -1587,7 +1587,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_Lightning2Attack ( const statePar
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "claw_sweep", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
@@ -1597,14 +1597,14 @@ stateResult_t rvMonsterBossMakron::State_Torso_Lightning2Attack ( const statePar
 				boltTime = gameLocal.time - boltSweepStartTime;
 				leftBoltVector.Lerp( boltVectorMax, boltVectorMin, boltTime / SEC2MS(boltSweepTime));
 
-				LightningSweep( leftBoltVector, leftBoltEffect, leftBoltImpact );	
+				LightningSweep( leftBoltVector, leftBoltEffect, leftBoltImpact );
 			}
 			else if( stateBoltSweep == 2)	{
 				//gameLocal.Warning("Sweep 2 done.");
 				StopAllBoltEffects();
 				stateBoltSweep = 0;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1634,12 +1634,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_StompAttack( const stateParms_t& 
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "shockwave_stomp", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1682,7 +1682,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_Teleport( const stateParms_t& par
 				}
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1717,12 +1717,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_GrenadeAttack ( const stateParms_
 				PlayAnim ( ANIMCHANNEL_TORSO, "range_attack_grenade_spawn", parms.blendFrames );
 			}
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1735,7 +1735,7 @@ rvBossMakron::State_Torso_Recharge
 ================
 */
 stateResult_t rvMonsterBossMakron::State_Torso_Recharge ( const stateParms_t& parms ) {
-	
+
 	ExecScriptFunction( scriptRecharge );
 	return SRESULT_DONE;
 }
@@ -1758,12 +1758,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_MeleeAttack ( const stateParms_t&
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "melee_attack", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;	
+			return SRESULT_WAIT;
 
 	}
 
@@ -1778,12 +1778,12 @@ stateResult_t rvMonsterBossMakron::State_Torso_MeleeAttack ( const stateParms_t&
 rvMonsterBossMakron::State_Torso_RotateToAngle
 ================
 */
-stateResult_t rvMonsterBossMakron::State_Torso_RotateToAngle ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterBossMakron::State_Torso_RotateToAngle ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT_LOOP,
 	};
-	
+
 	float facingTimeDelta;
 	float turnYaw;
 
@@ -1806,7 +1806,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_RotateToAngle ( const stateParms_
 				ang.yaw += ( turnRate * facingTimeDelta );
 				SetAngles( ang);
 				move.current_yaw = ang.yaw;
-				return SRESULT_STAGE( STAGE_WAIT_LOOP);	
+				return SRESULT_STAGE( STAGE_WAIT_LOOP);
 			}
 			aifl.scripted = false;
 			return SRESULT_DONE;
@@ -1819,8 +1819,8 @@ stateResult_t rvMonsterBossMakron::State_Torso_RotateToAngle ( const stateParms_
 rvMonsterBossMakron::State_Torso_TurnRight90
 ================
 */
-stateResult_t rvMonsterBossMakron::State_Torso_TurnRight90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterBossMakron::State_Torso_TurnRight90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -1830,7 +1830,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_TurnRight90 ( const stateParms_t&
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_right_90", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -1839,7 +1839,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_TurnRight90 ( const stateParms_t&
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1847,8 +1847,8 @@ stateResult_t rvMonsterBossMakron::State_Torso_TurnRight90 ( const stateParms_t&
 rvMonsterBossMakron::State_Torso_TurnLeft90
 ================
 */
-stateResult_t rvMonsterBossMakron::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {	
-	enum { 
+stateResult_t rvMonsterBossMakron::State_Torso_TurnLeft90 ( const stateParms_t& parms ) {
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT
 	};
@@ -1858,7 +1858,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_TurnLeft90 ( const stateParms_t& 
 			PlayAnim ( ANIMCHANNEL_TORSO, "turn_left_90", parms.blendFrames );
 			AnimTurn ( 90.0f, true );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( move.fl.moving || AnimDone ( ANIMCHANNEL_TORSO, 0 )) {
 				AnimTurn ( 0, true );
@@ -1867,7 +1867,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_TurnLeft90 ( const stateParms_t& 
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -1876,7 +1876,7 @@ rvMonsterBossMakron::State_Torso_CannonAttack
 ================
 */
 stateResult_t rvMonsterBossMakron::State_Torso_CannonAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -1896,17 +1896,17 @@ stateResult_t rvMonsterBossMakron::State_Torso_CannonAttack ( const stateParms_t
 				noLegs = false;
 				PlayAnim ( ANIMCHANNEL_TORSO, "range_cannon_start", parms.blendFrames );
 				PlayAnim ( ANIMCHANNEL_LEGS, "range_cannon_start", parms.blendFrames );
-	
+
 			}
 			shots = (gameLocal.random.RandomInt ( 8 ) + 4) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_LOOP:
 			//if we're flying, and moving, fire fast!
 			//if( flagFlyingMode &&  move.fl.moving )	{
@@ -1918,7 +1918,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_CannonAttack ( const stateParms_t
 				PlayAnim ( ANIMCHANNEL_TORSO, "range_cannon_fire", 0 );
 			}
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (IsEnemyVisible() && !enemy.fl.inFov)  ) {
@@ -1935,14 +1935,14 @@ stateResult_t rvMonsterBossMakron::State_Torso_CannonAttack ( const stateParms_t
 				return SRESULT_STAGE ( STAGE_LOOP );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 
@@ -1953,7 +1953,7 @@ rvMonsterBossMakron::State_Torso_Lightning1Attack
 */
 
 stateResult_t rvMonsterBossMakron::State_Torso_Lightning1Attack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_INIT_BOLT,
@@ -1974,7 +1974,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_Lightning1Attack ( const statePar
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_start", parms.blendFrames );
 			shots = (gameLocal.random.RandomInt ( 3 ) + 2) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_INIT_BOLT );
@@ -1991,7 +1991,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_Lightning1Attack ( const statePar
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_loop", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			//sweep the blasts back and forth
 			MaintainBoltSweep();
@@ -2004,17 +2004,17 @@ stateResult_t rvMonsterBossMakron::State_Torso_Lightning1Attack ( const statePar
 				}
 				else	{
 					PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_loop", 0 );
-				}	
+				}
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 
@@ -2025,7 +2025,7 @@ rvMonsterBossMakron::State_Torso_KillPlayer
 */
 
 stateResult_t rvMonsterBossMakron::State_Torso_KillPlayer ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAITSTART,
 		STAGE_LOOP,
@@ -2039,7 +2039,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_KillPlayer ( const stateParms_t& 
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_start", parms.blendFrames );
 			shots = 8;
 			return SRESULT_STAGE ( STAGE_WAITSTART );
-			
+
 		case STAGE_WAITSTART:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				return SRESULT_STAGE ( STAGE_LOOP );
@@ -2049,7 +2049,7 @@ stateResult_t rvMonsterBossMakron::State_Torso_KillPlayer ( const stateParms_t& 
 		case STAGE_LOOP:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_loop_killplayer", 0 );
 			return SRESULT_STAGE ( STAGE_WAITLOOP );
-		
+
 		case STAGE_WAITLOOP:
 			//keep playing the anim until the sweeping is done.
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) || flagFakeDeath ) {
@@ -2060,17 +2060,17 @@ stateResult_t rvMonsterBossMakron::State_Torso_KillPlayer ( const stateParms_t& 
 				}
 				else	{
 					PlayAnim ( ANIMCHANNEL_TORSO, "range_blast_loop_killplayer", 0 );
-				}	
+				}
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITEND:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
-			return SRESULT_WAIT;				
+			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 
@@ -2093,14 +2093,14 @@ stateResult_t rvMonsterBossMakron::State_Torso_CannonSweepAttack ( const statePa
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack_cannonsweep", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT);
-		
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_DONE;
 			}
 			//if the flag is up, fire.
-			
-			return SRESULT_WAIT;	
+
+			return SRESULT_WAIT;
 
 	}
 
@@ -2125,7 +2125,7 @@ stateResult_t rvMonsterBossMakron::State_Killed ( const stateParms_t& parms ) {
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, "death_start", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_FALLSTARTWAIT );
-			
+
 		case STAGE_FALLSTARTWAIT:
 			if ( move.fl.onGround ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "death_end", 4 );
@@ -2136,14 +2136,14 @@ stateResult_t rvMonsterBossMakron::State_Killed ( const stateParms_t& parms ) {
 				return SRESULT_STAGE ( STAGE_FALLLOOPWAIT );
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_FALLLOOPWAIT:
 			if ( move.fl.onGround ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "death_end", 0 );
 				return SRESULT_STAGE ( STAGE_FALLENDWAIT );
 			}
-			return SRESULT_WAIT;			
-					
+			return SRESULT_WAIT;
+
 		case STAGE_FALLENDWAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				disablePain = true;
@@ -2160,14 +2160,14 @@ stateResult_t rvMonsterBossMakron::State_Killed ( const stateParms_t& parms ) {
 
 				if( spawnArgs.GetBool ( "remove_on_death" )  ){
 					PostState ( "State_Remove" );
-				} else { 
+				} else {
 					PostState ( "State_Dead" );
 				}
 
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}	
+	}
 	return SRESULT_ERROR;
 }
 
@@ -2193,11 +2193,11 @@ rvMonsterBossMakron::Frame_BeginLightningSweep2
 */
 
 stateResult_t rvMonsterBossMakron::Frame_EndLightningSweep2 ( const stateParms_t& parms )	{
-	
+
 	//end the sweep with this flag
 	stateBoltSweep = 2;
 	return SRESULT_OK;
-	
+
 }
 
 /*
@@ -2228,13 +2228,13 @@ rvMonsterBossMakron::Frame_StompAttack
 */
 
 stateResult_t rvMonsterBossMakron::Frame_StompAttack ( const stateParms_t& parms )	{
-	
+
 	idVec3		origin;
 	idVec3		worldUp(0, 0, 1);
 
 	// Eminate from Makron origin
 	origin = this->GetPhysics()->GetOrigin();
-	
+
 	//start radius at 256;
 	stompRadius = spawnArgs.GetFloat("stomp_start_size", "64");
 
@@ -2267,7 +2267,7 @@ rvMonsterBossMakron::Event_StompAttack
 */
 
 void rvMonsterBossMakron::Event_StompAttack (idVec3& origin) 	{
-	
+
 	idVec3		targetOrigin;
 	idVec3		worldUp;
 	idEntity*	entities[ 1024 ];
@@ -2283,14 +2283,14 @@ void rvMonsterBossMakron::Event_StompAttack (idVec3& origin) 	{
 	worldUp.x = 0;
 	worldUp.y = 0;
 	worldUp.z = 1;
-	
+
 	//if the radius is too big, stop.
 	if ( stompRadius > stompMaxRadius )	{
 		return;
 	}
 
 	//get all enemies within radius. If they are:
-	//	 within radius, 
+	//	 within radius,
 	//	 more than (radius - stompWidth) units away,
 	//   Z valued within 16 of the the stomp Z
 	//they take stomp damage.
@@ -2300,30 +2300,30 @@ void rvMonsterBossMakron::Event_StompAttack (idVec3& origin) 	{
 	//gameRenderWorld->DebugCircle( colorBlue,origin,worldUp,stompRadius - stompWidth,24,20,false);
 
 	for ( i = 0; i < count; i ++ ) {
-		idEntity* ent = entities[i];	
+		idEntity* ent = entities[i];
 
-		//don't stomp ourself, derp...	
+		//don't stomp ourself, derp...
 		if ( !ent || ent == this ) {
 			continue;
 		}
 
-		// Must be an actor that takes damage to be affected		
+		// Must be an actor that takes damage to be affected
 		if ( !ent->fl.takedamage || !ent->IsType ( idActor::GetClassType() ) ) {
 			continue;
 		}
-				
+
 		// Are they Z equal (about?)
-		targetOrigin =  ent->GetPhysics()->GetOrigin();	
+		targetOrigin =  ent->GetPhysics()->GetOrigin();
 		if( idMath::Abs( targetOrigin.z - origin.z) > 16)	{
 			continue;
 		}
 
 		// are they within the stomp width?
-		if( targetOrigin.Dist( origin) < ( stompRadius - stompWidth)  || 
+		if( targetOrigin.Dist( origin) < ( stompRadius - stompWidth)  ||
 			targetOrigin.Dist( origin) > stompRadius )	{
 			continue;
 		}
-		
+
 		if( gameRenderWorld->FastWorldTrace(result, origin, ent->GetPhysics()->GetCenterMass()) ) {
 			continue;
 		}
@@ -2333,9 +2333,9 @@ void rvMonsterBossMakron::Event_StompAttack (idVec3& origin) 	{
 		dir.NormalizeFast ( );
 		ent->Damage ( this, this, dir, spawnArgs.GetString ( "def_makron_stomp_damage" ), 1.0f, 0 );
 		//gameRenderWorld->DebugArrow( colorYellow, origin, targetOrigin, 5, 1000);
-	
+
 	}
-		
+
 	//move the radius along
 	stompRadius += stompSpeed;
 
@@ -2344,4 +2344,4 @@ void rvMonsterBossMakron::Event_StompAttack (idVec3& origin) 	{
 
 }
 
-	
+

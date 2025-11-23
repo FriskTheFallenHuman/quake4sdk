@@ -23,8 +23,8 @@ public:
 
 	bool				Play			( int startTime, bool loop = false, const idVec3& origin = vec3_origin );
 	void				Stop			( bool destroyParticles = false );
-	void				Restart			( void );	
-	
+	void				Restart			( void );
+
 	int					GetEffectIndex	( void );
 	const char *		GetEffectName	( void );
 
@@ -35,7 +35,7 @@ public:
 
 	void				SetEndOrigin	( const idVec3& endOrigin );
 	void				SetEndOrigin	( jointHandle_t joint ) { endOriginJoint = joint; }
-	
+
 	void				SetGravity		( const idVec3& gravity ) { renderEffect.gravity = gravity; }
 
 	void				SetColor		( const idVec4& color );
@@ -85,7 +85,7 @@ public:
 
 	void				Save		( idSaveGame *savefile ) const;
 	void				Restore		( idRestoreGame *savefile );
-	
+
 protected:
 
 	idList<jointHandle_t>			crawlJoints;

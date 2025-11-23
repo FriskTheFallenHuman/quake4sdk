@@ -50,9 +50,9 @@ void rvCTF_AssaultPoint::Event_InitializeLinks( void ) {
 	if( linked ) {
 		return;
 	}
-	
+
 	// pull in our targets
-	toStrogg = gameLocal.FindEntity( spawnArgs.GetString( "targetStroggAP" ) );	
+	toStrogg = gameLocal.FindEntity( spawnArgs.GetString( "targetStroggAP" ) );
 	toMarine = gameLocal.FindEntity( spawnArgs.GetString( "targetMarineAP" ) );
 
 	ResetIndices();
@@ -92,7 +92,7 @@ void rvCTF_AssaultPoint::ResetIndices( void ) {
 		}
 		ap = static_cast<rvCTF_AssaultPoint*>(ap->toStrogg.GetEntity());
 		ap->index = assignIndices++;
-		
+
 		ptr = ap;
 		gameLocal.mpGame.assaultPoints.Append( ptr );
 
@@ -124,7 +124,7 @@ void rvCTF_AssaultPoint::Event_Touch( idEntity *activator, trace_t *trace ) {
 
 	int enemyPowerup = -1;
 	int friendlyPowerup = -1;
-	
+
 	if ( owner == TEAM_MARINE ) {
 		friendlyPowerup = POWERUP_CTF_STROGGFLAG;
 		enemyPowerup = POWERUP_CTF_MARINEFLAG;
@@ -177,16 +177,16 @@ void rvCTF_AssaultPoint::Event_Touch( idEntity *activator, trace_t *trace ) {
 					owner = TEAM_STROGG;
 					gameLocal.Printf("Assault point %s captured by strogg!\n", name.c_str());
 				}
-			}			
+			}
 			break;
 		}
 	}
-	
+
 
 	if( oldOwner != owner ) {
 		// we switched hands, reset forward spawns
 		gameLocal.ClearForwardSpawns();
-		
+
 		if( oldOwner == TEAM_MARINE ) {
 			if( static_cast<rvCTF_AssaultPoint*>(toMarine.GetEntity())->IsType( rvCTF_AssaultPoint::Type ) ) {
 				static_cast<rvCTF_AssaultPoint*>(toMarine.GetEntity())->ResetSpawns( oldOwner );
@@ -196,7 +196,7 @@ void rvCTF_AssaultPoint::Event_Touch( idEntity *activator, trace_t *trace ) {
 				static_cast<rvCTF_AssaultPoint*>(toStrogg.GetEntity())->ResetSpawns( oldOwner );
 			}
 		}
-		
+
 		rvItemCTFFlag::ResetFlag ( enemyPowerup );
 
 		gameLocal.mpGame.AddPlayerTeamScore( player, 2 );
@@ -227,7 +227,7 @@ void rvCTF_AssaultPoint::ResetSpawns( int team ) {
 			if( static_cast<rvCTF_AssaultPoint*>(toStrogg.GetEntity())->IsType( rvCTF_AssaultPoint::Type ) ) {
 				static_cast<rvCTF_AssaultPoint*>(toStrogg.GetEntity())->ResetSpawns( team );
 			}
-		}	
+		}
 	}
 }
 
@@ -236,7 +236,7 @@ void rvCTF_AssaultPoint::SetOwner ( int newOwner ) {
 		// server should set owner via EVENT_ACTIVATE, not here
 		return;
 	}
-	
+
 	owner = newOwner;
 	SetOwnerColor ();
 }
@@ -255,14 +255,14 @@ void rvCTF_AssaultPoint::SetOwnerColor ( void ) {
 	const idDeclSkin* skin = NULL;
 	if( owner == TEAM_MARINE ) {
 		skin = declManager->FindSkin( "skins/ddynerman/green_glow", false );
-	} else if ( owner == TEAM_STROGG ) { 
+	} else if ( owner == TEAM_STROGG ) {
 		skin = declManager->FindSkin( "skins/ddynerman/orange_glow", false );
 	} else {
 		skin = declManager->FindSkin( "skins/ddynerman/white", false );
 	}
 
 	if ( skin ) {
-		SetSkin( skin );	
+		SetSkin( skin );
 	}
 }
 
@@ -299,7 +299,7 @@ void rvCTFAssaultPlayerStart::Event_Activate( idEntity *activator ) {
 		gameLocal.Warning( "rvCTFAssaultPlayerStart::Event_Activate() - was activated by something other than an assault point\n" );
 		return;
 	}
-	
+
 	rvCTF_AssaultPoint* ap = static_cast<rvCTF_AssaultPoint*>(activator);
 
 	if( ap->GetOwner() == team ) {

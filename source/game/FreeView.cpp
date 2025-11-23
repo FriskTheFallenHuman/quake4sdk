@@ -61,7 +61,7 @@ void idFreeView::PickRandomSpawn( void ) {
 	viewAngles = start->GetPhysics()->GetAxis().ToAngles();
 	snapAngle = true;
 }
-	
+
 /*
 ===============
 idFreeView::Fly
@@ -80,11 +80,11 @@ void idFreeView::Fly( const usercmd_t &ucmd ) {
 		viewAngleOffset = viewAngles - src;
 		snapAngle = false;
 	}
-	
+
 	viewAngles = src + viewAngleOffset;
-	
+
 	physics->SetPlayerInput( ucmd, viewAngles );
-	physics->Evaluate( gameLocal.time - gameLocal.previousTime, gameLocal.time );	
+	physics->Evaluate( gameLocal.time - gameLocal.previousTime, gameLocal.time );
 }
 
 /*
@@ -140,7 +140,7 @@ void idFreeView::Setup( void ) {
 	physics->SetSpeed( pm_spectatespeed.GetFloat(), pm_crouchspeed.GetFloat() );
 	physics->SetClipModelNoLink( clip );
 	physics->SetClipMask( MASK_PLAYERSOLID );
-	physics->SetMovementType( PM_SPECTATOR );	
+	physics->SetMovementType( PM_SPECTATOR );
 }
 
 /*

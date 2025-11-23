@@ -139,7 +139,7 @@ void idModelExport::LoadMayaDll( void ) {
 	}
 
 	// look up the dll interface functions
-	dllEntry = ( exporterDLLEntry_t )sys->DLL_GetProcAddress( importDLL, "dllEntry" ); 
+	dllEntry = ( exporterDLLEntry_t )sys->DLL_GetProcAddress( importDLL, "dllEntry" );
 	Maya_ConvertModel = ( exporterInterface_t )sys->DLL_GetProcAddress( importDLL, "Maya_ConvertModel" );
 	Maya_Shutdown = ( exporterShutdown_t )sys->DLL_GetProcAddress( importDLL, "Maya_Shutdown" );
 	if ( !Maya_ConvertModel || !dllEntry || !Maya_Shutdown ) {
@@ -178,7 +178,7 @@ void idModelExport::LoadMayaDll( void ) {
 =====================
 idModelExport::ConvertMayaToMD5
 
-Checks if a Maya model should be converted to an MD5, and converts if if the time/date or 
+Checks if a Maya model should be converted to an MD5, and converts if if the time/date or
 version number has changed.
 =====================
 */
@@ -222,7 +222,7 @@ bool idModelExport::ConvertMayaToMD5( void ) {
 		return true;
 	}
 */
-   
+
 // RAVEN END
 
 	// get the destination file's time
@@ -289,7 +289,7 @@ bool idModelExport::ConvertMayaToMD5( void ) {
 	if ( Maya_Error != "Ok" ) {
 		return false;
 	}
-	
+
 	// conversion succeded
 	return true;
 }

@@ -21,20 +21,20 @@ Lexer *LexerFactory::MakeLexer( char const * const ptr, int length, char const *
 	return new Lexer(ptr, length, name, flags | GetWriteBinary() | GetReadBinary());
 }
 
-int LexerFactory::GetReadBinary() 
-{ 
-	if(cvarSystem->GetCVarBool("com_binaryRead")) 
+int LexerFactory::GetReadBinary()
+{
+	if(cvarSystem->GetCVarBool("com_binaryRead"))
 	{
-		return LEXFL_READBINARY; 
+		return LEXFL_READBINARY;
 	}
-	else 
+	else
 	{
-		return 0; 
+		return 0;
 	}
 }
 
-int LexerFactory::GetWriteBinary() 
-{ 
+int LexerFactory::GetWriteBinary()
+{
 	int ret=0;
 	int writeBinary = cvarSystem->GetCVarInteger("com_binaryWrite");
 	switch(writeBinary)

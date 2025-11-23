@@ -68,7 +68,7 @@ const int SHADERPARM_BRIGHTNESS		= 6;	// for the overall brightness of effects
 // RAVEN BEGIN
 // dluetscher: added a default value for light detail levels
 #define DEFAULT_LIGHT_DETAIL_LEVEL	10.f
-// RAVEN END 
+// RAVEN END
 
 enum {
 	RD_MISC = 0,
@@ -149,7 +149,7 @@ typedef struct renderEntity_s {
 // bdube: hiding surfaces
 	// Mask of surfaces which should be suppresesed when rendering the entity
 	int						suppressSurfaceMask;
-// RAVEN END	
+// RAVEN END
 
 	// positioning
 	// axis rotation vectors must be unit length for many
@@ -164,13 +164,13 @@ typedef struct renderEntity_s {
 // RAVEN BEGIN
 // bdube: overlay shaders
 	const idMaterial *		overlayShader;			// overlays the model on top of itself with this shader (originally for powerups)
-// RAVEN END	
+// RAVEN END
 	const idDeclSkin *		customSkin;				// 0 for no remappings
 // RAVEN BEGIN
 	int						referenceSoundHandle;	// for shader sound tables, allowing effects to vary with sounds
-// RAVEN END	
+// RAVEN END
 	float					shaderParms[ MAX_ENTITY_SHADER_PARMS ];	// can be used in any way by shader or model generation
-  
+
 // RAVEN BEGIN
 // mwhitlock: Xenon texture streaming
 #if defined(_XENON)
@@ -203,9 +203,9 @@ typedef struct renderEntity_s {
 
 // bdube: weapon depth hack only in a given view id
 	int						weaponDepthHackInViewID;// squash depth range so view weapons don't poke into walls
-// RAVEN END	
+// RAVEN END
 													// this automatically implies noShadow
-												
+
 // RAVEN BEGIN
 // ddynerman: Wolf LOD code
 	float					shadowLODDistance;
@@ -238,7 +238,7 @@ typedef struct renderLight_s {
 	bool					noSpecular;			// (should we replace this with material parameters on the shader?)
 // RAVEN BEGIN
 // ddynerman: no dynamic shadows - allows dmap to create optimized static shadows, but prevents dynamic shadows
-	bool					noDynamicShadows;	
+	bool					noDynamicShadows;
 // RAVEN END
 
 	bool					pointLight;			// otherwise a projection light (should probably invert the sense of this, because points are way more common)
@@ -300,7 +300,7 @@ typedef struct renderEffect_s {
 	bool					ambient;					// effect is from an entity
 	bool					inConnectedArea;
 	int						weaponDepthHackInViewID;	// squash depth range so view weapons don't poke into walls
-	float					modelDepthHack;	
+	float					modelDepthHack;
 
 	int						referenceSoundHandle;		// for shader sound tables, allowing effects to vary with sounds
 
@@ -321,7 +321,7 @@ typedef struct renderView_s {
 	idMat3					viewaxis;			// transformation matrix, view looks down the positive X axis
 
 	bool					cramZNear;			// for cinematics, we want to set ZNear much lower
-	bool					forceUpdate;		// for an update 
+	bool					forceUpdate;		// for an update
 
 	// time in milliseconds for shader effects and other time dependent rendering issues
 	int						time;
@@ -402,10 +402,10 @@ enum
 	// Only draw the GUI, not the world.
 	RF_GUI_ONLY					= BIT( 3 ),
 // RAVEN BEGIN
-// dluetscher: added render flag to denote that penumbra map rendering is desired 
+// dluetscher: added render flag to denote that penumbra map rendering is desired
 	RF_PENUMBRA_MAP				= BIT( 4 ),
-// dluetscher: added render flag that defers the command buffer submission of render 
-//			   commands until the first non-deferred render command (with the exception of 
+// dluetscher: added render flag that defers the command buffer submission of render
+//			   commands until the first non-deferred render command (with the exception of
 //			   certain render commands like RC_DRAW_PENUMBRA_MAPS - which ignores deferred
 //			   render commands and lets them get submitted past)
 	RF_DEFER_COMMAND_SUBMIT		= BIT( 5 ),
@@ -469,7 +469,7 @@ public:
 
 // mwhitlock: Xenon texture streaming
 #if defined(_XENON)
-	virtual void			StreamAreaTextures(bool inBackground) = 0;	
+	virtual void			StreamAreaTextures(bool inBackground) = 0;
 	virtual void			ClearAreaTextureStreamer(void) = 0;
 #endif
 // RAVEN END
@@ -590,7 +590,7 @@ public:
 	// the next renderScene
 	virtual bool			ProcessDemoCommand( idDemoFile *readDemo, renderView_t *demoRenderView, renderView_t *portalSkyRenderView, int *demoTimeOffset ) = 0;
 
-	// this is used to regenerate all interactions ( which is currently only done during influences ), there may be a less 
+	// this is used to regenerate all interactions ( which is currently only done during influences ), there may be a less
 	// expensive way to do it
 	virtual void			RegenerateWorld( void ) = 0;
 

@@ -76,8 +76,8 @@ void rvPhysics_Particle::DebugDraw( void ) {
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point, contacts[i].point + 6.0f * contacts[i].normal );
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point - 2.0f * x, contacts[i].point + 2.0f * x );
 			gameRenderWorld->DebugLine( colorWhite, contacts[i].point - 2.0f * y, contacts[i].point + 2.0f * y );
-		}		
-	}	
+		}
+	}
 }
 
 /*
@@ -98,10 +98,10 @@ rvPhysics_Particle::rvPhysics_Particle( void ) {
 	dropToFloor		= false;
 	testSolid		= false;
 	hasMaster		= false;
-	
+
 	SetFriction( 0.6f, 0.6f, 0.0f );
 	SetBouncyness ( 0.5f, true );
-		
+
 	gravityNormal.Zero();
 }
 
@@ -217,7 +217,7 @@ void rvPhysics_Particle::SetClipModel( idClipModel *model, const float density, 
 	if ( clipModel && clipModel != model && freeOld ) {
 		delete clipModel;
 	}
-	
+
 	clipModel = model;
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
@@ -369,10 +369,10 @@ bool rvPhysics_Particle::Evaluate( int timeStepMSec, int endTimeMSec ) {
 	if ( hasMaster ) {
 		idVec3	masterOrigin;
 		idMat3	masterAxis;
-		idVec3	oldOrigin;		
-		
+		idVec3	oldOrigin;
+
 		oldOrigin = current.origin;
-		
+
 		self->GetMasterPosition( masterOrigin, masterAxis );
 		current.origin = masterOrigin + current.localOrigin * masterAxis;
 // RAVEN BEGIN
@@ -382,13 +382,13 @@ bool rvPhysics_Particle::Evaluate( int timeStepMSec, int endTimeMSec ) {
 
 		trace_t tr;
 		gameLocal.Translation( self, tr, oldOrigin, current.origin, clipModel, clipModel->GetAxis(), clipMask, self );
-		
+
 		if ( tr.fraction < 1.0f ) {
 			self->Collide ( tr, current.origin - oldOrigin );
 		}
-		
+
 		DebugDraw();
-		
+
 		return true;
 	}
 
@@ -408,7 +408,7 @@ bool rvPhysics_Particle::Evaluate( int timeStepMSec, int endTimeMSec ) {
 
 	// Determine if currently on the ground
 	CheckGround ( );
-	
+
 	// Determine the current upward velocity
 	if ( gravityNormal != vec3_zero ) {
 		upspeed = -( current.velocity * gravityNormal );
@@ -416,25 +416,25 @@ bool rvPhysics_Particle::Evaluate( int timeStepMSec, int endTimeMSec ) {
 		upspeed = current.velocity.z;
 	}
 
-	// If not on the ground, or moving upwards, or bouncing and moving toward gravity then do a straight 
-	// forward slide move and gravity.		
+	// If not on the ground, or moving upwards, or bouncing and moving toward gravity then do a straight
+	// forward slide move and gravity.
 	if ( !current.onGround || upspeed > 1.0f || (bouncyness > 0.0f && upspeed < -PRT_BOUNCESTOP && !current.inWater) ) {
 		// Force ground off when moving upward
 		if ( upspeed > 0.0f ) {
 			current.onGround = false;
 		}
-		SlideMove( current.origin, current.velocity, current.velocity * timeStep );		
+		SlideMove( current.origin, current.velocity, current.velocity * timeStep );
 		if ( current.onGround && upspeed < PRT_BOUNCESTOP ) {
 			current.velocity -= ( current.velocity * gravityNormal ) * gravityNormal;
 		} else {
-			current.velocity += (gravityVector * timeStep);	
+			current.velocity += (gravityVector * timeStep);
 		}
 	} else {
 		idVec3 delta;
 
 		// Slow down due to friction
 		ApplyFriction ( timeStep );
-	
+
 		delta = current.velocity * timeStep;
 		current.velocity -= ( current.velocity * gravityNormal ) * gravityNormal;
 		if ( delta == vec3_origin ) {
@@ -828,7 +828,7 @@ void rvPhysics_Particle::ApplyFriction( float timeStep ) {
 	idVec3	vel;
 	float	speed;
 	float	newspeed;
-	
+
 	// ignore slope movement, remove all velocity in gravity direction
 	vel = current.velocity + (current.velocity * gravityNormal) * gravityNormal;
 
@@ -840,16 +840,16 @@ void rvPhysics_Particle::ApplyFriction( float timeStep ) {
 	}
 
 	// scale the velocity
-	if ( current.onGround ) {		
+	if ( current.onGround ) {
 		newspeed = speed - ((speed * contactFriction) * timeStep);
 	} else {
 		newspeed = speed - ((speed * linearFriction) * timeStep);
 	}
-		
+
 	if (newspeed < 0) {
 		newspeed = 0;
 	}
-	
+
 	current.velocity *= ( newspeed / speed );
 }
 
@@ -876,28 +876,28 @@ bool rvPhysics_Particle::SlideMove( idVec3 &start, idVec3 &velocity, const idVec
 			}
 			return true;
 		}
-		
+
 		bool hitTeleporter = false;
-		
+
 		// let the entity know about the collision
 		collide = self->Collide( tr, current.velocity, hitTeleporter );
-		
+
 		idEntity* ent;
 		ent = gameLocal.entities[tr.c.entityNum];
 		assert ( ent );
-		
+
 		// If we hit water just clip the move for now and keep on going
 		if ( ent->GetPhysics()->GetContents() & CONTENTS_WATER ) {
 			// Make sure we dont collide with water again
 			clipMask &= ~CONTENTS_WATER;
-			
+
 			current.inWater = true;
-			
+
 			// Allow the loop to go one more round to push us through the water
 			i--;
-						
+
 			velocity *= 0.4f;
-						
+
 			move.ProjectOntoPlane( tr.c.normal, PRT_OVERCLIP );
 			continue;
 		// bounce the projectile
@@ -918,7 +918,7 @@ bool rvPhysics_Particle::SlideMove( idVec3 &start, idVec3 &velocity, const idVec
 			dot = DotProduct( velocity, tr.c.normal );
 			velocity  = ( velocity - ( 2.0f * dot * tr.c.normal ) );
 			return true;
-		}			
+		}
 // RAVEN BEGIN
 // dluetscher: removed redundant trace calls
 		else {
@@ -970,7 +970,7 @@ void rvPhysics_Particle::WriteToSnapshot( idBitMsgDelta &msg ) const {
 	if ( hasMaster ) {
 		idCQuat localQuat;
 		localQuat = current.localAxis.ToCQuat();
-		
+
 		msg.WriteBits ( 1, 1 );
 		msg.WriteFloat( localQuat.x );
 		msg.WriteFloat( localQuat.y );
@@ -978,9 +978,9 @@ void rvPhysics_Particle::WriteToSnapshot( idBitMsgDelta &msg ) const {
 		msg.WriteDeltaFloat( current.origin[0], current.localOrigin[0] );
 		msg.WriteDeltaFloat( current.origin[1], current.localOrigin[1] );
 		msg.WriteDeltaFloat( current.origin[2], current.localOrigin[2] );
-	} else { 
+	} else {
 		msg.WriteBits ( 0, 1 );
-	}		
+	}
 }
 
 /*

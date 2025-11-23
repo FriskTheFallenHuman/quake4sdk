@@ -52,7 +52,7 @@ void rvClientModel::FreeEntityDef ( void ) {
 	if ( entityDefHandle >= 0 ) {
 		gameRenderWorld->FreeEntityDef ( entityDefHandle );
 		entityDefHandle = -1;
-	}	
+	}
 }
 
 /*
@@ -108,7 +108,7 @@ void rvClientModel::Present(void) {
 		entityDefHandle = gameRenderWorld->AddEntityDef( &renderEntity );
 	} else {
 		gameRenderWorld->UpdateEntityDef( entityDefHandle, &renderEntity );
-	}		
+	}
 }
 
 /*
@@ -120,13 +120,13 @@ bool rvClientModel::SetCustomShader ( const char* shaderName ) {
 	if ( shaderName == NULL ) {
 		return false;
 	}
-	
+
 	const idMaterial* material = declManager->FindMaterial( shaderName );
 
 	if ( material == NULL ) {
 		return false;
 	}
-	
+
 	renderEntity.customShader = material;
 
 	return true;

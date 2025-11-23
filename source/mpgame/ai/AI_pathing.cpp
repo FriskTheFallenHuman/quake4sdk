@@ -119,7 +119,7 @@ int PointInsideObstacle( const obstacle_t *obstacles, const int numObstacles, co
 		if ( !obstacles[i].winding.PointInside( point, 0.1f ) ) {
 			continue;
 		}
-		
+
 		return i;
 	}
 
@@ -244,7 +244,7 @@ void GetPointOutsideObstacles( const obstacle_t *obstacles, const int numObstacl
 			return;
 		}
 	}
-	gameLocal.Warning( "GetPointOutsideObstacles: no valid point found" ); 
+	gameLocal.Warning( "GetPointOutsideObstacles: no valid point found" );
 }
 
 /*
@@ -307,7 +307,7 @@ int GetObstacles( const idActor* owner, const idPhysics *physics, const idAAS *a
 	bool extrudePlayer = false;
 
 	if ( player && owner->team == player->team ) {
-		if ( player->HasEnemies() 
+		if ( player->HasEnemies()
 			|| (player->weapon && player->weapon->lastAttack > gameLocal.GetTime() - 2000)
 			|| (owner->IsType( idAI::GetClassType() ) && ((idAI*)owner)->GetEnemy()) ) {
 
@@ -360,7 +360,7 @@ int GetObstacles( const idActor* owner, const idPhysics *physics, const idAAS *a
 		}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( obEnt->IsType( idActor::GetClassType() ) ) {
 // RAVEN END
 			obPhys = obEnt->GetPhysics();
@@ -381,7 +381,7 @@ int GetObstacles( const idActor* owner, const idPhysics *physics, const idAAS *a
 		//		}
 		//	}
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 // cdr: Ignore Pushable objects
 		} else if (obEnt->GetPhysics()->IsPushable()) {
 			continue;
@@ -636,7 +636,7 @@ pathNode_t *BuildPathTree( const obstacle_t *obstacles, int numObstacles, const 
 
 	// gcc 4.0
 	idQueueTemplate<pathNode_t, offsetof( pathNode_t, next ) > pathNodeQueue, treeQueue;
-	
+
 	root = pathNodeAllocator.Alloc();
 	root->Init();
 	root->pos = startPos;
@@ -801,7 +801,7 @@ int OptimizePath( const pathNode_t *root, const pathNode_t *leafNode, const obst
 	optimizedPath[0] = root->pos;
 // BDUBE: FIXME - Added this line because quite a few places in the code count on there being at least 2 items in that array
 	optimizedPath[1] = root->pos;
-	
+
 	numPathPoints = 1;
 
 	for ( nextNode = curNode = root; curNode != leafNode; curNode = nextNode ) {
@@ -1430,7 +1430,7 @@ float HeightForTrajectory( const idVec3 &start, float zVel, float gravity ) {
 	t = zVel / gravity;
 	// maximum height of projectile
 	maxHeight = start.z - 0.5f * gravity * ( t * t );
-	
+
 	return maxHeight;
 }
 

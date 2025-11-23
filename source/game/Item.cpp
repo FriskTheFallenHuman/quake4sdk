@@ -85,7 +85,7 @@ idItem::~idItem() {
 	if ( trigger ) {
 		delete trigger;
 	}
-	
+
 	SetPhysics( NULL );
 }
 
@@ -145,9 +145,9 @@ void idItem::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( lastRenderViewTime );
 
 	RestorePhysics( &physicsObj );
-	
+
 	physicsObj.SetSelf( this );
-	
+
 	itemShellHandle = -1;
 }
 
@@ -191,7 +191,7 @@ bool idItem::UpdateRenderEntity( renderEntity_s *renderEntity, const renderView_
 		}
 	}
 
-	// fade down after the last pulse finishes 
+	// fade down after the last pulse finishes
 	if ( !inView && cycle > lastCycle ) {
 		renderEntity->shaderParms[4] = 0.0f;
 	} else {
@@ -262,7 +262,7 @@ bool idItem::GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis ) {
 					axis = spec->GetRenderView()->viewaxis;
 				}
 			} else {
-				axis = gameLocal.GetLocalPlayer()->GetRenderView()->viewaxis;	
+				axis = gameLocal.GetLocalPlayer()->GetRenderView()->viewaxis;
 			}
 		} else {
 			// dedicated server for instance
@@ -314,7 +314,7 @@ idItem::Think
 */
 void idItem::Think( void ) {
 	if ( thinkFlags & TH_PHYSICS ) {
-		RunPhysics();		
+		RunPhysics();
 		UpdateTrigger();
 	}
 
@@ -393,7 +393,7 @@ void idItem::Spawn( void ) {
 	idVec3		vSize;
 	idBounds	bounds(vec3_origin);
 
-	// check for triggerbounds, which allows for non-square triggers (useful for, say, a CTF flag)	
+	// check for triggerbounds, which allows for non-square triggers (useful for, say, a CTF flag)
 	if ( spawnArgs.GetVector( "triggerbounds", "16 16 16", vSize )) {
 		bounds.AddPoint(idVec3( vSize.x*0.5f,  vSize.y*0.5f, 0.0f));
 		bounds.AddPoint(idVec3(-vSize.x*0.5f, -vSize.y*0.5f, vSize.z));
@@ -538,7 +538,7 @@ void idItem::Spawn( void ) {
 			effectIdle = PlayEffect( "fx_idle", renderEntity.origin, renderEntity.axis, true );
 		}
 	}
-	
+
 	GetPhysics( )->SetClipMask( GetPhysics( )->GetClipMask( ) | CONTENTS_ITEMCLIP );
 	pickedUp = false;
 }
@@ -590,8 +590,8 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 
 	if ( spawnArgs.GetBool( "inv_carry" ) ) {
 		return player->GiveInventoryItem( &spawnArgs );
-	} 
-	
+	}
+
 	// Handle the special ammo pickup that gives ammo for the weapon the player currently has
 	if ( spawnArgs.GetBool( "item_currentWeaponAmmo" ) ) {
 		const char *ammoName = player->weapon->GetAmmoNameForIndex(player->weapon->GetAmmoType());
@@ -601,7 +601,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 			return true;
 		}
 		return false;
-	} 
+	}
 
 	return player->GiveItem( this );
 }
@@ -622,7 +622,7 @@ void idItem::SendPickupMsg( int clientNum ) {
 	msg.WriteByte( clientNum );
 
 	// send as unreliable to client picking up the item, so it can play HUD things
-	gameLocal.SendUnreliableMessagePVS( msg, this, itemPVSArea );	
+	gameLocal.SendUnreliableMessagePVS( msg, this, itemPVSArea );
 }
 
 /*
@@ -634,9 +634,9 @@ bool idItem::Pickup( idPlayer *player ) {
 	//dropped weapon?
 	bool dropped = spawnArgs.GetBool( "dropped" );
 
-	if ( gameLocal.isMultiplayer && !dropped && spawnArgs.FindKey( "weaponclass" ) 
+	if ( gameLocal.isMultiplayer && !dropped && spawnArgs.FindKey( "weaponclass" )
 		&& gameLocal.IsWeaponsStayOn() && gameLocal.time > player->lastPickupTime + 1000 ) {
-		
+
 		idDict attr;
 		GetAttributes( attr );
 		const idKeyValue* arg = attr.FindKey( "weapon" );
@@ -674,7 +674,7 @@ bool idItem::Pickup( idPlayer *player ) {
 	} else {
 		StartSound( "snd_acquire", SND_CHANNEL_ITEM, 0, false, NULL );
 	}
-		
+
 	// trigger our targets
 	ActivateTargets( player );
 
@@ -683,7 +683,7 @@ bool idItem::Pickup( idPlayer *player ) {
 	//if a placed item and si_weaponStay is on and we're a weapon, don't remove and respawn
 	if ( gameLocal.IsMultiplayer() ) {
 		if ( !dropped )	{
-			if ( spawnArgs.FindKey( "weaponclass" ) ) { 
+			if ( spawnArgs.FindKey( "weaponclass" ) ) {
 				if ( gameLocal.IsWeaponsStayOn() ) {
 					return true;
 				}
@@ -746,9 +746,9 @@ bool idItem::Pickup( idPlayer *player ) {
 			PostEventMS( &EV_Remove, 5000 );
 		}
 	}
-	
-	trigger->SetContents( 0 );	
-	
+
+	trigger->SetContents( 0 );
+
 	StopEffect( "fx_idle" );
 
 	return true;
@@ -761,7 +761,7 @@ idItem::Hide
 */
 void idItem::Hide( void ) {
 	srvReady = 0;
-	idEntity::Hide( );	
+	idEntity::Hide( );
 	trigger->SetContents( 0 );
 }
 
@@ -851,7 +851,7 @@ void idItem::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 			}
 
 			if( simpleItem ) {
-				UpdateVisuals();			
+				UpdateVisuals();
 			}
 			pickedUp = false;
 
@@ -873,7 +873,7 @@ void idItem::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 				FreeModelDef();
 				UpdateVisuals();
 			}
-			
+
 			pickedUp = true;
 
 			StopEffect( "fx_idle" );
@@ -892,12 +892,12 @@ void idItem::Event_Pickup( int clientNum ) {
 	idPlayer *player;
 
 	assert( gameLocal.isClient );
-	
+
 	// play pickup sound
 	if ( !spawnArgs.GetBool( "globalAcquireSound" ) ) {
 		StartSound( "snd_acquire", SND_CHANNEL_ITEM, 0, false, NULL );
 	}
-	
+
 	if( clientNum == gameLocal.localClientNum ) {
 		player = (idPlayer*)gameLocal.entities[ clientNum ];
 		player->lastPickupTime = gameLocal.time;
@@ -943,7 +943,7 @@ void idItem::Event_DropToFloor( void ) {
  	if ( GetBindMaster() != NULL && GetBindMaster() != this ) {
  		return;
  	}
- 	
+
  	physicsObj.DropToFloor( );
 }
 
@@ -954,7 +954,7 @@ idItem::Event_Touch
 */
 void idItem::Event_Touch( idEntity *other, trace_t *trace ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( !other->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 		return;
@@ -979,7 +979,7 @@ void idItem::Event_Trigger( idEntity *activator ) {
 	}
 
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( activator && activator->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 		Pickup( static_cast<idPlayer *>( activator ) );
@@ -1000,10 +1000,10 @@ void idItem::Event_Respawn( void ) {
 		if( !simpleItem ) {
 			SetSkin( skin );
 		}
-	} 
-	
+	}
+
 	if( !pickupSkin ) {
-		BecomeActive( TH_THINK );	
+		BecomeActive( TH_THINK );
 		Show();
 	}
 
@@ -1114,7 +1114,7 @@ void idItemPowerup::Spawn( void ) {
 	}
 
 	type = spawnArgs.GetInt( "type", "0" );
-	
+
 	// If the powerup was dropped then make it dissapear using its remaining time.
 	if ( spawnArgs.GetBool( "dropped" ) && time != -1 ) {
 		droppedTime = gameLocal.time + time;
@@ -1150,10 +1150,10 @@ bool idItemPowerup::GiveToPlayer( idPlayer *player ) {
 	if ( type >= POWERUP_AMMOREGEN && type <= POWERUP_SCOUT ) {
 		if ( ( player->inventory.powerups & ARENA_POWERUP_MASK ) != 0 ) {
 			return false;
-		} 
+		}
 	}
 
-	// in flavours of arena CTF (or are idItemPowerups only used in Arena? or even, are idItemPowerups MP only?), 
+	// in flavours of arena CTF (or are idItemPowerups only used in Arena? or even, are idItemPowerups MP only?),
 	//	ensure that items with a team can only be picked up by members of that team
 	if ( gameLocal.IsMultiplayer() && gameLocal.IsTeamGame() && team >= 0 ) {
 		if( team != player->team ) {
@@ -1218,7 +1218,7 @@ idItemPowerup::Pickup
 bool idItemPowerup::Pickup( idPlayer* player ) {
 	// regular pickup routine, but unique items need to think to know when to respawn
 	bool pickup;
-	
+
 	if( gameLocal.isClient ) {
 		// no client-side powerup prediction
 		return false;
@@ -1333,7 +1333,7 @@ void idObjective::Event_CamShot( ) {
 			renderSystem->UnCrop();
 		}
 	}
-}  
+}
 
 /*
 ================
@@ -1361,7 +1361,7 @@ void idObjective::Event_Trigger( idEntity *activator ) {
 				// a tad slow but keeps from having to update all objectives in all maps with a name ptr
 				for( int i = 0; i < gameLocal.num_entities; i++ ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 					if ( gameLocal.entities[ i ] && gameLocal.entities[ i ]->IsType( idObjectiveComplete::GetClassType() ) ) {
 // RAVEN END
 						if ( idStr::Icmp( spawnArgs.GetString( "objectivetitle" ), gameLocal.entities[ i ]->spawnArgs.GetString( "objectivetitle" ) ) == 0 ){
@@ -1419,7 +1419,7 @@ void idObjective::Event_HideObjective(idEntity *e) {
 ===============================================================================
 
   idMoveableItem
-	
+
 ===============================================================================
 */
 
@@ -1553,7 +1553,7 @@ idEntity *idMoveableItem::DropItem( const char *classname, const idVec3 &origin,
 	args.Set( "dropped", "1" );
 
  	// we sometimes drop idMoveables here, so set 'nodrop' to 1 so that it doesn't get put on the floor
- 	args.Set( "nodrop", "1" ); 
+ 	args.Set( "nodrop", "1" );
 
 	if ( activateDelay ) {
 		args.SetBool( "triggerFirst", true );
@@ -1722,7 +1722,7 @@ idItemRemover::RemoveItem
 */
 void idItemRemover::RemoveItem( idPlayer *player ) {
 	const char *remove;
-	
+
 	remove = spawnArgs.GetString( "remove" );
 	player->RemoveInventoryItem( remove );
 }
@@ -1734,7 +1734,7 @@ idItemRemover::Event_Trigger
 */
 void idItemRemover::Event_Trigger( idEntity *activator ) {
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 	if ( activator->IsType( idPlayer::GetClassType() ) ) {
 // RAVEN END
 		RemoveItem( static_cast<idPlayer *>(activator) );
@@ -1891,7 +1891,7 @@ void rvObjectiveFailed::Event_Trigger( idEntity *activator ) {
 	}
 	if ( !spawnArgs.GetString( "inv_objective", NULL ) ) {
 		return;
-	}	
+	}
 
 	player->GetObjectiveHud()->SetStateString( "objective", "2" );
 	player->GetObjectiveHud()->SetStateString( "objectivetext", common->GetLocalizedString( spawnArgs.GetString( "objectivetext" ) ) );
@@ -1952,7 +1952,7 @@ void rvItemCTFFlag::Spawn () {
 			break;
 		}
 		case TEAM_STROGG: {
-			powerup = POWERUP_CTF_STROGGFLAG;	
+			powerup = POWERUP_CTF_STROGGFLAG;
 			gameLocal.mpGame.SetFlagEntity( this, TEAM_STROGG );
 			break;
 		}
@@ -1965,11 +1965,11 @@ void rvItemCTFFlag::Spawn () {
 			PostEventMS ( &EV_Remove, 0 );
 			return;
 	}
-	
+
 	if ( dropped ) {
 		if ( !gameLocal.isClient ) {
 			((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagState( team, FS_DROPPED );
-		}	
+		}
 		if ( reset ) {
 			//PostEventSec( &EV_ResetFlag, 1 );
 		} else {
@@ -1983,7 +1983,7 @@ void rvItemCTFFlag::Spawn () {
 	} else {
 		if ( !gameLocal.isClient ) {
 			((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagState( team, FS_AT_BASE );
-		}	
+		}
 	}
 
 	GetPhysics( )->SetClipMask( GetPhysics( )->GetClipMask( ) | CONTENTS_ITEMCLIP );
@@ -2018,14 +2018,14 @@ bool rvItemCTFFlag::GiveToPlayer( idPlayer* player ) {
 	int enemyPowerup;
 
 	bool canPickup = ( team == player->team );
-	
+
 	switch ( player->team ) {
 		default:
 		case TEAM_MARINE:
 			teamPowerup  = POWERUP_CTF_MARINEFLAG;
 			enemyPowerup = POWERUP_CTF_STROGGFLAG;
 			break;
-			
+
 		case TEAM_STROGG:
 			teamPowerup  = POWERUP_CTF_STROGGFLAG;
 			enemyPowerup = POWERUP_CTF_MARINEFLAG;
@@ -2037,13 +2037,13 @@ bool rvItemCTFFlag::GiveToPlayer( idPlayer* player ) {
 		canPickup = ( team == gameLocal.mpGame.OpposingTeam( player->team ) );
 		enemyPowerup = POWERUP_CTF_ONEFLAG;
 	}
-	
+
 	// If the player runs over their own flag the only thing they
 	// can do is score or return it.
 
 	// when the player touches the one flag, he always gets it
 	if ( canPickup ) {
-		// If the flag was dropped, return it		
+		// If the flag was dropped, return it
 		if ( dropped ) {
 			gameLocal.mpGame.AddPlayerTeamScore( player, 2 );
 			statManager->FlagReturned( player );
@@ -2057,13 +2057,13 @@ bool rvItemCTFFlag::GiveToPlayer( idPlayer* player ) {
 			if ( !gameLocal.mpGame.CanCapture ( player->team ) ) {
 				return false;
 			}
-			
+
 			ResetFlag( enemyPowerup );
-			
+
 			gameLocal.mpGame.FlagCaptured( player );
 		}
 		return false;
-	} 
+	}
 
 	// only pickup one flag in arena CTF
 	if( ( gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) && team != TEAM_MAX ) {
@@ -2118,12 +2118,12 @@ bool rvItemCTFFlag::Pickup( idPlayer *player ) {
 
 	gameLocal.mpGame.AddPlayerTeamScore( player, 1 );
 
-	if( gameLocal.gameType == GAME_CTF || gameLocal.gameType == GAME_ARENA_CTF ) { 
+	if( gameLocal.gameType == GAME_CTF || gameLocal.gameType == GAME_ARENA_CTF ) {
 		((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagState( team, FS_TAKEN );
 	} else if( gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
 		((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagState( team, (player->team == TEAM_MARINE ? FS_TAKEN_MARINE : FS_TAKEN_STROGG) );
 	}
-	
+
 	((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagCarrier( team, player->entityNumber );
 
 	if ( spawnArgs.GetBool( "dropped" ) ) {
@@ -2131,7 +2131,7 @@ bool rvItemCTFFlag::Pickup( idPlayer *player ) {
 	}
 
 	BecomeInactive( TH_THINK );
-	
+
 	return true;
 }
 
@@ -2145,26 +2145,26 @@ void rvItemCTFFlag::ResetFlag( int powerup ) {
 	for ( ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next() ) {
 		// Make sure no players have the flag anymore
 // RAVEN BEGIN
-// jnewquist: Use accessor for static class type 
+// jnewquist: Use accessor for static class type
 		if ( ent->IsType ( idPlayer::GetClassType() ) ) {
 // RAVEN END
 			static_cast<idPlayer*>(ent)->ClearPowerup ( powerup );
 			continue;
 		}
-	
+
 		// If its not a CTF flag item then skip it
 		if ( !ent->IsType( rvItemCTFFlag::Type ) ) {
-			continue;			
+			continue;
 		}
-		
+
 		// Make sure its the right type first
 		rvItemCTFFlag* flag;
 		flag = static_cast<rvItemCTFFlag*>(ent);
 		if ( flag->powerup != powerup ) {
 			continue;
 		}
-		
-		if ( flag->dropped ) {			
+
+		if ( flag->dropped ) {
 			flag->PostEventMS( &EV_Remove, 0 );
 		} else {
 			flag->PostEventMS( &EV_RespawnItem, 0 );
@@ -2181,12 +2181,12 @@ void rvItemCTFFlag::ResetFlag( int powerup ) {
 		} else if ( powerup == POWERUP_CTF_ONEFLAG ) {
 			team = TEAM_MAX;
 		}
-		
+
 		((rvCTFGameState*)gameLocal.mpGame.GetGameState())->SetFlagState( team, FS_AT_BASE );
-	}	
+	}
 
 }
-  
+
 /*
 ================
 rvItemCTFFlag::Event_ResetFlag
@@ -2207,7 +2207,7 @@ rvItemCTFFlag::Collide
 */
 bool rvItemCTFFlag::Collide( const trace_t &collision, const idVec3 &velocity ) {
 	idEntity* lol = gameLocal.entities[ collision.c.entityNum ];
-	
+
 	if ( collision.c.contents & CONTENTS_ITEMCLIP && lol && !lol->IsType( idItem::GetClassType() ) ) {
 		ResetFlag( powerup );
 	}
@@ -2297,7 +2297,7 @@ bool riDeadZonePowerup::Pickup( idPlayer* player ) {
 	pickup = idItemPowerup::Pickup( player );
 
 	if ( spawnArgs.GetBool( "dropped" ) ) {
-		// Cancel the respawn so the powerup doesn't get removed 
+		// Cancel the respawn so the powerup doesn't get removed
 		// from the player that just picked it up.
 		PostEventMS( &EV_Remove, 0 );
 		CancelEvents( &EV_ResetSpawn );
@@ -2319,17 +2319,17 @@ void riDeadZonePowerup::ResetSpawn( int powerup ) {
 
 		// If its not a DeadZone powerup then skip it
 		if ( !ent->IsType( riDeadZonePowerup::Type ) ) {
-			continue;			
+			continue;
 		}
-		
+
 		// Make sure its the right type first
 		riDeadZonePowerup* flag;
 		flag = static_cast<riDeadZonePowerup*>(ent);
 		if ( flag->powerup != powerup ) {
 			continue;
 		}
-		
-		if ( flag->spawnArgs.GetBool("dropped", "0") && flag == this ) {			
+
+		if ( flag->spawnArgs.GetBool("dropped", "0") && flag == this ) {
 			flag->PostEventMS( &EV_Remove, 0 );
 		} else {
 			if ( !flag->IsVisible() ) {
@@ -2339,19 +2339,19 @@ void riDeadZonePowerup::ResetSpawn( int powerup ) {
 						gameLocal.DPrintf("WARNING: Trying to spawn a powerup at a DROPPED location!");
 				}
 				count++;
-			}		
+			}
 		}
-	}	
-	
+	}
+
 	if ( spawnSpot ) {
 		spawnSpot->Show();
-		spawnSpot->PostEventMS( &EV_RespawnItem, 0 );			
+		spawnSpot->PostEventMS( &EV_RespawnItem, 0 );
 	}
 	else {
 		gameLocal.DPrintf("WARNING: Failed to find a valid spawn spot!");
 	}
 }
-  
+
 /*
 ================
 riDeadZonePowerup::Collide

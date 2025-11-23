@@ -10,7 +10,7 @@
 	This is a replacement for the compiler heap code (i.e. "C" malloc() and
 	free() calls). On average 2.5-3.0 times faster than MSVC malloc()/free().
 	Worst case performance is 1.65 times faster and best case > 70 times.
- 
+
 ===============================================================================
 */
 
@@ -116,8 +116,8 @@ typedef struct {
 // amccarthy:  tags for memory allocation tracking.  When updating this list please update the
 // list of discriptions in Heap.cpp as well.
 typedef enum {
-	MA_NONE = 0,	
-	
+	MA_NONE = 0,
+
 	MA_OPNEW,
 	MA_DEFAULT,
 	MA_LEXER,
@@ -226,10 +226,10 @@ void		Mem_Free16( void *ptr );
 
 // jscott: standardised stack allocation
 inline void *Mem_StackAlloc( const int size ) { return( _alloca( size ) ); }
-inline void *Mem_StackAlloc16( const int size ) { 
+inline void *Mem_StackAlloc16( const int size ) {
 	byte *addr = ( byte * )_alloca( size + 15 );
 	addr = ( byte * )( ( int )( addr + 15 ) & 0xfffffff0 );
-	return( ( void * )addr ); 
+	return( ( void * )addr );
 }
 
 // dluetscher: moved the inline new/delete operators to sys_local.cpp and Game_local.cpp so that
@@ -258,10 +258,10 @@ void		Mem_Free16( void *ptr, const char *fileName, const int lineNumber );
 
 // jscott: standardised stack allocation
 inline void *Mem_StackAlloc( const int size ) { return( _alloca( size ) ); }
-inline void *Mem_StackAlloc16( const int size ) { 
+inline void *Mem_StackAlloc16( const int size ) {
 	byte *addr = ( byte * )_alloca( size + 15 );
 	addr = ( byte * )( ( int )( addr + 15 ) & 0xfffffff0 );
-	return( ( void * )addr ); 
+	return( ( void * )addr );
 }
 
 // dluetscher: moved the inline new/delete operators to sys_local.cpp and Game_local.cpp so that

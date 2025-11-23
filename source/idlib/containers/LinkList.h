@@ -57,7 +57,7 @@ Node is initialized to be the head of an empty list
 template< class type >
 idLinkList<type>::idLinkList() {
 	owner	= NULL;
-	head	= this;	
+	head	= this;
 	next	= this;
 	prev	= this;
 }

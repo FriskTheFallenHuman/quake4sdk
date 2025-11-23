@@ -73,7 +73,7 @@ void rvSingleTiming::OutputDataToFile( idFile *file, int framesRecorded )
 	}
 	outputName += mName;
 
-	sprintf(buffer, "%-36s %-9.3f %-9.3f %-9.3f %-9.3f %-9i %-9i %-9.3f\n", outputName.c_str(), 
+	sprintf(buffer, "%-36s %-9.3f %-9.3f %-9.3f %-9.3f %-9i %-9i %-9.3f\n", outputName.c_str(),
 		(float)mTotalValue, (float)( mTotalValue / (float)framesRecorded), (float)mPeakValue,
 		(float)mLimit, mLimitExceeded, mLimitExceededTimesFive, (float)(mTotalUpdates / (float)framesRecorded) );
 	file->Write ( buffer, strlen( buffer ) );
@@ -146,14 +146,14 @@ rvSingleTiming *rvTimingCollection::GetTiming( idStr &timingName )
 {
 	int *handle = NULL;
 
-	if( mTimingsIndex.Get( timingName, &handle ) ) 
-	{	
+	if( mTimingsIndex.Get( timingName, &handle ) )
+	{
 		return( &mTimings[*handle] );
 	}
 
 	rvSingleTiming	newTiming( timingName );
 	int				index = mTimings.Num();
-	
+
 	mTimingsIndex.Set( timingName, index );
 	mTimings.Append( newTiming );
 	return &mTimings[index];
@@ -323,7 +323,7 @@ void rvTimingCollection::_TimingStart( const char *timingName, const char *fileN
 
 	// Go up the timer list.
 
-	mCurTimer++; 
+	mCurTimer++;
 	assert( mCurTimer < MAX_TIMERS );
 
 	// Keep track of the current function being timed in case we nest and need to know our parent.
@@ -333,7 +333,7 @@ void rvTimingCollection::_TimingStart( const char *timingName, const char *fileN
 	// Set the information about this timer.
 
 	rvSingleTiming *curTiming = GetTiming( mTimerName[mCurTimer] );
-	
+
 	if( mCurTimer == 0 )
 	{
 		curTiming->mParentName = "base";
@@ -374,7 +374,7 @@ void rvTimingCollection::_TimingStop( double msecLimit, const char *fileName, co
 	// Update incidental information on the timer.
 
 	rvSingleTiming *curTiming = GetTiming( mTimerName[mCurTimer] );
-	
+
 	curTiming->mEndFile = fileName;
 	curTiming->mEndLine = lineNum;
 

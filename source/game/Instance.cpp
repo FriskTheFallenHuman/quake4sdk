@@ -35,7 +35,7 @@ rvInstance::~rvInstance() {
 
 void rvInstance::Populate( int serverChecksum ) {
 	gameState_t currentState = gameLocal.GameState();
-	
+
 	// disable the minSpawnIndex lock out
 	int latchMinSpawnIndex = gameLocal.minSpawnIndex;
 	gameLocal.minSpawnIndex = MAX_CLIENTS;
@@ -45,7 +45,7 @@ void rvInstance::Populate( int serverChecksum ) {
 	}
 
 	if ( gameLocal.isServer ) {
-		// When populating on a server, record the entity numbers	
+		// When populating on a server, record the entity numbers
 		numMapEntities = gameLocal.GetNumMapEntities();
 
 		// mwhitlock: Dynamic memory consolidation
@@ -81,13 +81,13 @@ void rvInstance::Populate( int serverChecksum ) {
 	} else {
 		bool proto69 = ( gameLocal.GetCurrentDemoProtocol() == 69 );
 
-		// When populating on a client, spawn the map using existing numbers		
+		// When populating on a client, spawn the map using existing numbers
 		// check for good state
-		// OK to spawn w/o specific entity numbers if we're in the startup process.  Otherwise, 
+		// OK to spawn w/o specific entity numbers if we're in the startup process.  Otherwise,
 		// we need entity numbers from the server.
 		// TTimo: only valid for backward 1.2 playback now
 		assert( !proto69 || ( mapEntityNumbers || ( instanceID == 0 && gameLocal.GameState() == GAMESTATE_STARTUP ) ) );
-		
+
 		if ( !proto69 ) {
 			// have the client produce a log of the entity layout so we can match it with the server's
 			// this is also going to be used to issue the EV_FindTargets below
@@ -221,7 +221,7 @@ void rvInstance::PrintMapNumbers( void ) {
 /*
 ================
 rvInstance::SetSpawnInstanceID
-Sets the spawn instance ID for this instance.  On the client, only instance 0 is ever 
+Sets the spawn instance ID for this instance.  On the client, only instance 0 is ever
 used, but it spawns in map entities for other instances.  spawnInstanceID is used to
 spawn map entities with the correct instance number on the client.
 ================

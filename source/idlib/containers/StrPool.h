@@ -135,7 +135,7 @@ ID_INLINE void idStrPool::FreeString( const idPoolStr *poolStr ) {
 	poolStr->numUsers--;
 	if ( poolStr->numUsers <= 0 ) {
 		hash = poolHash.GenerateKey( poolStr->c_str(), caseSensitive );
-		if ( caseSensitive ) { 
+		if ( caseSensitive ) {
 			for ( i = poolHash.First( hash ); i != -1; i = poolHash.Next( i ) ) {
 				if ( pool[i]->Cmp( poolStr->c_str() ) == 0 ) {
 					break;

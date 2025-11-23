@@ -16,10 +16,10 @@ public:
 
 			rvClientModel ( void );
 	virtual ~rvClientModel ( void );
-	
+
 	void						Spawn			( void );
 	virtual void				Think			( void );
-	
+
 	virtual renderEntity_t*		GetRenderEntity	( void );
 	const char*					GetClassname	( void ) const;
 
@@ -32,8 +32,8 @@ public:
 
 	virtual void				SetModel( const char *modelname );
 
-	virtual const idAnimator*	GetAnimator( void ) const { return NULL; }	
-	virtual idAnimator*			GetAnimator( void ) { return NULL; }	
+	virtual const idAnimator*	GetAnimator( void ) const { return NULL; }
+	virtual idAnimator*			GetAnimator( void ) { return NULL; }
 
 
 	bool						UpdateRenderEntity( renderEntity_s *renderEntity, const renderView_t *renderView );

@@ -17,8 +17,8 @@
 
 /***********************************************************************
 
-  rvViewWeapon  
-	
+  rvViewWeapon
+
 ***********************************************************************/
 
 // class def
@@ -40,10 +40,10 @@ rvViewWeapon::rvViewWeapon()
 rvViewWeapon::rvViewWeapon() {
 	modelDefHandle		= -1;
 	weapon				= NULL;
-		
+
 	Clear();
 
-	fl.networkSync = true;	
+	fl.networkSync = true;
 }
 
 /*
@@ -110,7 +110,7 @@ rvViewWeapon::ClientPredictionThink
 ===============
 */
 void rvViewWeapon::ClientPredictionThink( void ) {
-	UpdateAnimation();	
+	UpdateAnimation();
 }
 
 /***********************************************************************
@@ -153,10 +153,10 @@ void rvViewWeapon::Clear( void ) {
 
 	memset( &refSound, 0, sizeof( refSound_t ) );
 	refSound.referenceSoundHandle = -1;
-	
+
  	// setting diversity to 0 results in no random sound.  -1 indicates random.
  	refSound.diversity = -1.0f;
-	
+
 	if ( weapon && weapon->GetOwner ( ) ) {
 		// don't spatialize the weapon sounds
 		refSound.listenerId = weapon->GetOwner( )->GetListenerId();
@@ -228,7 +228,7 @@ void rvViewWeapon::UpdateSkin( void ) {
 	}
 */
 }
-	
+
 /*
 ================
 rvViewWeapon::SetModel
@@ -368,11 +368,11 @@ rvViewWeapon::ClientStale
 */
 bool rvViewWeapon::ClientStale ( void ) {
 	StopSound( SND_CHANNEL_ANY, false );
-	
+
 	if ( weapon ) {
 		weapon->ClientStale( );
 	}
-	
+
 	idEntity::ClientStale( );
 
 	return false;
@@ -420,13 +420,13 @@ rvViewWeapon::SetSkin
 */
 void rvViewWeapon::SetSkin( const char *skinname ) {
  	const idDeclSkin *skinDecl;
- 
+
  	if ( !skinname || !skinname[ 0 ] ) {
  		skinDecl = NULL;
  	} else {
  		skinDecl = declManager->FindSkin( skinname );
  	}
- 
+
  	renderEntity.customSkin = skinDecl;
 	UpdateVisuals();
 
@@ -461,8 +461,8 @@ void rvViewWeapon::SetOverlayShader( const idMaterial* material ) {
 
 /***********************************************************************
 
-  rvWeapon  
-	
+  rvWeapon
+
 ***********************************************************************/
 
 CLASS_DECLARATION( idClass, rvWeapon )
@@ -480,14 +480,14 @@ rvWeapon::rvWeapon ( void ) {
 
 #ifdef _XENON
 	aimAssistFOV = 10.0f;
-#endif	
+#endif
 
 	memset ( &animDoneTime, 0, sizeof(animDoneTime) );
 	memset ( &wsfl, 0, sizeof(wsfl) );
 	memset ( &wfl, 0, sizeof(wfl) );
 
 	hitscanAttackDef = -1;
-	
+
 	forceGUIReload = false;
 }
 
@@ -498,12 +498,12 @@ rvWeapon::~rvWeapon
 */
 rvWeapon::~rvWeapon( void ) {
 	int i;
-	
+
 	// Free all current light defs
 	for ( i = 0; i < WPLIGHT_MAX; i ++ ) {
 		FreeLight ( i );
 	}
-		
+
 	// Disassociate with the view model
 	if ( viewModel ) {
 		StopSound( SND_CHANNEL_ANY, false );
@@ -518,42 +518,42 @@ rvWeapon::Init
 */
 void rvWeapon::Init( idPlayer* _owner, const idDeclEntityDef* def, int _weaponIndex, bool _isStrogg ) {
 	int i;
-	
+
 	viewModel		= _owner->GetWeaponViewModel( );
 	worldModel		= _owner->GetWeaponWorldModel( );
-	weaponDef		= def; 
+	weaponDef		= def;
 	owner			= _owner;
 	scriptObject	= &viewModel->scriptObject;
 	weaponIndex 	= _weaponIndex;
 	mods			= owner->inventory.weaponMods[ weaponIndex ];
 	isStrogg		= _isStrogg;
-	
+
 	spawnArgs = weaponDef->dict;
 
 #ifdef _XENON
 	aimAssistFOV = spawnArgs.GetFloat( "aimAssistFOV", "10.0f" );
-#endif	
+#endif
 
 	// Apply the mod dictionaries
-	for ( i = 0; i < MAX_WEAPONMODS; i ++ ) {		
+	for ( i = 0; i < MAX_WEAPONMODS; i ++ ) {
 		const idDict* modDict;
 		if ( !(mods & (1<<i) ) ) {
 			continue;
 		}
 
 		const char* mod;
-		if ( !spawnArgs.GetString ( va("def_mod%d", i+1), "", &mod ) || !*mod ) { 
+		if ( !spawnArgs.GetString ( va("def_mod%d", i+1), "", &mod ) || !*mod ) {
 			continue;
 		}
-		
+
 		modDict = gameLocal.FindEntityDefDict ( mod, false );
 		if ( !modDict ) {
 			continue;
 		}
-		
+
 		spawnArgs.Copy ( *modDict );
    	}
-   	
+
    	// Associate the weapon with the view model
 	viewModel->weapon = this;
 }
@@ -572,7 +572,7 @@ void rvWeapon::FindViewModelPositionStyle( idVec3& viewOffset, idAngles& viewAng
 		styleDef = gameLocal.FindEntityDefDict( styleDefName, false );
 	}
 	assert( styleDef );
-	
+
 	viewAngles = styleDef->GetAngles( "viewangles" );
 	viewOffset = styleDef->GetVector( "viewoffset" );
 }
@@ -583,7 +583,7 @@ rvWeapon::Spawn
 ================
 */
 void rvWeapon::Spawn ( void ) {
-	
+
 	memset ( &wsfl, 0, sizeof(wsfl) );
 	memset ( &wfl, 0, sizeof(wfl) );
 
@@ -659,7 +659,7 @@ void rvWeapon::Spawn ( void ) {
 	lowAmmo				= spawnArgs.GetInt( "lowAmmo" );
 	ammoType			= GetAmmoIndexForName( spawnArgs.GetString( "ammoType" ) );
 	maxAmmo				= owner->inventory.MaxAmmoForAmmoClass ( owner, GetAmmoNameForIndex ( ammoType ) );
-	
+
 	if ( ( ammoType < 0 ) || ( ammoType >= MAX_AMMO ) ) {
 		gameLocal.Warning( "Unknown ammotype for class '%s'", this->GetClassname ( ) );
 	}
@@ -674,12 +674,12 @@ void rvWeapon::Spawn ( void ) {
  			ammoClip = ammoAvail;
 		}
 	}
-	
-	// Complex initializations Initialize 
+
+	// Complex initializations Initialize
 	InitDefs( );
 	InitWorldModel( );
 	InitViewModel( );
-	
+
 	// Requires the view model so must be done after it
 	InitLights( );
 
@@ -691,7 +691,7 @@ void rvWeapon::Spawn ( void ) {
 
 	stateThread.SetName( va("%s_%s_%s", owner->GetName(), viewModel->GetName ( ), spawnArgs.GetString("classname") ) );
 	stateThread.SetOwner( this );
-	
+
 	forceGUIReload = true;
 }
 
@@ -710,7 +710,7 @@ void rvWeapon::InitViewModel( void ) {
 	viewModel->Clear ( );
 	// Make sure the sound handle is initted
 	viewModel->refSound.referenceSoundHandle = -1;
-	
+
 	// Intialize the weapon guis
 	if ( spawnArgs.GetString ( "gui", "", &guiName ) ) {
 		int g = 0;
@@ -724,29 +724,29 @@ void rvWeapon::InitViewModel( void ) {
 	viewModel->spawnArgs = weaponDef->dict;
 
 	// Set the model for the view model
-	if ( isStrogg ) {		
+	if ( isStrogg ) {
 		temp = spawnArgs.GetString ( "model_view_strogg", spawnArgs.GetString ( "model_view" ) );
 	} else {
 		temp = spawnArgs.GetString ( "model_view" );
-	}	
+	}
 	viewModel->SetModel( temp, mods );
 
 	// Hide surfaces
 	for ( kv = spawnArgs.MatchPrefix ( "hidesurface", NULL );
 		  kv;
 		  kv = spawnArgs.MatchPrefix ( "hidesurface", kv ) ) {
-		viewModel->ProcessEvent ( &EV_HideSurface, kv->GetValue() );	
+		viewModel->ProcessEvent ( &EV_HideSurface, kv->GetValue() );
 	}
 
 	// Show and Hide the mods
-	for ( i = 0; i < MAX_WEAPONMODS; i ++ )	{	
+	for ( i = 0; i < MAX_WEAPONMODS; i ++ )	{
 		const idDict* modDict = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( va("def_mod%d", i+1) ), false );
 		if ( !modDict ) {
 			continue;
 		}
-			
+
 		// Hide any show surfaces for mods that arent on
-		if ( !(mods & (1<<i)) ) {						
+		if ( !(mods & (1<<i)) ) {
 			for ( kv = modDict->MatchPrefix ( "mod_showsurface", NULL );
 				  kv;
 				  kv = modDict->MatchPrefix ( "mod_showsurface", kv ) ) {
@@ -756,7 +756,7 @@ void rvWeapon::InitViewModel( void ) {
 			for ( kv = modDict->MatchPrefix ( "mod_hidesurface", NULL );
 				  kv;
 				  kv = modDict->MatchPrefix ( "mod_hidesurface", kv ) ) {
-				viewModel->ProcessEvent ( &EV_HideSurface, kv->GetValue() );	
+				viewModel->ProcessEvent ( &EV_HideSurface, kv->GetValue() );
 			}
 		}
 	}
@@ -776,7 +776,7 @@ void rvWeapon::InitViewModel( void ) {
 	if ( spawnArgs.GetString ( "skin", "", &temp ) ) {
 		viewModel->GetRenderEntity()->customSkin = declManager->FindSkin ( temp );
 	}
-	
+
  	// make sure we have the correct skin
  	viewModel->UpdateSkin();
 }
@@ -790,10 +790,10 @@ void rvWeapon::InitLights ( void ) {
 	const char*		shader;
 	idVec4			color;
 	renderLight_t*	light;
-	
+
 	memset ( lights, 0, sizeof(lights) );
 	memset ( lightHandles, -1, sizeof(lightHandles) );
-		
+
 	// setup gui light
 	light = &lights[WPLIGHT_GUI];
 	shader = spawnArgs.GetString( "mtr_guiLightShader", "" );
@@ -845,7 +845,7 @@ void rvWeapon::InitLights ( void ) {
 		light->allowLightInViewID = owner->entityNumber+1;
 		muzzleFlashTime	= SEC2MS( spawnArgs.GetFloat( "flashTime", "0.25" ) );
 		muzzleFlashEnd = 0;
-		spawnArgs.GetVector ( "flashViewOffset", "0 0 0", muzzleFlashViewOffset );	
+		spawnArgs.GetVector ( "flashViewOffset", "0 0 0", muzzleFlashViewOffset );
 	}
 
 	// the world muzzle flash is the same, just positioned differently
@@ -855,7 +855,7 @@ void rvWeapon::InitLights ( void ) {
 	light->allowLightInViewID = 0;
 	light->lightId = WPLIGHT_MUZZLEFLASH_WORLD * 100 + owner->entityNumber;
 
-	// flashlight	
+	// flashlight
 	light = &lights[WPLIGHT_FLASHLIGHT];
 	shader = spawnArgs.GetString( "mtr_flashlightShader", "lights/muzzleflash" );
 	if ( shader && *shader ) {
@@ -880,10 +880,10 @@ void rvWeapon::InitLights ( void ) {
 			light->right	= spawnArgs.GetVector( "flashlightRight" );
 			light->end		= light->target;
 		}
-		
+
 		light->allowLightInViewID = owner->entityNumber+1;
 		light->lightId = WPLIGHT_FLASHLIGHT * 100 + owner->entityNumber;
-		spawnArgs.GetVector ( "flashlightViewOffset", "0 0 0", flashlightViewOffset );	
+		spawnArgs.GetVector ( "flashlightViewOffset", "0 0 0", flashlightViewOffset );
 	}
 
 	// the world muzzle flashlight is the same, just positioned differently
@@ -891,7 +891,7 @@ void rvWeapon::InitLights ( void ) {
 	light = &lights[WPLIGHT_FLASHLIGHT_WORLD];
 	light->suppressLightInViewID = owner->entityNumber+1;
 	light->allowLightInViewID = 0;
-	light->lightId = WPLIGHT_FLASHLIGHT_WORLD * 100 + owner->entityNumber; 	
+	light->lightId = WPLIGHT_FLASHLIGHT_WORLD * 100 + owner->entityNumber;
 }
 
 /*
@@ -904,7 +904,7 @@ void rvWeapon::InitDefs( void ) {
 	const idDeclEntityDef*	def;
 	const char*				spawnclass;
 	idTypeInfo*				cls;
-	
+
 	// get the projectile
 	attackDict.Clear();
 
@@ -931,7 +931,7 @@ void rvWeapon::InitDefs( void ) {
 			hitscanAttackDef = def->Index();
 		}
 		wfl.attackHitscan = true;
-	} 
+	}
 
 	// Alternate projectile
 	attackAltDict.Clear ();
@@ -956,7 +956,7 @@ void rvWeapon::InitDefs( void ) {
 			attackAltDict = def->dict;
 		}
 		wfl.attackAltHitscan = true;
-	} 
+	}
 
 	// get the melee damage def
 	meleeDistance = spawnArgs.GetFloat( "melee_distance" );
@@ -988,8 +988,8 @@ void rvWeapon::InitDefs( void ) {
 rvWeapon::Think
 ================
 */
-void rvWeapon::Think ( void ) {	
-	
+void rvWeapon::Think ( void ) {
+
 	// Cache the player origin and axis
 	playerViewOrigin = owner->firstPersonViewOrigin;
 	playerViewAxis   = owner->firstPersonViewAxis;
@@ -999,7 +999,7 @@ void rvWeapon::Think ( void ) {
 
 	// hide offset is for dropping the gun when approaching a GUI or NPC
 	// This is simpler to manage than doing the weapon put-away animation
- 	if ( gameLocal.time - hideStartTime < hideTime ) {		
+ 	if ( gameLocal.time - hideStartTime < hideTime ) {
  		float frac = ( float )( gameLocal.time - hideStartTime ) / ( float )hideTime;
  		if ( hideStart < hideEnd ) {
  			frac = 1.0f - frac;
@@ -1024,7 +1024,7 @@ void rvWeapon::Think ( void ) {
 	} else {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 	}
-	
+
 	// Update the zoom variable before updating the script
 	wsfl.zoom = owner->IsZoomed( );
 
@@ -1040,8 +1040,8 @@ void rvWeapon::Think ( void ) {
 	// Clear reload and flashlight flags
 	wsfl.reload		= false;
 	wsfl.flashlight	= false;
-	
-	// deal with the third-person visible world model 
+
+	// deal with the third-person visible world model
 	// don't show shadows of the world model in first person
 	if ( worldModel && worldModel->GetRenderEntity() ) {
 		// always show your own weapon
@@ -1079,7 +1079,7 @@ void rvWeapon::Think ( void ) {
 			light.shaderParms[ SHADERPARM_RED ]	  = color[0] * color[3];
 			light.shaderParms[ SHADERPARM_GREEN ] = color[1] * color[3];
 			light.shaderParms[ SHADERPARM_BLUE ]  = color[2] * color[3];
-			GetGlobalJointTransform( true, guiLightJointView, light.origin, light.axis, guiLightOffset );		
+			GetGlobalJointTransform( true, guiLightJointView, light.origin, light.axis, guiLightOffset );
 			UpdateLight ( WPLIGHT_GUI );
 		} else {
 			common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
@@ -1345,7 +1345,7 @@ void rvWeapon::Save ( idSaveGame *savefile ) const {
 	savefile->WriteFloat			( zoomTime );
 
 	// Lights
-	for ( i = 0; i < WPLIGHT_MAX; i ++ ) {		
+	for ( i = 0; i < WPLIGHT_MAX; i ++ ) {
 		savefile->WriteInt( lightHandles[i] );
 		savefile->WriteRenderLight( lights[i] );
 	}
@@ -1368,7 +1368,7 @@ void rvWeapon::Save ( idSaveGame *savefile ) const {
 	// multiplayer
  	savefile->WriteInt		( clipPredictTime );	// TOSAVE: Save MP value?
 
-	// View 
+	// View
 	savefile->WriteVec3		( playerViewOrigin );
 	savefile->WriteMat3		( playerViewAxis );
 
@@ -1535,7 +1535,7 @@ void rvWeapon::Restore ( idRestoreGame *savefile ) {
 	// multiplayer
  	savefile->ReadInt		( clipPredictTime );		// TORESTORE: Restore MP value?
 
-	// View 
+	// View
 	savefile->ReadVec3		( playerViewOrigin );
 	savefile->ReadMat3		( playerViewAxis );
 
@@ -1576,12 +1576,12 @@ void rvWeapon::Restore ( idRestoreGame *savefile ) {
 	for ( i = 0; i < ANIM_NumAnimChannels; i++ ) {
 		savefile->ReadInt( animDoneTime[i] );
 	}
-	
+
 	savefile->ReadInt		( methodOfDeath );	// cnicholson: Added unrestored var
 
 #ifdef _XENON
 	aimAssistFOV = spawnArgs.GetFloat( "aimAssistFOV", "10.0f" );
-#endif	
+#endif
 }
 
 /***********************************************************************
@@ -1685,7 +1685,7 @@ void rvWeapon::RaiseWeapon( void ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	viewModel->Show();
 
 	if ( forceGUIReload ) {
@@ -1695,11 +1695,11 @@ void rvWeapon::RaiseWeapon( void ) {
 			idUserInterface* gui = viewModel->GetRenderEntity()->gui[g];
  			if ( gui ) {
 				gui->SetStateInt ( "player_ammo", ammo );
-				
+
 				if ( ClipSize ( ) ) {
 					gui->SetStateFloat ( "player_ammopct", (float)ammo / (float)ClipSize() );
 					gui->SetStateInt ( "player_clip_size", ClipSize() );
-				} else { 
+				} else {
 					gui->SetStateFloat ( "player_ammopct", (float)ammo / (float)maxAmmo );
 					gui->SetStateInt ( "player_clip_size", maxAmmo );
 				}
@@ -1836,17 +1836,17 @@ void rvWeapon::NetEndReload ( void ) {
 		}
 		viewModel->ServerSendEvent( EVENT_ENDRELOAD, NULL, false, -1 );
 	}
-}   
+}
 
 /*
 ================
 rvWeapon::SetStatus
 ================
 */
-void rvWeapon::SetStatus ( weaponStatus_t _status ) {	
+void rvWeapon::SetStatus ( weaponStatus_t _status ) {
 	status = _status;
 	switch ( status ) {
-		case WP_READY:			
+		case WP_READY:
 			wsfl.raiseWeapon = false;
 			if ( !viewModel ) {
 				common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
@@ -1856,7 +1856,7 @@ void rvWeapon::SetStatus ( weaponStatus_t _status ) {
 			break;
 		case WP_OUTOFAMMO:
 			wsfl.raiseWeapon = false;
-			break;		
+			break;
 		case WP_RELOAD:
 			if ( !viewModel ) {
 				common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
@@ -2014,7 +2014,7 @@ void rvWeapon::MuzzleRise( idVec3 &origin, idMat3 &axis ) {
 	if ( time > muzzle_kick_maxtime ) {
 		time = muzzle_kick_maxtime;
 	}
-	
+
 	amount = ( float )time / ( float )muzzle_kick_maxtime;
 	ang		= muzzle_kick_angles * amount;
 	offset	= muzzle_kick_offset * amount;
@@ -2129,12 +2129,12 @@ rvWeapon::UpdateGUI
 */
 void rvWeapon::UpdateGUI( void ) {
 	idUserInterface* gui;
-	
+
 	if ( !viewModel ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	gui = viewModel->GetRenderEntity()->gui[0];
 	if ( !gui || status == WP_HOLSTERED ) {
 		return;
@@ -2159,18 +2159,18 @@ for ( g = 0; g < MAX_RENDERENTITY_GUI && viewModel->GetRenderEntity()->gui[g]; g
 		// show remaining ammo
 		if ( gui->State().GetInt ( "player_cachedammo", "-1") != ammo ) {
 			gui->SetStateInt ( "player_ammo", ammo );
-			
+
 			if ( ClipSize ( ) ) {
 				gui->SetStateFloat ( "player_ammopct", (float)ammo / (float)ClipSize() );
 				gui->SetStateInt ( "player_clip_size", ClipSize() );
-			} else { 
+			} else {
 				gui->SetStateFloat ( "player_ammopct", (float)ammo / (float)maxAmmo );
 				gui->SetStateInt ( "player_clip_size", maxAmmo );
 			}
 			gui->SetStateInt ( "player_cachedammo", ammo );
 			gui->HandleNamedEvent ( "weapon_ammo" );
-		}	
-	}	
+		}
+	}
 
 //		viewModel->GetRenderEntity()->gui[g]->SetStateInt ( "player_clip_size", ClipSize() );
 }
@@ -2185,7 +2185,7 @@ for ( g = 0; g < MAX_RENDERENTITY_GUI && viewModel->GetRenderEntity()->gui[g]; g
 rvWeapon::UpdateCrosshairGUI
 ================
 */
-void rvWeapon::UpdateCrosshairGUI( idUserInterface* gui ) const {	
+void rvWeapon::UpdateCrosshairGUI( idUserInterface* gui ) const {
 // RAVEN BEGIN
 // cnicholson: Added support for universal crosshair
 
@@ -2196,14 +2196,14 @@ void rvWeapon::UpdateCrosshairGUI( idUserInterface* gui ) const {
 		const idMaterial *material = declManager->FindMaterial( g_crosshairCustomFile.GetString() );
 		if ( material ) {
 			material->SetSort( SS_GUI );
-		}			
+		}
 	} else {
 		gui->SetStateString( "crossImage", spawnArgs.GetString( "mtr_crosshair" ) );
 
 		const idMaterial *material = declManager->FindMaterial( spawnArgs.GetString( "mtr_crosshair" ) );
 		if ( material ) {
 			material->SetSort( SS_GUI );
-		}			
+		}
 	}
 
 // Original Block
@@ -2433,12 +2433,12 @@ void rvWeapon::SetClip ( int amount ) {
 	} else if ( amount > clipSize ) {
 		ammoClip = clipSize;
 	}
-	
+
 	if ( !viewModel ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	viewModel->PostGUIEvent ( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
 		viewModel->PostGUIEvent ( "weapon_noammo" );
@@ -2486,7 +2486,7 @@ void rvWeapon::AddToClip ( int amount ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	viewModel->PostGUIEvent ( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
 		viewModel->PostGUIEvent ( "weapon_noammo" );
@@ -2508,12 +2508,12 @@ rvWeapon::Attack
 void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuseOffset, float power ) {
 	idVec3 muzzleOrigin;
 	idMat3 muzzleAxis;
-	
+
 	if ( !viewModel ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	if ( viewModel->IsHidden() ) {
 		return;
 	}
@@ -2555,7 +2555,7 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 	} else {
 		// go straight out of the view
 		muzzleOrigin = playerViewOrigin;
-		muzzleAxis = playerViewAxis;		
+		muzzleAxis = playerViewAxis;
 		muzzleOrigin += playerViewAxis[0] * muzzleOffset;
 	}
 
@@ -2591,7 +2591,7 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
 		viewModel->PostGUIEvent ( "weapon_noammo" );
 	}
-	
+
 	// The attack is either a hitscan or a launched projectile, do that now.
 	if ( !gameLocal.isClient ) {
 		idDict& dict = altAttack ? attackAltDict : attackDict;
@@ -2601,9 +2601,9 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		} else {
 			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
 		}
-		//asalmon:  changed to keep stats even in single player 
+		//asalmon:  changed to keep stats even in single player
 		statManager->WeaponFired( owner, weaponIndex, num_attacks );
-		
+
 	}
 }
 
@@ -2623,15 +2623,15 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 	if ( gameLocal.isClient ) {
 		return;
 	}
-	
+
 	// Let the AI know about the new attack
 	if ( !gameLocal.isMultiplayer ) {
 		aiManager.ReactToPlayerAttack ( owner, muzzleOrigin, muzzleAxis[0] );
 	}
-		
+
 	ownerBounds = owner->GetPhysics()->GetAbsBounds();
 	spreadRad   = DEG2RAD( spread );
-	
+
 	idVec3 dirOffset;
 	idVec3 startOffset;
 
@@ -2644,7 +2644,7 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 		idVec3	 dir;
 		idBounds projBounds;
 		idVec3	 muzzle_pos;
-		
+
 		// Calculate a random launch direction based on the spread
 		ang = idMath::Sin( spreadRad * gameLocal.random.RandomFloat() );
 		spin = (float)DEG2RAD( 360.0f ) * gameLocal.random.RandomFloat();
@@ -2668,7 +2668,7 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 		if ( !ent ) {
 			gameLocal.Error( "failed to spawn projectile for weapon '%s'", weaponDef->GetName ( ) );
 		}
-		
+
 		assert ( ent->IsType( idProjectile::GetClassType() ) );
 
 		// Create the projectile
@@ -2688,12 +2688,12 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 			muzzle_pos = muzzleOrigin + muzzleAxis[ 0 ] * 2.0f;
 			if ( ( ownerBounds - projBounds).RayIntersection( muzzle_pos, muzzleAxis[0], distance ) ) {
 				start = muzzle_pos + distance * muzzleAxis[0];
-			} 
+			}
 #else
 			muzzle_pos = muzzleOrigin + playerViewAxis[ 0 ] * 2.0f;
 			if ( ( ownerBounds - projBounds).RayIntersection( muzzle_pos, playerViewAxis[0], distance ) ) {
 				start = muzzle_pos + distance * playerViewAxis[0];
-			} 
+			}
 #endif
 //RAVEN END
 			else {
@@ -2705,10 +2705,10 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 // RAVEN END
 			muzzle_pos = tr.endpos;
 		}
-		
+
 		// Launch the actual projectile
 		proj->Launch( muzzle_pos + startOffset, dir, pushVelocity, fuseOffset, power );
-		
+
 		// Increment the projectile launch count and let the derived classes
 		// mess with it if they want.
 		OnLaunchProjectile ( proj );
@@ -2773,7 +2773,7 @@ void rvWeapon::Hitscan( const idDict& dict, const idVec3& muzzleOrigin, const id
 	float spreadRad = DEG2RAD( spread );
 	idVec3 end;
 	for( i = 0; i < num_hitscans; i++ ) {
-		if( weaponDef->dict.GetBool( "machinegunSpreadStyle" ) ) {	
+		if( weaponDef->dict.GetBool( "machinegunSpreadStyle" ) ) {
 			float r = gameLocal.random.RandomFloat() * idMath::PI * 2.0f;
 			float u = idMath::Sin( r ) * gameLocal.random.CRandomFloat() * spread * 16;
 			r = idMath::Cos( r ) * gameLocal.random.CRandomFloat() * spread * 16;
@@ -2804,10 +2804,10 @@ void rvWeapon::Hitscan( const idDict& dict, const idVec3& muzzleOrigin, const id
 				radius = spread * 6;
 				angle = (i - circleHitscans) * (idMath::TWO_PI / num_hitscans) * 2;
 			}
-			
+
 			float r = radius * (idMath::Cos(angle) + (gameLocal.random.CRandomFloat() * 0.2f));
 			float u = radius * (idMath::Sin(angle) + (gameLocal.random.CRandomFloat() * 0.2f));
-			
+
 #ifdef _XBOX
 			end = muzzleOrigin + ( ( 8192 * 16 ) * muzzleAxis[ 0 ] );
 			end += ( r * muzzleAxis[ 1 ] );
@@ -2856,7 +2856,7 @@ void rvWeapon::AlertMonsters( void ) {
 	idEntity *ent;
 	idVec3 end;
 	renderLight_t& muzzleFlash = lights[WPLIGHT_MUZZLEFLASH];
-	
+
 	end = muzzleFlash.origin + muzzleFlash.axis * muzzleFlash.target;
  	gameLocal.TracePoint( owner, tr, muzzleFlash.origin, end, CONTENTS_OPAQUE | MASK_SHOT_RENDERMODEL | CONTENTS_FLASHLIGHT_TRIGGER, owner );
 	if ( g_debugWeapon.GetBool() ) {
@@ -2937,14 +2937,14 @@ void rvWeapon::EjectBrass ( void ) {
 
 	cent->SetOwner( GetOwner() );
 	cent->SetOrigin ( origin + playerViewAxis * ejectOffset );
-	cent->SetAxis ( playerViewAxis );	
-	
+	cent->SetAxis ( playerViewAxis );
+
 	// Depth hack the brass to make sure it clips in front of view weapon properly
 	cent->GetRenderEntity()->weaponDepthHackInViewID = GetOwner()->entityNumber + 1;
-	
+
 	// Clear the depth hack soon after it clears the view
 	cent->PostEventMS ( &CL_ClearDepthHack, 200 );
-	
+
 	// Fade the brass out so they dont accumulate
 	brassTime =(int)SEC2MS(g_brassTime.GetFloat() / 2.0f);
 	cent->PostEventMS ( &CL_FadeOut, brassTime, brassTime );
@@ -2970,7 +2970,7 @@ bool rvWeapon::BloodSplat( float size ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return false;
 	}
-	
+
 	if ( wfl.hasBloodSplat ) {
 		return true;
 	}
@@ -3054,21 +3054,21 @@ rvWeapon::NetCatchup
 void rvWeapon::NetCatchup( void ) {
 	ExecuteState ( "NetCatchup" );
 }
-   
+
 /*
 ===============
 rvWeapon::PlayAnim
 ===============
 */
 void rvWeapon::PlayAnim( int channel, const char *animname, int blendFrames ) {
-	
+
 	if ( !viewModel ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	int	anim;
-	
+
 	anim = viewAnimator->GetAnim( animname );
 	if ( !anim ) {
 		gameLocal.Warning( "missing '%s' animation on '%s' (%s)", animname, viewModel->GetName(), viewModel->GetEntityDefName() );
@@ -3078,7 +3078,7 @@ void rvWeapon::PlayAnim( int channel, const char *animname, int blendFrames ) {
 		viewModel->Show();
 		viewAnimator->PlayAnim( channel, anim, gameLocal.time, FRAME2MS( blendFrames ) );
 		animDoneTime[channel] = viewAnimator->CurrentAnim( channel )->GetEndTime();
-		
+
 		// Play the animation on the world model as well
 		if ( worldAnimator ) {
 			worldAnimator->GetAnim( animname );
@@ -3096,12 +3096,12 @@ rvWeapon::PlayCycle
 */
 void rvWeapon::PlayCycle( int channel, const char *animname, int blendFrames ) {
 	int anim;
-	
+
 	if ( !viewModel ) {
 		common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 		return;
 	}
-	
+
 	anim = viewAnimator->GetAnim( animname );
 	if ( !anim ) {
 		gameLocal.Warning( "missing '%s' animation on '%s' (%s)", animname, viewModel->GetName(), viewModel->GetEntityDefName() );
@@ -3169,7 +3169,7 @@ rvClientEffect* rvWeapon::PlayEffect( const char* effectName, jointHandle_t join
 	if ( viewModel ) {
 		return viewModel->PlayEffect( effectName, joint, loop, endOrigin, broadcast );
 	}
-	
+
 	common->Warning( "NULL viewmodel %s\n", __FUNCTION__ );
 	return 0;
 }
@@ -3223,7 +3223,7 @@ void rvWeapon::CacheWeapon( const char *weaponName ) {
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -3247,14 +3247,14 @@ stateResult_t rvWeapon::State_Raise ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
+	};
 	switch ( parms.stage ) {
 		// Start the weapon raising
 		case STAGE_INIT:
 			SetStatus ( WP_RISING );
 			PlayAnim( ANIMCHANNEL_ALL, "raise", 0 );
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
 				SetState ( "Idle", 4 );
@@ -3276,25 +3276,25 @@ rvWeapon::State_Lower
 Lower the weapon
 ================
 */
-stateResult_t rvWeapon::State_Lower ( const stateParms_t& parms ) {	
+stateResult_t rvWeapon::State_Lower ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 		STAGE_WAITRAISE
-	};	
+	};
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			SetStatus ( WP_LOWERING );
 			PlayAnim ( ANIMCHANNEL_ALL, "putaway", parms.blendFrames );
 			return SRESULT_STAGE(STAGE_WAIT);
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
 				SetStatus ( WP_HOLSTERED );
 				return SRESULT_STAGE(STAGE_WAITRAISE);
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_WAITRAISE:
 			if ( wsfl.raiseWeapon ) {
 				SetState ( "Raise", 0 );

@@ -57,7 +57,7 @@ idVec3::ToYaw
 */
 float idVec3::ToYaw( void ) const {
 	float yaw;
-	
+
 	if ( ( y == 0.0f ) && ( x == 0.0f ) ) {
 		yaw = 0.0f;
 	} else {
@@ -78,7 +78,7 @@ idVec3::ToPitch
 float idVec3::ToPitch( void ) const {
 	float	forward;
 	float	pitch;
-	
+
 	if ( ( x == 0.0f ) && ( y == 0.0f ) ) {
 		if ( z > 0.0f ) {
 			pitch = 90.0f;
@@ -105,7 +105,7 @@ idAngles idVec3::ToAngles( void ) const {
 	float forward;
 	float yaw;
 	float pitch;
-	
+
 	if ( ( x == 0.0f ) && ( y == 0.0f ) ) {
 		yaw = 0.0f;
 		if ( z > 0.0f ) {
@@ -135,35 +135,35 @@ idAngles idVec3::ToAngles( void ) const {
 idVec3::ToRadians
 =============
 */
-rvAngles idVec3::ToRadians( void ) const 
+rvAngles idVec3::ToRadians( void ) const
 {
 	float forward;
 	float yaw;
 	float pitch;
-	
-	if( !x && !y ) 
+
+	if( !x && !y )
 	{
 		yaw = 0.0f;
-		if( z > 0.0f ) 
+		if( z > 0.0f )
 		{
 			pitch = idMath::HALF_PI;
 		}
-		else 
+		else
 		{
 			pitch = idMath::THREEFOURTHS_PI;
 		}
-	} 
-	else 
+	}
+	else
 	{
 		yaw = idMath::ATan( y, x );
-		if( yaw < 0.0f ) 
+		if( yaw < 0.0f )
 		{
 			yaw += idMath::TWO_PI;
 		}
 
 		forward = ( float )idMath::Sqrt( x * x + y * y );
 		pitch = idMath::ATan( z, forward );
-		if( pitch < 0.0f ) 
+		if( pitch < 0.0f )
 		{
 			pitch += idMath::TWO_PI;
 		}
@@ -182,7 +182,7 @@ idPolar3 idVec3::ToPolar( void ) const {
 	float forward;
 	float yaw;
 	float pitch;
-	
+
 	if ( ( x == 0.0f ) && ( y == 0.0f ) ) {
 		yaw = 0.0f;
 		if ( z > 0.0f ) {
@@ -267,19 +267,19 @@ idMat3 idVec3::ToMat3( int axis ) const {
 
 // RAVEN BEGIN
 // jscott: slightly quicker version without the copy
-idMat3 &idVec3::ToMat3( idMat3 &mat ) const 
+idMat3 &idVec3::ToMat3( idMat3 &mat ) const
 {
 	float	d;
 
 	mat[0] = *this;
 	d = x * x + y * y;
-	if ( !d ) 
+	if ( !d )
 	{
 		mat[1][0] = 1.0f;
 		mat[1][1] = 0.0f;
 		mat[1][2] = 0.0f;
-	} 
-	else 
+	}
+	else
 	{
 		d = idMath::InvSqrt( d );
 		mat[1][0] = -y * d;

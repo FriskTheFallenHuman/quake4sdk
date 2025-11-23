@@ -79,7 +79,7 @@ void rvAIMedic::Spawn ( void ) {
 		Event_EnableHeal();
 	}
 	const char  *func;
-	if ( spawnArgs.GetString( "script_postHeal", "", &func ) ) 
+	if ( spawnArgs.GetString( "script_postHeal", "", &func ) )
 	{
 		mPostHealScript.Init( func );
 	}
@@ -114,7 +114,7 @@ void rvAIMedic::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool( silent );
 
 	//NOTE: every time these are used, they are set first, no point in saving/loading them!
-	savefile->WriteInt( curHealValue );		
+	savefile->WriteInt( curHealValue );
 	savefile->WriteInt( maxPatientValue );
 	mPostHealScript.Save( savefile );
 }
@@ -138,7 +138,7 @@ void rvAIMedic::Restore( idRestoreGame *savefile ) {
 	savefile->ReadBool( silent );
 
 	//NOTE: every time these are used, they are set first, no point in saving/loading them!
-	savefile->ReadInt( curHealValue );		
+	savefile->ReadInt( curHealValue );
 	savefile->ReadInt( maxPatientValue );
 	mPostHealScript.Restore( savefile );
 
@@ -174,7 +174,7 @@ void rvAIMedic::Event_DisableHeal( void ) {
 rvAIMedic::Event_EnableMovement
 ==================
 */
-void rvAIMedic::Event_EnableMovement( void ) {	
+void rvAIMedic::Event_EnableMovement( void ) {
 	stationary = false;
 }
 
@@ -183,7 +183,7 @@ void rvAIMedic::Event_EnableMovement( void ) {
 rvAIMedic::Event_DisableMovement
 ==================
 */
-void rvAIMedic::Event_DisableMovement ( void ) {	
+void rvAIMedic::Event_DisableMovement ( void ) {
 	stationary = true;
 }
 
@@ -226,7 +226,7 @@ rvAIMedic::GetDebugInfo
 void rvAIMedic::GetDebugInfo( debugInfoProc_t proc, void* userData ) {
 	// Base class first
 	rvAITactical::GetDebugInfo ( proc, userData );
-	
+
 	proc ( "rvAIMedic", "aifl.scripted",	aifl.scripted?"true":"false", userData );
 	proc ( "rvAIMedic", "move.fl.disabled",	move.fl.disabled?"true":"false", userData );
 	proc ( "rvAIMedic", "IsSpeaking",		IsSpeaking()?"true":"false", userData );
@@ -284,7 +284,7 @@ void rvAIMedic::TakePatient( idPlayer* pPatient )
 	healing = false;
 	//healedAmount = 0;
 
-	if ( pPatient && DistanceTo( pPatient ) > 250.0f && !silent ) 
+	if ( pPatient && DistanceTo( pPatient ) > 250.0f && !silent )
 	{
 		//have enough time to say this before we get there...?
 		//jshepard: tech/medic dependent speech
@@ -470,7 +470,7 @@ rvAIMedic::Think
 void rvAIMedic::Think ( void ) {
 	rvAITactical::Think ( );
 
-//	while( entMedic.getKey("alive") == "true" && entMedic.getKey("healer") == "1")	
+//	while( entMedic.getKey("alive") == "true" && entMedic.getKey("healer") == "1")
 //???
 	if ( !noAutoHeal )
 	{
@@ -492,7 +492,7 @@ void rvAIMedic::Think ( void ) {
 				//otherwise, check team?
 				/*
 				idActor* actor;
-				for( actor = aiManager.GetAllyTeam ( (aiTeam_t)team ); actor; actor = actor->teamNode.Next() ) 	
+				for( actor = aiManager.GetAllyTeam ( (aiTeam_t)team ); actor; actor = actor->teamNode.Next() )
 				{
 					if ( CheckTakePatient( actor ) )
 					{
@@ -503,7 +503,7 @@ void rvAIMedic::Think ( void ) {
 			}
 		}
 	}
-}				
+}
 
 /*
 =====================
@@ -570,7 +570,7 @@ bool rvAIMedic::Pain( idEntity *inflictor, idEntity *attacker, int damage, const
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -586,14 +586,14 @@ idAI::State_Medic
 Rush towards the patient to melee range and heal until they're okay
 ================
 */
-stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {	
+stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 	enum {
 		STAGE_MOVE,			// Move towards the patient, speak & start anim
 		STAGE_PRE_HEAL_ANIM_WAIT,// Wait for pre heal anim to finish, then start the normal heal anim
 		STAGE_HEAL_START_WAIT,// Wait for start anim to finish
 		STAGE_HEAL,			// Keep healing until no longer in melee range or they're fully healed
 		STAGE_WAIT_FINISH	// Finish anim
-	};	
+	};
 	if ( !patient || patient->health <= 0 || !SituationAllowsPatient() )
 	{//patient dead or situation is bad
 		//NOTE: if patient still alive and situation is just bad, maybe we shouldn't break out altogether, maybe pause and resume?
@@ -619,7 +619,7 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 			// Attack when we have either stopped moving or are within melee range
 			if ( move.fl.done )
 			{
-				if ( DistanceTo( patient ) > combat.meleeRange || !CanSee(patient,false) ) 
+				if ( DistanceTo( patient ) > combat.meleeRange || !CanSee(patient,false) )
 				{//wtf, we're not there yet, try again!
 					if ( !stationary && !move.fl.disabled ) {
 						MoveToEntity( patient, 42 );
@@ -644,7 +644,7 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 					healing = true;
 					// check for preHeal anim key and if it's present, play it first.
 					const char  *preHealAnim;
-					if ( spawnArgs.GetString( "anim_preHeal", "", &preHealAnim )) 
+					if ( spawnArgs.GetString( "anim_preHeal", "", &preHealAnim ))
 					{
 						PlayAnim( ANIMCHANNEL_TORSO, preHealAnim, 4 );
 						return SRESULT_STAGE ( STAGE_PRE_HEAL_ANIM_WAIT );
@@ -663,7 +663,7 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 				move.range = 42.0f;//shouldn't have to do this, but sometimes something is overriding the range to 8!  VERY VERY BAD... :_(
 			}
 			/*
-			else if ( !CheckTacticalMove ( AITACTICAL_MEDIC ) && CanSee(patient,false) ) 
+			else if ( !CheckTacticalMove ( AITACTICAL_MEDIC ) && CanSee(patient,false) )
 			{//we're here, just stop
 				Speak( "lipsync_medic_arrive", true );
 				StopMove ( MOVE_STATUS_DONE );
@@ -687,11 +687,11 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 					} else if ( !IsEnemyRecentlyVisible ( ) ) {
 						CheckForEnemy ( true );
 					}
-				}			
+				}
 			}
 
 		return SRESULT_WAIT;
-	
+
 		// intermediate state which may or may not exist...depends on the presence of pre heal anim key on this entity
 		case STAGE_PRE_HEAL_ANIM_WAIT:
 			const char  *preHealAnim;
@@ -732,16 +732,16 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 			{
 				SetHealValues( patient );
 				/*
-				if ( curHealValue >= maxPatientValue 
+				if ( curHealValue >= maxPatientValue
 					|| (curHealValue > minHealValue && healedAmount >= healAmt) )
 				{//patient fully healed (or we've used up our allotment), we're done here
 					Speak( "lipsync_heal_end_", true );
-					PlayAnim( ANIMCHANNEL_TORSO, "medic_treating_player_end", 4 );	
+					PlayAnim( ANIMCHANNEL_TORSO, "medic_treating_player_end", 4 );
 					return SRESULT_STAGE ( STAGE_WAIT_FINISH );
 				}
 				*/
 
-				// If we are out of melee range or lost sight of our patient then start moving again			
+				// If we are out of melee range or lost sight of our patient then start moving again
 				/*
 				if ( !stationary && !move.fl.disabled ) {
 					if ( DistanceTo( patient ) > combat.meleeRange || !CanSee( patient, false ) ) {
@@ -800,7 +800,7 @@ stateResult_t rvAIMedic::State_Medic ( const stateParms_t& parms ) {
 							Speak( "lipsync_heal_end_tech_", true );
 						}
 					}
-					PlayAnim( ANIMCHANNEL_TORSO, "medic_treating_player_end", 4 );	
+					PlayAnim( ANIMCHANNEL_TORSO, "medic_treating_player_end", 4 );
 					return SRESULT_STAGE ( STAGE_WAIT_FINISH );
 				}
 				if ( gameLocal.random.RandomFloat() > 0.5f )

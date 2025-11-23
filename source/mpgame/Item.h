@@ -43,7 +43,7 @@ public:
 // mekberg: added
 	virtual bool			Collide( const trace_t &collision, const idVec3 &velocity );
 // RAVEN END
-	
+
 	enum {
 		EVENT_PICKUP = idEntity::EVENT_MAXEVENTS,
 		EVENT_RESPAWNFX,
@@ -118,7 +118,7 @@ private: // FIXME: Temp hack while Eric gets back to me about why GameState.cpp 
 	void					Event_Respawn		( void );
 	void					Event_RespawnFx		( void );
 	void					Event_Pickup		( int clientNum );
-  
+
 // RAVEN BEGIN
 // abahr
 	void					Event_SetGravity();
@@ -200,13 +200,13 @@ private:
 class rvItemCTFFlag : public idItem {
 public:
 	CLASS_PROTOTYPE( rvItemCTFFlag );
-	
+
 							rvItemCTFFlag();
-							
+
 	void					Spawn();
 	virtual bool			GiveToPlayer ( idPlayer* player );
 	virtual bool			Pickup( idPlayer *player );
-	
+
 	static void				ResetFlag( int type );
 	virtual void			Think( void );
 
@@ -216,7 +216,7 @@ private:
 	int						team;
 	int						powerup;
 	bool					dropped;
-	
+
 	void					Event_ResetFlag( void );
 	void					Event_LinkTrigger( void );
 };

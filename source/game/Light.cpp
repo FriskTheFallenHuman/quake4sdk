@@ -242,13 +242,13 @@ idLight::idLight() {
 	fadeStart			= 0;
 	fadeEnd				= 0;
 	soundWasPlaying		= false;
-	
+
 // RAVEN BEGIN
 // bdube: light gui
 	lightGUI			= NULL;
 	random				= 0.0f;
 	wait				= 0.0f;
-// RAVEN END	
+// RAVEN END
 }
 
 /*
@@ -271,12 +271,12 @@ archives object for save game file
 */
 void idLight::Save( idSaveGame *savefile ) const {
 	savefile->WriteRenderLight( renderLight );
-	
+
 	savefile->WriteBool( renderLight.prelightModel != NULL );
 
 	savefile->WriteVec3( localLightOrigin );
 	savefile->WriteMat3( localLightAxis );
-	//qhandle_t		lightDefHandle;	// cnicholson: This wasn't here from id, so I didnt add it either. 
+	//qhandle_t		lightDefHandle;	// cnicholson: This wasn't here from id, so I didnt add it either.
 
 	savefile->WriteString( brokenModel );
 	savefile->WriteInt( levels );
@@ -349,10 +349,10 @@ void idLight::Restore( idRestoreGame *savefile ) {
 // RAVEN BEGIN
 // bdube: light gui
 	lightGUI.Restore ( savefile );
-// RAVEN END	
+// RAVEN END
 
 	savefile->ReadBool( soundWasPlaying );
-	
+
 	lightDefHandle = -1;
 
 	SetLightLevel();
@@ -445,7 +445,7 @@ void idLight::Spawn( void ) {
 			int	pos;
 
 			needBroken = false;
-		
+
 			pos = model.Find( "." );
 			if ( pos < 0 ) {
 				pos = model.Length();
@@ -458,7 +458,7 @@ void idLight::Spawn( void ) {
 				brokenModel += &model[ pos ];
 			}
 		}
-	
+
 		// make sure the model gets cached
 		if ( !renderModelManager->CheckModel( brokenModel ) ) {
 			if ( needBroken ) {
@@ -472,11 +472,11 @@ void idLight::Spawn( void ) {
 	}
 
 	PostEventMS( &EV_PostSpawn, 0 );
-	
+
 // RAVEN BEGIN
-// bdube: light guis	
+// bdube: light guis
 	const char* lightGUI;
-	if ( spawnArgs.GetString ( "light_gui", "", &lightGUI ) ) {	
+	if ( spawnArgs.GetString ( "light_gui", "", &lightGUI ) ) {
 		PostEventMS( &EV_Light_SetLightGUI, 0, lightGUI );
 	}
 
@@ -920,7 +920,7 @@ void idLight::Think( void ) {
 		}
 
 // RAVEN BEGIN
-// bdube: gui controlled lights		
+// bdube: gui controlled lights
 		if ( lightGUI ) {
 			SetColor ( lightGUI->GetRenderEntity()->gui[0]->GetLightColor ( ) );
 		}
@@ -1191,7 +1191,7 @@ void idLight::Event_SetSoundHandles( void ) {
 			targetEnt->GetRenderEntity()->referenceSoundHandle = renderEntity.referenceSoundHandle;
 		}
 // RAVEN END
-	}	
+	}
 }
 
 /*
@@ -1285,7 +1285,7 @@ void idLight::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 		}
 	}
 	UnpackColor( msg.ReadLong(), baseColor );
-	// lightParentEntityNum = msg.ReadBits( GENTITYNUM_BITS );	
+	// lightParentEntityNum = msg.ReadBits( GENTITYNUM_BITS );
 
 /*	// only helps prediction
 	UnpackColor( msg.ReadLong(), fadeFrom );
@@ -1444,7 +1444,7 @@ void idLight::Event_EarthQuake(float requiresLOS)
 	}
 
 	float	offTime = spawnArgs.GetFloat("quakeOffTime", "1.0");
-	
+
 	Off();
 	PostEventMS(&EV_Light_On, offTime*1000.0f);
 }
@@ -1468,7 +1468,7 @@ void idLight::Event_SetLightGUI ( const char* gui ) {
 idLight::Event_SetCurrentLightLevel
 ================
 */
-void idLight::Event_SetCurrentLightLevel( int in ) { 
+void idLight::Event_SetCurrentLightLevel( int in ) {
 	currentLevel = in;
 	SetLightLevel();
 }
@@ -1478,8 +1478,8 @@ void idLight::Event_SetCurrentLightLevel( int in ) {
 idLight::Event_SetMaxLightLevel
 ================
 */
-void idLight::Event_SetMaxLightLevel( int in ) { 
-	levels = in; 
+void idLight::Event_SetMaxLightLevel( int in ) {
+	levels = in;
 	SetLightLevel();
 }
 

@@ -31,7 +31,7 @@ bool rvPhysics_VehicleMonster::Evaluate( int timeStepMSec, int endTimeMSec ) {
 }
 
 void rvPhysics_VehicleMonster::SetGravity ( const idVec3 & v ) {
-	gravityVector = v; 
+	gravityVector = v;
 	gravityNormal = gameLocal.GetGravity( );
 	gravityNormal.Normalize();
 }

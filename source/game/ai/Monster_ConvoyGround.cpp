@@ -17,11 +17,11 @@ public:
 	void					InitSpawnArgsVariables		( void );
 	void					Save						( idSaveGame *savefile ) const;
 	void					Restore						( idRestoreGame *savefile );
-	
+
 	virtual void			Postthink					( void );
 	virtual bool			Pain						( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
 	virtual bool			CheckPainActions			( void );
-	
+
 	virtual bool			CanTurn						( void ) const;
 	virtual bool			CanMove						( void ) const;
 	virtual	void			Damage						( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
@@ -45,7 +45,7 @@ protected:
 	idVec3					lastPainDir;
 
 	rvAIAction				actionBlasterAttack;
-	
+
 	virtual bool			CheckActions				( void );
 	virtual int				FilterTactical				( int availableTactical );
 
@@ -80,7 +80,7 @@ rvMonsterConvoyGround::rvMonsterConvoyGround
 */
 rvMonsterConvoyGround::rvMonsterConvoyGround ( ) {
 	shots				= 0;
-	isOpen				= false;		
+	isOpen				= false;
 	vehicleCollision	= false;
 	moveCurrentAnimRate	= 1.0f;
 }
@@ -100,12 +100,12 @@ rvMonsterConvoyGround::Spawn
 ================
 */
 void rvMonsterConvoyGround::Spawn ( void ) {
-	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack", "Torso_BlasterAttack", AIACTIONF_ATTACK );		
+	actionBlasterAttack.Init ( spawnArgs, "action_blasterAttack", "Torso_BlasterAttack", AIACTIONF_ATTACK );
 
 	InitSpawnArgsVariables();
-	
-	aifl.disableLook = true; 
-	
+
+	aifl.disableLook = true;
+
 	onGround = true;
 
 }
@@ -122,9 +122,9 @@ void rvMonsterConvoyGround::Postthink ( void ) {
 		InterruptState ( "State_Fall" );
 	}
 */
-	
+
 	idAI::Postthink ( );
-}	
+}
 
 /*
 ================
@@ -132,7 +132,7 @@ rvMonsterConvoyGround::Save
 ================
 */
 bool rvMonsterConvoyGround::Pain ( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
-	lastPainDir = dir;	
+	lastPainDir = dir;
 	return idAI::Pain ( inflictor, attacker, damage, dir, location );
 }
 
@@ -236,7 +236,7 @@ rvMonsterConvoyGround::AdjustHealthByDamage
 void rvMonsterConvoyGround::AdjustHealthByDamage ( int damage ) {
 	if ( isOpen || vehicleCollision ) {
 		idAI::AdjustHealthByDamage ( damage );
-	} else { 
+	} else {
 		PlayEffect ( "fx_shieldHit", animator.GetJointHandle ( "axis" ) );
 	}
 }
@@ -259,10 +259,10 @@ rvMonsterConvoyGround::Spawn
 bool rvMonsterConvoyGround::CheckActions ( void ) {
 	if ( isOpen ) {
 		if ( move.fl.moving ) {
-/*		
-			|| !CheckAction_RangedAttack( &actionBlasterAttack, -1 ) 
+/*
+			|| !CheckAction_RangedAttack( &actionBlasterAttack, -1 )
 			|| enemy.range > actionBlasterAttack.maxRange
-			|| enemy.range < actionBlasterAttack.minRange 
+			|| enemy.range < actionBlasterAttack.minRange
 			|| (!move.fl.moving && (gameLocal.GetTime()-move.startTime) > 3000 ) ) {
 */
 			StartSound( "snd_prepare", SND_CHANNEL_ANY, 0, 0, 0  );
@@ -294,7 +294,7 @@ bool rvMonsterConvoyGround::CheckPainActions ( void ) {
 	if ( isOpen ) {
 		return false;
 	}
-	
+
 	return idAI::CheckPainActions ( );
 }
 
@@ -305,11 +305,11 @@ rvMonsterConvoyGround::GetIdleAnimName
 */
 const char* rvMonsterConvoyGround::GetIdleAnimName ( void ) {
 	// Start idle animation
-	if ( isOpen ) { 
+	if ( isOpen ) {
 		return "idle_open";
-	}	
+	}
 	return "idle";
-}	
+}
 
 /*
 ================
@@ -330,15 +330,15 @@ void rvMonsterConvoyGround::GetDebugInfo ( debugInfoProc_t proc, void* userData 
 	idAI::GetDebugInfo ( proc, userData );
 
 	proc ( "idAI", "action_blasterAttack",	aiActionStatusString[actionBlasterAttack.status], userData );
-	
+
 	proc ( "rvMonsterConvoyGround", "moveAnimRate",	va("%g", moveCurrentAnimRate ), userData );
-	proc ( "rvMonsterConvoyGround", "isOpen",		isOpen ? "true" : "false", userData );		
+	proc ( "rvMonsterConvoyGround", "isOpen",		isOpen ? "true" : "false", userData );
 }
 
 /*
 ===============================================================================
 
-	States 
+	States
 
 ===============================================================================
 */
@@ -377,30 +377,30 @@ stateResult_t rvMonsterConvoyGround::State_Fall ( const stateParms_t& parms ) {
 			PlayCycle ( ANIMCHANNEL_TORSO, "idle", 0 );
 			oldOrigin = physicsObj.GetOrigin ( );
 			return SRESULT_STAGE(STAGE_WAITIMPACT);
-			
+
 		case STAGE_WAITIMPACT:
 			if ( physicsObj.HasGroundContacts ( ) ) {
 				return SRESULT_STAGE(STAGE_IMPACT);
 			}
 			return SRESULT_WAIT;
-			
+
 		case STAGE_IMPACT:
 			StopSound ( SND_CHANNEL_VOICE, false );
 			StopEffect ( "fx_droptrail" );
 			PlayEffect ( "fx_landing", GetPhysics()->GetOrigin(), (-GetPhysics()->GetGravityNormal()).ToMat3() );
-			
+
 			if ( (physicsObj.GetOrigin ( ) - oldOrigin).LengthSqr() > Square(128.0f) ) {
 				PlayAnim ( ANIMCHANNEL_TORSO, "land", 0 );
 				return SRESULT_STAGE ( STAGE_WAITDONE );
 			}
 			return SRESULT_STAGE ( STAGE_DONE );
-			
+
 		case STAGE_WAITDONE:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 4 ) ) {
 				return SRESULT_STAGE ( STAGE_DONE );
 			}
 			return SRESULT_WAIT;
-		
+
 		case STAGE_DONE:
 			onGround = true;
 			SetAnimState ( ANIMCHANNEL_LEGS, "Legs_Idle" );
@@ -416,7 +416,7 @@ rvMonsterConvoyGround::State_Torso_BlasterAttack
 ================
 */
 stateResult_t rvMonsterConvoyGround::State_Torso_BlasterAttack ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_ATTACK,
 		STAGE_WAIT
@@ -426,11 +426,11 @@ stateResult_t rvMonsterConvoyGround::State_Torso_BlasterAttack ( const stateParm
 			shots = (gameLocal.random.RandomInt ( maxShots - minShots ) + minShots) * combat.aggressiveScale;
 			return SRESULT_STAGE ( STAGE_ATTACK );
 
-		case STAGE_ATTACK:			
+		case STAGE_ATTACK:
 			PlayAnim ( ANIMCHANNEL_TORSO, "range_attack", parms.blendFrames );
 			shots--;
 			return SRESULT_STAGE ( STAGE_WAIT );
-			
+
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, 0 ) ) {
 				if ( --shots <= 0 || (IsEnemyVisible() && !enemy.fl.inFov)  ) {
@@ -440,7 +440,7 @@ stateResult_t rvMonsterConvoyGround::State_Torso_BlasterAttack ( const stateParm
 			}
 			return SRESULT_WAIT;
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -449,7 +449,7 @@ rvMonsterConvoyGround::State_Torso_Open
 ================
 */
 stateResult_t rvMonsterConvoyGround::State_Torso_Open ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};
@@ -464,11 +464,11 @@ stateResult_t rvMonsterConvoyGround::State_Torso_Open ( const stateParms_t& parm
 
 		case STAGE_WAIT:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
-				return SRESULT_DONE; 
+				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-	}			
-	return SRESULT_ERROR; 
+	}
+	return SRESULT_ERROR;
 }
 
 /*
@@ -477,7 +477,7 @@ rvMonsterConvoyGround::State_Torso_Close
 ================
 */
 stateResult_t rvMonsterConvoyGround::State_Torso_Close ( const stateParms_t& parms ) {
-	enum { 
+	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};
@@ -493,12 +493,12 @@ stateResult_t rvMonsterConvoyGround::State_Torso_Close ( const stateParms_t& par
 				isOpen = false;
 				aifl.disableLook = true;
 				ForceTacticalUpdate();
-				return SRESULT_DONE; 
+				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
-			
+
 	}
-	return SRESULT_ERROR; 
+	return SRESULT_ERROR;
 }
 
 /*
@@ -511,23 +511,23 @@ stateResult_t rvMonsterConvoyGround::State_Torso_Pain ( const stateParms_t& parm
 		STAGE_START,
 		STAGE_END
 	};
-	
+
 	switch ( parms.stage ) {
 		case STAGE_START:
-			// Force the orientation to the direction we got hit from so the animation looks correct		
+			// Force the orientation to the direction we got hit from so the animation looks correct
 			OverrideFlag ( AIFLAGOVERRIDE_NOTURN, true );
 			TurnToward ( physicsObj.GetOrigin() - lastPainDir * 128.0f );
 			move.current_yaw = move.ideal_yaw;
-			
+
 			// Just in case the pain anim wasnt set before we got here.
 			if ( !painAnim.Length ( ) ) {
 				painAnim = "pain";
 			}
-			
+
 			DisableAnimState ( ANIMCHANNEL_LEGS );
 			PlayAnim ( ANIMCHANNEL_TORSO, painAnim, parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_END );
-	
+
 		case STAGE_END:
 			if ( AnimDone ( ANIMCHANNEL_TORSO, parms.blendFrames ) ) {
 				return SRESULT_DONE;
@@ -563,7 +563,7 @@ stateResult_t rvMonsterConvoyGround::State_Legs_Move ( const stateParms_t& parms
 			StartSound( "snd_move", SND_CHANNEL_BODY3, 0, false, NULL );
 
 			return SRESULT_STAGE ( STAGE_MOVE );
-			
+
 		case STAGE_MOVE:
 
 			// If not moving forward just go back to idle
@@ -577,9 +577,9 @@ stateResult_t rvMonsterConvoyGround::State_Legs_Move ( const stateParms_t& parms
 			if ( !ai_debugHelpers.GetBool ( ) && physicsObj.HasGroundContacts ( ) ) {
 				float	rate;
 				idVec3	dir;
-								
+
 				dir = (physicsObj.GetOrigin ( ) - oldOrigin);
-				
+
 				if ( DistanceTo ( move.moveDest ) < move.walkRange ) {
 					rate = moveAnimRateMin;
 				} else if ( dir.Normalize ( ) > 0.0f ) {
@@ -589,15 +589,15 @@ stateResult_t rvMonsterConvoyGround::State_Legs_Move ( const stateParms_t& parms
 					rate = moveAnimRateMin + moveAnimRateRange * 0.5f;
 				}
 				moveCurrentAnimRate += ((rate - moveCurrentAnimRate) * moveAccelRate);
-				
+
 				animator.CurrentAnim ( ANIMCHANNEL_LEGS )->SetPlaybackRate ( gameLocal.time, moveCurrentAnimRate );
 			}
 
 			oldOrigin = physicsObj.GetOrigin ( );
-			
+
 			return SRESULT_WAIT;
 	}
-		
+
 	return SRESULT_ERROR;
 }
 

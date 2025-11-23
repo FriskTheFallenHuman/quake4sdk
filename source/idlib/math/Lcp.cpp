@@ -551,7 +551,7 @@ bool idLCP_Square::Solve( const idMatX &o_m, idVecX &o_x, const idVecX &o_b, con
 		}
 	}
 
-	// sub matrix for factorization 
+	// sub matrix for factorization
 	clamped.SetData( m.GetNumRows(), m.GetNumColumns(), MATX_ALLOCA( m.GetNumRows() * m.GetNumColumns() ) );
 	diagonal.SetData( m.GetNumRows(), VECX_ALLOCA( m.GetNumRows() ) );
 
@@ -1341,7 +1341,7 @@ bool idLCP_Symmetric::Solve( const idMatX &o_m, idVecX &o_x, const idVecX &o_b, 
 		}
 	}
 
-	// sub matrix for factorization 
+	// sub matrix for factorization
 	clamped.SetData( m.GetNumRows(), m.GetNumColumns(), MATX_ALLOCA( m.GetNumRows() * m.GetNumColumns() ) );
 	diagonal.SetData( m.GetNumRows(), VECX_ALLOCA( m.GetNumRows() ) );
 	solveCache1.SetData( m.GetNumRows(), VECX_ALLOCA( m.GetNumRows() ) );

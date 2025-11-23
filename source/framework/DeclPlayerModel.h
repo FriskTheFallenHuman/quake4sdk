@@ -38,4 +38,4 @@ public:
 	virtual bool			Validate( const char *psText, int iTextLength, idStr &strReportTo ) const;
 };
 
-#endif 
+#endif
