@@ -3,6 +3,15 @@
 
 #include "Game_local.h"
 
+struct game_name_s {
+	game_name_s( void ) {
+		sprintf( string, "Q4SP %s", VERSION_STRING_DOTTED );
+	}
+	char string[256];
+} game_name;
+
+idCVar gamename( "gamename", game_name.string, CVAR_GAME | CVAR_SERVERINFO | CVAR_ROM, "" );
+
 // RAVEN BEGIN
 #include "../bse/BSEInterface.h"
 #include "Projectile.h"
@@ -452,7 +461,7 @@ void idGameLocal::Init( void ) {
 // RAVEN END
 
 	Printf( "------------- Initializing Game -------------\n" );
-	Printf( "gamename: %s\n", GAME_VERSION );
+	Printf( "gamename: %s\n", game_name.string );
 	Printf( "gamedate: %s\n", __DATE__ );
 
 // RAVEN BEGIN

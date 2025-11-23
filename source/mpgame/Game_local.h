@@ -27,6 +27,8 @@ inline void operator delete[]( void *p ) { Memory::Free(p); }
 
 extern idRenderWorld *				gameRenderWorld;
 
+#include "../sys/AutoVersion.h"
+
 // classes used by idGameLocal
 class idEntity;
 class idActor;

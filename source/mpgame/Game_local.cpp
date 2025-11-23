@@ -3,8 +3,6 @@
 
 #include "Game_local.h"
 
-#include "../sys/AutoVersion.h"
-
 struct game_name_s {
 	game_name_s( void ) {
 		sprintf( string, "Q4MP %s", VERSION_STRING_DOTTED );

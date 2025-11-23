@@ -44,7 +44,7 @@ idCVar g_version(					"g_version",				gameVersion.string,	CVAR_GAME | CVAR_ROM, 
 idCVar gamedate(					"gamedate",					__DATE__,		CVAR_GAME | CVAR_ROM, "" );
 
 // server info
-idCVar si_name(						"si_name",					"Quake 4 Server",	CVAR_GAME | CVAR_SERVERINFO | PC_CVAR_ARCHIVE | CVAR_CASE_SENSITIVE | CVAR_SPECIAL_CONCAT, "name of the server" );
+idCVar si_name(						"si_name",					"Quake 4 MP Server",	CVAR_GAME | CVAR_SERVERINFO | PC_CVAR_ARCHIVE | CVAR_CASE_SENSITIVE | CVAR_SPECIAL_CONCAT, "name of the server" );
 // RITUAL BEGIN
 // squirrel: added DeadZone multiplayer mode
 //idCVar sq_numRoundsPerMatch(		"dz_numRoundsPerMatch",		"5",			CVAR_GAME | CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_INTEGER, "number of rounds per match in DeadZone", 1, 999999 );
