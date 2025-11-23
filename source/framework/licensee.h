@@ -17,9 +17,7 @@
 #define GAME_BUILD_TYPE					"Debug"
 #elif defined(_MPBETA)
 #define GAME_BUILD_TYPE					"MPBeta"
-#elif defined(_FINAL)
-#define GAME_BUILD_TYPE					""
-#elif defined(_RELEASE)
+#else
 #define	GAME_BUILD_TYPE					""
 #endif
 

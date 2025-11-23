@@ -3,6 +3,7 @@
 
 #include "../Game_local.h"
 #include "../../sys/AutoVersion.h"
+#include "../../framework/licensee.h"
 
 #if defined( _DEBUG )
 	#define	BUILD_DEBUG	"-debug"

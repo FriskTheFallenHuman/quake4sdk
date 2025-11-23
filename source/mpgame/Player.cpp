@@ -16,7 +16,6 @@
 #include "client/ClientModel.h"
 #include "ai/AAS_tactical.h"
 #include "Healing_Station.h"
-#include "ai/AI_Medic.h"
 
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
@@ -7304,15 +7303,6 @@ void idPlayer::UpdateFocusCharacter( idEntity* newEnt ) {
 	// Handle character interaction
 	cursor->SetStateString( "npc", common->GetLocalizedString(newEnt->spawnArgs.GetString( "npc_name", "Joe" )) );
 	cursor->SetStateString( "npcdesc", common->GetLocalizedString(newEnt->spawnArgs.GetString( "npc_description", "" )) );
-	if ( newEnt->IsType( rvAIMedic::GetClassType() ) ) {
-		if ( ((rvAIMedic*)newEnt)->isTech ) {
-			cursor->SetStateInt( "npc_medictech", 2 );
-		} else {
-			cursor->SetStateInt( "npc_medictech", 1 );
-		}
-	} else {
-		cursor->SetStateInt( "npc_medictech", 0 );
-	}
 }
 /*
 ================

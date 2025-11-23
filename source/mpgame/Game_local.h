@@ -1307,7 +1307,6 @@ const int	CINEMATIC_SKIP_DELAY	= SEC2MS( 2.0f );
 #include "physics/Physics_RigidBody.h"
 #include "physics/Physics_AF.h"
 #include "physics/Physics_Particle.h"
-#include "physics/Physics_VehicleMonster.h"
 
 #include "vehicle/VehicleController.h"
 
@@ -1346,7 +1345,6 @@ const int	CINEMATIC_SKIP_DELAY	= SEC2MS( 2.0f );
 #include "vehicle/Vehicle.h"
 #include "SplineMover.h"
 #include "TramGate.h"
-#include "vehicle/VehicleDriver.h"
 // RAVEN END
 #include "Camera.h"
 #include "Moveable.h"

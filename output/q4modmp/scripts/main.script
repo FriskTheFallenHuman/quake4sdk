@@ -1,0 +1,42 @@
+/***********************************************************************
+
+doom_main.script
+
+This is the main script that is loaded before any level scripts load.
+
+***********************************************************************/
+
+#include "scripts/doom_defs.script"
+#include "scripts/defs.script"
+#include "scripts/events.script"
+#include "scripts/doom_util.script"
+#include "scripts/util.script"
+
+//Common Objects
+#include "scripts/common/train_mover.script"
+#include "scripts/common/func_train.script"
+#include "scripts/common/tram_obj.script"
+#include "scripts/common/tramCar.script"
+
+// Map Scripts
+
+//Bits
+#include "scripts/bits/bit_nodeChain.script"
+
+// FIXME!  The following three scripts should likely disappear.
+// Common Scripts
+// these script is needed on multiple levels, they are NOT test scripts 
+#include "scripts/common/navCrossing.script"
+
+void doom_main() 
+{
+	sys.print( "Entering doom_main()\n");
+
+	//
+	// Do any script setup here
+	//
+
+	sys.print( "Exiting doom_main()\n" );
+}
+
+
